@@ -11,6 +11,7 @@ Public Class Form1
         Dim oItems As Outlook.Items = objFolder.Items
         Dim oMsg As Outlook.MailItem
         Dim oAtt As Outlook.Attachment
+        Dim sFile As String
 
         For Each oMsg In oItems
             Debug.Print(oMsg.Subject)
@@ -19,11 +20,14 @@ Public Class Form1
             Debug.Print(oMsg.Attachments.Count)
             If oMsg.Attachments.Count > 0 Then
                 For Each oAtt In oMsg.Attachments
-                    picImage.Image = New Bitmap(oAtt.PathName)
+                    sFile = Environment.GetEnvironmentVariable("userprofile") & "\Desktop\" & oAtt.FileName
+                    oAtt.SaveAsFile(sFile)
+                    picImage.Image = New Bitmap(sFile)
                     Do Until (btnNextPressed = True)
                         Application.DoEvents()
                     Loop
                     btnNextPressed = False
+
                 Next
             End If
             Do Until (btnNextPressed = True)
@@ -39,26 +43,31 @@ Public Class Form1
     Private Sub btnConvert_Click(sender As Object, e As EventArgs) Handles btnConvert.Click
         Dim objWdDoc As Word.Document
         Dim objWord As Word.Application
+        Dim sDoc As String
         Dim sDesktop As String = _
             Environment.GetEnvironmentVariable("userprofile") & "\Desktop\"
+        If dlgOpen.ShowDialog() = DialogResult.OK Then
+            Dim i As Integer
+            i = 0
+            objWord = CreateObject("Word.Application")
+            objWord.ActivePrinter = "Fax"
 
-        objWord = CreateObject("Word.Application")
-        objWdDoc = objWord.Documents.Open(sDesktop & "testdocument.docx")
-        objWord.Visible = True
+            For Each sDoc In dlgOpen.FileNames
+                i += 1
+                objWdDoc = objWord.Documents.Open(sDoc)
+                objWord.Visible = False
+                'Print to Tiff
+                objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=sDesktop & i & ".tiff")
+                objWdDoc.Close()
+            Next
+            objWord.Quit()
+        End If
 
-        'Select Printer
-        objWord.ActivePrinter = "Fax"
-
-        'Print to Tiff
-        objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=sDesktop & "test.tiff")
         'Range:=WdPrintOutRange.wdPrintAllDocument, _
         '                     OutputFileName:=sDesktop & "test.tiff", _
         '                      Item:=WdPrintOutItem.wdPrintDocumentContent, _
         '                      PrintToFile:=True)
-        'Close Document
-        objWdDoc.Close()
-        'Close Word
-        objWord.Quit()
+
         'General Cleanup
         objWdDoc = Nothing
         objWord = Nothing

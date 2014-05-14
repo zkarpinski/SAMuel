@@ -61,13 +61,17 @@ Partial Class Form1
         Me.picImage.TabIndex = 1
         Me.picImage.TabStop = False
         '
+        'dlgOpen
+        '
+        Me.dlgOpen.Multiselect = True
+        '
         'btnConvert
         '
         Me.btnConvert.Location = New System.Drawing.Point(164, 241)
         Me.btnConvert.Name = "btnConvert"
         Me.btnConvert.Size = New System.Drawing.Size(75, 23)
         Me.btnConvert.TabIndex = 2
-        Me.btnConvert.Text = "Button1"
+        Me.btnConvert.Text = "Convert"
         Me.btnConvert.UseVisualStyleBackColor = True
         '
         'TabControl1
@@ -106,7 +110,7 @@ Partial Class Form1
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(406, 281)
+        Me.TabPage2.Size = New System.Drawing.Size(406, 316)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Word -> tif"
         Me.TabPage2.UseVisualStyleBackColor = True
