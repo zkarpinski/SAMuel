@@ -15,41 +15,57 @@ Public Class frmMain
         Dim oItems As Outlook.Items = objFolder.Items
         Dim oMsg As Outlook.MailItem
         Dim oAtt As Outlook.Attachment
+        Dim sDestination As String = Environment.GetEnvironmentVariable("userprofile") & "\Desktop\"
         Dim sFile As String
         Dim sFileExt As String
 
+        'For each email in source folder
         For Each oMsg In oItems
+            'Fill out textbox values
             Debug.Print(oMsg.Subject)
             txtSubject.Text = oMsg.Subject
             txtFrom.Text = oMsg.SenderName
             txtAcc.Text = regexAccount(oMsg.Subject)
             rtbEmailBody.Text = oMsg.Body
             Debug.Print(oMsg.Attachments.Count)
-            If oMsg.Attachments.Count > 0 Then
-                For Each oAtt In oMsg.Attachments
-                    sFile = Environment.GetEnvironmentVariable("userprofile") & "\Desktop\" & oAtt.FileName
-                    sFileExt = Path.GetExtension(sFile).ToLower
 
+            If oMsg.Attachments.Count > 0 Then
+                'For every attachment within the email
+                For Each oAtt In oMsg.Attachments
+                    sFile = sDestination & oAtt.FileName
+                    'Verify a valid attachment file type
+                    sFileExt = Path.GetExtension(sFile).ToLower
                     If sFileExt = ".tiff" Or sFileExt = ".png" Or _
                             sFileExt = ".jpg" Or sFileExt = ".jpeg" Or _
                             sFileExt = ".tif" Or sFileExt = ".gif" Then
+                        'Save the attachment then load the preview
                         oAtt.SaveAsFile(sFile)
                         picImage.Image = New Bitmap(sFile)
+                        'Wait for user validation of attachment
                         Do Until (btnNextPressed = True)
+                            '-------- ADD REJECT/ACCEPT/CANCEL HANDLING ------------
                             Application.DoEvents()
                         Loop
                         btnNextPressed = False
+                        '------- ADD CONVERT TO TIFF ------------
+
+                        '------- ADD WATERMARK OF ACCOUNT # TO TIFF ---------
+
+                        'Release image
+                        picImage.Image.Dispose()
+                        picImage.Image = Nothing
+                        'Delete the saved email attachment
+                        ''System.IO.Directory.GetFiles() ' Get all files within a folder ** useful later **
+                        System.IO.File.Delete(sFile)
                     End If
                 Next
             End If
+            'Wait for user to move to next email
             Do Until (btnNextPressed = True)
                 Application.DoEvents()
             Loop
             btnNextPressed = False
         Next
-        'If dlgOpen.ShowDialog() = DialogResult.OK Then
-        'picImage.Image = New Bitmap(dlgOpen.FileName)
-        'End If
     End Sub
 
     Private Sub btnConvert_Click(sender As Object, e As EventArgs) Handles btnConvert.Click
@@ -61,31 +77,33 @@ Public Class frmMain
 
         Form_Reset()
 
-
         'If files are selected continue code
         If dlgOpen.ShowDialog() = DialogResult.OK Then
-            Dim i As Integer
-            i = 0
+            'Initiate word application object
             objWord = CreateObject("Word.Application")
+            'Set active printer to Fax
             objWord.ActivePrinter = "Fax"
+            'Determine progressbar maximum value from number of files chosen
             ProgressBar.Maximum = dlgOpen.FileNames.Count()
             For Each sDoc In dlgOpen.FileNames
-
+                'Get the file name
                 sFileName = Path.GetFileNameWithoutExtension(sDoc)
-                i += 1
+                'Open the document within word
                 objWdDoc = objWord.Documents.Open(sDoc)
                 objWord.Visible = False
                 'Print to Tiff
                 objWdDoc.PrintOut(PrintToFile:=True, _
                                   OutputFileName:=sDestination & sFileName & ".tiff")
+                'Release document
                 objWdDoc.Close()
+                'Progress the progress bar
                 ProgressBar.Value += 1
             Next
             lblDone.Visible = True
             objWord.Quit()
         End If
 
-        'General Cleanup
+        'Cleanup
         btnConvert.Enabled = True
         objWdDoc = Nothing
         objWord = Nothing
@@ -110,19 +128,23 @@ Public Class frmMain
     End Sub
 
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        'Resets the form state to default
         Form_Reset()
     End Sub
 
     Private Sub TabControl1_Changed(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
-        form_Reset()
-
+        'Resets the form state to default
+        Form_Reset()
     End Sub
 
     Private Sub Form_Reset()
+        'Resets the form state to default
+
         'Outlook Tab
         btnNextPressed = False
         btnRejectPressed = False
         btnRunState = False
+        picImage.Image = Nothing
 
 
         'Progress bar reset
