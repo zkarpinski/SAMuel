@@ -28,8 +28,10 @@ Partial Class frmMain
         Me.btnConvert = New System.Windows.Forms.Button()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
-        Me.rtbEmailBody = New System.Windows.Forms.RichTextBox()
+        Me.btnCancel = New System.Windows.Forms.Button()
         Me.btnNext = New System.Windows.Forms.Button()
+        Me.rtbEmailBody = New System.Windows.Forms.RichTextBox()
+        Me.btnReject = New System.Windows.Forms.Button()
         Me.txtAcc = New System.Windows.Forms.TextBox()
         Me.txtFrom = New System.Windows.Forms.TextBox()
         Me.txtSubject = New System.Windows.Forms.TextBox()
@@ -100,8 +102,10 @@ Partial Class frmMain
         '
         'TabPage1
         '
-        Me.TabPage1.Controls.Add(Me.rtbEmailBody)
+        Me.TabPage1.Controls.Add(Me.btnCancel)
         Me.TabPage1.Controls.Add(Me.btnNext)
+        Me.TabPage1.Controls.Add(Me.rtbEmailBody)
+        Me.TabPage1.Controls.Add(Me.btnReject)
         Me.TabPage1.Controls.Add(Me.txtAcc)
         Me.TabPage1.Controls.Add(Me.txtFrom)
         Me.TabPage1.Controls.Add(Me.txtSubject)
@@ -118,6 +122,26 @@ Partial Class frmMain
         Me.TabPage1.Text = "Outlook"
         Me.TabPage1.UseVisualStyleBackColor = True
         '
+        'btnCancel
+        '
+        Me.btnCancel.Enabled = False
+        Me.btnCancel.Location = New System.Drawing.Point(286, 278)
+        Me.btnCancel.Name = "btnCancel"
+        Me.btnCancel.Size = New System.Drawing.Size(75, 23)
+        Me.btnCancel.TabIndex = 11
+        Me.btnCancel.Text = "Cancel"
+        Me.btnCancel.UseVisualStyleBackColor = True
+        '
+        'btnNext
+        '
+        Me.btnNext.Location = New System.Drawing.Point(182, 278)
+        Me.btnNext.Name = "btnNext"
+        Me.btnNext.Size = New System.Drawing.Size(75, 23)
+        Me.btnNext.TabIndex = 10
+        Me.btnNext.Text = "Next"
+        Me.btnNext.UseVisualStyleBackColor = True
+        Me.btnNext.Visible = False
+        '
         'rtbEmailBody
         '
         Me.rtbEmailBody.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -127,14 +151,15 @@ Partial Class frmMain
         Me.rtbEmailBody.TabIndex = 9
         Me.rtbEmailBody.Text = ""
         '
-        'btnNext
+        'btnReject
         '
-        Me.btnNext.Location = New System.Drawing.Point(286, 185)
-        Me.btnNext.Name = "btnNext"
-        Me.btnNext.Size = New System.Drawing.Size(75, 23)
-        Me.btnNext.TabIndex = 8
-        Me.btnNext.Text = "Reject"
-        Me.btnNext.UseVisualStyleBackColor = True
+        Me.btnReject.Enabled = False
+        Me.btnReject.Location = New System.Drawing.Point(286, 185)
+        Me.btnReject.Name = "btnReject"
+        Me.btnReject.Size = New System.Drawing.Size(75, 23)
+        Me.btnReject.TabIndex = 8
+        Me.btnReject.Text = "Reject"
+        Me.btnReject.UseVisualStyleBackColor = True
         '
         'txtAcc
         '
@@ -353,7 +378,7 @@ Partial Class frmMain
     Friend WithEvents txtAcc As System.Windows.Forms.TextBox
     Friend WithEvents txtFrom As System.Windows.Forms.TextBox
     Friend WithEvents txtSubject As System.Windows.Forms.TextBox
-    Friend WithEvents btnNext As System.Windows.Forms.Button
+    Friend WithEvents btnReject As System.Windows.Forms.Button
     Friend WithEvents TabPage4 As System.Windows.Forms.TabPage
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents txtDPAaccnum As System.Windows.Forms.TextBox
@@ -367,5 +392,7 @@ Partial Class frmMain
     Friend WithEvents ProgressBar As System.Windows.Forms.ProgressBar
     Friend WithEvents lblDone As System.Windows.Forms.Label
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Friend WithEvents btnNext As System.Windows.Forms.Button
+    Friend WithEvents btnCancel As System.Windows.Forms.Button
 
 End Class

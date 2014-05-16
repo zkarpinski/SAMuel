@@ -6,7 +6,7 @@ Public Class frmMain
 
     Dim btnNextPressed As Boolean
     Dim btnRejectPressed As Boolean
-    Dim btnRunState As Boolean
+    Dim btnCancelPressed As Boolean
 
     Private Sub btnRun_Click(sender As Object, e As EventArgs) Handles btnRun.Click
         Dim oApp As Outlook.Application = New Outlook.Application
@@ -18,6 +18,14 @@ Public Class frmMain
         Dim sDestination As String = Environment.GetEnvironmentVariable("userprofile") & "\Desktop\"
         Dim sFile As String
         Dim sFileExt As String
+
+        'enable buttons
+        btnCancel.Enabled = True
+        btnReject.Enabled = True
+        btnNext.Visible = True
+        btnNext.Enabled = True
+        btnRun.Enabled = False
+        btnRun.Visible = False
 
         'For each email in source folder
         For Each oMsg In oItems
@@ -42,14 +50,24 @@ Public Class frmMain
                         oAtt.SaveAsFile(sFile)
                         picImage.Image = New Bitmap(sFile)
                         'Wait for user validation of attachment
-                        Do Until (btnNextPressed = True)
-                            '-------- ADD REJECT/ACCEPT/CANCEL HANDLING ------------
+                        Do Until (btnNextPressed = True Or btnRejectPressed = True Or btnCancelPressed = True)
                             Application.DoEvents()
                         Loop
-                        btnNextPressed = False
-                        '------- ADD CONVERT TO TIFF ------------
+                        If btnCancelPressed Then
+                            'When canceled, reset form and end the routine
+                            Form_Reset()
+                            Exit Sub
+                        ElseIf btnNextPressed Then
+                            '------- ADD CONVERT TO TIFF ------------
 
-                        '------- ADD WATERMARK OF ACCOUNT # TO TIFF ---------
+                            '------- ADD WATERMARK OF ACCOUNT # TO TIFF ---------
+                        ElseIf btnRejectPressed Then
+                            '------ LOG reject action? ---------
+                        End If
+
+                        'Reset variables
+                        btnNextPressed = False
+                        btnRejectPressed = False
 
                         'Release image
                         picImage.Image.Dispose()
@@ -109,8 +127,8 @@ Public Class frmMain
         objWord = Nothing
     End Sub
 
-    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnNext.Click
-        btnNextPressed = True
+    Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnReject.Click
+        btnRejectPressed = True
     End Sub
 
     Private Sub chkMinPayment_CheckedChanged(sender As Object, e As EventArgs) Handles chkMinPayment.CheckedChanged
@@ -141,10 +159,19 @@ Public Class frmMain
         'Resets the form state to default
 
         'Outlook Tab
+        'variables
         btnNextPressed = False
         btnRejectPressed = False
-        btnRunState = False
+        btnCancelPressed = False
+        'settings
         picImage.Image = Nothing
+        btnCancel.Enabled = False
+        btnReject.Enabled = False
+        btnNext.Visible = False
+        btnNext.Enabled = False
+        btnRun.Enabled = True
+        btnRun.Visible = True
+
 
 
         'Progress bar reset
@@ -152,7 +179,11 @@ Public Class frmMain
         lblDone.Visible = False
     End Sub
 
-    Private Sub TabPage1_Click(sender As Object, e As EventArgs) Handles TabPage1.Click
+    Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
+        btnCancelPressed = True
+    End Sub
 
+    Private Sub btnNext_Click_1(sender As Object, e As EventArgs) Handles btnNext.Click
+        btnNextPressed = True
     End Sub
 End Class
