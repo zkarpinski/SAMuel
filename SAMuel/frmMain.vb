@@ -151,4 +151,8 @@ Public Class frmMain
         ProgressBar.Value = 0
         lblDone.Visible = False
     End Sub
+
+    Private Sub TabPage1_Click(sender As Object, e As EventArgs) Handles TabPage1.Click
+
+    End Sub
 End Class

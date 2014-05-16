@@ -18,7 +18,7 @@ Imports System.Runtime.InteropServices
 <Assembly: ComVisible(False)>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("40aabdd2-71e4-470e-9131-32677b253bdc")> 
+<Assembly: Guid("d006cd8e-9b6d-4c33-a6f5-649c11ab716d")> 
 
 ' Version information for an assembly consists of the following four values:
 '
