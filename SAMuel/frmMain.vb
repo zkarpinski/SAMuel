@@ -153,6 +153,10 @@ Public Class frmMain
     Private Sub TabControl1_Changed(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
         'Resets the form state to default
         Form_Reset()
+        If TabControl1.SelectedIndex = 3 Then
+            mtxtDPAAcc.Focus()
+
+        End If
     End Sub
 
     Private Sub Form_Reset()
@@ -185,5 +189,20 @@ Public Class frmMain
 
     Private Sub btnNext_Click_1(sender As Object, e As EventArgs) Handles btnNext.Click
         btnNextPressed = True
+    End Sub
+
+    Private Sub txtDPAaccnum_TextChanged(sender As Object, e As EventArgs)
+
+    End Sub
+
+    Private Sub btnDPAprocess_Click(sender As Object, e As EventArgs) Handles btnDPAprocess.Click
+        Dim accNumber As String
+        accNumber = mtxtDPAAcc.Text
+        Call OpenCSSAcc(accNumber)
+        Call EnrollBB()
+    End Sub
+
+    Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
+        End
     End Sub
 End Class

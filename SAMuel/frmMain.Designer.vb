@@ -39,7 +39,8 @@ Partial Class frmMain
         Me.lblFrom = New System.Windows.Forms.Label()
         Me.lblSubject = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
-        Me.TabPage4 = New System.Windows.Forms.TabPage()
+        Me.tabDPA = New System.Windows.Forms.TabPage()
+        Me.mtxtDPAAcc = New System.Windows.Forms.MaskedTextBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.txtDPAmonthly = New System.Windows.Forms.TextBox()
@@ -48,19 +49,23 @@ Partial Class frmMain
         Me.btnDPAprocess = New System.Windows.Forms.Button()
         Me.chkMinPayment = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.txtDPAaccnum = New System.Windows.Forms.TextBox()
         Me.ProgressBar = New System.Windows.Forms.ProgressBar()
         Me.lblDone = New System.Windows.Forms.Label()
+        Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
+        Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
-        Me.TabPage4.SuspendLayout()
+        Me.tabDPA.SuspendLayout()
+        Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnRun
         '
-        Me.btnRun.Location = New System.Drawing.Point(182, 279)
+        Me.btnRun.Location = New System.Drawing.Point(177, 267)
         Me.btnRun.Name = "btnRun"
         Me.btnRun.Size = New System.Drawing.Size(75, 23)
         Me.btnRun.TabIndex = 0
@@ -82,7 +87,7 @@ Partial Class frmMain
         '
         'btnConvert
         '
-        Me.btnConvert.Location = New System.Drawing.Point(182, 279)
+        Me.btnConvert.Location = New System.Drawing.Point(177, 267)
         Me.btnConvert.Name = "btnConvert"
         Me.btnConvert.Size = New System.Drawing.Size(75, 23)
         Me.btnConvert.TabIndex = 2
@@ -93,11 +98,11 @@ Partial Class frmMain
         '
         Me.TabControl1.Controls.Add(Me.TabPage1)
         Me.TabControl1.Controls.Add(Me.TabPage2)
-        Me.TabControl1.Controls.Add(Me.TabPage4)
-        Me.TabControl1.Location = New System.Drawing.Point(-1, 13)
+        Me.TabControl1.Controls.Add(Me.tabDPA)
+        Me.TabControl1.Location = New System.Drawing.Point(-1, 27)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(439, 330)
+        Me.TabControl1.Size = New System.Drawing.Size(439, 316)
         Me.TabControl1.TabIndex = 3
         '
         'TabPage1
@@ -117,7 +122,7 @@ Partial Class frmMain
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(431, 304)
+        Me.TabPage1.Size = New System.Drawing.Size(431, 290)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Outlook"
         Me.TabPage1.UseVisualStyleBackColor = True
@@ -125,7 +130,7 @@ Partial Class frmMain
         'btnCancel
         '
         Me.btnCancel.Enabled = False
-        Me.btnCancel.Location = New System.Drawing.Point(286, 278)
+        Me.btnCancel.Location = New System.Drawing.Point(286, 267)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(75, 23)
         Me.btnCancel.TabIndex = 11
@@ -134,7 +139,7 @@ Partial Class frmMain
         '
         'btnNext
         '
-        Me.btnNext.Location = New System.Drawing.Point(182, 278)
+        Me.btnNext.Location = New System.Drawing.Point(177, 267)
         Me.btnNext.Name = "btnNext"
         Me.btnNext.Size = New System.Drawing.Size(75, 23)
         Me.btnNext.TabIndex = 10
@@ -222,34 +227,46 @@ Partial Class frmMain
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(431, 304)
+        Me.TabPage2.Size = New System.Drawing.Size(431, 290)
         Me.TabPage2.TabIndex = 1
         Me.TabPage2.Text = "Word -> tif"
         Me.TabPage2.UseVisualStyleBackColor = True
         '
-        'TabPage4
+        'tabDPA
         '
-        Me.TabPage4.Controls.Add(Me.GroupBox1)
-        Me.TabPage4.Controls.Add(Me.Label3)
-        Me.TabPage4.Controls.Add(Me.txtDPAmonthly)
-        Me.TabPage4.Controls.Add(Me.Label2)
-        Me.TabPage4.Controls.Add(Me.txtDPAdown)
-        Me.TabPage4.Controls.Add(Me.btnDPAprocess)
-        Me.TabPage4.Controls.Add(Me.chkMinPayment)
-        Me.TabPage4.Controls.Add(Me.Label1)
-        Me.TabPage4.Controls.Add(Me.txtDPAaccnum)
-        Me.TabPage4.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage4.Name = "TabPage4"
-        Me.TabPage4.Size = New System.Drawing.Size(431, 304)
-        Me.TabPage4.TabIndex = 3
-        Me.TabPage4.Text = "DPA"
-        Me.TabPage4.UseVisualStyleBackColor = True
+        Me.tabDPA.Controls.Add(Me.mtxtDPAAcc)
+        Me.tabDPA.Controls.Add(Me.GroupBox1)
+        Me.tabDPA.Controls.Add(Me.Label3)
+        Me.tabDPA.Controls.Add(Me.txtDPAmonthly)
+        Me.tabDPA.Controls.Add(Me.Label2)
+        Me.tabDPA.Controls.Add(Me.txtDPAdown)
+        Me.tabDPA.Controls.Add(Me.btnDPAprocess)
+        Me.tabDPA.Controls.Add(Me.chkMinPayment)
+        Me.tabDPA.Controls.Add(Me.Label1)
+        Me.tabDPA.Location = New System.Drawing.Point(4, 22)
+        Me.tabDPA.Name = "tabDPA"
+        Me.tabDPA.Size = New System.Drawing.Size(431, 290)
+        Me.tabDPA.TabIndex = 3
+        Me.tabDPA.Text = "DPA"
+        Me.tabDPA.UseVisualStyleBackColor = True
+        '
+        'mtxtDPAAcc
+        '
+        Me.mtxtDPAAcc.BackColor = System.Drawing.Color.Yellow
+        Me.mtxtDPAAcc.Location = New System.Drawing.Point(66, 15)
+        Me.mtxtDPAAcc.Mask = "00000-99999"
+        Me.mtxtDPAAcc.Name = "mtxtDPAAcc"
+        Me.mtxtDPAAcc.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
+        Me.mtxtDPAAcc.Size = New System.Drawing.Size(100, 20)
+        Me.mtxtDPAAcc.TabIndex = 1
+        Me.mtxtDPAAcc.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.mtxtDPAAcc.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
         '
         'GroupBox1
         '
         Me.GroupBox1.Location = New System.Drawing.Point(9, 116)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(419, 157)
+        Me.GroupBox1.Size = New System.Drawing.Size(419, 148)
         Me.GroupBox1.TabIndex = 12
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "GroupBox1"
@@ -269,7 +286,7 @@ Partial Class frmMain
         Me.txtDPAmonthly.Location = New System.Drawing.Point(239, 41)
         Me.txtDPAmonthly.Name = "txtDPAmonthly"
         Me.txtDPAmonthly.Size = New System.Drawing.Size(100, 20)
-        Me.txtDPAmonthly.TabIndex = 10
+        Me.txtDPAmonthly.TabIndex = 3
         '
         'Label2
         '
@@ -286,14 +303,14 @@ Partial Class frmMain
         Me.txtDPAdown.Location = New System.Drawing.Point(66, 41)
         Me.txtDPAdown.Name = "txtDPAdown"
         Me.txtDPAdown.Size = New System.Drawing.Size(100, 20)
-        Me.txtDPAdown.TabIndex = 8
+        Me.txtDPAdown.TabIndex = 2
         '
         'btnDPAprocess
         '
-        Me.btnDPAprocess.Location = New System.Drawing.Point(182, 279)
+        Me.btnDPAprocess.Location = New System.Drawing.Point(177, 267)
         Me.btnDPAprocess.Name = "btnDPAprocess"
         Me.btnDPAprocess.Size = New System.Drawing.Size(75, 23)
-        Me.btnDPAprocess.TabIndex = 7
+        Me.btnDPAprocess.TabIndex = 10
         Me.btnDPAprocess.Text = "Process DPA"
         Me.btnDPAprocess.UseVisualStyleBackColor = True
         '
@@ -303,7 +320,7 @@ Partial Class frmMain
         Me.chkMinPayment.Location = New System.Drawing.Point(6, 67)
         Me.chkMinPayment.Name = "chkMinPayment"
         Me.chkMinPayment.Size = New System.Drawing.Size(117, 17)
-        Me.chkMinPayment.TabIndex = 6
+        Me.chkMinPayment.TabIndex = 4
         Me.chkMinPayment.Text = "Minimum Payment?"
         Me.chkMinPayment.UseVisualStyleBackColor = True
         '
@@ -316,13 +333,6 @@ Partial Class frmMain
         Me.Label1.Size = New System.Drawing.Size(63, 13)
         Me.Label1.TabIndex = 5
         Me.Label1.Text = "Account #: "
-        '
-        'txtDPAaccnum
-        '
-        Me.txtDPAaccnum.Location = New System.Drawing.Point(66, 15)
-        Me.txtDPAaccnum.Name = "txtDPAaccnum"
-        Me.txtDPAaccnum.Size = New System.Drawing.Size(100, 20)
-        Me.txtDPAaccnum.TabIndex = 0
         '
         'ProgressBar
         '
@@ -344,6 +354,34 @@ Partial Class frmMain
         Me.lblDone.Text = "DONE"
         Me.lblDone.Visible = False
         '
+        'MenuStrip1
+        '
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.AboutToolStripMenuItem})
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.Size = New System.Drawing.Size(435, 24)
+        Me.MenuStrip1.TabIndex = 5
+        Me.MenuStrip1.Text = "MenuStrip1"
+        '
+        'FileToolStripMenuItem
+        '
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExitToolStripMenuItem})
+        Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
+        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
+        Me.FileToolStripMenuItem.Text = "&File"
+        '
+        'AboutToolStripMenuItem
+        '
+        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(52, 20)
+        Me.AboutToolStripMenuItem.Text = "About"
+        '
+        'ExitToolStripMenuItem
+        '
+        Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ExitToolStripMenuItem.Text = "&Exit"
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -352,6 +390,8 @@ Partial Class frmMain
         Me.Controls.Add(Me.lblDone)
         Me.Controls.Add(Me.ProgressBar)
         Me.Controls.Add(Me.TabControl1)
+        Me.Controls.Add(Me.MenuStrip1)
+        Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "frmMain"
         Me.Text = "SAMuel"
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).EndInit()
@@ -359,8 +399,10 @@ Partial Class frmMain
         Me.TabPage1.ResumeLayout(False)
         Me.TabPage1.PerformLayout()
         Me.TabPage2.ResumeLayout(False)
-        Me.TabPage4.ResumeLayout(False)
-        Me.TabPage4.PerformLayout()
+        Me.tabDPA.ResumeLayout(False)
+        Me.tabDPA.PerformLayout()
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -379,9 +421,8 @@ Partial Class frmMain
     Friend WithEvents txtFrom As System.Windows.Forms.TextBox
     Friend WithEvents txtSubject As System.Windows.Forms.TextBox
     Friend WithEvents btnReject As System.Windows.Forms.Button
-    Friend WithEvents TabPage4 As System.Windows.Forms.TabPage
+    Friend WithEvents tabDPA As System.Windows.Forms.TabPage
     Friend WithEvents Label1 As System.Windows.Forms.Label
-    Friend WithEvents txtDPAaccnum As System.Windows.Forms.TextBox
     Friend WithEvents btnDPAprocess As System.Windows.Forms.Button
     Friend WithEvents chkMinPayment As System.Windows.Forms.CheckBox
     Friend WithEvents Label3 As System.Windows.Forms.Label
@@ -394,5 +435,10 @@ Partial Class frmMain
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents btnNext As System.Windows.Forms.Button
     Friend WithEvents btnCancel As System.Windows.Forms.Button
+    Friend WithEvents mtxtDPAAcc As System.Windows.Forms.MaskedTextBox
+    Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
+    Friend WithEvents FileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents ExitToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class
