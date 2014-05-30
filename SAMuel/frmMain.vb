@@ -100,7 +100,7 @@ Public Class frmMain
             'Initiate word application object
             objWord = CreateObject("Word.Application")
             'Set active printer to Fax
-            objWord.ActivePrinter = "Fax"
+            objWord.ActivePrinter = "Microsoft Office Document Imaging"
             'Determine progressbar maximum value from number of files chosen
             ProgressBar.Maximum = dlgOpen.FileNames.Count()
             For Each sDoc In dlgOpen.FileNames
@@ -153,10 +153,6 @@ Public Class frmMain
     Private Sub TabControl1_Changed(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
         'Resets the form state to default
         Form_Reset()
-        If TabControl1.SelectedIndex = 3 Then
-            mtxtDPAAcc.Focus()
-
-        End If
     End Sub
 
     Private Sub Form_Reset()
@@ -177,6 +173,11 @@ Public Class frmMain
         btnRun.Visible = True
 
 
+        'DPA Tab
+        mtxtDPAAcc.Text = ""
+        txtDPAdown.Text = ""
+        txtDPAmonthly.Text = ""
+        chkMinPayment.Checked = False
 
         'Progress bar reset
         ProgressBar.Value = 0
@@ -199,10 +200,18 @@ Public Class frmMain
         Dim accNumber As String
         accNumber = mtxtDPAAcc.Text
         Call OpenCSSAcc(accNumber)
-        Call EnrollBB()
+        Call OpenPA()
+
     End Sub
 
     Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
         End
+    End Sub
+
+    Private Sub btnBudgetBill_Click(sender As Object, e As EventArgs) Handles btnBudgetBill.Click
+        AppActivate("Customer Service System Retrieval")
+        SendKeys.Send("~")
+        Threading.Thread.Sleep(400)
+        Call EnrollBB()
     End Sub
 End Class

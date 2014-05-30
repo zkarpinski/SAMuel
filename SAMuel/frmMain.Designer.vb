@@ -53,8 +53,9 @@ Partial Class frmMain
         Me.lblDone = New System.Windows.Forms.Label()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.btnBudgetBill = New System.Windows.Forms.Button()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -234,6 +235,7 @@ Partial Class frmMain
         '
         'tabDPA
         '
+        Me.tabDPA.Controls.Add(Me.btnBudgetBill)
         Me.tabDPA.Controls.Add(Me.mtxtDPAAcc)
         Me.tabDPA.Controls.Add(Me.GroupBox1)
         Me.tabDPA.Controls.Add(Me.Label3)
@@ -370,17 +372,26 @@ Partial Class frmMain
         Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
         Me.FileToolStripMenuItem.Text = "&File"
         '
+        'ExitToolStripMenuItem
+        '
+        Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(92, 22)
+        Me.ExitToolStripMenuItem.Text = "&Exit"
+        '
         'AboutToolStripMenuItem
         '
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(52, 20)
         Me.AboutToolStripMenuItem.Text = "About"
         '
-        'ExitToolStripMenuItem
+        'btnBudgetBill
         '
-        Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.ExitToolStripMenuItem.Text = "&Exit"
+        Me.btnBudgetBill.Location = New System.Drawing.Point(273, 267)
+        Me.btnBudgetBill.Name = "btnBudgetBill"
+        Me.btnBudgetBill.Size = New System.Drawing.Size(75, 23)
+        Me.btnBudgetBill.TabIndex = 13
+        Me.btnBudgetBill.Text = "Budget Bill"
+        Me.btnBudgetBill.UseVisualStyleBackColor = True
         '
         'frmMain
         '
@@ -440,5 +451,6 @@ Partial Class frmMain
     Friend WithEvents FileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExitToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents btnBudgetBill As System.Windows.Forms.Button
 
 End Class

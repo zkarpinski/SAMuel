@@ -13,21 +13,38 @@
     Public Sub OpenCSSAcc(ByVal accNum As String)
         'Focus to CSS
         AppActivate("Customer Service System Retrieval")
+        Threading.Thread.Sleep(100)
         'Clear
         SendKeys.Send(kAlt + "{d}")
-        SendKeys.Send(kEnter)
+        Threading.Thread.Sleep(100)
         'Enter account number into field
         SendKeys.Send("{TAB 4}")
+        Threading.Thread.Sleep(100)
         SendKeys.Send(accNum)
+        Threading.Thread.Sleep(100)
         'Open account
         SendKeys.Send(kEnter)
+        Threading.Thread.Sleep(400)
         'Handle random msgbox
         SendKeys.Send("o")
+        Threading.Thread.Sleep(100)
     End Sub
 
     Public Sub OpenPA()
         'Open Payment Agreement windows
         ' alt a, a, l, m
+        SendKeys.Send(kAlt)
+        Threading.Thread.Sleep(100)
+        SendKeys.Send("a")
+        Threading.Thread.Sleep(100)
+        SendKeys.Send("a")
+        Threading.Thread.Sleep(100)
+        SendKeys.Send("l")
+        Threading.Thread.Sleep(100)
+        SendKeys.Send("m")
+        Threading.Thread.Sleep(100)
+
+
     End Sub
 
     Public Sub AddPA()
@@ -49,46 +66,80 @@
         'Process Action
         'ctrl+p, enter
         SendKeys.Send(kCtrl + "{p}")
+        Threading.Thread.Sleep(100)
         SendKeys.Send(kEnter)
+        Threading.Thread.Sleep(400)
     End Sub
 
     Public Sub EnrollBB()
+        Dim sBBKeys() As String = {kAlt, "o", "a", "g", _
+                    kDown, kEnter, _
+                    "{TAB 3}", kEnter, _
+                    "{Tab 8}", kEnter, _
+                    "bb as per signed dpa", _
+                    kTab, kEnter _
+                    }
+
         'Enroll into budget billing
         'Open Maintain Program Agreement window
-        SendKeys.Send(kAlt + "oag")
+        SendKeys.Send(kAlt)
+        Threading.Thread.Sleep(100)
+        SendKeys.Send("o")
+        Threading.Thread.Sleep(100)
+        SendKeys.Send("a")
+        Threading.Thread.Sleep(100)
+        SendKeys.Send("g")
+        Threading.Thread.Sleep(400)
 
         'Select Budget Billing
         SendKeys.Send(kDown)
+        Threading.Thread.Sleep(50)
         SendKeys.Send(kEnter)
+        Threading.Thread.Sleep(400)
 
         'Select Budget Billing Request
         SendKeys.Send("{TAB 3}")
+        Threading.Thread.Sleep(100)
         SendKeys.Send(kEnter)
+        Threading.Thread.Sleep(400)
 
         'Enter BB remarks
         SendKeys.Send("{TAB 8}")
+        Threading.Thread.Sleep(100)
         SendKeys.Send(kEnter)
+        Threading.Thread.Sleep(400)
         SendKeys.Send("bb as per signed dpa")
-        SendKeys.Send(kTab + kEnter)
+        Threading.Thread.Sleep(100)
+        SendKeys.Send(kTab)
+        Threading.Thread.Sleep(100)
+        SendKeys.Send(kEnter)
+        Threading.Thread.Sleep(400)
         'Exit prompts
         SendKeys.Send("{TAB 3}")
+        Threading.Thread.Sleep(100)
         SendKeys.Send(kEnter)
+        Threading.Thread.Sleep(400)
 
         'Progress Actions
         ProcessAction()
 
         'Exit window
         SendKeys.Send(kAlt + "p")
+        Threading.Thread.Sleep(100)
         SendKeys.Send("e")
+        Threading.Thread.Sleep(400)
         'Close window
-        SendKeys.Send(kAlt + "c")
-        SendKeys.Send("e")
+        CloseWin()
 
     End Sub
 
-    Public Sub CloseWin()
+    Private Sub CloseWin()
         'Close window
         'alt, c, e
+        SendKeys.Send(kAlt + "c")
+        Threading.Thread.Sleep(100)
+        SendKeys.Send("e")
+        Threading.Thread.Sleep(400)
     End Sub
 
 End Module
