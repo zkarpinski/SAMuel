@@ -15,9 +15,12 @@ Public Class frmMain
         Dim oItems As Outlook.Items = objFolder.Items
         Dim oMsg As Outlook.MailItem
         Dim oAtt As Outlook.Attachment
+        Dim oSelection As Outlook.Selection
         Dim sDestination As String = Environment.GetEnvironmentVariable("userprofile") & "\Desktop\"
         Dim sFile As String
         Dim sFileExt As String
+
+        Form_Reset()
 
         'enable buttons
         btnCancel.Enabled = True
@@ -27,8 +30,11 @@ Public Class frmMain
         btnRun.Enabled = False
         btnRun.Visible = False
 
+        oSelection = oApp.ActiveExplorer.Selection
+        ProgressBar.Maximum = oSelection.Count
         'For each email in source folder
-        For Each oMsg In oItems
+        'For Each oMsg In oItems
+        For Each oMsg In oSelection
             'Fill out textbox values
             Debug.Print(oMsg.Subject)
             txtSubject.Text = oMsg.Subject
@@ -83,7 +89,23 @@ Public Class frmMain
                 Application.DoEvents()
             Loop
             btnNextPressed = False
+            ProgressBar.Value += 1
         Next
+        lblDone.Visible = True
+
+        'Disable Buttons
+        btnNextPressed = False
+        btnRejectPressed = False
+        btnCancelPressed = False
+        'settings
+        picImage.Image = Nothing
+        btnCancel.Enabled = False
+        btnReject.Enabled = False
+        btnNext.Visible = False
+        btnNext.Enabled = False
+        btnRun.Enabled = True
+        btnRun.Visible = True
+
     End Sub
 
     Private Sub btnConvert_Click(sender As Object, e As EventArgs) Handles btnConvert.Click
