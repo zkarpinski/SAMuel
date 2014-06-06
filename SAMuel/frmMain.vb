@@ -231,8 +231,9 @@ Public Class frmMain
     End Sub
 
     Private Sub btnBudgetBill_Click(sender As Object, e As EventArgs) Handles btnBudgetBill.Click
-        AppActivate("Customer Service System Retrieval")
-        SendKeys.Send("~")
+        Dim accNumber As String
+        accNumber = mtxtDPAAcc.Text
+        Call OpenCSSAcc(accNumber)
         Threading.Thread.Sleep(400)
         Call EnrollBB()
     End Sub
