@@ -237,4 +237,8 @@ Public Class frmMain
         Threading.Thread.Sleep(400)
         Call EnrollBB()
     End Sub
+
+    Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
+        frmAbout.Show()
+    End Sub
 End Class

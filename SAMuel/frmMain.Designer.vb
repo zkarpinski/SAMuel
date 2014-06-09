@@ -40,6 +40,7 @@ Partial Class frmMain
         Me.lblSubject = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.tabDPA = New System.Windows.Forms.TabPage()
+        Me.btnBudgetBill = New System.Windows.Forms.Button()
         Me.mtxtDPAAcc = New System.Windows.Forms.MaskedTextBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.Label3 = New System.Windows.Forms.Label()
@@ -55,13 +56,17 @@ Partial Class frmMain
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.btnBudgetBill = New System.Windows.Forms.Button()
+        Me.tabRFax = New System.Windows.Forms.TabPage()
+        Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.btnRFax = New System.Windows.Forms.Button()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
         Me.tabDPA.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
+        Me.tabRFax.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnRun
@@ -100,6 +105,7 @@ Partial Class frmMain
         Me.TabControl1.Controls.Add(Me.TabPage1)
         Me.TabControl1.Controls.Add(Me.TabPage2)
         Me.TabControl1.Controls.Add(Me.tabDPA)
+        Me.TabControl1.Controls.Add(Me.tabRFax)
         Me.TabControl1.Location = New System.Drawing.Point(-1, 27)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
@@ -252,6 +258,15 @@ Partial Class frmMain
         Me.tabDPA.Text = "DPA"
         Me.tabDPA.UseVisualStyleBackColor = True
         '
+        'btnBudgetBill
+        '
+        Me.btnBudgetBill.Location = New System.Drawing.Point(273, 267)
+        Me.btnBudgetBill.Name = "btnBudgetBill"
+        Me.btnBudgetBill.Size = New System.Drawing.Size(75, 23)
+        Me.btnBudgetBill.TabIndex = 13
+        Me.btnBudgetBill.Text = "Budget Bill"
+        Me.btnBudgetBill.UseVisualStyleBackColor = True
+        '
         'mtxtDPAAcc
         '
         Me.mtxtDPAAcc.BackColor = System.Drawing.Color.Yellow
@@ -358,7 +373,7 @@ Partial Class frmMain
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.AboutToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.AboutToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(435, 24)
@@ -384,14 +399,37 @@ Partial Class frmMain
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(52, 20)
         Me.AboutToolStripMenuItem.Text = "About"
         '
-        'btnBudgetBill
+        'tabRFax
         '
-        Me.btnBudgetBill.Location = New System.Drawing.Point(273, 267)
-        Me.btnBudgetBill.Name = "btnBudgetBill"
-        Me.btnBudgetBill.Size = New System.Drawing.Size(75, 23)
-        Me.btnBudgetBill.TabIndex = 13
-        Me.btnBudgetBill.Text = "Budget Bill"
-        Me.btnBudgetBill.UseVisualStyleBackColor = True
+        Me.tabRFax.Controls.Add(Me.btnRFax)
+        Me.tabRFax.Location = New System.Drawing.Point(4, 22)
+        Me.tabRFax.Name = "tabRFax"
+        Me.tabRFax.Size = New System.Drawing.Size(431, 290)
+        Me.tabRFax.TabIndex = 4
+        Me.tabRFax.Text = "RightFax"
+        Me.tabRFax.UseVisualStyleBackColor = True
+        '
+        'ToolsToolStripMenuItem
+        '
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OptionsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
+        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(48, 20)
+        Me.ToolsToolStripMenuItem.Text = "&Tools"
+        '
+        'OptionsToolStripMenuItem
+        '
+        Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.OptionsToolStripMenuItem.Text = "&Options"
+        '
+        'btnRFax
+        '
+        Me.btnRFax.Location = New System.Drawing.Point(177, 267)
+        Me.btnRFax.Name = "btnRFax"
+        Me.btnRFax.Size = New System.Drawing.Size(75, 23)
+        Me.btnRFax.TabIndex = 3
+        Me.btnRFax.Text = "Fax"
+        Me.btnRFax.UseVisualStyleBackColor = True
         '
         'frmMain
         '
@@ -414,6 +452,7 @@ Partial Class frmMain
         Me.tabDPA.PerformLayout()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
+        Me.tabRFax.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -452,5 +491,9 @@ Partial Class frmMain
     Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExitToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents btnBudgetBill As System.Windows.Forms.Button
+    Friend WithEvents tabRFax As System.Windows.Forms.TabPage
+    Friend WithEvents ToolsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents OptionsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents btnRFax As System.Windows.Forms.Button
 
 End Class
