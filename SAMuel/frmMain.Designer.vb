@@ -50,23 +50,24 @@ Partial Class frmMain
         Me.btnDPAprocess = New System.Windows.Forms.Button()
         Me.chkMinPayment = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.tabRFax = New System.Windows.Forms.TabPage()
+        Me.btnRFax = New System.Windows.Forms.Button()
         Me.ProgressBar = New System.Windows.Forms.ProgressBar()
         Me.lblDone = New System.Windows.Forms.Label()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tabRFax = New System.Windows.Forms.TabPage()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.btnRFax = New System.Windows.Forms.Button()
+        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
         Me.tabDPA.SuspendLayout()
-        Me.MenuStrip1.SuspendLayout()
         Me.tabRFax.SuspendLayout()
+        Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnRun
@@ -241,6 +242,7 @@ Partial Class frmMain
         '
         'tabDPA
         '
+        Me.tabDPA.Controls.Add(Me.CheckBox1)
         Me.tabDPA.Controls.Add(Me.btnBudgetBill)
         Me.tabDPA.Controls.Add(Me.mtxtDPAAcc)
         Me.tabDPA.Controls.Add(Me.GroupBox1)
@@ -266,6 +268,7 @@ Partial Class frmMain
         Me.btnBudgetBill.TabIndex = 13
         Me.btnBudgetBill.Text = "Budget Bill"
         Me.btnBudgetBill.UseVisualStyleBackColor = True
+        Me.btnBudgetBill.Visible = False
         '
         'mtxtDPAAcc
         '
@@ -286,7 +289,7 @@ Partial Class frmMain
         Me.GroupBox1.Size = New System.Drawing.Size(419, 148)
         Me.GroupBox1.TabIndex = 12
         Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "GroupBox1"
+        Me.GroupBox1.Text = "Account Info:"
         '
         'Label3
         '
@@ -351,6 +354,25 @@ Partial Class frmMain
         Me.Label1.TabIndex = 5
         Me.Label1.Text = "Account #: "
         '
+        'tabRFax
+        '
+        Me.tabRFax.Controls.Add(Me.btnRFax)
+        Me.tabRFax.Location = New System.Drawing.Point(4, 22)
+        Me.tabRFax.Name = "tabRFax"
+        Me.tabRFax.Size = New System.Drawing.Size(431, 290)
+        Me.tabRFax.TabIndex = 4
+        Me.tabRFax.Text = "RightFax"
+        Me.tabRFax.UseVisualStyleBackColor = True
+        '
+        'btnRFax
+        '
+        Me.btnRFax.Location = New System.Drawing.Point(177, 267)
+        Me.btnRFax.Name = "btnRFax"
+        Me.btnRFax.Size = New System.Drawing.Size(75, 23)
+        Me.btnRFax.TabIndex = 3
+        Me.btnRFax.Text = "Fax"
+        Me.btnRFax.UseVisualStyleBackColor = True
+        '
         'ProgressBar
         '
         Me.ProgressBar.Location = New System.Drawing.Point(-1, 343)
@@ -393,22 +415,6 @@ Partial Class frmMain
         Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(92, 22)
         Me.ExitToolStripMenuItem.Text = "&Exit"
         '
-        'AboutToolStripMenuItem
-        '
-        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(52, 20)
-        Me.AboutToolStripMenuItem.Text = "About"
-        '
-        'tabRFax
-        '
-        Me.tabRFax.Controls.Add(Me.btnRFax)
-        Me.tabRFax.Location = New System.Drawing.Point(4, 22)
-        Me.tabRFax.Name = "tabRFax"
-        Me.tabRFax.Size = New System.Drawing.Size(431, 290)
-        Me.tabRFax.TabIndex = 4
-        Me.tabRFax.Text = "RightFax"
-        Me.tabRFax.UseVisualStyleBackColor = True
-        '
         'ToolsToolStripMenuItem
         '
         Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OptionsToolStripMenuItem})
@@ -419,17 +425,24 @@ Partial Class frmMain
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
         Me.OptionsToolStripMenuItem.Text = "&Options"
         '
-        'btnRFax
+        'AboutToolStripMenuItem
         '
-        Me.btnRFax.Location = New System.Drawing.Point(177, 267)
-        Me.btnRFax.Name = "btnRFax"
-        Me.btnRFax.Size = New System.Drawing.Size(75, 23)
-        Me.btnRFax.TabIndex = 3
-        Me.btnRFax.Text = "Fax"
-        Me.btnRFax.UseVisualStyleBackColor = True
+        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(52, 20)
+        Me.AboutToolStripMenuItem.Text = "About"
+        '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(6, 87)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(90, 17)
+        Me.CheckBox1.TabIndex = 14
+        Me.CheckBox1.Text = "Budget Billing"
+        Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'frmMain
         '
@@ -450,9 +463,9 @@ Partial Class frmMain
         Me.TabPage2.ResumeLayout(False)
         Me.tabDPA.ResumeLayout(False)
         Me.tabDPA.PerformLayout()
+        Me.tabRFax.ResumeLayout(False)
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
-        Me.tabRFax.ResumeLayout(False)
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -495,5 +508,6 @@ Partial Class frmMain
     Friend WithEvents ToolsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents OptionsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents btnRFax As System.Windows.Forms.Button
+    Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
 
 End Class

@@ -1,9 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SAMuel", "SAMuel\SAMuel.vbproj", "{DF5AC783-AF4F-412E-B13E-1CA24999F0C3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{29D2D132-83E3-4F41-8E64-A8AAE5C40CA1}"
+	ProjectSection(SolutionItems) = preProject
+		images\DPA-preview.JPG = images\DPA-preview.JPG
+		images\Outlook-preview.JPG = images\Outlook-preview.JPG
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
