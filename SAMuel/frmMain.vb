@@ -122,7 +122,7 @@ Public Class frmMain
             'Initiate word application object
             objWord = CreateObject("Word.Application")
             'Set active printer to Fax
-            objWord.ActivePrinter = "Microsoft Office Document Imaging"
+            objWord.ActivePrinter = "Microsoft Office Document Image Writer"
             'Determine progressbar maximum value from number of files chosen
             ProgressBar.Maximum = dlgOpen.FileNames.Count()
             For Each sDoc In dlgOpen.FileNames
