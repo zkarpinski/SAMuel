@@ -10,9 +10,6 @@ Public Class frmMain
 
     Private Sub btnRun_Click(sender As Object, e As EventArgs) Handles btnRun.Click
         Dim oApp As Outlook.Application = New Outlook.Application
-        Dim objFolder As Outlook.MAPIFolder = oApp.Session.Folders.GetFirst
-        objFolder = objFolder.Folders.Item("Inbox")
-        Dim oItems As Outlook.Items = objFolder.Items
         Dim oMsg As Outlook.MailItem
         Dim oAtt As Outlook.Attachment
         Dim oSelection As Outlook.Selection
@@ -109,6 +106,7 @@ Public Class frmMain
     End Sub
 
     Private Sub btnConvert_Click(sender As Object, e As EventArgs) Handles btnConvert.Click
+        'Converts Word Documents to .tif using MODI
         Dim objWdDoc As Word.Document
         Dim objWord As Word.Application
         Dim sDoc As String
@@ -201,6 +199,16 @@ Public Class frmMain
         txtDPAmonthly.Text = ""
         chkMinPayment.Checked = False
 
+        'RightFax Tab
+        txtRFuser.Text = My.Settings.rfUser
+        txtRFsvr.Text = My.Settings.rfServer
+        txtRFpw.Text = My.Settings.rfPW
+        chkRFNTauth.Checked = My.Settings.rfUseNT
+        txtRFRecFax.Text = My.Settings.rfRecFax
+        txtRFRecName.Text = My.Settings.rfRecName
+        chkRFSaveRec.Checked = False
+        chkRFCoverSheet.Checked = True
+
         'Progress bar reset
         ProgressBar.Value = 0
         lblDone.Visible = False
@@ -223,7 +231,6 @@ Public Class frmMain
         accNumber = mtxtDPAAcc.Text
         Call OpenCSSAcc(accNumber)
         Call OpenPA()
-
     End Sub
 
     Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
@@ -240,5 +247,65 @@ Public Class frmMain
 
     Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
         frmAbout.Show()
+    End Sub
+
+    Private Sub btnRFax_Click(sender As Object, e As EventArgs) Handles btnRFax.Click
+        Dim strServerName As String, strUsername As String, strPassword As String 'RightFax Server Strings
+        Dim strRecName As String, strRecFax As String 'Fax Recipient Strings
+        Dim bUseNTAuth As Boolean, bSaveRec As Boolean, bUseCoverSheet As Boolean
+
+        'Set values
+        strServerName = txtRFsvr.Text
+        strUsername = txtRFuser.Text
+        strPassword = txtRFpw.Text
+        If chkRFNTauth.Checked = True Then
+            bUseNTAuth = True
+        Else
+            bUseNTAuth = False
+        End If
+        strRecName = txtRFRecName.Text
+        strRecFax = txtRFRecFax.Text
+        If chkRFSaveRec.Checked = True Then
+            bSaveRec = True
+        Else
+            bSaveRec = False
+        End If
+        If chkRFCoverSheet.Checked = True Then
+            bUseCoverSheet = True
+        Else
+            bUseCoverSheet = False
+        End If
+
+        'Update RF Server User App Settings
+        My.Settings.rfUseNT = bUseNTAuth
+        My.Settings.rfServer = strServerName
+        My.Settings.rfUser = strUsername
+        My.Settings.rfPW = strPassword
+        'Update RF Recipient User App Settings
+        If bSaveRec Then
+            My.Settings.rfRecName = strRecName
+            My.Settings.rfRecFax = strRecFax
+        End If
+
+        'If files are selected continue code
+        If dlgOpen.ShowDialog() = DialogResult.OK Then
+            ''Do RightFax stuff here
+        End If
+    End Sub
+
+    Private Sub Label4_Click(sender As Object, e As EventArgs) Handles lblRFserver.Click
+
+    End Sub
+
+    Private Sub lblRFuser_Click(sender As Object, e As EventArgs) Handles lblRFuser.Click
+
+    End Sub
+
+    Private Sub OptionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.Click
+
+    End Sub
+
+    Private Sub TextBox1_TextChanged(sender As Object, e As EventArgs) Handles txtRFRecName.TextChanged
+
     End Sub
 End Class

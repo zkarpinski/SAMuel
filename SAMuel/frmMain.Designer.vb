@@ -40,6 +40,7 @@ Partial Class frmMain
         Me.lblSubject = New System.Windows.Forms.Label()
         Me.TabPage2 = New System.Windows.Forms.TabPage()
         Me.tabDPA = New System.Windows.Forms.TabPage()
+        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.btnBudgetBill = New System.Windows.Forms.Button()
         Me.mtxtDPAAcc = New System.Windows.Forms.MaskedTextBox()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
@@ -60,7 +61,21 @@ Partial Class frmMain
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.CheckBox1 = New System.Windows.Forms.CheckBox()
+        Me.txtRFsvr = New System.Windows.Forms.TextBox()
+        Me.lblRFserver = New System.Windows.Forms.Label()
+        Me.lblRFuser = New System.Windows.Forms.Label()
+        Me.txtRFuser = New System.Windows.Forms.TextBox()
+        Me.chkRFNTauth = New System.Windows.Forms.CheckBox()
+        Me.lblRFpassword = New System.Windows.Forms.Label()
+        Me.txtRFpw = New System.Windows.Forms.TextBox()
+        Me.grpRFServer = New System.Windows.Forms.GroupBox()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.txtRFRecName = New System.Windows.Forms.TextBox()
+        Me.lblRFRecName = New System.Windows.Forms.Label()
+        Me.txtRFRecFax = New System.Windows.Forms.TextBox()
+        Me.lblRFRecFax = New System.Windows.Forms.Label()
+        Me.chkRFCoverSheet = New System.Windows.Forms.CheckBox()
+        Me.chkRFSaveRec = New System.Windows.Forms.CheckBox()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -68,6 +83,8 @@ Partial Class frmMain
         Me.tabDPA.SuspendLayout()
         Me.tabRFax.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
+        Me.grpRFServer.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnRun
@@ -260,6 +277,16 @@ Partial Class frmMain
         Me.tabDPA.Text = "DPA"
         Me.tabDPA.UseVisualStyleBackColor = True
         '
+        'CheckBox1
+        '
+        Me.CheckBox1.AutoSize = True
+        Me.CheckBox1.Location = New System.Drawing.Point(6, 87)
+        Me.CheckBox1.Name = "CheckBox1"
+        Me.CheckBox1.Size = New System.Drawing.Size(90, 17)
+        Me.CheckBox1.TabIndex = 14
+        Me.CheckBox1.Text = "Budget Billing"
+        Me.CheckBox1.UseVisualStyleBackColor = True
+        '
         'btnBudgetBill
         '
         Me.btnBudgetBill.Location = New System.Drawing.Point(273, 267)
@@ -356,6 +383,9 @@ Partial Class frmMain
         '
         'tabRFax
         '
+        Me.tabRFax.Controls.Add(Me.chkRFSaveRec)
+        Me.tabRFax.Controls.Add(Me.GroupBox2)
+        Me.tabRFax.Controls.Add(Me.grpRFServer)
         Me.tabRFax.Controls.Add(Me.btnRFax)
         Me.tabRFax.Location = New System.Drawing.Point(4, 22)
         Me.tabRFax.Name = "tabRFax"
@@ -412,7 +442,7 @@ Partial Class frmMain
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(92, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.ExitToolStripMenuItem.Text = "&Exit"
         '
         'ToolsToolStripMenuItem
@@ -425,7 +455,7 @@ Partial Class frmMain
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.OptionsToolStripMenuItem.Text = "&Options"
         '
         'AboutToolStripMenuItem
@@ -434,15 +464,147 @@ Partial Class frmMain
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(52, 20)
         Me.AboutToolStripMenuItem.Text = "About"
         '
-        'CheckBox1
+        'txtRFsvr
         '
-        Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(6, 87)
-        Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(90, 17)
-        Me.CheckBox1.TabIndex = 14
-        Me.CheckBox1.Text = "Budget Billing"
-        Me.CheckBox1.UseVisualStyleBackColor = True
+        Me.txtRFsvr.Location = New System.Drawing.Point(64, 22)
+        Me.txtRFsvr.Name = "txtRFsvr"
+        Me.txtRFsvr.Size = New System.Drawing.Size(100, 20)
+        Me.txtRFsvr.TabIndex = 4
+        '
+        'lblRFserver
+        '
+        Me.lblRFserver.AutoSize = True
+        Me.lblRFserver.Location = New System.Drawing.Point(19, 25)
+        Me.lblRFserver.Name = "lblRFserver"
+        Me.lblRFserver.Size = New System.Drawing.Size(41, 13)
+        Me.lblRFserver.TabIndex = 5
+        Me.lblRFserver.Text = "Server:"
+        '
+        'lblRFuser
+        '
+        Me.lblRFuser.AutoSize = True
+        Me.lblRFuser.Location = New System.Drawing.Point(191, 25)
+        Me.lblRFuser.Name = "lblRFuser"
+        Me.lblRFuser.Size = New System.Drawing.Size(58, 13)
+        Me.lblRFuser.TabIndex = 7
+        Me.lblRFuser.Text = "Username:"
+        '
+        'txtRFuser
+        '
+        Me.txtRFuser.Location = New System.Drawing.Point(255, 22)
+        Me.txtRFuser.Name = "txtRFuser"
+        Me.txtRFuser.Size = New System.Drawing.Size(100, 20)
+        Me.txtRFuser.TabIndex = 6
+        '
+        'chkRFNTauth
+        '
+        Me.chkRFNTauth.AutoSize = True
+        Me.chkRFNTauth.Location = New System.Drawing.Point(22, 65)
+        Me.chkRFNTauth.Name = "chkRFNTauth"
+        Me.chkRFNTauth.Size = New System.Drawing.Size(134, 17)
+        Me.chkRFNTauth.TabIndex = 8
+        Me.chkRFNTauth.Text = "Use NT Authentication"
+        Me.chkRFNTauth.UseVisualStyleBackColor = True
+        '
+        'lblRFpassword
+        '
+        Me.lblRFpassword.AutoSize = True
+        Me.lblRFpassword.Location = New System.Drawing.Point(193, 51)
+        Me.lblRFpassword.Name = "lblRFpassword"
+        Me.lblRFpassword.Size = New System.Drawing.Size(56, 13)
+        Me.lblRFpassword.TabIndex = 10
+        Me.lblRFpassword.Text = "Password:"
+        '
+        'txtRFpw
+        '
+        Me.txtRFpw.Location = New System.Drawing.Point(255, 48)
+        Me.txtRFpw.Name = "txtRFpw"
+        Me.txtRFpw.Size = New System.Drawing.Size(100, 20)
+        Me.txtRFpw.TabIndex = 9
+        '
+        'grpRFServer
+        '
+        Me.grpRFServer.Controls.Add(Me.chkRFNTauth)
+        Me.grpRFServer.Controls.Add(Me.lblRFpassword)
+        Me.grpRFServer.Controls.Add(Me.txtRFsvr)
+        Me.grpRFServer.Controls.Add(Me.txtRFpw)
+        Me.grpRFServer.Controls.Add(Me.lblRFserver)
+        Me.grpRFServer.Controls.Add(Me.txtRFuser)
+        Me.grpRFServer.Controls.Add(Me.lblRFuser)
+        Me.grpRFServer.Location = New System.Drawing.Point(19, 3)
+        Me.grpRFServer.Name = "grpRFServer"
+        Me.grpRFServer.Size = New System.Drawing.Size(381, 95)
+        Me.grpRFServer.TabIndex = 11
+        Me.grpRFServer.TabStop = False
+        Me.grpRFServer.Text = "Server Info"
+        '
+        'GroupBox2
+        '
+        Me.GroupBox2.Controls.Add(Me.chkRFCoverSheet)
+        Me.GroupBox2.Controls.Add(Me.txtRFRecFax)
+        Me.GroupBox2.Controls.Add(Me.lblRFRecFax)
+        Me.GroupBox2.Controls.Add(Me.txtRFRecName)
+        Me.GroupBox2.Controls.Add(Me.lblRFRecName)
+        Me.GroupBox2.Location = New System.Drawing.Point(19, 104)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(381, 95)
+        Me.GroupBox2.TabIndex = 12
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "Fax Info"
+        '
+        'txtRFRecName
+        '
+        Me.txtRFRecName.Location = New System.Drawing.Point(98, 22)
+        Me.txtRFRecName.Name = "txtRFRecName"
+        Me.txtRFRecName.Size = New System.Drawing.Size(100, 20)
+        Me.txtRFRecName.TabIndex = 4
+        '
+        'lblRFRecName
+        '
+        Me.lblRFRecName.AutoSize = True
+        Me.lblRFRecName.Location = New System.Drawing.Point(6, 25)
+        Me.lblRFRecName.Name = "lblRFRecName"
+        Me.lblRFRecName.Size = New System.Drawing.Size(86, 13)
+        Me.lblRFRecName.TabIndex = 5
+        Me.lblRFRecName.Text = "Recipient Name:"
+        '
+        'txtRFRecFax
+        '
+        Me.txtRFRecFax.Location = New System.Drawing.Point(98, 48)
+        Me.txtRFRecFax.Name = "txtRFRecFax"
+        Me.txtRFRecFax.Size = New System.Drawing.Size(100, 20)
+        Me.txtRFRecFax.TabIndex = 6
+        '
+        'lblRFRecFax
+        '
+        Me.lblRFRecFax.AutoSize = True
+        Me.lblRFRecFax.Location = New System.Drawing.Point(6, 50)
+        Me.lblRFRecFax.Name = "lblRFRecFax"
+        Me.lblRFRecFax.Size = New System.Drawing.Size(75, 13)
+        Me.lblRFRecFax.TabIndex = 7
+        Me.lblRFRecFax.Text = "Recipient Fax:"
+        '
+        'chkRFCoverSheet
+        '
+        Me.chkRFCoverSheet.AutoSize = True
+        Me.chkRFCoverSheet.Checked = True
+        Me.chkRFCoverSheet.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkRFCoverSheet.Location = New System.Drawing.Point(17, 78)
+        Me.chkRFCoverSheet.Name = "chkRFCoverSheet"
+        Me.chkRFCoverSheet.Size = New System.Drawing.Size(123, 17)
+        Me.chkRFCoverSheet.TabIndex = 11
+        Me.chkRFCoverSheet.Text = "Include Cover Sheet"
+        Me.chkRFCoverSheet.UseVisualStyleBackColor = True
+        '
+        'chkRFSaveRec
+        '
+        Me.chkRFSaveRec.AutoSize = True
+        Me.chkRFSaveRec.Location = New System.Drawing.Point(7, 267)
+        Me.chkRFSaveRec.Name = "chkRFSaveRec"
+        Me.chkRFSaveRec.Size = New System.Drawing.Size(152, 17)
+        Me.chkRFSaveRec.TabIndex = 13
+        Me.chkRFSaveRec.Text = "Save recipient info for later"
+        Me.chkRFSaveRec.UseVisualStyleBackColor = True
         '
         'frmMain
         '
@@ -464,8 +626,13 @@ Partial Class frmMain
         Me.tabDPA.ResumeLayout(False)
         Me.tabDPA.PerformLayout()
         Me.tabRFax.ResumeLayout(False)
+        Me.tabRFax.PerformLayout()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
+        Me.grpRFServer.ResumeLayout(False)
+        Me.grpRFServer.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
+        Me.GroupBox2.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -509,5 +676,20 @@ Partial Class frmMain
     Friend WithEvents OptionsToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents btnRFax As System.Windows.Forms.Button
     Friend WithEvents CheckBox1 As System.Windows.Forms.CheckBox
+    Friend WithEvents lblRFserver As System.Windows.Forms.Label
+    Friend WithEvents txtRFsvr As System.Windows.Forms.TextBox
+    Friend WithEvents lblRFuser As System.Windows.Forms.Label
+    Friend WithEvents txtRFuser As System.Windows.Forms.TextBox
+    Friend WithEvents chkRFNTauth As System.Windows.Forms.CheckBox
+    Friend WithEvents lblRFpassword As System.Windows.Forms.Label
+    Friend WithEvents txtRFpw As System.Windows.Forms.TextBox
+    Friend WithEvents grpRFServer As System.Windows.Forms.GroupBox
+    Friend WithEvents GroupBox2 As System.Windows.Forms.GroupBox
+    Friend WithEvents txtRFRecName As System.Windows.Forms.TextBox
+    Friend WithEvents lblRFRecName As System.Windows.Forms.Label
+    Friend WithEvents txtRFRecFax As System.Windows.Forms.TextBox
+    Friend WithEvents lblRFRecFax As System.Windows.Forms.Label
+    Friend WithEvents chkRFCoverSheet As System.Windows.Forms.CheckBox
+    Friend WithEvents chkRFSaveRec As System.Windows.Forms.CheckBox
 
 End Class
