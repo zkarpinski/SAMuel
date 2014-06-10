@@ -12,3 +12,7 @@ A toolset designed for work at National Grid.
 	* Add "watermark" of account number
 * Automate DPA process
 * Integration with RightFax
+
+##Preview
+![DPA](https://github.com/zKarp/SAMuel/master/images/DPA-preview.JPG "DPA tab preview")
+![Outlok](https://github.com/zKarp/SAMuel/master/images/Outlook-preview.JPG "Outlook tab preview")
