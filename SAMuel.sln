@@ -7,9 +7,13 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SAMuel", "SAMuel\SAMuel.vbp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{29D2D132-83E3-4F41-8E64-A8AAE5C40CA1}"
 	ProjectSection(SolutionItems) = preProject
-		images\DPA-preview.JPG = images\DPA-preview.JPG
-		images\Outlook-preview.JPG = images\Outlook-preview.JPG
+		Scripts\Hotkeys\bb.ahk = Scripts\Hotkeys\bb.ahk
+		Scripts\Fax-C&I.vbs = Scripts\Fax-C&I.vbs
+		Scripts\OpenFile-XP.vbs = Scripts\OpenFile-XP.vbs
 		README.md = README.md
+		Scripts\README.md = Scripts\README.md
+		Scripts\MS Office Macros\RightFax_It.bas = Scripts\MS Office Macros\RightFax_It.bas
+		Scripts\Word_To_Tiff.vbs = Scripts\Word_To_Tiff.vbs
 	EndProjectSection
 EndProject
 Global

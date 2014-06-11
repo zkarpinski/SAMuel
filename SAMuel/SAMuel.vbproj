@@ -150,7 +150,6 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="SAMuel.zip" />
-    <None Include="Scripts\README.md" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Interop.Outlook">
@@ -193,13 +192,6 @@
       <ProductName>Windows Installer 4.5</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Scripts\Fax-C&amp;I.vbs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Scripts\OpenFile-XP.vbs" />
-    <None Include="Scripts\Word_To_Tiff.vbs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
