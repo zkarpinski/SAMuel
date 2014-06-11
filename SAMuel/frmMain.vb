@@ -286,6 +286,7 @@ Public Class frmMain
             My.Settings.rfRecName = strRecName
             My.Settings.rfRecFax = strRecFax
         End If
+        My.Settings.Save()
 
         'If files are selected continue code
         If dlgOpen.ShowDialog() = DialogResult.OK Then
