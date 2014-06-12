@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 		Scripts\README.md = Scripts\README.md
 		Scripts\MS Office Macros\RightFax_It.bas = Scripts\MS Office Macros\RightFax_It.bas
+		TODO.md = TODO.md
 		Scripts\Word_To_Tiff.vbs = Scripts\Word_To_Tiff.vbs
 	EndProjectSection
 EndProject

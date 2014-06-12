@@ -52,39 +52,39 @@ Partial Class frmMain
         Me.chkMinPayment = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.tabRFax = New System.Windows.Forms.TabPage()
+        Me.chkRFSaveRec = New System.Windows.Forms.CheckBox()
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
+        Me.chkRFCoverSheet = New System.Windows.Forms.CheckBox()
+        Me.txtRFRecFax = New System.Windows.Forms.TextBox()
+        Me.lblRFRecFax = New System.Windows.Forms.Label()
+        Me.txtRFRecName = New System.Windows.Forms.TextBox()
+        Me.lblRFRecName = New System.Windows.Forms.Label()
+        Me.grpRFServer = New System.Windows.Forms.GroupBox()
+        Me.chkRFNTauth = New System.Windows.Forms.CheckBox()
+        Me.lblRFpassword = New System.Windows.Forms.Label()
+        Me.txtRFsvr = New System.Windows.Forms.TextBox()
+        Me.txtRFpw = New System.Windows.Forms.TextBox()
+        Me.lblRFserver = New System.Windows.Forms.Label()
+        Me.txtRFuser = New System.Windows.Forms.TextBox()
+        Me.lblRFuser = New System.Windows.Forms.Label()
         Me.btnRFax = New System.Windows.Forms.Button()
         Me.ProgressBar = New System.Windows.Forms.ProgressBar()
-        Me.lblDone = New System.Windows.Forms.Label()
+        Me.lblStatus = New System.Windows.Forms.Label()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
         Me.FileToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.txtRFsvr = New System.Windows.Forms.TextBox()
-        Me.lblRFserver = New System.Windows.Forms.Label()
-        Me.lblRFuser = New System.Windows.Forms.Label()
-        Me.txtRFuser = New System.Windows.Forms.TextBox()
-        Me.chkRFNTauth = New System.Windows.Forms.CheckBox()
-        Me.lblRFpassword = New System.Windows.Forms.Label()
-        Me.txtRFpw = New System.Windows.Forms.TextBox()
-        Me.grpRFServer = New System.Windows.Forms.GroupBox()
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox()
-        Me.txtRFRecName = New System.Windows.Forms.TextBox()
-        Me.lblRFRecName = New System.Windows.Forms.Label()
-        Me.txtRFRecFax = New System.Windows.Forms.TextBox()
-        Me.lblRFRecFax = New System.Windows.Forms.Label()
-        Me.chkRFCoverSheet = New System.Windows.Forms.CheckBox()
-        Me.chkRFSaveRec = New System.Windows.Forms.CheckBox()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.TabPage2.SuspendLayout()
         Me.tabDPA.SuspendLayout()
         Me.tabRFax.SuspendLayout()
-        Me.MenuStrip1.SuspendLayout()
-        Me.grpRFServer.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
+        Me.grpRFServer.SuspendLayout()
+        Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnRun
@@ -394,107 +394,89 @@ Partial Class frmMain
         Me.tabRFax.Text = "RightFax"
         Me.tabRFax.UseVisualStyleBackColor = True
         '
-        'btnRFax
+        'chkRFSaveRec
         '
-        Me.btnRFax.Location = New System.Drawing.Point(177, 267)
-        Me.btnRFax.Name = "btnRFax"
-        Me.btnRFax.Size = New System.Drawing.Size(75, 23)
-        Me.btnRFax.TabIndex = 3
-        Me.btnRFax.Text = "Fax"
-        Me.btnRFax.UseVisualStyleBackColor = True
+        Me.chkRFSaveRec.AutoSize = True
+        Me.chkRFSaveRec.Location = New System.Drawing.Point(7, 267)
+        Me.chkRFSaveRec.Name = "chkRFSaveRec"
+        Me.chkRFSaveRec.Size = New System.Drawing.Size(152, 17)
+        Me.chkRFSaveRec.TabIndex = 13
+        Me.chkRFSaveRec.Text = "Save recipient info for later"
+        Me.chkRFSaveRec.UseVisualStyleBackColor = True
         '
-        'ProgressBar
+        'GroupBox2
         '
-        Me.ProgressBar.Location = New System.Drawing.Point(-1, 343)
-        Me.ProgressBar.Name = "ProgressBar"
-        Me.ProgressBar.Size = New System.Drawing.Size(439, 23)
-        Me.ProgressBar.TabIndex = 4
-        Me.ProgressBar.Value = 88
+        Me.GroupBox2.Controls.Add(Me.chkRFCoverSheet)
+        Me.GroupBox2.Controls.Add(Me.txtRFRecFax)
+        Me.GroupBox2.Controls.Add(Me.lblRFRecFax)
+        Me.GroupBox2.Controls.Add(Me.txtRFRecName)
+        Me.GroupBox2.Controls.Add(Me.lblRFRecName)
+        Me.GroupBox2.Location = New System.Drawing.Point(19, 104)
+        Me.GroupBox2.Name = "GroupBox2"
+        Me.GroupBox2.Size = New System.Drawing.Size(381, 95)
+        Me.GroupBox2.TabIndex = 12
+        Me.GroupBox2.TabStop = False
+        Me.GroupBox2.Text = "Fax Info"
         '
-        'lblDone
+        'chkRFCoverSheet
         '
-        Me.lblDone.AutoSize = True
-        Me.lblDone.BackColor = System.Drawing.Color.Transparent
-        Me.lblDone.ForeColor = System.Drawing.Color.Black
-        Me.lblDone.Location = New System.Drawing.Point(203, 346)
-        Me.lblDone.Name = "lblDone"
-        Me.lblDone.Size = New System.Drawing.Size(38, 13)
-        Me.lblDone.TabIndex = 3
-        Me.lblDone.Text = "DONE"
-        Me.lblDone.Visible = False
+        Me.chkRFCoverSheet.AutoSize = True
+        Me.chkRFCoverSheet.Checked = True
+        Me.chkRFCoverSheet.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkRFCoverSheet.Location = New System.Drawing.Point(17, 78)
+        Me.chkRFCoverSheet.Name = "chkRFCoverSheet"
+        Me.chkRFCoverSheet.Size = New System.Drawing.Size(123, 17)
+        Me.chkRFCoverSheet.TabIndex = 11
+        Me.chkRFCoverSheet.Text = "Include Cover Sheet"
+        Me.chkRFCoverSheet.UseVisualStyleBackColor = True
         '
-        'MenuStrip1
+        'txtRFRecFax
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.AboutToolStripMenuItem})
-        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
-        Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(435, 24)
-        Me.MenuStrip1.TabIndex = 5
-        Me.MenuStrip1.Text = "MenuStrip1"
+        Me.txtRFRecFax.Location = New System.Drawing.Point(98, 48)
+        Me.txtRFRecFax.Name = "txtRFRecFax"
+        Me.txtRFRecFax.Size = New System.Drawing.Size(100, 20)
+        Me.txtRFRecFax.TabIndex = 6
         '
-        'FileToolStripMenuItem
+        'lblRFRecFax
         '
-        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExitToolStripMenuItem})
-        Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
-        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
-        Me.FileToolStripMenuItem.Text = "&File"
+        Me.lblRFRecFax.AutoSize = True
+        Me.lblRFRecFax.Location = New System.Drawing.Point(6, 50)
+        Me.lblRFRecFax.Name = "lblRFRecFax"
+        Me.lblRFRecFax.Size = New System.Drawing.Size(75, 13)
+        Me.lblRFRecFax.TabIndex = 7
+        Me.lblRFRecFax.Text = "Recipient Fax:"
         '
-        'ExitToolStripMenuItem
+        'txtRFRecName
         '
-        Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.ExitToolStripMenuItem.Text = "&Exit"
+        Me.txtRFRecName.Location = New System.Drawing.Point(98, 22)
+        Me.txtRFRecName.Name = "txtRFRecName"
+        Me.txtRFRecName.Size = New System.Drawing.Size(100, 20)
+        Me.txtRFRecName.TabIndex = 4
         '
-        'ToolsToolStripMenuItem
+        'lblRFRecName
         '
-        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OptionsToolStripMenuItem})
-        Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
-        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(48, 20)
-        Me.ToolsToolStripMenuItem.Text = "&Tools"
+        Me.lblRFRecName.AutoSize = True
+        Me.lblRFRecName.Location = New System.Drawing.Point(6, 25)
+        Me.lblRFRecName.Name = "lblRFRecName"
+        Me.lblRFRecName.Size = New System.Drawing.Size(86, 13)
+        Me.lblRFRecName.TabIndex = 5
+        Me.lblRFRecName.Text = "Recipient Name:"
         '
-        'OptionsToolStripMenuItem
+        'grpRFServer
         '
-        Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.OptionsToolStripMenuItem.Text = "&Options"
-        '
-        'AboutToolStripMenuItem
-        '
-        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(52, 20)
-        Me.AboutToolStripMenuItem.Text = "About"
-        '
-        'txtRFsvr
-        '
-        Me.txtRFsvr.Location = New System.Drawing.Point(64, 22)
-        Me.txtRFsvr.Name = "txtRFsvr"
-        Me.txtRFsvr.Size = New System.Drawing.Size(100, 20)
-        Me.txtRFsvr.TabIndex = 4
-        '
-        'lblRFserver
-        '
-        Me.lblRFserver.AutoSize = True
-        Me.lblRFserver.Location = New System.Drawing.Point(19, 25)
-        Me.lblRFserver.Name = "lblRFserver"
-        Me.lblRFserver.Size = New System.Drawing.Size(41, 13)
-        Me.lblRFserver.TabIndex = 5
-        Me.lblRFserver.Text = "Server:"
-        '
-        'lblRFuser
-        '
-        Me.lblRFuser.AutoSize = True
-        Me.lblRFuser.Location = New System.Drawing.Point(191, 25)
-        Me.lblRFuser.Name = "lblRFuser"
-        Me.lblRFuser.Size = New System.Drawing.Size(58, 13)
-        Me.lblRFuser.TabIndex = 7
-        Me.lblRFuser.Text = "Username:"
-        '
-        'txtRFuser
-        '
-        Me.txtRFuser.Location = New System.Drawing.Point(255, 22)
-        Me.txtRFuser.Name = "txtRFuser"
-        Me.txtRFuser.Size = New System.Drawing.Size(100, 20)
-        Me.txtRFuser.TabIndex = 6
+        Me.grpRFServer.Controls.Add(Me.chkRFNTauth)
+        Me.grpRFServer.Controls.Add(Me.lblRFpassword)
+        Me.grpRFServer.Controls.Add(Me.txtRFsvr)
+        Me.grpRFServer.Controls.Add(Me.txtRFpw)
+        Me.grpRFServer.Controls.Add(Me.lblRFserver)
+        Me.grpRFServer.Controls.Add(Me.txtRFuser)
+        Me.grpRFServer.Controls.Add(Me.lblRFuser)
+        Me.grpRFServer.Location = New System.Drawing.Point(19, 3)
+        Me.grpRFServer.Name = "grpRFServer"
+        Me.grpRFServer.Size = New System.Drawing.Size(381, 95)
+        Me.grpRFServer.TabIndex = 11
+        Me.grpRFServer.TabStop = False
+        Me.grpRFServer.Text = "Server Info"
         '
         'chkRFNTauth
         '
@@ -515,6 +497,13 @@ Partial Class frmMain
         Me.lblRFpassword.TabIndex = 10
         Me.lblRFpassword.Text = "Password:"
         '
+        'txtRFsvr
+        '
+        Me.txtRFsvr.Location = New System.Drawing.Point(64, 22)
+        Me.txtRFsvr.Name = "txtRFsvr"
+        Me.txtRFsvr.Size = New System.Drawing.Size(100, 20)
+        Me.txtRFsvr.TabIndex = 4
+        '
         'txtRFpw
         '
         Me.txtRFpw.Location = New System.Drawing.Point(255, 48)
@@ -522,96 +511,106 @@ Partial Class frmMain
         Me.txtRFpw.Size = New System.Drawing.Size(100, 20)
         Me.txtRFpw.TabIndex = 9
         '
-        'grpRFServer
+        'lblRFserver
         '
-        Me.grpRFServer.Controls.Add(Me.chkRFNTauth)
-        Me.grpRFServer.Controls.Add(Me.lblRFpassword)
-        Me.grpRFServer.Controls.Add(Me.txtRFsvr)
-        Me.grpRFServer.Controls.Add(Me.txtRFpw)
-        Me.grpRFServer.Controls.Add(Me.lblRFserver)
-        Me.grpRFServer.Controls.Add(Me.txtRFuser)
-        Me.grpRFServer.Controls.Add(Me.lblRFuser)
-        Me.grpRFServer.Location = New System.Drawing.Point(19, 3)
-        Me.grpRFServer.Name = "grpRFServer"
-        Me.grpRFServer.Size = New System.Drawing.Size(381, 95)
-        Me.grpRFServer.TabIndex = 11
-        Me.grpRFServer.TabStop = False
-        Me.grpRFServer.Text = "Server Info"
+        Me.lblRFserver.AutoSize = True
+        Me.lblRFserver.Location = New System.Drawing.Point(19, 25)
+        Me.lblRFserver.Name = "lblRFserver"
+        Me.lblRFserver.Size = New System.Drawing.Size(41, 13)
+        Me.lblRFserver.TabIndex = 5
+        Me.lblRFserver.Text = "Server:"
         '
-        'GroupBox2
+        'txtRFuser
         '
-        Me.GroupBox2.Controls.Add(Me.chkRFCoverSheet)
-        Me.GroupBox2.Controls.Add(Me.txtRFRecFax)
-        Me.GroupBox2.Controls.Add(Me.lblRFRecFax)
-        Me.GroupBox2.Controls.Add(Me.txtRFRecName)
-        Me.GroupBox2.Controls.Add(Me.lblRFRecName)
-        Me.GroupBox2.Location = New System.Drawing.Point(19, 104)
-        Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(381, 95)
-        Me.GroupBox2.TabIndex = 12
-        Me.GroupBox2.TabStop = False
-        Me.GroupBox2.Text = "Fax Info"
+        Me.txtRFuser.Location = New System.Drawing.Point(255, 22)
+        Me.txtRFuser.Name = "txtRFuser"
+        Me.txtRFuser.Size = New System.Drawing.Size(100, 20)
+        Me.txtRFuser.TabIndex = 6
         '
-        'txtRFRecName
+        'lblRFuser
         '
-        Me.txtRFRecName.Location = New System.Drawing.Point(98, 22)
-        Me.txtRFRecName.Name = "txtRFRecName"
-        Me.txtRFRecName.Size = New System.Drawing.Size(100, 20)
-        Me.txtRFRecName.TabIndex = 4
+        Me.lblRFuser.AutoSize = True
+        Me.lblRFuser.Location = New System.Drawing.Point(191, 25)
+        Me.lblRFuser.Name = "lblRFuser"
+        Me.lblRFuser.Size = New System.Drawing.Size(58, 13)
+        Me.lblRFuser.TabIndex = 7
+        Me.lblRFuser.Text = "Username:"
         '
-        'lblRFRecName
+        'btnRFax
         '
-        Me.lblRFRecName.AutoSize = True
-        Me.lblRFRecName.Location = New System.Drawing.Point(6, 25)
-        Me.lblRFRecName.Name = "lblRFRecName"
-        Me.lblRFRecName.Size = New System.Drawing.Size(86, 13)
-        Me.lblRFRecName.TabIndex = 5
-        Me.lblRFRecName.Text = "Recipient Name:"
+        Me.btnRFax.Location = New System.Drawing.Point(177, 267)
+        Me.btnRFax.Name = "btnRFax"
+        Me.btnRFax.Size = New System.Drawing.Size(75, 23)
+        Me.btnRFax.TabIndex = 3
+        Me.btnRFax.Text = "Fax"
+        Me.btnRFax.UseVisualStyleBackColor = True
         '
-        'txtRFRecFax
+        'ProgressBar
         '
-        Me.txtRFRecFax.Location = New System.Drawing.Point(98, 48)
-        Me.txtRFRecFax.Name = "txtRFRecFax"
-        Me.txtRFRecFax.Size = New System.Drawing.Size(100, 20)
-        Me.txtRFRecFax.TabIndex = 6
+        Me.ProgressBar.Location = New System.Drawing.Point(-1, 343)
+        Me.ProgressBar.Name = "ProgressBar"
+        Me.ProgressBar.Size = New System.Drawing.Size(439, 23)
+        Me.ProgressBar.TabIndex = 4
+        Me.ProgressBar.Value = 88
         '
-        'lblRFRecFax
+        'lblStatus
         '
-        Me.lblRFRecFax.AutoSize = True
-        Me.lblRFRecFax.Location = New System.Drawing.Point(6, 50)
-        Me.lblRFRecFax.Name = "lblRFRecFax"
-        Me.lblRFRecFax.Size = New System.Drawing.Size(75, 13)
-        Me.lblRFRecFax.TabIndex = 7
-        Me.lblRFRecFax.Text = "Recipient Fax:"
+        Me.lblStatus.AutoSize = True
+        Me.lblStatus.BackColor = System.Drawing.Color.Transparent
+        Me.lblStatus.ForeColor = System.Drawing.Color.Black
+        Me.lblStatus.Location = New System.Drawing.Point(203, 346)
+        Me.lblStatus.Name = "lblStatus"
+        Me.lblStatus.Size = New System.Drawing.Size(38, 13)
+        Me.lblStatus.TabIndex = 3
+        Me.lblStatus.Text = "DONE"
         '
-        'chkRFCoverSheet
+        'MenuStrip1
         '
-        Me.chkRFCoverSheet.AutoSize = True
-        Me.chkRFCoverSheet.Checked = True
-        Me.chkRFCoverSheet.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkRFCoverSheet.Location = New System.Drawing.Point(17, 78)
-        Me.chkRFCoverSheet.Name = "chkRFCoverSheet"
-        Me.chkRFCoverSheet.Size = New System.Drawing.Size(123, 17)
-        Me.chkRFCoverSheet.TabIndex = 11
-        Me.chkRFCoverSheet.Text = "Include Cover Sheet"
-        Me.chkRFCoverSheet.UseVisualStyleBackColor = True
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.AboutToolStripMenuItem})
+        Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
+        Me.MenuStrip1.Name = "MenuStrip1"
+        Me.MenuStrip1.Size = New System.Drawing.Size(435, 24)
+        Me.MenuStrip1.TabIndex = 5
+        Me.MenuStrip1.Text = "MenuStrip1"
         '
-        'chkRFSaveRec
+        'FileToolStripMenuItem
         '
-        Me.chkRFSaveRec.AutoSize = True
-        Me.chkRFSaveRec.Location = New System.Drawing.Point(7, 267)
-        Me.chkRFSaveRec.Name = "chkRFSaveRec"
-        Me.chkRFSaveRec.Size = New System.Drawing.Size(152, 17)
-        Me.chkRFSaveRec.TabIndex = 13
-        Me.chkRFSaveRec.Text = "Save recipient info for later"
-        Me.chkRFSaveRec.UseVisualStyleBackColor = True
+        Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExitToolStripMenuItem})
+        Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
+        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
+        Me.FileToolStripMenuItem.Text = "&File"
+        '
+        'ExitToolStripMenuItem
+        '
+        Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(92, 22)
+        Me.ExitToolStripMenuItem.Text = "&Exit"
+        '
+        'ToolsToolStripMenuItem
+        '
+        Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OptionsToolStripMenuItem})
+        Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
+        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(48, 20)
+        Me.ToolsToolStripMenuItem.Text = "&Tools"
+        '
+        'OptionsToolStripMenuItem
+        '
+        Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
+        Me.OptionsToolStripMenuItem.Text = "&Options"
+        '
+        'AboutToolStripMenuItem
+        '
+        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(52, 20)
+        Me.AboutToolStripMenuItem.Text = "About"
         '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(435, 361)
-        Me.Controls.Add(Me.lblDone)
+        Me.Controls.Add(Me.lblStatus)
         Me.Controls.Add(Me.ProgressBar)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.MenuStrip1)
@@ -627,12 +626,12 @@ Partial Class frmMain
         Me.tabDPA.PerformLayout()
         Me.tabRFax.ResumeLayout(False)
         Me.tabRFax.PerformLayout()
-        Me.MenuStrip1.ResumeLayout(False)
-        Me.MenuStrip1.PerformLayout()
-        Me.grpRFServer.ResumeLayout(False)
-        Me.grpRFServer.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
         Me.GroupBox2.PerformLayout()
+        Me.grpRFServer.ResumeLayout(False)
+        Me.grpRFServer.PerformLayout()
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -661,7 +660,7 @@ Partial Class frmMain
     Friend WithEvents txtDPAdown As System.Windows.Forms.TextBox
     Friend WithEvents rtbEmailBody As System.Windows.Forms.RichTextBox
     Friend WithEvents ProgressBar As System.Windows.Forms.ProgressBar
-    Friend WithEvents lblDone As System.Windows.Forms.Label
+    Friend WithEvents lblStatus As System.Windows.Forms.Label
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
     Friend WithEvents btnNext As System.Windows.Forms.Button
     Friend WithEvents btnCancel As System.Windows.Forms.Button
