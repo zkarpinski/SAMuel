@@ -2,14 +2,18 @@
 
     Private Sub btnSelectSaveFolder_Click(sender As Object, e As EventArgs) Handles btnSelectSaveFolder.Click
         If FolderBrowserDialog1.ShowDialog() = DialogResult.OK Then
-            Me.txtSavePath.Text = FolderBrowserDialog1.SelectedPath
+            Me.txtSavePath.Text = FolderBrowserDialog1.SelectedPath + "\"
         End If
     End Sub
 
     Private Sub btnSaveOptions_Click(sender As Object, e As EventArgs) Handles btnSaveOptions.Click
         'Update settings, save and close
-        My.Settings.savePath = Me.txtSavePath.Text
-        My.Settings.Save()
+        If Me.txtSavePath.Text <> My.Settings.savePath Then
+            My.Settings.savePath = Me.txtSavePath.Text
+            My.Settings.Save()
+            GlobalModule.LogAction(actionCode:=2, action:=Me.txtSavePath.Text)
+        End If
+
         Me.Close()
     End Sub
 

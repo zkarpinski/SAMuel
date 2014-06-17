@@ -76,6 +76,8 @@ Partial Class frmMain
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.clbSelectedEmails = New System.Windows.Forms.CheckedListBox()
+        Me.lblSelectedEmails = New System.Windows.Forms.Label()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -98,9 +100,9 @@ Partial Class frmMain
         '
         'picImage
         '
-        Me.picImage.Location = New System.Drawing.Point(246, 0)
+        Me.picImage.Location = New System.Drawing.Point(286, 6)
         Me.picImage.Name = "picImage"
-        Me.picImage.Size = New System.Drawing.Size(160, 179)
+        Me.picImage.Size = New System.Drawing.Size(68, 96)
         Me.picImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.picImage.TabIndex = 1
         Me.picImage.TabStop = False
@@ -132,6 +134,8 @@ Partial Class frmMain
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.lblSelectedEmails)
+        Me.TabPage1.Controls.Add(Me.clbSelectedEmails)
         Me.TabPage1.Controls.Add(Me.btnCancel)
         Me.TabPage1.Controls.Add(Me.btnNext)
         Me.TabPage1.Controls.Add(Me.rtbEmailBody)
@@ -184,7 +188,7 @@ Partial Class frmMain
         'btnReject
         '
         Me.btnReject.Enabled = False
-        Me.btnReject.Location = New System.Drawing.Point(286, 185)
+        Me.btnReject.Location = New System.Drawing.Point(286, 108)
         Me.btnReject.Name = "btnReject"
         Me.btnReject.Size = New System.Drawing.Size(75, 23)
         Me.btnReject.TabIndex = 8
@@ -605,6 +609,25 @@ Partial Class frmMain
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(52, 20)
         Me.AboutToolStripMenuItem.Text = "About"
         '
+        'clbSelectedEmails
+        '
+        Me.clbSelectedEmails.Enabled = False
+        Me.clbSelectedEmails.FormattingEnabled = True
+        Me.clbSelectedEmails.Location = New System.Drawing.Point(252, 160)
+        Me.clbSelectedEmails.Name = "clbSelectedEmails"
+        Me.clbSelectedEmails.Size = New System.Drawing.Size(168, 94)
+        Me.clbSelectedEmails.TabIndex = 12
+        '
+        'lblSelectedEmails
+        '
+        Me.lblSelectedEmails.AutoSize = True
+        Me.lblSelectedEmails.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSelectedEmails.Location = New System.Drawing.Point(283, 144)
+        Me.lblSelectedEmails.Name = "lblSelectedEmails"
+        Me.lblSelectedEmails.Size = New System.Drawing.Size(101, 13)
+        Me.lblSelectedEmails.TabIndex = 13
+        Me.lblSelectedEmails.Text = "Selected Emails:"
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -690,5 +713,7 @@ Partial Class frmMain
     Friend WithEvents lblRFRecFax As System.Windows.Forms.Label
     Friend WithEvents chkRFCoverSheet As System.Windows.Forms.CheckBox
     Friend WithEvents chkRFSaveRec As System.Windows.Forms.CheckBox
+    Friend WithEvents clbSelectedEmails As System.Windows.Forms.CheckedListBox
+    Friend WithEvents lblSelectedEmails As System.Windows.Forms.Label
 
 End Class
