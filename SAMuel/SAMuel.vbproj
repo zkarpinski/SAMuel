@@ -112,6 +112,7 @@
     <Compile Include="frmOptions.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Modules\ConvertToTiff.vb" />
     <Compile Include="Modules\EmailProcessing.vb" />
     <Compile Include="Modules\GlobalModule.vb" />
     <Compile Include="Modules\modDPAHandle.vb" />

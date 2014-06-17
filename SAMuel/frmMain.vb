@@ -21,6 +21,7 @@ Public Class frmMain
         Dim attachmentImg As Image
 
         Reset_Outlook_Tab()
+        clbSelectedEmails.Items.Clear()
         Reset_ProgressBar()
 
         'enable buttons
@@ -108,9 +109,12 @@ Public Class frmMain
                         lblStatus.Text = ""
                     End If
                     'Checks the email in the check list box
-                    clbSelectedEmails.SetItemChecked(clbSelectedEmails.FindString(strSubject), True)
+                    clbSelectedEmails.SetItemChecked(clbSelectedEmails.FindStringExact(strSubject), True)
                 Next
+            Else
+                clbSelectedEmails.SetItemCheckState(clbSelectedEmails.FindStringExact(strSubject), CheckState.Indeterminate)
             End If
+
             'Wait for user to move to next email
             'Do Until (bNextPressed = True)
             '   Application.DoEvents()
@@ -126,44 +130,22 @@ Public Class frmMain
 
     Private Sub btnConvert_Click(sender As Object, e As EventArgs) Handles btnConvert.Click
         'Converts Word Documents to .tif using MODI
-        Dim objWdDoc As Word.Document
-        Dim objWord As Word.Application
-        Dim sDoc As String
-        Dim sDestination As String = My.Settings.savePath
-        Dim sFileName As String
 
         Reset()
 
         'If files are selected continue code
         If dlgOpen.ShowDialog() = DialogResult.OK Then
-            'Initiate word application object and minimize it
-            objWord = CreateObject("Word.Application")
-            objWord.WindowState = Word.WdWindowState.wdWindowStateMinimize
-            'Set active printer to Fax
-            objWord.ActivePrinter = "Microsoft Office Document Image Writer"
-            'Determine progressbar maximum value from number of files chosen
-            ProgressBar.Maximum = dlgOpen.FileNames.Count()
-            For Each sDoc In dlgOpen.FileNames
-                'Get the file name
-                sFileName = Path.GetFileNameWithoutExtension(sDoc)
-                'Open the document within word
-                objWdDoc = objWord.Documents.Open(sDoc)
-                objWord.Visible = False
-                'Print to Tiff
-                objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=sDestination & sFileName & ".tif")
-                'Release document
-                objWdDoc.Close()
-                'Progress the progress bar
-                ProgressBar.Value += 1
-            Next
-            lblStatus.Text = "DONE!"
-            objWord.Quit()
+            Try
+                ConvertToTiff.WordDocs(dlgOpen.FileNames)
+
+            Catch ex As Exception
+                MessageBox.Show(ex.Message)
+                Return
+            End Try
         End If
 
         'Cleanup
         btnConvert.Enabled = True
-        objWdDoc = Nothing
-        objWord = Nothing
     End Sub
 
     Private Sub btnNext_Click(sender As Object, e As EventArgs) Handles btnReject.Click
@@ -212,6 +194,7 @@ Public Class frmMain
         Reset_DPA_Tab()
         Reset_RightFax_Tab()
         Reset_ProgressBar()
+        clbSelectedEmails.Items.Clear()
     End Sub
 
     Private Sub Reset_ProgressBar()
@@ -254,7 +237,6 @@ Public Class frmMain
         btnNext.Enabled = False
         btnRun.Enabled = True
         btnRun.Visible = True
-        clbSelectedEmails.Items.Clear()
 
         'clear text fields
         rtbEmailBody.Text = ""
@@ -356,5 +338,34 @@ Public Class frmMain
 
     Private Sub OptionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.Click
         frmOptions.Show()
+    End Sub
+
+    Private Sub _DragDrop(ByVal sender As Object, ByVal e As DragEventArgs) Handles tabWordToTiff.DragDrop
+        'http://www.codemag.com/Article/0407031
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+
+            Dim files As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
+            Try
+                ConvertToTiff.WordDocs(files)
+
+            Catch ex As Exception
+                MessageBox.Show(ex.Message)
+                Return
+            End Try
+        End If
+
+    End Sub
+
+    Private Sub _DragEnter(ByVal sender As Object, ByVal e As DragEventArgs) Handles tabWordToTiff.DragEnter
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            e.Effect = DragDropEffects.Copy
+        Else
+            e.Effect = DragDropEffects.None
+        End If
+    End Sub
+
+
+    Private Sub tabWordToTiff_Click(sender As Object, e As EventArgs) Handles tabWordToTiff.Click
+
     End Sub
 End Class

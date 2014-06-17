@@ -28,6 +28,8 @@ Partial Class frmMain
         Me.btnConvert = New System.Windows.Forms.Button()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.lblSelectedEmails = New System.Windows.Forms.Label()
+        Me.clbSelectedEmails = New System.Windows.Forms.CheckedListBox()
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.rtbEmailBody = New System.Windows.Forms.RichTextBox()
@@ -38,7 +40,7 @@ Partial Class frmMain
         Me.lblAcc = New System.Windows.Forms.Label()
         Me.lblFrom = New System.Windows.Forms.Label()
         Me.lblSubject = New System.Windows.Forms.Label()
-        Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.tabWordToTiff = New System.Windows.Forms.TabPage()
         Me.tabDPA = New System.Windows.Forms.TabPage()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.btnBudgetBill = New System.Windows.Forms.Button()
@@ -76,12 +78,11 @@ Partial Class frmMain
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.clbSelectedEmails = New System.Windows.Forms.CheckedListBox()
-        Me.lblSelectedEmails = New System.Windows.Forms.Label()
+        Me.lblDragAndDropWord = New System.Windows.Forms.Label()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
-        Me.TabPage2.SuspendLayout()
+        Me.tabWordToTiff.SuspendLayout()
         Me.tabDPA.SuspendLayout()
         Me.tabRFax.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -123,7 +124,7 @@ Partial Class frmMain
         'TabControl1
         '
         Me.TabControl1.Controls.Add(Me.TabPage1)
-        Me.TabControl1.Controls.Add(Me.TabPage2)
+        Me.TabControl1.Controls.Add(Me.tabWordToTiff)
         Me.TabControl1.Controls.Add(Me.tabDPA)
         Me.TabControl1.Controls.Add(Me.tabRFax)
         Me.TabControl1.Location = New System.Drawing.Point(-1, 27)
@@ -155,6 +156,27 @@ Partial Class frmMain
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Outlook"
         Me.TabPage1.UseVisualStyleBackColor = True
+        '
+        'lblSelectedEmails
+        '
+        Me.lblSelectedEmails.AutoSize = True
+        Me.lblSelectedEmails.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSelectedEmails.Location = New System.Drawing.Point(283, 144)
+        Me.lblSelectedEmails.Name = "lblSelectedEmails"
+        Me.lblSelectedEmails.Size = New System.Drawing.Size(101, 13)
+        Me.lblSelectedEmails.TabIndex = 13
+        Me.lblSelectedEmails.Text = "Selected Emails:"
+        '
+        'clbSelectedEmails
+        '
+        Me.clbSelectedEmails.AllowDrop = True
+        Me.clbSelectedEmails.FormattingEnabled = True
+        Me.clbSelectedEmails.Location = New System.Drawing.Point(252, 160)
+        Me.clbSelectedEmails.Name = "clbSelectedEmails"
+        Me.clbSelectedEmails.SelectionMode = System.Windows.Forms.SelectionMode.None
+        Me.clbSelectedEmails.Size = New System.Drawing.Size(168, 94)
+        Me.clbSelectedEmails.TabIndex = 12
+        Me.clbSelectedEmails.TabStop = False
         '
         'btnCancel
         '
@@ -250,16 +272,18 @@ Partial Class frmMain
         Me.lblSubject.TabIndex = 2
         Me.lblSubject.Text = "Subject:"
         '
-        'TabPage2
+        'tabWordToTiff
         '
-        Me.TabPage2.Controls.Add(Me.btnConvert)
-        Me.TabPage2.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage2.Name = "TabPage2"
-        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(431, 290)
-        Me.TabPage2.TabIndex = 1
-        Me.TabPage2.Text = "Word -> tif"
-        Me.TabPage2.UseVisualStyleBackColor = True
+        Me.tabWordToTiff.AllowDrop = True
+        Me.tabWordToTiff.Controls.Add(Me.lblDragAndDropWord)
+        Me.tabWordToTiff.Controls.Add(Me.btnConvert)
+        Me.tabWordToTiff.Location = New System.Drawing.Point(4, 22)
+        Me.tabWordToTiff.Name = "tabWordToTiff"
+        Me.tabWordToTiff.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabWordToTiff.Size = New System.Drawing.Size(431, 290)
+        Me.tabWordToTiff.TabIndex = 1
+        Me.tabWordToTiff.Text = "Word -> tif"
+        Me.tabWordToTiff.UseVisualStyleBackColor = True
         '
         'tabDPA
         '
@@ -609,34 +633,25 @@ Partial Class frmMain
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(52, 20)
         Me.AboutToolStripMenuItem.Text = "About"
         '
-        'clbSelectedEmails
+        'lblDragAndDropWord
         '
-        Me.clbSelectedEmails.Enabled = False
-        Me.clbSelectedEmails.FormattingEnabled = True
-        Me.clbSelectedEmails.Location = New System.Drawing.Point(252, 160)
-        Me.clbSelectedEmails.Name = "clbSelectedEmails"
-        Me.clbSelectedEmails.Size = New System.Drawing.Size(168, 94)
-        Me.clbSelectedEmails.TabIndex = 12
-        '
-        'lblSelectedEmails
-        '
-        Me.lblSelectedEmails.AutoSize = True
-        Me.lblSelectedEmails.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblSelectedEmails.Location = New System.Drawing.Point(283, 144)
-        Me.lblSelectedEmails.Name = "lblSelectedEmails"
-        Me.lblSelectedEmails.Size = New System.Drawing.Size(101, 13)
-        Me.lblSelectedEmails.TabIndex = 13
-        Me.lblSelectedEmails.Text = "Selected Emails:"
+        Me.lblDragAndDropWord.AutoSize = True
+        Me.lblDragAndDropWord.Location = New System.Drawing.Point(52, 185)
+        Me.lblDragAndDropWord.Name = "lblDragAndDropWord"
+        Me.lblDragAndDropWord.Size = New System.Drawing.Size(319, 13)
+        Me.lblDragAndDropWord.TabIndex = 3
+        Me.lblDragAndDropWord.Text = "Click Convert or Drag and Drop Word documents to convert to .tiff"
         '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(435, 361)
+        Me.ClientSize = New System.Drawing.Size(435, 363)
         Me.Controls.Add(Me.lblStatus)
         Me.Controls.Add(Me.ProgressBar)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.MenuStrip1)
+        Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "frmMain"
         Me.Text = "SAMuel"
@@ -644,7 +659,8 @@ Partial Class frmMain
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)
         Me.TabPage1.PerformLayout()
-        Me.TabPage2.ResumeLayout(False)
+        Me.tabWordToTiff.ResumeLayout(False)
+        Me.tabWordToTiff.PerformLayout()
         Me.tabDPA.ResumeLayout(False)
         Me.tabDPA.PerformLayout()
         Me.tabRFax.ResumeLayout(False)
@@ -665,7 +681,7 @@ Partial Class frmMain
     Friend WithEvents btnConvert As System.Windows.Forms.Button
     Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
     Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
-    Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
+    Friend WithEvents tabWordToTiff As System.Windows.Forms.TabPage
     Friend WithEvents lblSubject As System.Windows.Forms.Label
     Friend WithEvents lblFrom As System.Windows.Forms.Label
     Friend WithEvents lblAcc As System.Windows.Forms.Label
@@ -715,5 +731,6 @@ Partial Class frmMain
     Friend WithEvents chkRFSaveRec As System.Windows.Forms.CheckBox
     Friend WithEvents clbSelectedEmails As System.Windows.Forms.CheckedListBox
     Friend WithEvents lblSelectedEmails As System.Windows.Forms.Label
+    Friend WithEvents lblDragAndDropWord As System.Windows.Forms.Label
 
 End Class
