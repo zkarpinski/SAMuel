@@ -115,6 +115,7 @@
     <Compile Include="Modules\ConvertToTiff.vb" />
     <Compile Include="Modules\EmailProcessing.vb" />
     <Compile Include="Modules\GlobalModule.vb" />
+    <Compile Include="Modules\KofaxModule.vb" />
     <Compile Include="Modules\modDPAHandle.vb" />
     <Compile Include="Modules\RightFax.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />

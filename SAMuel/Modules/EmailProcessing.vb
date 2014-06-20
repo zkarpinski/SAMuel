@@ -20,8 +20,8 @@ Public Module EmailProcessing
 
         ' Account Number Watermark Settings
         font = New Font("Times New Roman", 30.0F)
-        point = New PointF(500, 50) '(x,y)
-        brush = New SolidBrush(Color.FromArgb(150, Color.Black))
+        point = New PointF(img.Width / 3, 50) '(x,y)
+        brush = New SolidBrush(Color.FromArgb(150, Color.Red))
 
         ' Create graphics from image
         graphics = Drawing.Graphics.FromImage(img)
@@ -96,7 +96,7 @@ Public Module EmailProcessing
                 While i < fileNames.Length
                     tiffPaths(i) = [String].Format("{0}{1}.tiff",
                                        My.Settings.savePath,
-                                       "testImage")
+                                       "test")
 
                     ' Save as individual tiff files. 
                     Using tiffImg As Image = Image.FromFile(fileNames)
@@ -111,4 +111,103 @@ Public Module EmailProcessing
     Private Sub Convert_Image_To_Tif(sEditedImg As String, Optional p2 As Object = Nothing, Optional p3 As Boolean = Nothing)
         Throw New NotImplementedException
     End Sub
+
+    Sub Resize_Image(ByRef img As Image)
+        'following code resizes picture to fit
+
+        Dim bm As New Bitmap(img)
+        Dim width As Integer
+        Dim height As Integer
+        Dim newBM As Bitmap
+        Dim wRatio As Double = 1700 / bm.Width
+        Dim hRatio As Double = 2200 / bm.Height
+        Dim sRatio As Double
+        'Determine the scale
+        If wRatio < hRatio Then
+            sRatio = wRatio
+        Else : sRatio = hRatio
+        End If
+
+        width = bm.Width * sRatio
+        height = bm.Height * sRatio
+        newBM = New Bitmap(width, height)
+        Dim g As Graphics = Graphics.FromImage(newBM)
+
+        g.InterpolationMode = Drawing2D.InterpolationMode.Default
+
+        g.DrawImage(bm, New Rectangle(0, 0, width, height), New Rectangle(0, 0, bm.Width, _
+bm.Height), GraphicsUnit.Pixel)
+
+        g.Dispose()
+
+        bm.Dispose()
+
+        'image path.
+        newBM.Save(My.Settings.savePath + "test12123.jpg")
+
+        newBM.Dispose()
+
+    End Sub
+
+    Sub ReSize_IMG(ByRef img As Image)
+        Dim ImgX As Integer
+        Dim ImgY As Integer
+        Dim PSizeX As Integer = 2200
+        Dim PSizeY As Integer = 1700
+        Dim ScaleX As Double
+        Dim ScaleY As Double
+        Dim RecX As Integer
+        Dim RecY As Integer
+        Dim ScaleM As Double
+
+
+        ImgX = img.Height
+        ImgY = img.Width
+
+        ScaleX = PSizeX / ImgX
+        ScaleY = PSizeY / ImgY
+        If ScaleX < ScaleY Then
+            ScaleM = ScaleX
+        Else : ScaleM = ScaleY
+        End If
+        RecY = ImgY * ScaleM
+        RecX = ImgX * ScaleM
+        Dim bm As Bitmap = New Bitmap(1, 1)
+        Dim g As Graphics = Graphics.FromImage(bm)
+        g.DrawImage(img, 0, 0, RecY, RecX)
+        bm.Save(My.Settings.savePath + "testtt.jpg")
+    End Sub
+
+    Function MakeGrayscale(img As Bitmap) As Bitmap
+
+        'create a blank bitmap the same size as original
+        Dim newBitMap As Bitmap = New Bitmap(img.Width, img.Height)
+
+        'get a graphics object from the new image
+        Dim g As Graphics = Graphics.FromImage(newBitMap)
+
+        'create the grayscale ColorMatrix
+        Dim colorMatrix As ColorMatrix = New ColorMatrix()
+
+        'new float[] {.3f, .3f, .3f, 0, 0},
+        'new float[] {.59f, .59f, .59f, 0, 0},
+        'new float[] {.11f, .11f, .11f, 0, 0},
+        'new float[] {0, 0, 0, 1, 0},
+        'new float[] {0, 0, 0, 0, 1}
+
+
+        'create some image attributes
+        Dim attributes As ImageAttributes = New ImageAttributes()
+
+        'set the color matrix attribute
+        attributes.SetColorMatrix(colorMatrix)
+
+        'draw the original image on the new image
+        'using the grayscale color matrix
+        g.DrawImage(img, New Rectangle(0, 0, img.Width, img.Height), 0, 0, img.Width, img.Height, GraphicsUnit.Pixel, attributes)
+
+        'dispose the Graphics object
+        g.Dispose()
+        Return newBitMap
+    End Function
 End Module

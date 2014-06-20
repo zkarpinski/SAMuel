@@ -46,21 +46,24 @@ Public Class frmMain
             strSubject = oMsg.Subject
             txtSubject.Text = strSubject
             txtFrom.Text = oMsg.SenderName
+            rtbEmailBody.Text = oMsg.Body
+
             'REGEX subject line for Account number or customer #
-            strREGEXed = GlobalModule.RegexAccount(strSubject)
-            If strREGEXed <> "ACC# NOT FOUND" Then
-                txtAcc.Text = strREGEXed
-            Else
-                'Look for Customer Number
-                strREGEXed = GlobalModule.RegexCustomer(strSubject)
-                If strREGEXed <> "CUST# NOT FOUND" Then
+            If strSubject IsNot vbNullString Then
+                strREGEXed = GlobalModule.RegexAccount(strSubject)
+                If strREGEXed <> "ACC# NOT FOUND" Then
                     txtAcc.Text = strREGEXed
                 Else
-                    txtAcc.Text = "UNKNOWN ACC"
+                    'Look for Customer Number
+                    strREGEXed = GlobalModule.RegexCustomer(strSubject)
+                    If strREGEXed <> "CUST# NOT FOUND" Then
+                        txtAcc.Text = strREGEXed
+                    Else
+                        txtAcc.Text = "UNKNOWN ACC"
+                    End If
                 End If
             End If
 
-            rtbEmailBody.Text = oMsg.Body
 
             'Process each attachment within the email
             If oMsg.Attachments.Count > 0 Then
@@ -87,9 +90,21 @@ Public Class frmMain
                         ElseIf bNextPressed Then
                             'Add account number as a watermark
                             lblStatus.Text = "Adding Watermark..."
+                            Me.Refresh()
+                            'EmailProcessing.ReSize_IMG(attachmentImg)
+                            EmailProcessing.Resize_Image(attachmentImg)
                             sEditedImg = EmailProcessing.Add_Watermark(attachmentImg, txtAcc.Text) ''add suffix handing
+                            picImage.Image.Dispose()
+                            picImage.Image = Nothing
                             lblStatus.Text = "Converting to Tiff..."
-                            EmailProcessing.Convert_Image_To_Tif(sEditedImg, False)
+                            Me.Refresh()
+                            Dim bmp As System.Drawing.Bitmap
+                            bmp = New System.Drawing.Bitmap(sEditedImg)
+                            bmp.Save([String].Format("{0}{1}.tiff",
+                                       My.Settings.savePath,
+                                       txtAcc.Text), System.Drawing.Imaging.ImageFormat.Tiff)
+                            Me.Refresh()
+                            'EmailProcessing.Convert_Image_To_Tif(sEditedImg, False)
                         ElseIf bRejectPressed Then
                             '------ LOG reject action? ---------
                         End If
@@ -99,8 +114,6 @@ Public Class frmMain
                         bRejectPressed = False
 
                         'Release image
-                        picImage.Image.Dispose()
-                        picImage.Image = Nothing
                         attachmentImg.Dispose()
                         attachmentImg = Nothing
                         'Delete the saved email attachment
@@ -366,6 +379,19 @@ Public Class frmMain
 
 
     Private Sub tabWordToTiff_Click(sender As Object, e As EventArgs) Handles tabWordToTiff.Click
+
+    End Sub
+
+    Private Sub Label4_Click(sender As Object, e As EventArgs) Handles lblKFBatchName.Click
+
+    End Sub
+
+    Private Sub btnKFImport_Click(sender As Object, e As EventArgs) Handles btnKFImport.Click
+
+        dlgOpen.Filter = "TIFF Images|*.tif;*.tiff"
+        If dlgOpen.ShowDialog() = DialogResult.OK Then
+            KofaxModule.CreateXML(dlgOpen.FileNames)
+        End If
 
     End Sub
 End Class

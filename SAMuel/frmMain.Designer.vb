@@ -41,6 +41,7 @@ Partial Class frmMain
         Me.lblFrom = New System.Windows.Forms.Label()
         Me.lblSubject = New System.Windows.Forms.Label()
         Me.tabWordToTiff = New System.Windows.Forms.TabPage()
+        Me.lblDragAndDropWord = New System.Windows.Forms.Label()
         Me.tabDPA = New System.Windows.Forms.TabPage()
         Me.CheckBox1 = New System.Windows.Forms.CheckBox()
         Me.btnBudgetBill = New System.Windows.Forms.Button()
@@ -78,7 +79,10 @@ Partial Class frmMain
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.lblDragAndDropWord = New System.Windows.Forms.Label()
+        Me.tabKofax = New System.Windows.Forms.TabPage()
+        Me.lblKFBatchName = New System.Windows.Forms.Label()
+        Me.txtKFBatchName = New System.Windows.Forms.TextBox()
+        Me.btnKFImport = New System.Windows.Forms.Button()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -88,6 +92,7 @@ Partial Class frmMain
         Me.GroupBox2.SuspendLayout()
         Me.grpRFServer.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
+        Me.tabKofax.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnRun
@@ -127,6 +132,7 @@ Partial Class frmMain
         Me.TabControl1.Controls.Add(Me.tabWordToTiff)
         Me.TabControl1.Controls.Add(Me.tabDPA)
         Me.TabControl1.Controls.Add(Me.tabRFax)
+        Me.TabControl1.Controls.Add(Me.tabKofax)
         Me.TabControl1.Location = New System.Drawing.Point(-1, 27)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
@@ -284,6 +290,15 @@ Partial Class frmMain
         Me.tabWordToTiff.TabIndex = 1
         Me.tabWordToTiff.Text = "Word -> tif"
         Me.tabWordToTiff.UseVisualStyleBackColor = True
+        '
+        'lblDragAndDropWord
+        '
+        Me.lblDragAndDropWord.AutoSize = True
+        Me.lblDragAndDropWord.Location = New System.Drawing.Point(52, 185)
+        Me.lblDragAndDropWord.Name = "lblDragAndDropWord"
+        Me.lblDragAndDropWord.Size = New System.Drawing.Size(319, 13)
+        Me.lblDragAndDropWord.TabIndex = 3
+        Me.lblDragAndDropWord.Text = "Click Convert or Drag and Drop Word documents to convert to .tiff"
         '
         'tabDPA
         '
@@ -633,14 +648,44 @@ Partial Class frmMain
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(52, 20)
         Me.AboutToolStripMenuItem.Text = "About"
         '
-        'lblDragAndDropWord
+        'tabKofax
         '
-        Me.lblDragAndDropWord.AutoSize = True
-        Me.lblDragAndDropWord.Location = New System.Drawing.Point(52, 185)
-        Me.lblDragAndDropWord.Name = "lblDragAndDropWord"
-        Me.lblDragAndDropWord.Size = New System.Drawing.Size(319, 13)
-        Me.lblDragAndDropWord.TabIndex = 3
-        Me.lblDragAndDropWord.Text = "Click Convert or Drag and Drop Word documents to convert to .tiff"
+        Me.tabKofax.Controls.Add(Me.btnKFImport)
+        Me.tabKofax.Controls.Add(Me.lblKFBatchName)
+        Me.tabKofax.Controls.Add(Me.txtKFBatchName)
+        Me.tabKofax.Location = New System.Drawing.Point(4, 22)
+        Me.tabKofax.Name = "tabKofax"
+        Me.tabKofax.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabKofax.Size = New System.Drawing.Size(431, 290)
+        Me.tabKofax.TabIndex = 5
+        Me.tabKofax.Text = "Kofax It"
+        Me.tabKofax.UseVisualStyleBackColor = True
+        '
+        'lblKFBatchName
+        '
+        Me.lblKFBatchName.AutoSize = True
+        Me.lblKFBatchName.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblKFBatchName.Location = New System.Drawing.Point(12, 25)
+        Me.lblKFBatchName.Name = "lblKFBatchName"
+        Me.lblKFBatchName.Size = New System.Drawing.Size(69, 13)
+        Me.lblKFBatchName.TabIndex = 13
+        Me.lblKFBatchName.Text = "Batch Name:"
+        '
+        'txtKFBatchName
+        '
+        Me.txtKFBatchName.Location = New System.Drawing.Point(87, 22)
+        Me.txtKFBatchName.Name = "txtKFBatchName"
+        Me.txtKFBatchName.Size = New System.Drawing.Size(100, 20)
+        Me.txtKFBatchName.TabIndex = 12
+        '
+        'btnKFImport
+        '
+        Me.btnKFImport.Location = New System.Drawing.Point(177, 267)
+        Me.btnKFImport.Name = "btnKFImport"
+        Me.btnKFImport.Size = New System.Drawing.Size(75, 23)
+        Me.btnKFImport.TabIndex = 14
+        Me.btnKFImport.Text = "Import"
+        Me.btnKFImport.UseVisualStyleBackColor = True
         '
         'frmMain
         '
@@ -671,6 +716,8 @@ Partial Class frmMain
         Me.grpRFServer.PerformLayout()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
+        Me.tabKofax.ResumeLayout(False)
+        Me.tabKofax.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -732,5 +779,9 @@ Partial Class frmMain
     Friend WithEvents clbSelectedEmails As System.Windows.Forms.CheckedListBox
     Friend WithEvents lblSelectedEmails As System.Windows.Forms.Label
     Friend WithEvents lblDragAndDropWord As System.Windows.Forms.Label
+    Friend WithEvents tabKofax As System.Windows.Forms.TabPage
+    Friend WithEvents btnKFImport As System.Windows.Forms.Button
+    Friend WithEvents lblKFBatchName As System.Windows.Forms.Label
+    Friend WithEvents txtKFBatchName As System.Windows.Forms.TextBox
 
 End Class
