@@ -12,9 +12,6 @@ Public Class frmMain
 
     Private Sub btnRun_Click(sender As Object, e As EventArgs) Handles btnRun.Click
         Dim oApp As Outlook.Application = New Outlook.Application
-        Dim oMsg As Outlook.MailItem
-        Dim oAtt As Outlook.Attachment
-        Dim oSelection As Outlook.Selection
         Dim sDestination As String = My.Settings.savePath
         Dim sFile As String, sFileExt As String, editedImg As String
         Dim outTiff As String
@@ -39,75 +36,28 @@ Public Class frmMain
         btnRun.Visible = False
 
         '**TODO** Add no selection handling
-        oSelection = oApp.ActiveExplorer.Selection
-
-        For Each oMsg In oSelection
-            sEmail = New SAM_Email(oMsg)
+        'Create each SAM Email
+        For Each value In oApp.ActiveExplorer.Selection
+            sEmail = New SAM_Email(value)
+            sEmail.Regex()
             samEmails.Add(sEmail)
-            clbSelectedEmails.Items.Add("[" & oMsg.Attachments.Count.ToString & "] " & oMsg.Subject)
-
+            clbSelectedEmails.Items.Add("[" & sEmail.AttachmentsCount.ToString & "] " & sEmail.Subject)
         Next
 
-        'oMsg = Nothing
-        'oSelection = Nothing
-        'oApp.Quit()
-        'oApp = Nothing
-
         emailCount = samEmails.Count
-
         ProgressBar.Maximum = emailCount
-        'Process each email selected
-        For Each oMsg In oSelection
-            'Parse data from the email
-            strSubject = oMsg.Subject
-            txtSubject.Text = strSubject
-            txtFrom.Text = oMsg.SenderName
-            rtbEmailBody.Text = oMsg.Body
 
-            'REGEX subject line for Account number or customer #
-            If strSubject IsNot vbNullString Then
-                strREGEXed = GlobalModule.RegexAccount(strSubject)
-                If strREGEXed <> "ACC# NOT FOUND" Then
-                    txtAcc.Text = strREGEXed
-                Else
-                    'Look for Customer Number
-                    strREGEXed = GlobalModule.RegexCustomer(strSubject)
-                    If strREGEXed <> "CUST# NOT FOUND" Then
-                        txtAcc.Text = strREGEXed
-                    Else
-                        strREGEXed = "REGEX_BODY"
-                    End If
-                End If
-            Else
-                strREGEXed = "REGEX_BODY"
-            End If
+        oApp = Nothing
 
-            'REGEX Body for Account number or customer #
-            If strREGEXed = "REGEX_BODY" Then
-                If rtbEmailBody.Text IsNot vbNullString Then
-                    strREGEXed = GlobalModule.RegexAccount(rtbEmailBody.Text)
-                    If strREGEXed <> "ACC# NOT FOUND" Then
-                        txtAcc.Text = strREGEXed
-                    Else
-                        strREGEXed = GlobalModule.RegexCustomer(rtbEmailBody.Text)
-                        If strREGEXed <> "CUST# NOT FOUND" Then
-                            txtAcc.Text = strREGEXed
-                        Else
-                            txtAcc.Text = "ACCOUNT UNKNOWN"
-                            chkAuditMode.Checked = True
-                        End If
-                    End If
-
-                Else
-                    txtAcc.Text = "ACCOUNT UNKNOWN"
-                    chkAuditMode.Checked = True
-                End If
-            End If
+        'Process each email
+        For Each sEmail In samEmails
+            'Force an audit if the email is found to be not valid.
+            If (Not sEmail.IsValid) Then chkAuditMode.Checked = True
 
             'Process each attachment within the email
-            If oMsg.Attachments.Count > 0 Then
-                For Each oAtt In oMsg.Attachments
-                    sFile = sDestination & oAtt.FileName
+            If sEmail.AttachmentsCount > 0 Then
+                For Each sFile In sEmail.Attachments
+                    'sFile = sDestination & oAtt.FileName
                     'Verify a valid attachment file type
                     sFileExt = Path.GetExtension(sFile).ToLower
                     If sFileExt = ".tiff" Or sFileExt = ".png" Or _
@@ -115,7 +65,7 @@ Public Class frmMain
                             sFileExt = ".tif" Or sFileExt = ".gif" Or _
                             sFileExt = ".bmp" Then
                         'Save the attachment then load the preview
-                        oAtt.SaveAsFile(sFile)
+                        'oAtt.SaveAsFile(sFile)
                         attachmentImg = Drawing.Image.FromFile(sFile)
                         picImage.Image = attachmentImg
 
@@ -141,11 +91,11 @@ Public Class frmMain
                             Me.Refresh()
                             'EmailProcessing.ReSize_IMG(attachmentImg)
                             'EmailProcessing.Resize_Image(attachmentImg)
-                            EmailProcessing.Add_Watermark(attachmentImg, txtAcc.Text) ''add suffix handing
+                            EmailProcessing.Add_Watermark(attachmentImg, sEmail.Account) ''add suffix handing
                             lblStatus.Text = "Converting to Tiff..."
                             Me.Refresh()
                             'Save the edited attachment as tiff and add to list
-                            outTiff = [String].Format("{0}{1}{2}.tiff", sDestination, i & "_", txtAcc.Text)
+                            outTiff = [String].Format("{0}{1}{2}.tiff", sDestination, i & "_", sEmail.Account)
                             picImage.Image.Save(outTiff, System.Drawing.Imaging.ImageFormat.Tiff)
                             tiffList.Add(outTiff)
                             Me.Refresh()

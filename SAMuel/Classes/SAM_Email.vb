@@ -6,7 +6,7 @@
     Private mCustAcc As String
     Private mAttachments As New List(Of String)
 
-    Private IsVaidAcc As Boolean = True
+    Private _IsValid As Boolean = True
 
     Public Sub New(ByRef objEmail As Object)
         Dim sFile As String
@@ -22,8 +22,38 @@
                 value.SaveAsFile(sFile)
                 mAttachments.Add(sFile)
             Next
+        Else
+            _IsValid = False
         End If
     End Sub
+    Public Sub Regex()
+        Dim strRegex As String
+        strRegex = GlobalModule.RegexAccount(mSubject)
+        If strRegex = "ACC# NOT FOUND" Then
+            strRegex = GlobalModule.RegexCustomer(mSubject)
+            If strRegex = "CUST# NOT FOUND" Then
+                strRegex = GlobalModule.RegexAccount(mBody)
+                If strRegex = "ACC# NOT FOUND" Then
+                    strRegex = GlobalModule.RegexCustomer(mSubject)
+                    If strRegex = "CUST# NOT FOUND" Then
+                        strRegex = "UNKNOWN"
+                        _IsValid = False
+                    End If
+                End If
+            End If
+        End If
+
+        mCustAcc = strRegex
+    End Sub
+
+    Public Property Account() As String
+        Get
+            Return mCustAcc
+        End Get
+        Set(ByVal value As String)
+            mCustAcc = value
+        End Set
+    End Property
 
     ReadOnly Property AttachmentsCount As Integer
         Get
@@ -43,9 +73,15 @@
         End Get
     End Property
 
-    ReadOnly Property Account As String
+    ReadOnly Property Attachments As List(Of String)
         Get
-            Return mCustAcc
+            Return mAttachments
         End Get
     End Property
+    ReadOnly Property IsValid As Boolean
+        Get
+            Return _IsValid
+        End Get
+    End Property
+
 End Class

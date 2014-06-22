@@ -207,4 +207,9 @@ Public Module EmailProcessing
         g.Dispose()
         Return newBitMap
     End Function
+
+    Function ValidateAttachmentType(sFile As String) As Boolean
+        Return 1
+    End Function
+
 End Module
