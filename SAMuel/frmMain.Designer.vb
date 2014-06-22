@@ -71,6 +71,10 @@ Partial Class frmMain
         Me.txtRFuser = New System.Windows.Forms.TextBox()
         Me.lblRFuser = New System.Windows.Forms.Label()
         Me.btnRFax = New System.Windows.Forms.Button()
+        Me.tabKofax = New System.Windows.Forms.TabPage()
+        Me.btnKFImport = New System.Windows.Forms.Button()
+        Me.lblKFBatchName = New System.Windows.Forms.Label()
+        Me.txtKFBatchName = New System.Windows.Forms.TextBox()
         Me.ProgressBar = New System.Windows.Forms.ProgressBar()
         Me.lblStatus = New System.Windows.Forms.Label()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
@@ -79,10 +83,7 @@ Partial Class frmMain
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.tabKofax = New System.Windows.Forms.TabPage()
-        Me.lblKFBatchName = New System.Windows.Forms.Label()
-        Me.txtKFBatchName = New System.Windows.Forms.TextBox()
-        Me.btnKFImport = New System.Windows.Forms.Button()
+        Me.chkAuditMode = New System.Windows.Forms.CheckBox()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -91,8 +92,8 @@ Partial Class frmMain
         Me.tabRFax.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.grpRFServer.SuspendLayout()
-        Me.MenuStrip1.SuspendLayout()
         Me.tabKofax.SuspendLayout()
+        Me.MenuStrip1.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnRun
@@ -141,6 +142,7 @@ Partial Class frmMain
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.chkAuditMode)
         Me.TabPage1.Controls.Add(Me.lblSelectedEmails)
         Me.TabPage1.Controls.Add(Me.clbSelectedEmails)
         Me.TabPage1.Controls.Add(Me.btnCancel)
@@ -588,6 +590,45 @@ Partial Class frmMain
         Me.btnRFax.Text = "Fax"
         Me.btnRFax.UseVisualStyleBackColor = True
         '
+        'tabKofax
+        '
+        Me.tabKofax.Controls.Add(Me.btnKFImport)
+        Me.tabKofax.Controls.Add(Me.lblKFBatchName)
+        Me.tabKofax.Controls.Add(Me.txtKFBatchName)
+        Me.tabKofax.Location = New System.Drawing.Point(4, 22)
+        Me.tabKofax.Name = "tabKofax"
+        Me.tabKofax.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabKofax.Size = New System.Drawing.Size(431, 290)
+        Me.tabKofax.TabIndex = 5
+        Me.tabKofax.Text = "Kofax It"
+        Me.tabKofax.UseVisualStyleBackColor = True
+        '
+        'btnKFImport
+        '
+        Me.btnKFImport.Location = New System.Drawing.Point(177, 267)
+        Me.btnKFImport.Name = "btnKFImport"
+        Me.btnKFImport.Size = New System.Drawing.Size(75, 23)
+        Me.btnKFImport.TabIndex = 14
+        Me.btnKFImport.Text = "Import"
+        Me.btnKFImport.UseVisualStyleBackColor = True
+        '
+        'lblKFBatchName
+        '
+        Me.lblKFBatchName.AutoSize = True
+        Me.lblKFBatchName.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblKFBatchName.Location = New System.Drawing.Point(12, 25)
+        Me.lblKFBatchName.Name = "lblKFBatchName"
+        Me.lblKFBatchName.Size = New System.Drawing.Size(69, 13)
+        Me.lblKFBatchName.TabIndex = 13
+        Me.lblKFBatchName.Text = "Batch Name:"
+        '
+        'txtKFBatchName
+        '
+        Me.txtKFBatchName.Location = New System.Drawing.Point(87, 22)
+        Me.txtKFBatchName.Name = "txtKFBatchName"
+        Me.txtKFBatchName.Size = New System.Drawing.Size(100, 20)
+        Me.txtKFBatchName.TabIndex = 12
+        '
         'ProgressBar
         '
         Me.ProgressBar.Location = New System.Drawing.Point(-1, 343)
@@ -648,44 +689,15 @@ Partial Class frmMain
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(52, 20)
         Me.AboutToolStripMenuItem.Text = "About"
         '
-        'tabKofax
+        'chkAuditMode
         '
-        Me.tabKofax.Controls.Add(Me.btnKFImport)
-        Me.tabKofax.Controls.Add(Me.lblKFBatchName)
-        Me.tabKofax.Controls.Add(Me.txtKFBatchName)
-        Me.tabKofax.Location = New System.Drawing.Point(4, 22)
-        Me.tabKofax.Name = "tabKofax"
-        Me.tabKofax.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabKofax.Size = New System.Drawing.Size(431, 290)
-        Me.tabKofax.TabIndex = 5
-        Me.tabKofax.Text = "Kofax It"
-        Me.tabKofax.UseVisualStyleBackColor = True
-        '
-        'lblKFBatchName
-        '
-        Me.lblKFBatchName.AutoSize = True
-        Me.lblKFBatchName.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblKFBatchName.Location = New System.Drawing.Point(12, 25)
-        Me.lblKFBatchName.Name = "lblKFBatchName"
-        Me.lblKFBatchName.Size = New System.Drawing.Size(69, 13)
-        Me.lblKFBatchName.TabIndex = 13
-        Me.lblKFBatchName.Text = "Batch Name:"
-        '
-        'txtKFBatchName
-        '
-        Me.txtKFBatchName.Location = New System.Drawing.Point(87, 22)
-        Me.txtKFBatchName.Name = "txtKFBatchName"
-        Me.txtKFBatchName.Size = New System.Drawing.Size(100, 20)
-        Me.txtKFBatchName.TabIndex = 12
-        '
-        'btnKFImport
-        '
-        Me.btnKFImport.Location = New System.Drawing.Point(177, 267)
-        Me.btnKFImport.Name = "btnKFImport"
-        Me.btnKFImport.Size = New System.Drawing.Size(75, 23)
-        Me.btnKFImport.TabIndex = 14
-        Me.btnKFImport.Text = "Import"
-        Me.btnKFImport.UseVisualStyleBackColor = True
+        Me.chkAuditMode.AutoSize = True
+        Me.chkAuditMode.Location = New System.Drawing.Point(4, 270)
+        Me.chkAuditMode.Name = "chkAuditMode"
+        Me.chkAuditMode.Size = New System.Drawing.Size(80, 17)
+        Me.chkAuditMode.TabIndex = 14
+        Me.chkAuditMode.Text = "Audit Mode"
+        Me.chkAuditMode.UseVisualStyleBackColor = True
         '
         'frmMain
         '
@@ -714,10 +726,10 @@ Partial Class frmMain
         Me.GroupBox2.PerformLayout()
         Me.grpRFServer.ResumeLayout(False)
         Me.grpRFServer.PerformLayout()
-        Me.MenuStrip1.ResumeLayout(False)
-        Me.MenuStrip1.PerformLayout()
         Me.tabKofax.ResumeLayout(False)
         Me.tabKofax.PerformLayout()
+        Me.MenuStrip1.ResumeLayout(False)
+        Me.MenuStrip1.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -783,5 +795,6 @@ Partial Class frmMain
     Friend WithEvents btnKFImport As System.Windows.Forms.Button
     Friend WithEvents lblKFBatchName As System.Windows.Forms.Label
     Friend WithEvents txtKFBatchName As System.Windows.Forms.TextBox
+    Friend WithEvents chkAuditMode As System.Windows.Forms.CheckBox
 
 End Class

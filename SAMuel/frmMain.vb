@@ -16,9 +16,12 @@ Public Class frmMain
         Dim oAtt As Outlook.Attachment
         Dim oSelection As Outlook.Selection
         Dim sDestination As String = My.Settings.savePath
-        Dim sFile As String, sFileExt As String, sEditedImg As String
+        Dim sFile As String, sFileExt As String, editedImg As String
+        Dim outTiff As String
         Dim strREGEXed As String, strSubject As String
         Dim attachmentImg As Image
+        Dim tiffList As New List(Of String)
+        Dim i As Integer = 0, emailCount As Integer
 
         Reset_Outlook_Tab()
         clbSelectedEmails.Items.Clear()
@@ -36,10 +39,12 @@ Public Class frmMain
         oSelection = oApp.ActiveExplorer.Selection
 
         For Each oMsg In oSelection
-            clbSelectedEmails.Items.Add(oMsg.Subject)
+            clbSelectedEmails.Items.Add("[" & oMsg.Attachments.Count.ToString & "] " & oMsg.Subject)
         Next
 
-        ProgressBar.Maximum = oSelection.Count
+        emailCount = oSelection.Count
+
+        ProgressBar.Maximum = emailCount
         'Process each email selected
         For Each oMsg In oSelection
             'Parse data from the email
@@ -59,11 +64,34 @@ Public Class frmMain
                     If strREGEXed <> "CUST# NOT FOUND" Then
                         txtAcc.Text = strREGEXed
                     Else
-                        txtAcc.Text = "UNKNOWN ACC"
+                        strREGEXed = "REGEX_BODY"
                     End If
                 End If
+            Else
+                strREGEXed = "REGEX_BODY"
             End If
 
+            'REGEX Body for Account number or customer #
+            If strREGEXed = "REGEX_BODY" Then
+                If rtbEmailBody.Text IsNot vbNullString Then
+                    strREGEXed = GlobalModule.RegexAccount(rtbEmailBody.Text)
+                    If strREGEXed <> "ACC# NOT FOUND" Then
+                        txtAcc.Text = strREGEXed
+                    Else
+                        strREGEXed = GlobalModule.RegexCustomer(rtbEmailBody.Text)
+                        If strREGEXed <> "CUST# NOT FOUND" Then
+                            txtAcc.Text = strREGEXed
+                        Else
+                            txtAcc.Text = "ACCOUNT UNKNOWN"
+                            chkAuditMode.Checked = True
+                        End If
+                    End If
+
+                Else
+                    txtAcc.Text = "ACCOUNT UNKNOWN"
+                    chkAuditMode.Checked = True
+                End If
+            End If
 
             'Process each attachment within the email
             If oMsg.Attachments.Count > 0 Then
@@ -73,38 +101,43 @@ Public Class frmMain
                     sFileExt = Path.GetExtension(sFile).ToLower
                     If sFileExt = ".tiff" Or sFileExt = ".png" Or _
                             sFileExt = ".jpg" Or sFileExt = ".jpeg" Or _
-                            sFileExt = ".tif" Or sFileExt = ".gif" Then
+                            sFileExt = ".tif" Or sFileExt = ".gif" Or _
+                            sFileExt = ".bmp" Then
                         'Save the attachment then load the preview
                         oAtt.SaveAsFile(sFile)
                         attachmentImg = Drawing.Image.FromFile(sFile)
-                        'picImage.Image = New Bitmap(sFile)
                         picImage.Image = attachmentImg
+
                         'Wait for user validation of attachment
-                        Do Until (bNextPressed = True Or bRejectPressed = True Or bCancelPressed = True)
+                        Do Until (bNextPressed = True Or bRejectPressed = True Or bCancelPressed = True Or Me.chkAuditMode.Checked = False)
                             Application.DoEvents()
                         Loop
                         If bCancelPressed Then
                             'When canceled, reset form and end the routine
+                            'Release image
+                            picImage.Image.Dispose()
+                            picImage.Image = Nothing
+
+                            attachmentImg.Dispose()
+                            attachmentImg = Nothing
+
                             Reset_Outlook_Tab()
                             Exit Sub
-                        ElseIf bNextPressed Then
+                        ElseIf bNextPressed Or Me.chkAuditMode.Checked = False Then
+                            i += 1
                             'Add account number as a watermark
                             lblStatus.Text = "Adding Watermark..."
                             Me.Refresh()
                             'EmailProcessing.ReSize_IMG(attachmentImg)
-                            EmailProcessing.Resize_Image(attachmentImg)
-                            sEditedImg = EmailProcessing.Add_Watermark(attachmentImg, txtAcc.Text) ''add suffix handing
-                            picImage.Image.Dispose()
-                            picImage.Image = Nothing
+                            'EmailProcessing.Resize_Image(attachmentImg)
+                            EmailProcessing.Add_Watermark(attachmentImg, txtAcc.Text) ''add suffix handing
                             lblStatus.Text = "Converting to Tiff..."
                             Me.Refresh()
-                            Dim bmp As System.Drawing.Bitmap
-                            bmp = New System.Drawing.Bitmap(sEditedImg)
-                            bmp.Save([String].Format("{0}{1}.tiff",
-                                       My.Settings.savePath,
-                                       txtAcc.Text), System.Drawing.Imaging.ImageFormat.Tiff)
+                            'Save the edited attachment as tiff and add to list
+                            outTiff = [String].Format("{0}{1}{2}.tiff", sDestination, i & "_", txtAcc.Text)
+                            picImage.Image.Save(outTiff, System.Drawing.Imaging.ImageFormat.Tiff)
+                            tiffList.Add(outTiff)
                             Me.Refresh()
-                            'EmailProcessing.Convert_Image_To_Tif(sEditedImg, False)
                         ElseIf bRejectPressed Then
                             '------ LOG reject action? ---------
                         End If
@@ -114,27 +147,39 @@ Public Class frmMain
                         bRejectPressed = False
 
                         'Release image
+                        picImage.Image.Dispose()
+                        picImage.Image = Nothing
+
                         attachmentImg.Dispose()
                         attachmentImg = Nothing
+
+                        Application.DoEvents()
+                        Me.Refresh()
                         'Delete the saved email attachment
                         ''System.IO.Directory.GetFiles() ' Get all files within a folder ** useful later **
                         System.IO.File.Delete(sFile)
                         lblStatus.Text = ""
+                        'Checks the email in the check list box
+                        clbSelectedEmails.SetItemChecked(ProgressBar.Value, True)
+                    Else
+                        'Invalid Email Attachment
+
                     End If
-                    'Checks the email in the check list box
-                    clbSelectedEmails.SetItemChecked(clbSelectedEmails.FindStringExact(strSubject), True)
                 Next
             Else
-                clbSelectedEmails.SetItemCheckState(clbSelectedEmails.FindStringExact(strSubject), CheckState.Indeterminate)
+                'No attachments
+
             End If
 
-            'Wait for user to move to next email
-            'Do Until (bNextPressed = True)
-            '   Application.DoEvents()
-            'Loop
             bNextPressed = False
             ProgressBar.Value += 1
+            Me.Refresh()
+            Application.DoEvents()
         Next
+
+        lblStatus.Text = "Creating XML File..."
+        Me.Refresh()
+        KofaxModule.CreateXML(tiffList, "SAMuel - " & emailCount & " emails")
         lblStatus.Text = "DONE!"
 
         Reset_Outlook_Tab()
@@ -377,20 +422,12 @@ Public Class frmMain
         End If
     End Sub
 
-
-    Private Sub tabWordToTiff_Click(sender As Object, e As EventArgs) Handles tabWordToTiff.Click
-
-    End Sub
-
-    Private Sub Label4_Click(sender As Object, e As EventArgs) Handles lblKFBatchName.Click
-
-    End Sub
-
     Private Sub btnKFImport_Click(sender As Object, e As EventArgs) Handles btnKFImport.Click
-
+        Dim batchName As String
+        batchName = Me.txtKFBatchName.Text
         dlgOpen.Filter = "TIFF Images|*.tif;*.tiff"
         If dlgOpen.ShowDialog() = DialogResult.OK Then
-            KofaxModule.CreateXML(dlgOpen.FileNames)
+            KofaxModule.CreateXML((dlgOpen.FileNames).ToList, batchName)
         End If
 
     End Sub

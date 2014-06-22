@@ -2,7 +2,7 @@
 Imports System.Drawing.Imaging
 
 Public Module EmailProcessing
-    Public Function Add_Watermark(ByVal img As Image, ByVal accountNumber As String, Optional ByVal suffix As String = vbNullString) As String
+    Public Function Add_Watermark(ByRef img As Image, ByVal accountNumber As String, Optional ByVal suffix As String = vbNullString) As Image
         'Adds the account number as a watermark to the image
         'http://bytescout.com/products/developer/watermarkingsdk/how_to_add_text_watermark_to_image_using_dotnet_in_vb.html
         Dim graphics As Graphics
@@ -20,21 +20,18 @@ Public Module EmailProcessing
 
         ' Account Number Watermark Settings
         font = New Font("Times New Roman", 30.0F)
-        point = New PointF(img.Width / 3, 50) '(x,y)
+        point = New PointF(50, 50) '(x,y)
         brush = New SolidBrush(Color.FromArgb(150, Color.Red))
 
         ' Create graphics from image
         graphics = Drawing.Graphics.FromImage(img)
         ' Draw the Account Number Watermark
         graphics.DrawString(accountNumber, font, brush, point)
-        ' Save image
-        img.Save(savedFile)
+
         'Clear Resources
         graphics.Dispose()
         graphics = Nothing
-        img.Dispose()
-        img = Nothing
-        Return savedFile
+        Return img
     End Function
 
     ''**NOTE**This function needs an overhaul
@@ -122,6 +119,7 @@ Public Module EmailProcessing
         Dim wRatio As Double = 1700 / bm.Width
         Dim hRatio As Double = 2200 / bm.Height
         Dim sRatio As Double
+
         'Determine the scale
         If wRatio < hRatio Then
             sRatio = wRatio
@@ -135,8 +133,7 @@ Public Module EmailProcessing
 
         g.InterpolationMode = Drawing2D.InterpolationMode.Default
 
-        g.DrawImage(bm, New Rectangle(0, 0, width, height), New Rectangle(0, 0, bm.Width, _
-bm.Height), GraphicsUnit.Pixel)
+        g.DrawImage(bm, New Rectangle(0, 0, width, height), New Rectangle(0, 0, bm.Width, bm.Height), GraphicsUnit.Pixel)
 
         g.Dispose()
 

@@ -8,31 +8,28 @@ Module KofaxModule
     ''' <param name="fileList">
     ''' Array of files to be added to the XML file
     ''' </param>
-    Sub CreateXML(fileList() As String)
+    Sub CreateXML(ByRef fileList As List(Of String), batchName As String)
         Dim sPath As String
-        Dim batchName As String
+        Dim sFile As String
         Dim batchClass As String
 
-        sPath = "C:\ACXMLAID"
-        batchName = frmMain.txtKFBatchName.Text
+        sPath = "C:\ACXMLAID\" 'Default Kofax Import Connector watch folder
+        sFile = sPath & batchName & "-import.xml"
         batchClass = "eCorrespondence Fxd Pg"
+
+        'Creates the directory if it doesn't exist
         If Not System.IO.Directory.Exists(sPath) Then
             System.IO.Directory.CreateDirectory(sPath)
         End If
 
-        'check the file
-        Dim fs As FileStream = New FileStream(sPath & "\" & batchName & "-import.xml", FileMode.OpenOrCreate, FileAccess.ReadWrite)
-        Dim s As StreamWriter = New StreamWriter(fs)
-        s.Close()
-        fs.Close()
-
-        Dim fs1 As FileStream = New FileStream(sPath & "\" & batchName & "-import.xml", FileMode.Append, FileAccess.Write)
+        'Creates or Overwrites the XML file
+        Dim fs1 As FileStream = New FileStream(sFile, FileMode.Create, FileAccess.Write)
         Dim s1 As StreamWriter = New StreamWriter(fs1)
 
         'XML Header
         s1.Write("<ImportSession>" & vbCrLf)
         s1.Write(vbTab & "<Batches>" & vbCrLf)
-        s1.Write(vbTab & vbTab & "<Batch BatchClassName=""" & batchClass & """ EnableSingleDocProcessing = ""0"" NAME=""" & batchName & """>" & vbCrLf)
+        s1.Write(vbTab & vbTab & "<Batch BatchClassName=""" & batchClass & """ EnableSingleDocProcessing = ""0"" Name=""" & batchName & """>" & vbCrLf)
         s1.Write(vbTab & vbTab & vbTab & "<Documents>" & vbCrLf)
 
         'Handle each file
