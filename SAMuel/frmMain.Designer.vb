@@ -28,6 +28,7 @@ Partial Class frmMain
         Me.btnConvert = New System.Windows.Forms.Button()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.chkAuditMode = New System.Windows.Forms.CheckBox()
         Me.lblSelectedEmails = New System.Windows.Forms.Label()
         Me.clbSelectedEmails = New System.Windows.Forms.CheckedListBox()
         Me.btnCancel = New System.Windows.Forms.Button()
@@ -83,7 +84,7 @@ Partial Class frmMain
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.chkAuditMode = New System.Windows.Forms.CheckBox()
+        Me.lblOutlookMessage = New System.Windows.Forms.Label()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -142,6 +143,7 @@ Partial Class frmMain
         '
         'TabPage1
         '
+        Me.TabPage1.Controls.Add(Me.lblOutlookMessage)
         Me.TabPage1.Controls.Add(Me.chkAuditMode)
         Me.TabPage1.Controls.Add(Me.lblSelectedEmails)
         Me.TabPage1.Controls.Add(Me.clbSelectedEmails)
@@ -164,6 +166,16 @@ Partial Class frmMain
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Outlook"
         Me.TabPage1.UseVisualStyleBackColor = True
+        '
+        'chkAuditMode
+        '
+        Me.chkAuditMode.AutoSize = True
+        Me.chkAuditMode.Location = New System.Drawing.Point(4, 270)
+        Me.chkAuditMode.Name = "chkAuditMode"
+        Me.chkAuditMode.Size = New System.Drawing.Size(80, 17)
+        Me.chkAuditMode.TabIndex = 14
+        Me.chkAuditMode.Text = "Audit Mode"
+        Me.chkAuditMode.UseVisualStyleBackColor = True
         '
         'lblSelectedEmails
         '
@@ -689,15 +701,16 @@ Partial Class frmMain
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(52, 20)
         Me.AboutToolStripMenuItem.Text = "About"
         '
-        'chkAuditMode
+        'lblOutlookMessage
         '
-        Me.chkAuditMode.AutoSize = True
-        Me.chkAuditMode.Location = New System.Drawing.Point(4, 270)
-        Me.chkAuditMode.Name = "chkAuditMode"
-        Me.chkAuditMode.Size = New System.Drawing.Size(80, 17)
-        Me.chkAuditMode.TabIndex = 14
-        Me.chkAuditMode.Text = "Audit Mode"
-        Me.chkAuditMode.UseVisualStyleBackColor = True
+        Me.lblOutlookMessage.AutoSize = True
+        Me.lblOutlookMessage.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblOutlookMessage.ForeColor = System.Drawing.Color.Red
+        Me.lblOutlookMessage.Location = New System.Drawing.Point(46, 74)
+        Me.lblOutlookMessage.Name = "lblOutlookMessage"
+        Me.lblOutlookMessage.Size = New System.Drawing.Size(125, 13)
+        Me.lblOutlookMessage.TabIndex = 15
+        Me.lblOutlookMessage.Text = "Email Error/Warning!"
         '
         'frmMain
         '
@@ -796,5 +809,6 @@ Partial Class frmMain
     Friend WithEvents lblKFBatchName As System.Windows.Forms.Label
     Friend WithEvents txtKFBatchName As System.Windows.Forms.TextBox
     Friend WithEvents chkAuditMode As System.Windows.Forms.CheckBox
+    Friend WithEvents lblOutlookMessage As System.Windows.Forms.Label
 
 End Class

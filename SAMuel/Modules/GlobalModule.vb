@@ -35,14 +35,20 @@ Module GlobalModule
                     logAction = "Unknown action occured."
                 End If
             Case 1 'Faxed File
-                logAction = action + " was faxed."
+                logAction = "Notice  : " + action + " was faxed."
             Case 2 'Save path changed
-                logAction = "Default save path changed to " + action
+                logAction = "Notice  : Default save path changed to " + action
+            Case 3 'Email Processed
+                logAction = "Notice  : Email - " + action + " was processed"
+            Case 98 'SAM email error
+                logAction = "Error 98: Email Error: " + action
+            Case 99 'Reached undesired state
+                logAction = "Error 99: Undesired state reached. " + action
             Case Else
-                logAction = "Unknown action code used."
+                logAction = "ERROR XX: Unknown action code used."
         End Select
 
-        sw.WriteLine(Now + ": " + logAction)
+        sw.WriteLine(Now + "| " + logAction)
 
         'Close the log file
         sw.Flush()
@@ -68,5 +74,28 @@ Module GlobalModule
             Return "CUST# NOT FOUND"
         End If
     End Function
+
+    ''' <summary>
+    ''' Creates the output folders used by SAMuel if they do not exist
+    ''' </summary>
+    Sub InitOutputFolders()
+        Dim parentPath As String = My.Settings.savePath
+        Dim OutputFolders As Array = {parentPath, parentPath + "tiffs\", parentPath + "emails\", parentPath + "faxed\", parentPath + "converted\"}
+
+        'Create the folder if it does not exist
+        For Each value In OutputFolders
+            GlobalModule.CheckFolder(value)
+        Next
+    End Sub
+
+
+    ''' <summary>
+    ''' Creates a folder if the path does not exist
+    ''' </summary>
+    Sub CheckFolder(ByVal path As String)
+        If (Not System.IO.Directory.Exists(path)) Then
+            System.IO.Directory.CreateDirectory(path)
+        End If
+    End Sub
 
 End Module

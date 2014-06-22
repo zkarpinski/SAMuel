@@ -12,6 +12,7 @@
             My.Settings.savePath = Me.txtSavePath.Text
             My.Settings.Save()
             GlobalModule.LogAction(actionCode:=2, action:=Me.txtSavePath.Text)
+            GlobalModule.InitOutputFolders()
         End If
 
         Me.Close()

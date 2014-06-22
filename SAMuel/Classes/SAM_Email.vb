@@ -34,7 +34,7 @@
             If strRegex = "CUST# NOT FOUND" Then
                 strRegex = GlobalModule.RegexAccount(mBody)
                 If strRegex = "ACC# NOT FOUND" Then
-                    strRegex = GlobalModule.RegexCustomer(mSubject)
+                    strRegex = GlobalModule.RegexCustomer(mBody)
                     If strRegex = "CUST# NOT FOUND" Then
                         strRegex = "UNKNOWN"
                         _IsValid = False

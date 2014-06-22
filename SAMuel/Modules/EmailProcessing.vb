@@ -2,30 +2,25 @@
 Imports System.Drawing.Imaging
 
 Public Module EmailProcessing
-    Public Function Add_Watermark(ByRef img As Image, ByVal accountNumber As String, Optional ByVal suffix As String = vbNullString) As Image
+    Public Function Add_Watermark(ByRef img As Image, ByVal accountNumber As String) As Image
         'Adds the account number as a watermark to the image
         'http://bytescout.com/products/developer/watermarkingsdk/how_to_add_text_watermark_to_image_using_dotnet_in_vb.html
         Dim graphics As Graphics
         Dim font As Font
         Dim brush As SolidBrush
+        Dim rBrush As SolidBrush
         Dim point As PointF
-        Dim savedFile As String
-
-        'Determine if file needs a suffix
-        If suffix = vbNullString Then
-            savedFile = My.Settings.savePath + accountNumber + ".jpg"
-        Else
-            savedFile = My.Settings.savePath + accountNumber + "_" + suffix + ".jpg"
-        End If
 
         ' Account Number Watermark Settings
         font = New Font("Times New Roman", 30.0F)
         point = New PointF(50, 50) '(x,y)
         brush = New SolidBrush(Color.FromArgb(150, Color.Red))
+        rBrush = New SolidBrush(Color.FromArgb(100, Color.White))
 
         ' Create graphics from image
         graphics = Drawing.Graphics.FromImage(img)
         ' Draw the Account Number Watermark
+        graphics.FillRectangle(rBrush, point.X, point.Y, 250, 40)
         graphics.DrawString(accountNumber, font, brush, point)
 
         'Clear Resources
@@ -129,14 +124,12 @@ Public Module EmailProcessing
         width = bm.Width * sRatio
         height = bm.Height * sRatio
         newBM = New Bitmap(width, height)
+
         Dim g As Graphics = Graphics.FromImage(newBM)
-
         g.InterpolationMode = Drawing2D.InterpolationMode.Default
-
         g.DrawImage(bm, New Rectangle(0, 0, width, height), New Rectangle(0, 0, bm.Width, bm.Height), GraphicsUnit.Pixel)
 
         g.Dispose()
-
         bm.Dispose()
 
         'image path.
@@ -146,55 +139,18 @@ Public Module EmailProcessing
 
     End Sub
 
-    Sub ReSize_IMG(ByRef img As Image)
-        Dim ImgX As Integer
-        Dim ImgY As Integer
-        Dim PSizeX As Integer = 2200
-        Dim PSizeY As Integer = 1700
-        Dim ScaleX As Double
-        Dim ScaleY As Double
-        Dim RecX As Integer
-        Dim RecY As Integer
-        Dim ScaleM As Double
-
-
-        ImgX = img.Height
-        ImgY = img.Width
-
-        ScaleX = PSizeX / ImgX
-        ScaleY = PSizeY / ImgY
-        If ScaleX < ScaleY Then
-            ScaleM = ScaleX
-        Else : ScaleM = ScaleY
-        End If
-        RecY = ImgY * ScaleM
-        RecX = ImgX * ScaleM
-        Dim bm As Bitmap = New Bitmap(1, 1)
-        Dim g As Graphics = Graphics.FromImage(bm)
-        g.DrawImage(img, 0, 0, RecY, RecX)
-        bm.Save(My.Settings.savePath + "testtt.jpg")
-    End Sub
-
-    Function MakeGrayscale(img As Bitmap) As Bitmap
-
-        'create a blank bitmap the same size as original
-        Dim newBitMap As Bitmap = New Bitmap(img.Width, img.Height)
-
-        'get a graphics object from the new image
-        Dim g As Graphics = Graphics.FromImage(newBitMap)
-
-        'create the grayscale ColorMatrix
-        Dim colorMatrix As ColorMatrix = New ColorMatrix()
-
-        'new float[] {.3f, .3f, .3f, 0, 0},
-        'new float[] {.59f, .59f, .59f, 0, 0},
-        'new float[] {.11f, .11f, .11f, 0, 0},
-        'new float[] {0, 0, 0, 1, 0},
-        'new float[] {0, 0, 0, 0, 1}
-
-
-        'create some image attributes
+    Sub MakeGrayscale(ByRef img As Image)
+        Dim g As Graphics = Graphics.FromImage(img)
         Dim attributes As ImageAttributes = New ImageAttributes()
+        'The grayscale ColorMatrix http://msdn.microsoft.com/en-us/library/system.drawing.imaging.colormatrix(v=vs.110).aspx
+        Dim colorMatrixElements As Single()() = { _
+            New Single() {0.3F, 0.3F, 0.3F, 0, 0}, _
+            New Single() {0.59F, 0.59F, 0.59F, 0, 0}, _
+            New Single() {0.11F, 0.11F, 0.11F, 0, 0}, _
+            New Single() {0, 0, 0, 1, 0}, _
+            New Single() {0, 0, 0, 0, 1} _
+            }
+        Dim colorMatrix As New ColorMatrix(colorMatrixElements)
 
         'set the color matrix attribute
         attributes.SetColorMatrix(colorMatrix)
@@ -202,14 +158,22 @@ Public Module EmailProcessing
         'draw the original image on the new image
         'using the grayscale color matrix
         g.DrawImage(img, New Rectangle(0, 0, img.Width, img.Height), 0, 0, img.Width, img.Height, GraphicsUnit.Pixel, attributes)
-
         'dispose the Graphics object
         g.Dispose()
-        Return newBitMap
-    End Function
 
-    Function ValidateAttachmentType(sFile As String) As Boolean
-        Return 1
+    End Sub
+
+    Function ValidateAttachmentType(ByVal sFile As String) As String
+        Dim sFileExt As String
+        sFileExt = Path.GetExtension(sFile).ToLower
+        If sFileExt = ".tiff" Or sFileExt = ".png" Or _
+                sFileExt = ".jpg" Or sFileExt = ".jpeg" Or _
+                sFileExt = ".tif" Or sFileExt = ".gif" Or _
+                sFileExt = ".bmp" Then
+            Return sFileExt
+        Else
+            Return vbNullString
+        End If
     End Function
 
 End Module
