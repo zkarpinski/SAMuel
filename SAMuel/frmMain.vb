@@ -22,6 +22,9 @@ Public Class frmMain
         Dim attachmentImg As Image
         Dim tiffList As New List(Of String)
         Dim i As Integer = 0, emailCount As Integer
+        Dim samEmails As New List(Of SAM_Email)
+        Dim sEmail As SAM_Email
+
 
         Reset_Outlook_Tab()
         clbSelectedEmails.Items.Clear()
@@ -39,10 +42,18 @@ Public Class frmMain
         oSelection = oApp.ActiveExplorer.Selection
 
         For Each oMsg In oSelection
+            sEmail = New SAM_Email(oMsg)
+            samEmails.Add(sEmail)
             clbSelectedEmails.Items.Add("[" & oMsg.Attachments.Count.ToString & "] " & oMsg.Subject)
+
         Next
 
-        emailCount = oSelection.Count
+        'oMsg = Nothing
+        'oSelection = Nothing
+        'oApp.Quit()
+        'oApp = Nothing
+
+        emailCount = samEmails.Count
 
         ProgressBar.Maximum = emailCount
         'Process each email selected
@@ -156,7 +167,6 @@ Public Class frmMain
                         Application.DoEvents()
                         Me.Refresh()
                         'Delete the saved email attachment
-                        ''System.IO.Directory.GetFiles() ' Get all files within a folder ** useful later **
                         System.IO.File.Delete(sFile)
                         lblStatus.Text = ""
                         'Checks the email in the check list box
