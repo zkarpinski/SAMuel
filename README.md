@@ -8,8 +8,10 @@ A toolset designed for work at National Grid to automate monotonous but critical
 ##Features
 * Convert Word documents to .tif
 * Process Emails
-	* Save Attachments as .tif
-	* Add "watermark" of account number to the .tif
+    * Resize if larger then a page.
+    * Add "watermark" of account number to the image.
+    * Convert to grayscale.
+	* Compress and the attachment as .tiff
 * Automate DPA process
 * Integration with RightFax
 * Save user settings

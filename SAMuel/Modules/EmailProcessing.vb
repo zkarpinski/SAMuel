@@ -28,8 +28,7 @@ Public Module EmailProcessing
         graphics = Nothing
         Return img
     End Function
-
-    ''**NOTE**This function needs an overhaul
+    ''Depreciated Convert to TIff Routine''
     Public Sub Convert_Image_To_Tif(fileNames As String, isMultiPage As Boolean)
         'Converts the image to a tiff
         'http://code.msdn.microsoft.com/windowsdesktop/VBTiffImageConverter-f8fdfd7f/sourcecode?fileId=26346&pathId=565080007
@@ -99,11 +98,11 @@ Public Module EmailProcessing
             End If
         End Using
     End Sub
-
     Private Sub Convert_Image_To_Tif(sEditedImg As String, Optional p2 As Object = Nothing, Optional p3 As Boolean = Nothing)
         Throw New NotImplementedException
     End Sub
 
+    ''Depreciated Resize Routine''
     Sub Resize_Image(ByRef img As Image)
         'following code resizes picture to fit
 
@@ -115,6 +114,10 @@ Public Module EmailProcessing
         Dim hRatio As Double = 2200 / bm.Height
         Dim sRatio As Double
 
+        If img.Height <= 2200 And img.Width <= 1700 Then
+            Exit Sub
+        End If
+
         'Determine the scale
         If wRatio < hRatio Then
             sRatio = wRatio
@@ -124,6 +127,7 @@ Public Module EmailProcessing
         width = bm.Width * sRatio
         height = bm.Height * sRatio
         newBM = New Bitmap(width, height)
+        newBM.SetResolution(70.0F, 70.0F)
 
         Dim g As Graphics = Graphics.FromImage(newBM)
         g.InterpolationMode = Drawing2D.InterpolationMode.Default
@@ -134,11 +138,15 @@ Public Module EmailProcessing
 
         'image path.
         newBM.Save(My.Settings.savePath + "test12123.jpg")
-
         newBM.Dispose()
 
     End Sub
 
+    ''' <summary>
+    ''' Changes the image to grayscale using ColorMatrix
+    ''' </summary>
+    ''' <param name="img">Image ByRef to be changed to gray scale</param>
+    ''' <remarks></remarks>
     Sub MakeGrayscale(ByRef img As Image)
         Dim g As Graphics = Graphics.FromImage(img)
         Dim attributes As ImageAttributes = New ImageAttributes()
@@ -154,14 +162,15 @@ Public Module EmailProcessing
 
         'set the color matrix attribute
         attributes.SetColorMatrix(colorMatrix)
-
         'draw the original image on the new image
         'using the grayscale color matrix
         g.DrawImage(img, New Rectangle(0, 0, img.Width, img.Height), 0, 0, img.Width, img.Height, GraphicsUnit.Pixel, attributes)
         'dispose the Graphics object
         g.Dispose()
+        g = Nothing
 
     End Sub
+
 
     Function ValidateAttachmentType(ByVal sFile As String) As String
         Dim sFileExt As String

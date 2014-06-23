@@ -10,12 +10,14 @@
 
     Public Sub New(ByRef objEmail As Object)
         Dim sFile As String
-        Dim sPath As String = My.Settings.savePath
+        Dim sPath As String
 
         mSubject = objEmail.Subject
         mFrom = objEmail.SenderName
         mBody = objEmail.body
 
+        sPath = My.Settings.savePath + "emails\" + mFrom + "\"
+        GlobalModule.CheckFolder(sPath)
         If objEmail.Attachments.Count > 0 Then
             For Each value In objEmail.Attachments
                 sFile = sPath + value.FileName

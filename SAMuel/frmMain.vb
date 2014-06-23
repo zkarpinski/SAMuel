@@ -17,6 +17,8 @@ Public Class frmMain
         Dim sFile As String, sFileExt As String
         Dim outTiff As String
         Dim attachmentImg As Image
+        Dim modifiedImg As Image
+        Dim ms As MemoryStream
         Dim tiffList As New List(Of String)
         Dim i As Integer = 0, emailCount As Integer
         Dim samEmails As New List(Of SAM_Email)
@@ -91,7 +93,9 @@ Public Class frmMain
                         Do Until (bNextPressed = True Or bRejectPressed = True Or bCancelPressed = True Or bAuditMode = False)
                             Application.DoEvents()
                         Loop
+
                         bAuditMode = chkAuditMode.Checked
+
                         If bCancelPressed Then
                             'When canceled, release image and reset form and end the routine
                             picImage.Image = Nothing
@@ -104,21 +108,36 @@ Public Class frmMain
                             '------ LOG reject action? ---------
                         ElseIf bNextPressed Or bAuditMode = False Then
                             i += 1
+                            'Resize the image if it is too large
+                            If attachmentImg.Height > 2200 Or attachmentImg.Width > 1700 Then
+                                lblStatus.Text = "Resizing Image..."
+                                Me.Refresh()
+                                ms = ImageProcessing.ResizeImage(attachmentImg)
+                                modifiedImg = Image.FromStream(ms)
+                                Application.DoEvents()
+                            Else
+                                modifiedImg = Image.FromFile(sFile)
+                            End If
+                            picImage.Image = Nothing
+                            picImage.Image = modifiedImg
+                            attachmentImg.Dispose()
+                            attachmentImg = Nothing
+
                             'Add account number as a watermark
                             lblStatus.Text = "Adding Watermark..."
                             Me.Refresh()
-                            'EmailProcessing.Resize_Image(attachmentImg)
-                            EmailProcessing.Add_Watermark(attachmentImg, sEmail.Account) ''add suffix handing
+                            EmailProcessing.Add_Watermark(modifiedImg, sEmail.Account) ''add suffix handing
+                            'Convert the image to Grayscale
                             lblStatus.Text = "Converting to Grayscale..."
                             Me.Refresh()
-                            EmailProcessing.MakeGrayscale(attachmentImg)
+                            EmailProcessing.MakeGrayscale(modifiedImg)
+                            'Save the edited attachment as tiff and add to list
                             lblStatus.Text = "Converting to Tiff..."
                             Me.Refresh()
-                            'Save the edited attachment as tiff and add to list
                             sDestination = My.Settings.savePath + "tiffs\" + sEmail.From + "\"
                             GlobalModule.CheckFolder(sDestination)
-                            outTiff = [String].Format("{0}{1}{2}.tiff", sDestination, i & "_", sEmail.Account)
-                            picImage.Image.Save(outTiff, System.Drawing.Imaging.ImageFormat.Tiff)
+                            outTiff = [String].Format("{0}{1}{2}{3}.tiff", sDestination, i, "_", sEmail.Account)
+                            ImageProcessing.CompressTiff(modifiedImg, outTiff)
                             tiffList.Add(outTiff)
                             Me.Refresh()
                         Else
@@ -132,8 +151,10 @@ Public Class frmMain
 
                         'Release image
                         picImage.Image = Nothing
-                        attachmentImg.Dispose()
+                        If Not IsNothing(modifiedImg) Then modifiedImg.Dispose()
                         attachmentImg = Nothing
+                        If Not IsNothing(ms) Then ms.Dispose()
+                        ms = Nothing
 
                         Application.DoEvents()
                         Me.Refresh()

@@ -69,10 +69,19 @@
     <ManifestKeyFile>SAMuel_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
-    <GenerateManifests>true</GenerateManifests>
+    <GenerateManifests>false</GenerateManifests>
   </PropertyGroup>
   <PropertyGroup>
-    <SignManifests>true</SignManifests>
+    <SignManifests>false</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetZone>LocalIntranet</TargetZone>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\default.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -116,6 +125,7 @@
     <Compile Include="Modules\ConvertToTiff.vb" />
     <Compile Include="Modules\EmailProcessing.vb" />
     <Compile Include="Modules\GlobalModule.vb" />
+    <Compile Include="Modules\ImageProcessing.vb" />
     <Compile Include="Modules\KofaxModule.vb" />
     <Compile Include="Modules\modDPAHandle.vb" />
     <Compile Include="Modules\RightFax.vb" />
@@ -154,6 +164,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="My Project\app.manifest" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -184,39 +195,12 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
-    <COMReference Include="RFAXVIEWLib">
-      <Guid>{D0DE187A-5715-4AED-9CFA-F3C46E46FB7F}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
     <COMReference Include="RFCOMAPILib">
       <Guid>{FD0FBD6B-7484-4E50-B95A-AC5E3A5AFFAE}</Guid>
       <VersionMajor>1</VersionMajor>
       <VersionMinor>0</VersionMinor>
       <Lcid>0</Lcid>
       <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="RFObjLib">
-      <Guid>{BF9A9E2B-FE8B-4C15-91D5-F91D073C1241}</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
-    <COMReference Include="stdole">
-      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
@@ -242,6 +226,10 @@
       <ProductName>Windows Installer 4.5</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Resources\default.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

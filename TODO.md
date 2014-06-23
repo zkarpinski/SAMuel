@@ -8,9 +8,9 @@ List of what still is being worked on, features to be added, etc.
 #### Outlook Email Handling
 
 * Look into background worker for processing the images
-* Work on naming convention and string cleaning
-* Overhaul tiff conversion
+* ~~Work on naming convention~~ and string cleaning (#,:,/)
 * Error handling
+* ~~Overhaul tiff conversion~~
 
 #### DPA
 
@@ -30,3 +30,8 @@ List of what still is being worked on, features to be added, etc.
 * Drag and Drop Capability
 * Multiple import types (All selected files for 1 document)
 * Options to change output folder and BatchClass
+
+#### Options Menus
+
+* Remove hardcoded settings
+* Add atleast one option per tool

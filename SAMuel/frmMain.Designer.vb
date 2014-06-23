@@ -22,12 +22,14 @@ Partial Class frmMain
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
         Me.btnRun = New System.Windows.Forms.Button()
         Me.picImage = New System.Windows.Forms.PictureBox()
         Me.dlgOpen = New System.Windows.Forms.OpenFileDialog()
         Me.btnConvert = New System.Windows.Forms.Button()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.lblOutlookMessage = New System.Windows.Forms.Label()
         Me.chkAuditMode = New System.Windows.Forms.CheckBox()
         Me.lblSelectedEmails = New System.Windows.Forms.Label()
         Me.clbSelectedEmails = New System.Windows.Forms.CheckedListBox()
@@ -84,7 +86,6 @@ Partial Class frmMain
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.lblOutlookMessage = New System.Windows.Forms.Label()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -166,6 +167,17 @@ Partial Class frmMain
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Outlook"
         Me.TabPage1.UseVisualStyleBackColor = True
+        '
+        'lblOutlookMessage
+        '
+        Me.lblOutlookMessage.AutoSize = True
+        Me.lblOutlookMessage.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblOutlookMessage.ForeColor = System.Drawing.Color.Red
+        Me.lblOutlookMessage.Location = New System.Drawing.Point(46, 74)
+        Me.lblOutlookMessage.Name = "lblOutlookMessage"
+        Me.lblOutlookMessage.Size = New System.Drawing.Size(125, 13)
+        Me.lblOutlookMessage.TabIndex = 15
+        Me.lblOutlookMessage.Text = "Email Error/Warning!"
         '
         'chkAuditMode
         '
@@ -701,17 +713,6 @@ Partial Class frmMain
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(52, 20)
         Me.AboutToolStripMenuItem.Text = "About"
         '
-        'lblOutlookMessage
-        '
-        Me.lblOutlookMessage.AutoSize = True
-        Me.lblOutlookMessage.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblOutlookMessage.ForeColor = System.Drawing.Color.Red
-        Me.lblOutlookMessage.Location = New System.Drawing.Point(46, 74)
-        Me.lblOutlookMessage.Name = "lblOutlookMessage"
-        Me.lblOutlookMessage.Size = New System.Drawing.Size(125, 13)
-        Me.lblOutlookMessage.TabIndex = 15
-        Me.lblOutlookMessage.Text = "Email Error/Warning!"
-        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -722,6 +723,8 @@ Partial Class frmMain
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.MenuStrip1)
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D
+        Me.HelpButton = True
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
         Me.Name = "frmMain"
         Me.Text = "SAMuel"
