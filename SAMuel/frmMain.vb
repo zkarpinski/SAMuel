@@ -23,7 +23,7 @@ Public Class frmMain
         Dim i As Integer = 0, emailCount As Integer
         Dim samEmails As New List(Of SAM_Email)
         Dim sEmail As SAM_Email
-        Dim runResults() As Integer = {0, 0, 0} 'sucess,fail,skipped
+        Dim rand As New Random
 
 
         Reset_Outlook_Tab()
@@ -125,10 +125,14 @@ Public Class frmMain
                             Else
                                 modifiedImg = Image.FromFile(sFile)
                             End If
+
+                            'Release original attachment so it can be removed when done processing
                             picImage.Image = Nothing
-                            picImage.Image = modifiedImg
                             attachmentImg.Dispose()
                             attachmentImg = Nothing
+
+                            'Show the current image as it's being modified
+                            picImage.Image = modifiedImg
 
                             'Add account number as a watermark
                             lblStatus.Text = "Adding Watermark..."
@@ -143,7 +147,7 @@ Public Class frmMain
                             Me.Refresh()
                             sDestination = My.Settings.savePath + "tiffs\" + sEmail.From + "\"
                             GlobalModule.CheckFolder(sDestination)
-                            outTiff = [String].Format("{0}{1}{2}{3}.tiff", sDestination, i, "_", sEmail.Account)
+                            outTiff = [String].Format("{0}{1}_{2}.tiff", sDestination, rand.Next(10000).ToString, sEmail.Account)
                             ImageProcessing.CompressTiff(modifiedImg, outTiff)
                             docTiffList.Add(outTiff)
                             Me.Refresh()
@@ -165,6 +169,7 @@ Public Class frmMain
 
                         Application.DoEvents()
                         Me.Refresh()
+
                         'Delete the saved email attachment
                         System.IO.File.Delete(sFile)
                         lblStatus.Text = ""
@@ -177,7 +182,7 @@ Public Class frmMain
 
                 Else
                     'No attachments
-
+                    LogAction(50, String.Format("{0} - {1} was skipped. No attachments", sEmail.Subject, sEmail.From))
                 End If
 
                 bNextPressed = False
@@ -185,14 +190,16 @@ Public Class frmMain
                 Me.Refresh()
                 Application.DoEvents()
             Catch ex As Exception
-                LogAction(3, sEmail.Subject & " - " & sEmail.From & ", has was skipped. Contained an unknown error.")
+                'Unknown error with email.
+                LogAction(98, String.Format("{0} - {1} : {2}", sEmail.Subject, sEmail.From, ex.ToString))
             End Try
         Next
 
+        'Create XML if user decides to.
         If MsgBox("Email processing complete. Continue to create XML?", MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
             lblStatus.Text = "Creating XML File..."
             Me.Refresh()
-            KofaxModule.CreateXML(docList, "SAMuel - " & emailCount & " emails")
+            KofaxModule.CreateXML(docList, "SAMuel - " & docList.Count.ToString & " emails.")
         End If
 
         lblStatus.Text = "DONE!"

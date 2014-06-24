@@ -11,7 +11,8 @@ A toolset designed for work at National Grid to automate monotonous but critical
     * Resize if larger then a page.
     * Add "watermark" of account number to the image.
     * Convert to grayscale.
-	* Compress and the attachment as .tiff
+	* Compress and save the attachment as .tiff
+    * Add each email as a document to XML containing each attachment as a page
 * Automate DPA process
 * Integration with RightFax
 * Save user settings

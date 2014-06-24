@@ -34,12 +34,14 @@ Module GlobalModule
                 Else
                     logAction = "Unknown action occured."
                 End If
-            Case 1 'Faxed File
+            Case 1  'Faxed File
                 logAction = "Notice  : " + action + " was faxed."
-            Case 2 'Save path changed
+            Case 2  'Save path changed
                 logAction = "Notice  : Default save path changed to " + action
-            Case 3 'Email Processed
+            Case 3  'Email Processed
                 logAction = "Notice  : Email - " + action + " was processed"
+            Case 50 'Email Skipped
+                logAction = "Warning : Email - " + action
             Case 98 'SAM email error
                 logAction = "Error 98: Email Error: " + action
             Case 99 'Reached undesired state
