@@ -10,6 +10,7 @@ List of what still is being worked on, features to be added, etc.
 * Look into background worker for processing the images
 * ~~Work on naming convention~~ and string cleaning (#,:,/)
 * Error handling
+* PDF and other file formart handling
 * ~~Overhaul tiff conversion~~
 
 #### DPA

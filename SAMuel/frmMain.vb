@@ -80,6 +80,9 @@ Public Class frmMain
                             'Delete the file and move to next attachment
                             System.IO.File.Delete(sFile)
                             Continue For
+                        ElseIf sFileExt = ".pdf" Then
+                            EmailProcessing.ParsePDFImgs(sFile)
+                            Continue For
                         End If
                         'Load the attachment
                         attachmentImg = Image.FromFile(sFile)
@@ -344,9 +347,12 @@ Public Class frmMain
         Dim strRecName As String, strRecFax As String 'Fax Recipient Strings
         Dim bUseNTAuth As Boolean, bSaveRec As Boolean, bUseCoverSheet As Boolean
         Dim sFile As String
+        Dim i As Integer = 0, faxesCount As Integer
 
         Dim objRightFax As RFCOMAPILib.FaxServer
         Dim objFax As RFCOMAPILib.Fax
+
+        Reset_ProgressBar()
 
         'Set values
         strServerName = txtRFsvr.Text
@@ -386,13 +392,19 @@ Public Class frmMain
         If dlgOpen.ShowDialog() = DialogResult.OK Then
             objRightFax = RightFax.ConnectToServer(strServerName, strUsername, bUseNTAuth)
             objRightFax.OpenServer()
+            faxesCount = dlgOpen.FileNames.Count
+            ProgressBar.Maximum = faxesCount
             'Create and send each fax
             For Each sFile In dlgOpen.FileNames
+                lblStatus.Text = String.Format("Faxing {0} of {1}.", i, faxesCount)
+                Me.Refresh()
                 objFax = RightFax.CreateFax(objRightFax, strRecName, strRecFax, sFile)
                 RightFax.SendFax(objFax)
                 RightFax.MoveFaxedFile(sFile)
+                ProgressBar.Value += 1
                 objFax = Nothing
             Next
+            lblStatus.Text = "DONE!"
             objRightFax.CloseServer()
         End If
     End Sub

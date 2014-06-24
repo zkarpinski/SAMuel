@@ -11,6 +11,7 @@
     Public Sub New(ByRef objEmail As Object)
         Dim sFile As String
         Dim sPath As String
+        Dim rand As New Random
 
         mSubject = objEmail.Subject
         mFrom = objEmail.SenderName
@@ -20,7 +21,8 @@
         GlobalModule.CheckFolder(sPath)
         If objEmail.Attachments.Count > 0 Then
             For Each value In objEmail.Attachments
-                sFile = sPath + value.FileName
+                'Added random number for same filename handling cases
+                sFile = sPath & rand.Next(10000).ToString & value.FileName
                 value.SaveAsFile(sFile)
                 mAttachments.Add(sFile)
             Next

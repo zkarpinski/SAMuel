@@ -84,6 +84,9 @@
     <ApplicationIcon>Resources\default.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="pdflib">
+      <HintPath>libraries\PDFLib-v2.1\pdflib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />

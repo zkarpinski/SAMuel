@@ -27,19 +27,24 @@ Partial Class frmOptions
         Me.btnSelectSaveFolder = New System.Windows.Forms.Button()
         Me.btnSaveOptions = New System.Windows.Forms.Button()
         Me.lblSaveTo = New System.Windows.Forms.Label()
+        Me.TabControl1 = New System.Windows.Forms.TabControl()
+        Me.tabGeneral = New System.Windows.Forms.TabPage()
+        Me.tabOutlook = New System.Windows.Forms.TabPage()
+        Me.TabControl1.SuspendLayout()
+        Me.tabGeneral.SuspendLayout()
         Me.SuspendLayout()
         '
         'txtSavePath
         '
         Me.txtSavePath.Enabled = False
-        Me.txtSavePath.Location = New System.Drawing.Point(68, 36)
+        Me.txtSavePath.Location = New System.Drawing.Point(62, 8)
         Me.txtSavePath.Name = "txtSavePath"
         Me.txtSavePath.Size = New System.Drawing.Size(346, 20)
         Me.txtSavePath.TabIndex = 0
         '
         'btnSelectSaveFolder
         '
-        Me.btnSelectSaveFolder.Location = New System.Drawing.Point(420, 34)
+        Me.btnSelectSaveFolder.Location = New System.Drawing.Point(414, 6)
         Me.btnSelectSaveFolder.Name = "btnSelectSaveFolder"
         Me.btnSelectSaveFolder.Size = New System.Drawing.Size(75, 23)
         Me.btnSelectSaveFolder.TabIndex = 1
@@ -48,7 +53,7 @@ Partial Class frmOptions
         '
         'btnSaveOptions
         '
-        Me.btnSaveOptions.Location = New System.Drawing.Point(188, 192)
+        Me.btnSaveOptions.Location = New System.Drawing.Point(211, 199)
         Me.btnSaveOptions.Name = "btnSaveOptions"
         Me.btnSaveOptions.Size = New System.Drawing.Size(75, 23)
         Me.btnSaveOptions.TabIndex = 2
@@ -58,25 +63,58 @@ Partial Class frmOptions
         'lblSaveTo
         '
         Me.lblSaveTo.AutoSize = True
-        Me.lblSaveTo.Location = New System.Drawing.Point(8, 39)
+        Me.lblSaveTo.Location = New System.Drawing.Point(2, 11)
         Me.lblSaveTo.Name = "lblSaveTo"
         Me.lblSaveTo.Size = New System.Drawing.Size(60, 13)
         Me.lblSaveTo.TabIndex = 3
         Me.lblSaveTo.Text = "Save Path:"
         '
+        'TabControl1
+        '
+        Me.TabControl1.Controls.Add(Me.tabGeneral)
+        Me.TabControl1.Controls.Add(Me.tabOutlook)
+        Me.TabControl1.Location = New System.Drawing.Point(1, 1)
+        Me.TabControl1.Name = "TabControl1"
+        Me.TabControl1.SelectedIndex = 0
+        Me.TabControl1.Size = New System.Drawing.Size(506, 192)
+        Me.TabControl1.TabIndex = 4
+        '
+        'tabGeneral
+        '
+        Me.tabGeneral.Controls.Add(Me.txtSavePath)
+        Me.tabGeneral.Controls.Add(Me.lblSaveTo)
+        Me.tabGeneral.Controls.Add(Me.btnSelectSaveFolder)
+        Me.tabGeneral.Location = New System.Drawing.Point(4, 22)
+        Me.tabGeneral.Name = "tabGeneral"
+        Me.tabGeneral.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabGeneral.Size = New System.Drawing.Size(498, 166)
+        Me.tabGeneral.TabIndex = 0
+        Me.tabGeneral.Text = "General"
+        Me.tabGeneral.UseVisualStyleBackColor = True
+        '
+        'tabOutlook
+        '
+        Me.tabOutlook.Location = New System.Drawing.Point(4, 22)
+        Me.tabOutlook.Name = "tabOutlook"
+        Me.tabOutlook.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabOutlook.Size = New System.Drawing.Size(498, 134)
+        Me.tabOutlook.TabIndex = 1
+        Me.tabOutlook.Text = "Outlook"
+        Me.tabOutlook.UseVisualStyleBackColor = True
+        '
         'frmOptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(505, 227)
-        Me.Controls.Add(Me.lblSaveTo)
+        Me.ClientSize = New System.Drawing.Size(506, 227)
+        Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.btnSaveOptions)
-        Me.Controls.Add(Me.btnSelectSaveFolder)
-        Me.Controls.Add(Me.txtSavePath)
         Me.Name = "frmOptions"
         Me.Text = "Options"
+        Me.TabControl1.ResumeLayout(False)
+        Me.tabGeneral.ResumeLayout(False)
+        Me.tabGeneral.PerformLayout()
         Me.ResumeLayout(False)
-        Me.PerformLayout()
 
     End Sub
     Friend WithEvents txtSavePath As System.Windows.Forms.TextBox
@@ -84,4 +122,7 @@ Partial Class frmOptions
     Friend WithEvents btnSelectSaveFolder As System.Windows.Forms.Button
     Friend WithEvents btnSaveOptions As System.Windows.Forms.Button
     Friend WithEvents lblSaveTo As System.Windows.Forms.Label
+    Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
+    Friend WithEvents tabGeneral As System.Windows.Forms.TabPage
+    Friend WithEvents tabOutlook As System.Windows.Forms.TabPage
 End Class

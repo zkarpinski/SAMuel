@@ -2,6 +2,14 @@
 Imports System.Drawing.Imaging
 
 Public Module EmailProcessing
+
+    ''' <summary>
+    ''' Adds a string watermark to the passed image
+    ''' </summary>
+    ''' <param name="img">Image ByRef to add watermark to</param>
+    ''' <param name="accountNumber">String to be added as watermark</param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Function Add_Watermark(ByRef img As Image, ByVal accountNumber As String) As Image
         'Adds the account number as a watermark to the image
         'http://bytescout.com/products/developer/watermarkingsdk/how_to_add_text_watermark_to_image_using_dotnet_in_vb.html
@@ -28,119 +36,6 @@ Public Module EmailProcessing
         graphics = Nothing
         Return img
     End Function
-    ''Depreciated Convert to TIff Routine''
-    Public Sub Convert_Image_To_Tif(fileNames As String, isMultiPage As Boolean)
-        'Converts the image to a tiff
-        'http://code.msdn.microsoft.com/windowsdesktop/VBTiffImageConverter-f8fdfd7f/sourcecode?fileId=26346&pathId=565080007
-        Using encoderParams As New EncoderParameters(1)
-            Dim tiffCodecInfo As ImageCodecInfo = ImageCodecInfo.GetImageEncoders(). _
-                   First(Function(ie) ie.MimeType = "image/tiff")
-
-            Dim tiffPaths As String() = Nothing
-            If isMultiPage Then
-                tiffPaths = New String(1) {}
-                Dim tiffImg As Image = Nothing
-                Try
-                    Dim i As Integer = 0
-                    While i < fileNames.Length
-                        If i = 0 Then
-                            tiffPaths(i) = [String].Format("{0}\{1}.tiff",
-                                        Path.GetDirectoryName(fileNames(i)),
-                                        Path.GetFileNameWithoutExtension(fileNames(i)))
-
-                            ' Initialize the first frame of multi-page tiff. 
-                            tiffImg = Image.FromFile(fileNames(i))
-                            encoderParams.Param(0) = New EncoderParameter(
-                                Encoder.SaveFlag, DirectCast(EncoderValue.MultiFrame, 
-                                EncoderParameterValueType))
-                            tiffImg.Save(tiffPaths(i), tiffCodecInfo, encoderParams)
-                        Else
-                            ' Add additional frames. 
-                            encoderParams.Param(0) = New EncoderParameter(
-                                Encoder.SaveFlag,
-                                DirectCast(EncoderValue.FrameDimensionPage, 
-                                EncoderParameterValueType))
-                            Using frame As Image = Image.FromFile(fileNames(i))
-                                tiffImg.SaveAdd(frame, encoderParams)
-                            End Using
-                        End If
-
-                        If i = fileNames.Length - 1 Then
-                            ' When it is the last frame, flush the resources and closing. 
-                            encoderParams.Param(0) = New EncoderParameter(
-                                Encoder.SaveFlag,
-                                DirectCast(EncoderValue.Flush, EncoderParameterValueType))
-                            tiffImg.SaveAdd(encoderParams)
-                        End If
-                        System.Math.Max(System.Threading.Interlocked.Increment(i), i - 1)
-                    End While
-                Finally
-                    If tiffImg IsNot Nothing Then
-                        tiffImg.Dispose()
-                        tiffImg = Nothing
-                    End If
-                End Try
-            Else
-                tiffPaths = New String(fileNames.Length) {}
-
-                Dim i As Integer = 0
-                While i < fileNames.Length
-                    tiffPaths(i) = [String].Format("{0}{1}.tiff",
-                                       My.Settings.savePath,
-                                       "test")
-
-                    ' Save as individual tiff files. 
-                    Using tiffImg As Image = Image.FromFile(fileNames)
-                        tiffImg.Save(tiffPaths(i), ImageFormat.Tiff)
-                    End Using
-                    System.Math.Max(System.Threading.Interlocked.Increment(i), i - 1)
-                End While
-            End If
-        End Using
-    End Sub
-    Private Sub Convert_Image_To_Tif(sEditedImg As String, Optional p2 As Object = Nothing, Optional p3 As Boolean = Nothing)
-        Throw New NotImplementedException
-    End Sub
-
-    ''Depreciated Resize Routine''
-    Sub Resize_Image(ByRef img As Image)
-        'following code resizes picture to fit
-
-        Dim bm As New Bitmap(img)
-        Dim width As Integer
-        Dim height As Integer
-        Dim newBM As Bitmap
-        Dim wRatio As Double = 1700 / bm.Width
-        Dim hRatio As Double = 2200 / bm.Height
-        Dim sRatio As Double
-
-        If img.Height <= 2200 And img.Width <= 1700 Then
-            Exit Sub
-        End If
-
-        'Determine the scale
-        If wRatio < hRatio Then
-            sRatio = wRatio
-        Else : sRatio = hRatio
-        End If
-
-        width = bm.Width * sRatio
-        height = bm.Height * sRatio
-        newBM = New Bitmap(width, height)
-        newBM.SetResolution(70.0F, 70.0F)
-
-        Dim g As Graphics = Graphics.FromImage(newBM)
-        g.InterpolationMode = Drawing2D.InterpolationMode.Default
-        g.DrawImage(bm, New Rectangle(0, 0, width, height), New Rectangle(0, 0, bm.Width, bm.Height), GraphicsUnit.Pixel)
-
-        g.Dispose()
-        bm.Dispose()
-
-        'image path.
-        newBM.Save(My.Settings.savePath + "test12123.jpg")
-        newBM.Dispose()
-
-    End Sub
 
     ''' <summary>
     ''' Changes the image to grayscale using ColorMatrix
@@ -171,18 +66,45 @@ Public Module EmailProcessing
 
     End Sub
 
-
     Function ValidateAttachmentType(ByVal sFile As String) As String
         Dim sFileExt As String
         sFileExt = Path.GetExtension(sFile).ToLower
         If sFileExt = ".tiff" Or sFileExt = ".png" Or _
                 sFileExt = ".jpg" Or sFileExt = ".jpeg" Or _
                 sFileExt = ".tif" Or sFileExt = ".gif" Or _
-                sFileExt = ".bmp" Then
+                sFileExt = ".bmp" Or sFileExt = ".pdf" Then
             Return sFileExt
         Else
             Return vbNullString
         End If
     End Function
+
+
+    'Test Function
+    Sub ParsePDFImgs(pdfPath As String) 'As List(Of pdflib.clsPDFImage)
+        Dim count As Integer
+        Dim imagelist As List(Of pdflib.clsPDFImage)
+        Dim image As pdflib.clsPDFImage
+        Dim page As pdflib.clsPDFPage
+
+        Dim myPDF As New pdflib.ClsPDF(pdfPath)
+
+        'We get the images of the pdf
+        imagelist = myPDF.GetImages
+
+        'We save them
+        count = 0
+        For Each image In imagelist
+            count += 1
+            image.Save(My.Settings.savePath + "_image_" + count.ToString)
+        Next
+
+        'Get Images from page 1 only
+        page = myPDF.GetPage(1)
+        imagelist = page.GetImages
+
+        myPDF.Close()
+
+    End Sub
 
 End Module
