@@ -41,6 +41,8 @@ Public Class frmMain
         Try
             For Each value In oApp.ActiveExplorer.Selection
                 Try
+                    lblStatus.Text = "Saving attachments..."
+                    Me.Refresh()
                     sEmail = New SAM_Email(value)
                     sEmail.Regex()
                     samEmails.Add(sEmail)

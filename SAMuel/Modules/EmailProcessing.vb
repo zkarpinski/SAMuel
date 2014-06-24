@@ -14,13 +14,13 @@ Public Module EmailProcessing
         ' Account Number Watermark Settings
         font = New Font("Times New Roman", 30.0F)
         point = New PointF(50, 50) '(x,y)
-        brush = New SolidBrush(Color.FromArgb(150, Color.Red))
-        rBrush = New SolidBrush(Color.FromArgb(100, Color.White))
+        brush = New SolidBrush(Color.FromArgb(200, Color.Black))
+        rBrush = New SolidBrush(Color.FromArgb(160, Color.White))
 
         ' Create graphics from image
         graphics = Drawing.Graphics.FromImage(img)
         ' Draw the Account Number Watermark
-        graphics.FillRectangle(rBrush, point.X, point.Y, 250, 40)
+        graphics.FillRectangle(rBrush, point.X, point.Y, 230, 40)
         graphics.DrawString(accountNumber, font, brush, point)
 
         'Clear Resources

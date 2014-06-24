@@ -26,12 +26,12 @@ Module ImageProcessing
         quEncoder = Encoder.Quality
 
         ' Create an EncoderParameters object. 
-        myEncoderParameters = New EncoderParameters(2)
+        myEncoderParameters = New EncoderParameters(3)
 
         ' Save the bitmap as a TIFF file with the following parameters
-        myEncoderParameters.Param(0) = New EncoderParameter(cdEncoder, CType(24L, Int32))
-        myEncoderParameters.Param(1) = New EncoderParameter(quEncoder, CType(25L, Int32))
-        'myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionLZW)
+        myEncoderParameters.Param(0) = New EncoderParameter(cdEncoder, CType(1L, Int32))
+        myEncoderParameters.Param(1) = New EncoderParameter(quEncoder, CType(80L, Int32))
+        myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionCCITT3)
         myBitmap.Save(sSave, myImageCodecInfo, myEncoderParameters)
 
         myBitmap.Dispose()
@@ -67,7 +67,7 @@ Module ImageProcessing
 
         ' Create a newBitmap object based on a src
         myBitmap = New Bitmap(width, height)
-        myBitmap.SetResolution(70, 70)
+        myBitmap.SetResolution(200, 200)
 
         Dim g As Graphics = Graphics.FromImage(myBitmap)
         g.InterpolationMode = Drawing2D.InterpolationMode.Default
