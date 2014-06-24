@@ -5,12 +5,13 @@ Module KofaxModule
     ''' <summary>
     ''' Creates an XML file which is read by Kofax Import Connector to create a batch
     ''' </summary>
-    ''' <param name="fileList">
-    ''' Array of files to be added to the XML file
+    ''' <param name="docList">
+    ''' List of per document tiff files stored in another list
     ''' </param>
-    Sub CreateXML(ByRef fileList As List(Of String), batchName As String)
+    Sub CreateXML(ByRef docList As List(Of List(Of String)), batchName As String)
         Dim sPath As String
         Dim sFile As String
+        Dim sList As List(Of String)
         Dim batchClass As String
 
         sPath = "C:\ACXMLAID\" 'Default Kofax Import Connector watch folder
@@ -32,14 +33,16 @@ Module KofaxModule
         s1.Write(vbTab & vbTab & "<Batch BatchClassName=""" & batchClass & """ EnableSingleDocProcessing = ""0"" Name=""" & batchName & """>" & vbCrLf)
         s1.Write(vbTab & vbTab & vbTab & "<Documents>" & vbCrLf)
 
-        'Handle each file
-        For Each value In fileList
+        'Handle each document
+        For Each sList In docList
             s1.Write(vbTab & vbTab & vbTab & vbTab & "<Document>" & vbCrLf)
             s1.Write(vbTab & vbTab & vbTab & vbTab & vbTab & "<Pages>" & vbCrLf)
-            s1.Write(vbTab & vbTab & vbTab & vbTab & vbTab & vbTab & "<Page ImportFileName=""" & value & """/>" & vbCrLf)
+            'Write each tiff file associated with the document
+            For Each value In sList
+                s1.Write(vbTab & vbTab & vbTab & vbTab & vbTab & vbTab & "<Page ImportFileName=""" & value & """/>" & vbCrLf)
+            Next
             s1.Write(vbTab & vbTab & vbTab & vbTab & vbTab & "</Pages>" & vbCrLf)
             s1.Write(vbTab & vbTab & vbTab & vbTab & "</Document>" & vbCrLf)
-            'Me.Refresh()
         Next
 
         'End XML File

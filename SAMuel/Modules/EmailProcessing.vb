@@ -20,7 +20,7 @@ Public Module EmailProcessing
         Dim point As PointF
 
         ' Account Number Watermark Settings
-        font = New Font("Times New Roman", 30.0F)
+        font = New Font("Times New Roman", 20.0F)
         point = New PointF(50, 50) '(x,y)
         brush = New SolidBrush(Color.FromArgb(200, Color.Black))
         rBrush = New SolidBrush(Color.FromArgb(160, Color.White))

@@ -16,13 +16,14 @@ Public Class frmMain
         Dim sDestination As String
         Dim sFile As String, sFileExt As String
         Dim outTiff As String
-        Dim attachmentImg As Image
-        Dim modifiedImg As Image
-        Dim ms As MemoryStream
-        Dim tiffList As New List(Of String)
+        Dim attachmentImg As Image, modifiedImg As Image = Nothing
+        Dim ms As MemoryStream = Nothing
+        Dim docList As New List(Of List(Of String))
+        Dim docTiffList As New List(Of String)
         Dim i As Integer = 0, emailCount As Integer
         Dim samEmails As New List(Of SAM_Email)
         Dim sEmail As SAM_Email
+        Dim runResults() As Integer = {0, 0, 0} 'sucess,fail,skipped
 
 
         Reset_Outlook_Tab()
@@ -73,6 +74,7 @@ Public Class frmMain
 
                 'Process each attachment within the email
                 If sEmail.AttachmentsCount > 0 Then
+                    docTiffList = New List(Of String)
                     For Each sFile In sEmail.Attachments
                         'Verify a valid attachment file type.
                         sFileExt = EmailProcessing.ValidateAttachmentType(sFile)
@@ -143,7 +145,7 @@ Public Class frmMain
                             GlobalModule.CheckFolder(sDestination)
                             outTiff = [String].Format("{0}{1}{2}{3}.tiff", sDestination, i, "_", sEmail.Account)
                             ImageProcessing.CompressTiff(modifiedImg, outTiff)
-                            tiffList.Add(outTiff)
+                            docTiffList.Add(outTiff)
                             Me.Refresh()
                         Else
                             'Undesired state. Log this
@@ -170,6 +172,9 @@ Public Class frmMain
                         clbSelectedEmails.SetItemChecked(ProgressBar.Value, True)
 
                     Next
+                    'Add document to list of documents with tiffs
+                    docList.Add(docTiffList)
+
                 Else
                     'No attachments
 
@@ -184,9 +189,12 @@ Public Class frmMain
             End Try
         Next
 
-        lblStatus.Text = "Creating XML File..."
-        Me.Refresh()
-        KofaxModule.CreateXML(tiffList, "SAMuel - " & emailCount & " emails")
+        If MsgBox("Email processing complete. Continue to create XML?", MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
+            lblStatus.Text = "Creating XML File..."
+            Me.Refresh()
+            KofaxModule.CreateXML(docList, "SAMuel - " & emailCount & " emails")
+        End If
+
         lblStatus.Text = "DONE!"
 
         Reset_Outlook_Tab()
@@ -442,7 +450,8 @@ Public Class frmMain
         batchName = Me.txtKFBatchName.Text
         dlgOpen.Filter = "TIFF Images|*.tif;*.tiff"
         If dlgOpen.ShowDialog() = DialogResult.OK Then
-            KofaxModule.CreateXML((dlgOpen.FileNames).ToList, batchName)
+            'Disabled until handle two different inputs
+            'KofaxModule.CreateXML((dlgOpen.FileNames).ToList, batchName)
         End If
 
     End Sub

@@ -22,6 +22,7 @@ Partial Class frmMain
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
         Me.btnRun = New System.Windows.Forms.Button()
         Me.picImage = New System.Windows.Forms.PictureBox()
@@ -86,6 +87,7 @@ Partial Class frmMain
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -629,6 +631,7 @@ Partial Class frmMain
         '
         'btnKFImport
         '
+        Me.btnKFImport.Enabled = False
         Me.btnKFImport.Location = New System.Drawing.Point(177, 267)
         Me.btnKFImport.Name = "btnKFImport"
         Me.btnKFImport.Size = New System.Drawing.Size(75, 23)
@@ -712,6 +715,12 @@ Partial Class frmMain
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(52, 20)
         Me.AboutToolStripMenuItem.Text = "About"
+        '
+        'NotifyIcon1
+        '
+        Me.NotifyIcon1.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info
+        Me.NotifyIcon1.Text = "SAMuel"
+        Me.NotifyIcon1.Visible = True
         '
         'frmMain
         '
@@ -813,5 +822,6 @@ Partial Class frmMain
     Friend WithEvents txtKFBatchName As System.Windows.Forms.TextBox
     Friend WithEvents chkAuditMode As System.Windows.Forms.CheckBox
     Friend WithEvents lblOutlookMessage As System.Windows.Forms.Label
+    Friend WithEvents NotifyIcon1 As System.Windows.Forms.NotifyIcon
 
 End Class
