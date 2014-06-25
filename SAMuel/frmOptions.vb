@@ -15,10 +15,31 @@
             GlobalModule.InitOutputFolders()
         End If
 
+        Select Case cmbColorDepth.SelectedItem.ToString
+            Case "1-bit"
+                My.Settings.colorDepth = 1L
+            Case "2-bit"
+                My.Settings.colorDepth = 2L
+            Case "8-bit"
+                My.Settings.colorDepth = 8L
+            Case "24-bit"
+                My.Settings.colorDepth = 24L
+            Case "30-bit"
+                My.Settings.colorDepth = 30L
+        End Select
+
+        My.Settings.tiffCompression = cmbCompression.SelectedItem.ToString
+        My.Settings.wmFont = cmbFont.SelectedItem.ToString
+        My.Settings.Save()
+
+
         Me.Close()
     End Sub
 
     Private Sub frmOptions_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Me.txtSavePath.Text = My.Settings.savePath
+        Me.cmbColorDepth.SelectedItem = My.Settings.colorDepth.ToString & "-bit"
+        Me.cmbCompression.SelectedItem = My.Settings.tiffCompression
+        Me.cmbFont.SelectedItem = My.Settings.wmFont
     End Sub
 End Class

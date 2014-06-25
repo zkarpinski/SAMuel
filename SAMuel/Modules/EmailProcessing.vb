@@ -20,15 +20,15 @@ Public Module EmailProcessing
         Dim point As PointF
 
         ' Account Number Watermark Settings
-        font = New Font("Times New Roman", 20.0F)
-        point = New PointF(50, 50) '(x,y)
-        brush = New SolidBrush(Color.FromArgb(200, Color.Black))
-        rBrush = New SolidBrush(Color.FromArgb(160, Color.White))
+        font = New Font(My.Settings.wmFont, 15.0F)
+        point = New PointF(5, 0) '(x,y)
+        brush = New SolidBrush(Color.FromArgb(250, Color.Black))
+        rBrush = New SolidBrush(Color.FromArgb(250, Color.White))
 
         ' Create graphics from image
         graphics = Drawing.Graphics.FromImage(img)
         ' Draw the Account Number Watermark
-        graphics.FillRectangle(rBrush, point.X, point.Y, 230, 40)
+        graphics.FillRectangle(rBrush, point.X, point.Y + 1, 125, 20)
         graphics.DrawString(accountNumber, font, brush, point)
 
         'Clear Resources

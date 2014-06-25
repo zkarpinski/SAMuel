@@ -29,10 +29,35 @@ Module ImageProcessing
         myEncoderParameters = New EncoderParameters(3)
 
         ' Save the bitmap as a TIFF file with the following parameters
-        myEncoderParameters.Param(0) = New EncoderParameter(cdEncoder, CType(1L, Int32))
+        myEncoderParameters.Param(0) = New EncoderParameter(cdEncoder, CType(My.Settings.colorDepth, Int32))
         myEncoderParameters.Param(1) = New EncoderParameter(quEncoder, CType(80L, Int32))
-        myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionCCITT3)
-        myBitmap.Save(sSave, myImageCodecInfo, myEncoderParameters)
+
+        'Choose compression type from settings
+        Select Case My.Settings.tiffCompression
+            Case "None"
+                myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionNone)
+            Case "CCITT3"
+                myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionCCITT3)
+            Case "CCITT4"
+                myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionCCITT4)
+            Case "LZW"
+                myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionLZW)
+            Case "RLE"
+                myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionRle)
+            Case Else
+                myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionNone)
+        End Select
+
+
+        Try
+            myBitmap.Save(sSave, myImageCodecInfo, myEncoderParameters)
+        Catch ex As Exception
+            LogAction(99, ex.ToString)
+            MsgBox("Compression error. Try different settings in options.")
+            myBitmap.Dispose()
+            myBitmap = Nothing
+            Stop
+        End Try
 
         myBitmap.Dispose()
         myBitmap = Nothing
@@ -55,19 +80,24 @@ Module ImageProcessing
         Dim sRatio As Double
         Dim ms As New MemoryStream
 
-        'Determine the scale
-        If wRatio < hRatio Then
-            sRatio = wRatio
-        Else : sRatio = hRatio
-        End If
+        If bm.Height > 2200 Or bm.Width > 1700 Then
 
-        width = bm.Width * sRatio
-        height = bm.Height * sRatio
-        myBitmap = New Bitmap(width, height)
+            'Determine the scale
+            If wRatio < hRatio Then
+                sRatio = wRatio
+            Else : sRatio = hRatio
+            End If
+
+            width = bm.Width * sRatio
+            height = bm.Height * sRatio
+        Else
+            width = bm.Width
+            height = bm.Height
+        End If
 
         ' Create a newBitmap object based on a src
         myBitmap = New Bitmap(width, height)
-        myBitmap.SetResolution(200, 200)
+        myBitmap.SetResolution(96, 96)
 
         Dim g As Graphics = Graphics.FromImage(myBitmap)
         g.InterpolationMode = Drawing2D.InterpolationMode.Default

@@ -101,6 +101,11 @@ Public Class frmMain
                             Application.DoEvents()
                         Loop
 
+                        'Update sEmail account if its in audit mode
+                        If (bAuditMode) Then
+                            sEmail.Account = txtAcc.Text
+                        End If
+
                         bAuditMode = chkAuditMode.Checked
 
                         If bCancelPressed Then
@@ -116,41 +121,38 @@ Public Class frmMain
                         ElseIf bNextPressed Or bAuditMode = False Then
                             i += 1
                             'Resize the image if it is too large
-                            If attachmentImg.Height > 2200 Or attachmentImg.Width > 1700 Then
                                 lblStatus.Text = "Resizing Image..."
                                 Me.Refresh()
                                 ms = ImageProcessing.ResizeImage(attachmentImg)
                                 modifiedImg = Image.FromStream(ms)
                                 Application.DoEvents()
-                            Else
-                                modifiedImg = Image.FromFile(sFile)
-                            End If
 
-                            'Release original attachment so it can be removed when done processing
-                            picImage.Image = Nothing
-                            attachmentImg.Dispose()
-                            attachmentImg = Nothing
 
-                            'Show the current image as it's being modified
-                            picImage.Image = modifiedImg
+                                'Release original attachment so it can be removed when done processing
+                                picImage.Image = Nothing
+                                attachmentImg.Dispose()
+                                attachmentImg = Nothing
 
-                            'Add account number as a watermark
-                            lblStatus.Text = "Adding Watermark..."
-                            Me.Refresh()
-                            EmailProcessing.Add_Watermark(modifiedImg, sEmail.Account) ''add suffix handing
-                            'Convert the image to Grayscale
-                            lblStatus.Text = "Converting to Grayscale..."
-                            Me.Refresh()
-                            EmailProcessing.MakeGrayscale(modifiedImg)
-                            'Save the edited attachment as tiff and add to list
-                            lblStatus.Text = "Converting to Tiff..."
-                            Me.Refresh()
-                            sDestination = My.Settings.savePath + "tiffs\" + sEmail.From + "\"
-                            GlobalModule.CheckFolder(sDestination)
-                            outTiff = [String].Format("{0}{1}_{2}.tiff", sDestination, rand.Next(10000).ToString, sEmail.Account)
-                            ImageProcessing.CompressTiff(modifiedImg, outTiff)
-                            docTiffList.Add(outTiff)
-                            Me.Refresh()
+                                'Show the current image as it's being modified
+                                picImage.Image = modifiedImg
+
+                                'Add account number as a watermark
+                                lblStatus.Text = "Adding Watermark..."
+                                Me.Refresh()
+                                EmailProcessing.Add_Watermark(modifiedImg, sEmail.Account) ''add suffix handing
+                                'Convert the image to Grayscale
+                                lblStatus.Text = "Converting to Grayscale..."
+                                Me.Refresh()
+                                EmailProcessing.MakeGrayscale(modifiedImg)
+                                'Save the edited attachment as tiff and add to list
+                                lblStatus.Text = "Converting to Tiff..."
+                                Me.Refresh()
+                                sDestination = My.Settings.savePath + "tiffs\" + sEmail.From + "\"
+                                GlobalModule.CheckFolder(sDestination)
+                                outTiff = [String].Format("{0}{1}_{2}.tiff", sDestination, rand.Next(10000).ToString, sEmail.Account)
+                                ImageProcessing.CompressTiff(modifiedImg, outTiff)
+                                docTiffList.Add(outTiff)
+                                Me.Refresh()
                         Else
                             'Undesired state. Log this
                             LogAction(99, "Outlook buttonState: " & bCancelPressed.ToString & "," & bRejectPressed.ToString & "," & bNextPressed.ToString & "," & bAuditMode.ToString)
@@ -194,6 +196,8 @@ Public Class frmMain
                 LogAction(98, String.Format("{0} - {1} : {2}", sEmail.Subject, sEmail.From, ex.ToString))
             End Try
         Next
+
+        ''**Handle No emails complete **''
 
         'Create XML if user decides to.
         If MsgBox("Email processing complete. Continue to create XML?", MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
@@ -403,6 +407,7 @@ Public Class frmMain
         End If
         My.Settings.Save()
 
+
         'Fax the selected files
         If dlgOpen.ShowDialog() = DialogResult.OK Then
             objRightFax = RightFax.ConnectToServer(strServerName, strUsername, bUseNTAuth)
@@ -411,6 +416,7 @@ Public Class frmMain
             ProgressBar.Maximum = faxesCount
             'Create and send each fax
             For Each sFile In dlgOpen.FileNames
+                i += 1
                 lblStatus.Text = String.Format("Faxing {0} of {1}.", i, faxesCount)
                 Me.Refresh()
                 objFax = RightFax.CreateFax(objRightFax, strRecName, strRecFax, sFile)

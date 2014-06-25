@@ -30,8 +30,19 @@ Partial Class frmOptions
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.tabGeneral = New System.Windows.Forms.TabPage()
         Me.tabOutlook = New System.Windows.Forms.TabPage()
+        Me.grpTiffOptions = New System.Windows.Forms.GroupBox()
+        Me.cmbColorDepth = New System.Windows.Forms.ComboBox()
+        Me.cmbCompression = New System.Windows.Forms.ComboBox()
+        Me.lblColorDepth = New System.Windows.Forms.Label()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.grpWatermarkOptions = New System.Windows.Forms.GroupBox()
+        Me.lblFont = New System.Windows.Forms.Label()
+        Me.cmbFont = New System.Windows.Forms.ComboBox()
         Me.TabControl1.SuspendLayout()
         Me.tabGeneral.SuspendLayout()
+        Me.tabOutlook.SuspendLayout()
+        Me.grpTiffOptions.SuspendLayout()
+        Me.grpWatermarkOptions.SuspendLayout()
         Me.SuspendLayout()
         '
         'txtSavePath
@@ -94,13 +105,95 @@ Partial Class frmOptions
         '
         'tabOutlook
         '
+        Me.tabOutlook.Controls.Add(Me.grpWatermarkOptions)
+        Me.tabOutlook.Controls.Add(Me.grpTiffOptions)
         Me.tabOutlook.Location = New System.Drawing.Point(4, 22)
         Me.tabOutlook.Name = "tabOutlook"
         Me.tabOutlook.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabOutlook.Size = New System.Drawing.Size(498, 134)
+        Me.tabOutlook.Size = New System.Drawing.Size(498, 166)
         Me.tabOutlook.TabIndex = 1
         Me.tabOutlook.Text = "Outlook"
         Me.tabOutlook.UseVisualStyleBackColor = True
+        '
+        'grpTiffOptions
+        '
+        Me.grpTiffOptions.Controls.Add(Me.Label1)
+        Me.grpTiffOptions.Controls.Add(Me.lblColorDepth)
+        Me.grpTiffOptions.Controls.Add(Me.cmbCompression)
+        Me.grpTiffOptions.Controls.Add(Me.cmbColorDepth)
+        Me.grpTiffOptions.Location = New System.Drawing.Point(7, 72)
+        Me.grpTiffOptions.Name = "grpTiffOptions"
+        Me.grpTiffOptions.Size = New System.Drawing.Size(179, 88)
+        Me.grpTiffOptions.TabIndex = 0
+        Me.grpTiffOptions.TabStop = False
+        Me.grpTiffOptions.Text = "Tiff Options"
+        '
+        'cmbColorDepth
+        '
+        Me.cmbColorDepth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbColorDepth.FormattingEnabled = True
+        Me.cmbColorDepth.Items.AddRange(New Object() {"1-bit", "2-bit", "8-bit", "24-bit", "30-bit"})
+        Me.cmbColorDepth.Location = New System.Drawing.Point(77, 19)
+        Me.cmbColorDepth.Name = "cmbColorDepth"
+        Me.cmbColorDepth.Size = New System.Drawing.Size(96, 21)
+        Me.cmbColorDepth.TabIndex = 0
+        '
+        'cmbCompression
+        '
+        Me.cmbCompression.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbCompression.FormattingEnabled = True
+        Me.cmbCompression.Items.AddRange(New Object() {"LZW", "CCITT3", "CCITT4", "RLE", "None"})
+        Me.cmbCompression.Location = New System.Drawing.Point(77, 46)
+        Me.cmbCompression.Name = "cmbCompression"
+        Me.cmbCompression.Size = New System.Drawing.Size(96, 21)
+        Me.cmbCompression.TabIndex = 1
+        '
+        'lblColorDepth
+        '
+        Me.lblColorDepth.AutoSize = True
+        Me.lblColorDepth.Location = New System.Drawing.Point(8, 23)
+        Me.lblColorDepth.Name = "lblColorDepth"
+        Me.lblColorDepth.Size = New System.Drawing.Size(66, 13)
+        Me.lblColorDepth.TabIndex = 2
+        Me.lblColorDepth.Text = "Color Depth:"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(4, 49)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(73, 13)
+        Me.Label1.TabIndex = 3
+        Me.Label1.Text = "Compression: "
+        '
+        'grpWatermarkOptions
+        '
+        Me.grpWatermarkOptions.Controls.Add(Me.lblFont)
+        Me.grpWatermarkOptions.Controls.Add(Me.cmbFont)
+        Me.grpWatermarkOptions.Location = New System.Drawing.Point(192, 72)
+        Me.grpWatermarkOptions.Name = "grpWatermarkOptions"
+        Me.grpWatermarkOptions.Size = New System.Drawing.Size(179, 88)
+        Me.grpWatermarkOptions.TabIndex = 4
+        Me.grpWatermarkOptions.TabStop = False
+        Me.grpWatermarkOptions.Text = "Watermark Options"
+        '
+        'lblFont
+        '
+        Me.lblFont.AutoSize = True
+        Me.lblFont.Location = New System.Drawing.Point(46, 19)
+        Me.lblFont.Name = "lblFont"
+        Me.lblFont.Size = New System.Drawing.Size(31, 13)
+        Me.lblFont.TabIndex = 2
+        Me.lblFont.Text = "Font:"
+        '
+        'cmbFont
+        '
+        Me.cmbFont.FormattingEnabled = True
+        Me.cmbFont.Items.AddRange(New Object() {"Courier New", "Times New Roman", "fixed sys"})
+        Me.cmbFont.Location = New System.Drawing.Point(77, 15)
+        Me.cmbFont.Name = "cmbFont"
+        Me.cmbFont.Size = New System.Drawing.Size(96, 21)
+        Me.cmbFont.TabIndex = 0
         '
         'frmOptions
         '
@@ -114,6 +207,11 @@ Partial Class frmOptions
         Me.TabControl1.ResumeLayout(False)
         Me.tabGeneral.ResumeLayout(False)
         Me.tabGeneral.PerformLayout()
+        Me.tabOutlook.ResumeLayout(False)
+        Me.grpTiffOptions.ResumeLayout(False)
+        Me.grpTiffOptions.PerformLayout()
+        Me.grpWatermarkOptions.ResumeLayout(False)
+        Me.grpWatermarkOptions.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -125,4 +223,12 @@ Partial Class frmOptions
     Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
     Friend WithEvents tabGeneral As System.Windows.Forms.TabPage
     Friend WithEvents tabOutlook As System.Windows.Forms.TabPage
+    Friend WithEvents grpTiffOptions As System.Windows.Forms.GroupBox
+    Friend WithEvents lblColorDepth As System.Windows.Forms.Label
+    Friend WithEvents cmbCompression As System.Windows.Forms.ComboBox
+    Friend WithEvents cmbColorDepth As System.Windows.Forms.ComboBox
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents grpWatermarkOptions As System.Windows.Forms.GroupBox
+    Friend WithEvents lblFont As System.Windows.Forms.Label
+    Friend WithEvents cmbFont As System.Windows.Forms.ComboBox
 End Class

@@ -137,6 +137,42 @@ Namespace My
                 Me("savePath") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("24")>  _
+        Public Property colorDepth() As Long
+            Get
+                Return CType(Me("colorDepth"),Long)
+            End Get
+            Set
+                Me("colorDepth") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("LZW")>  _
+        Public Property tiffCompression() As String
+            Get
+                Return CType(Me("tiffCompression"),String)
+            End Get
+            Set
+                Me("tiffCompression") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("Courier New")>  _
+        Public Property wmFont() As String
+            Get
+                Return CType(Me("wmFont"),String)
+            End Get
+            Set
+                Me("wmFont") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
