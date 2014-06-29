@@ -10,7 +10,7 @@ Public Module EmailProcessing
     ''' <param name="accountNumber">String to be added as watermark</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function Add_Watermark(ByRef img As Image, ByVal accountNumber As String) As Image
+    Public Function Add_Watermark(ByRef myBitmap As Bitmap, ByVal accountNumber As String) As Image
         'Adds the account number as a watermark to the image
         'http://bytescout.com/products/developer/watermarkingsdk/how_to_add_text_watermark_to_image_using_dotnet_in_vb.html
         Dim graphics As Graphics
@@ -20,21 +20,21 @@ Public Module EmailProcessing
         Dim point As PointF
 
         ' Account Number Watermark Settings
-        font = New Font(My.Settings.wmFont, 15.0F)
+        font = New Font(My.Settings.wmFont, 9.0F)
         point = New PointF(5, 0) '(x,y)
         brush = New SolidBrush(Color.FromArgb(250, Color.Black))
         rBrush = New SolidBrush(Color.FromArgb(250, Color.White))
 
         ' Create graphics from image
-        graphics = Drawing.Graphics.FromImage(img)
+        graphics = Drawing.Graphics.FromImage(myBitmap)
         ' Draw the Account Number Watermark
-        graphics.FillRectangle(rBrush, point.X, point.Y + 1, 125, 20)
+        graphics.FillRectangle(rBrush, point.X, point.Y + 1, 128, 20)
         graphics.DrawString(accountNumber, font, brush, point)
 
         'Clear Resources
         graphics.Dispose()
         graphics = Nothing
-        Return img
+        Return myBitmap
     End Function
 
     ''' <summary>
@@ -42,8 +42,8 @@ Public Module EmailProcessing
     ''' </summary>
     ''' <param name="img">Image ByRef to be changed to gray scale</param>
     ''' <remarks></remarks>
-    Sub MakeGrayscale(ByRef img As Image)
-        Dim g As Graphics = Graphics.FromImage(img)
+    Sub MakeGrayscale(ByRef myBitmap As Bitmap)
+        Dim g As Graphics = Graphics.FromImage(myBitmap)
         Dim attributes As ImageAttributes = New ImageAttributes()
         'The grayscale ColorMatrix http://msdn.microsoft.com/en-us/library/system.drawing.imaging.colormatrix(v=vs.110).aspx
         Dim colorMatrixElements As Single()() = { _
@@ -59,7 +59,7 @@ Public Module EmailProcessing
         attributes.SetColorMatrix(colorMatrix)
         'draw the original image on the new image
         'using the grayscale color matrix
-        g.DrawImage(img, New Rectangle(0, 0, img.Width, img.Height), 0, 0, img.Width, img.Height, GraphicsUnit.Pixel, attributes)
+        g.DrawImage(myBitmap, New Rectangle(0, 0, myBitmap.Width, myBitmap.Height), 0, 0, myBitmap.Width, myBitmap.Height, GraphicsUnit.Pixel, attributes)
         'dispose the Graphics object
         g.Dispose()
         g = Nothing

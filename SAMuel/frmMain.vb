@@ -16,15 +16,15 @@ Public Class frmMain
         Dim sDestination As String
         Dim sFile As String, sFileExt As String
         Dim outTiff As String
-        Dim attachmentImg As Image, modifiedImg As Image = Nothing
-        Dim ms As MemoryStream = Nothing
         Dim docList As New List(Of List(Of String))
         Dim docTiffList As New List(Of String)
         Dim i As Integer = 0, emailCount As Integer
         Dim samEmails As New List(Of SAM_Email)
         Dim sEmail As SAM_Email
         Dim rand As New Random
+        Dim mBitmap As Bitmap
 
+        Me.Cursor = Cursors.WaitCursor
 
         Reset_Outlook_Tab()
         clbSelectedEmails.Items.Clear()
@@ -62,7 +62,7 @@ Public Class frmMain
         ProgressBar.Maximum = emailCount
 
         oApp = Nothing
-
+        bAuditMode = chkAuditMode.Checked
         'Process each email
         For Each sEmail In samEmails
             Try
@@ -87,13 +87,15 @@ Public Class frmMain
                             Continue For
                         End If
                         'Load the attachment
-                        attachmentImg = Image.FromFile(sFile)
-                        picImage.Image = attachmentImg
+                        'attachmentImg = Image.FromFile(sFile)
+                        mBitmap = Bitmap.FromFile(sFile)
                         'Display email info when in auditmode
                         If (bAuditMode) Then
+                            picImage.Image = mBitmap
                             txtAcc.Text = sEmail.Account
                             txtSubject.Text = sEmail.Subject
                             txtFrom.Text = sEmail.From
+                            rtbEmailBody.Text = sEmail.Body
                         End If
 
                         'Wait for user validation of attachment
@@ -111,8 +113,6 @@ Public Class frmMain
                         If bCancelPressed Then
                             'When canceled, release image and reset form and end the routine
                             picImage.Image = Nothing
-                            attachmentImg.Dispose()
-                            attachmentImg = Nothing
                             Me.Dispose()
                             Reset_Outlook_Tab()
                             Exit Sub
@@ -123,34 +123,33 @@ Public Class frmMain
                             'Resize the image if it is too large
                                 lblStatus.Text = "Resizing Image..."
                                 Me.Refresh()
-                                ms = ImageProcessing.ResizeImage(attachmentImg)
-                                modifiedImg = Image.FromStream(ms)
+                            mBitmap = ImageProcessing.ResizeImage(mBitmap)
                                 Application.DoEvents()
 
 
                                 'Release original attachment so it can be removed when done processing
                                 picImage.Image = Nothing
-                                attachmentImg.Dispose()
-                                attachmentImg = Nothing
-
-                                'Show the current image as it's being modified
-                                picImage.Image = modifiedImg
 
                                 'Add account number as a watermark
                                 lblStatus.Text = "Adding Watermark..."
                                 Me.Refresh()
-                                EmailProcessing.Add_Watermark(modifiedImg, sEmail.Account) ''add suffix handing
+                            EmailProcessing.Add_Watermark(mBitmap, sEmail.Account) ''add suffix handing
                                 'Convert the image to Grayscale
                                 lblStatus.Text = "Converting to Grayscale..."
                                 Me.Refresh()
-                                EmailProcessing.MakeGrayscale(modifiedImg)
+                            EmailProcessing.MakeGrayscale(mBitmap)
+
+                            mBitmap = ImageProcessing.ConvertToRGB(mBitmap)
+                            mBitmap = ImageProcessing.ConvertToBitonal(mBitmap)
+
+
                                 'Save the edited attachment as tiff and add to list
                                 lblStatus.Text = "Converting to Tiff..."
                                 Me.Refresh()
                                 sDestination = My.Settings.savePath + "tiffs\" + sEmail.From + "\"
                                 GlobalModule.CheckFolder(sDestination)
                                 outTiff = [String].Format("{0}{1}_{2}.tiff", sDestination, rand.Next(10000).ToString, sEmail.Account)
-                                ImageProcessing.CompressTiff(modifiedImg, outTiff)
+                            ImageProcessing.CompressTiff(mBitmap, outTiff)
                                 docTiffList.Add(outTiff)
                                 Me.Refresh()
                         Else
@@ -162,21 +161,20 @@ Public Class frmMain
                         bNextPressed = False
                         bRejectPressed = False
 
-                        'Release image
+                        'Release images
+                        If Not IsNothing(picImage.Image) Then picImage.Image.Dispose()
                         picImage.Image = Nothing
-                        If Not IsNothing(modifiedImg) Then modifiedImg.Dispose()
-                        attachmentImg = Nothing
-                        If Not IsNothing(ms) Then ms.Dispose()
-                        ms = Nothing
+
+                        lblStatus.Text = ""
+                        'Checks the email in the check list box
+                        clbSelectedEmails.SetItemChecked(ProgressBar.Value, True)
 
                         Application.DoEvents()
                         Me.Refresh()
 
                         'Delete the saved email attachment
                         System.IO.File.Delete(sFile)
-                        lblStatus.Text = ""
-                        'Checks the email in the check list box
-                        clbSelectedEmails.SetItemChecked(ProgressBar.Value, True)
+
 
                     Next
                     'Add document to list of documents with tiffs
@@ -196,18 +194,18 @@ Public Class frmMain
                 LogAction(98, String.Format("{0} - {1} : {2}", sEmail.Subject, sEmail.From, ex.ToString))
             End Try
         Next
-
+        lblStatus.Text = "Finished processing emails."
         ''**Handle No emails complete **''
 
         'Create XML if user decides to.
-        If MsgBox("Email processing complete. Continue to create XML?", MsgBoxStyle.OkCancel) = MsgBoxResult.Ok Then
+        If MsgBox("Email processing complete. Continue to create XML?", MsgBoxStyle.YesNo, "Email processing complete") = MsgBoxResult.Yes Then
             lblStatus.Text = "Creating XML File..."
             Me.Refresh()
             KofaxModule.CreateXML(docList, "SAMuel - " & docList.Count.ToString & " emails.")
         End If
 
         lblStatus.Text = "DONE!"
-
+        Me.Cursor = Cursors.Default
         Reset_Outlook_Tab()
 
     End Sub

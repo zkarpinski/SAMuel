@@ -82,6 +82,12 @@
             Return mAttachments
         End Get
     End Property
+    ReadOnly Property Body As String
+        Get
+            Return mBody
+        End Get
+    End Property
+
     ReadOnly Property IsValid As Boolean
         Get
             Return _IsValid

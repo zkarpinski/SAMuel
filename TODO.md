@@ -13,6 +13,7 @@ List of what still is being worked on, features to be added, etc.
 * Error handling
 * PDF and other file formart handling
 * ~~Overhaul tiff conversion~~
+* Scale watermark to image size.
 
 #### DPA
 

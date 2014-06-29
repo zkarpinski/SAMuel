@@ -1,0 +1,10 @@
+﻿<Window x:Class="SAMuel_SHARP.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <ToolBar HorizontalAlignment="Left" Margin="10,0,0,0" VerticalAlignment="Top" Width="169"/>
+        <ProgressBar HorizontalAlignment="Left" Height="24" Margin="0,295,0,0" VerticalAlignment="Top" Width="517"/>
+
+    </Grid>
+</Window>
