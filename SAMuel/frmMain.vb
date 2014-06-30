@@ -125,8 +125,6 @@ Public Class frmMain
                                 Me.Refresh()
                             mBitmap = ImageProcessing.ResizeImage(mBitmap)
                                 Application.DoEvents()
-
-
                                 'Release original attachment so it can be removed when done processing
                                 picImage.Image = Nothing
 
@@ -135,7 +133,7 @@ Public Class frmMain
                                 Me.Refresh()
                             EmailProcessing.Add_Watermark(mBitmap, sEmail.Account) ''add suffix handing
                                 'Convert the image to Grayscale
-                                lblStatus.Text = "Converting to Grayscale..."
+                            lblStatus.Text = "Converting to Bitonal..."
                                 Me.Refresh()
                             EmailProcessing.MakeGrayscale(mBitmap)
 
