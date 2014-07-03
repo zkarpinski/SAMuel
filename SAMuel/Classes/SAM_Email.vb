@@ -1,96 +1,59 @@
 ﻿Public Class SAM_Email
 
-    Private mSubject As String
-    Private mFrom As String
-    Private mBody As String
-    Private mCustAcc As String
-    Private mAttachments As New List(Of String)
-
-    Private _IsValid As Boolean = True
+    Public Property Subject As String
+    Public Property From As String
+    Public Property Body As String
+    Public Property Account As String
+    Public Property Attachments As New List(Of String)
+    Public Property IsValid As Boolean = True
+    Public Property IsBillAccount As Boolean = True
 
     Public Sub New(ByRef objEmail As Object)
         Dim sFile As String
         Dim sPath As String
         Dim rand As New Random
 
-        mSubject = objEmail.Subject
-        mFrom = objEmail.SenderName
-        mBody = objEmail.body
+        Subject = objEmail.Subject
+        From = objEmail.SenderName
+        Body = objEmail.body
 
-        sPath = My.Settings.savePath + "emails\" + mFrom + "\"
+        sPath = My.Settings.savePath + "emails\" + From + "\"
         GlobalModule.CheckFolder(sPath)
+
         If objEmail.Attachments.Count > 0 Then
             For Each value In objEmail.Attachments
                 'Added random number for same filename handling cases
                 sFile = sPath & rand.Next(10000).ToString & value.FileName
                 value.SaveAsFile(sFile)
-                mAttachments.Add(sFile)
+                Attachments.Add(sFile)
             Next
         Else
-            _IsValid = False
+            IsValid = False
         End If
     End Sub
     Public Sub Regex()
         Dim strRegex As String
-        strRegex = GlobalModule.RegexAccount(mSubject)
+        strRegex = GlobalModule.RegexAccount(Subject)
         If strRegex = "ACC# NOT FOUND" Then
-            strRegex = GlobalModule.RegexCustomer(mSubject)
+            strRegex = GlobalModule.RegexCustomer(Subject)
             If strRegex = "CUST# NOT FOUND" Then
-                strRegex = GlobalModule.RegexAccount(mBody)
+                strRegex = GlobalModule.RegexAccount(Body)
                 If strRegex = "ACC# NOT FOUND" Then
-                    strRegex = GlobalModule.RegexCustomer(mBody)
+                    strRegex = GlobalModule.RegexCustomer(Body)
                     If strRegex = "CUST# NOT FOUND" Then
                         strRegex = "UNKNOWN"
-                        _IsValid = False
+                        IsValid = False
                     End If
                 End If
             End If
         End If
 
-        mCustAcc = strRegex
+        Account = strRegex
     End Sub
-
-    Public Property Account() As String
-        Get
-            Return mCustAcc
-        End Get
-        Set(ByVal value As String)
-            mCustAcc = value
-        End Set
-    End Property
 
     ReadOnly Property AttachmentsCount As Integer
         Get
-            Return mAttachments.Count
-        End Get
-    End Property
-
-    ReadOnly Property Subject As String
-        Get
-            Return mSubject
-        End Get
-    End Property
-
-    ReadOnly Property From As String
-        Get
-            Return mFrom
-        End Get
-    End Property
-
-    ReadOnly Property Attachments As List(Of String)
-        Get
-            Return mAttachments
-        End Get
-    End Property
-    ReadOnly Property Body As String
-        Get
-            Return mBody
-        End Get
-    End Property
-
-    ReadOnly Property IsValid As Boolean
-        Get
-            Return _IsValid
+            Return Attachments.Count
         End Get
     End Property
 
