@@ -6,7 +6,7 @@ Public Module EmailProcessing
     ''' <summary>
     ''' Adds a string watermark to the passed image
     ''' </summary>
-    ''' <param name="img">Image ByRef to add watermark to</param>
+    ''' <param name="myBitmap">Bitmap ByRef to add watermark to</param>
     ''' <param name="accountNumber">String to be added as watermark</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
@@ -40,7 +40,7 @@ Public Module EmailProcessing
     ''' <summary>
     ''' Changes the image to grayscale using ColorMatrix
     ''' </summary>
-    ''' <param name="img">Image ByRef to be changed to gray scale</param>
+    ''' <param name="myBitmap">Bitmap ByRef to be changed to gray scale</param>
     ''' <remarks></remarks>
     Sub MakeGrayscale(ByRef myBitmap As Bitmap)
         Dim g As Graphics = Graphics.FromImage(myBitmap)

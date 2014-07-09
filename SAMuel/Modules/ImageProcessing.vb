@@ -63,8 +63,8 @@ Module ImageProcessing
     ''' <summary>
     ''' Resizes the image
     ''' </summary>
-    ''' <param name="img">
-    ''' Image ByRef to be resized
+    ''' <param name="bm">
+    ''' Bitmap ByRef to be resized
     ''' </param>
     ''' <returns> MemoryStream of resized image</returns>
     Public Function ResizeImage(ByRef bm As Bitmap) As Bitmap

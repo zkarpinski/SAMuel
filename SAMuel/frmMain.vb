@@ -91,6 +91,7 @@ Public Class frmMain
                         mBitmap = Bitmap.FromFile(sFile)
                         'Display email info when in auditmode
                         If (bAuditMode) Then
+                            Me.Cursor = Cursors.Default
                             picImage.Image = mBitmap
                             txtAcc.Text = sEmail.Account
                             txtSubject.Text = sEmail.Subject
@@ -102,6 +103,8 @@ Public Class frmMain
                         Do Until (bNextPressed = True Or bRejectPressed = True Or bCancelPressed = True Or bAuditMode = False)
                             Application.DoEvents()
                         Loop
+
+                        Me.Cursor = Cursors.WaitCursor
 
                         'Update sEmail account if its in audit mode
                         If (bAuditMode) Then
@@ -128,7 +131,7 @@ Public Class frmMain
                                 'Release original attachment so it can be removed when done processing
                                 picImage.Image = Nothing
 
-                                'Add account number as a watermark
+                            'Add account number as a watermark
                                 lblStatus.Text = "Adding Watermark..."
                                 Me.Refresh()
                             EmailProcessing.Add_Watermark(mBitmap, sEmail.Account) ''add suffix handing
