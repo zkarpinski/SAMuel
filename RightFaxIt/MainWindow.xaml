@@ -3,31 +3,27 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:RightFaxIt" x:Class="RightFaxIt.MainWindow"
         Title="RightFax It" Height="350" Width="525"
-        ResizeMode="CanMinimize" AllowDrop="True" Drop="FileDrop" DragOver="FileDrag" WindowStyle="ThreeDBorderWindow">
+        ResizeMode="CanMinimize" AllowDrop="True" Drop="FileDrop" DragOver="FileDrag" WindowStyle="ThreeDBorderWindow" Icon="fax.ico">
     <Grid x:Name="LayoutRoot" AllowDrop="True" Drop="FileDrop" DragOver="FileDrag">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="292*"/>
-            <ColumnDefinition Width="225*"/>
-        </Grid.ColumnDefinitions>
+
 
         <Button Content="Fax" HorizontalAlignment="Left" Margin="213,274,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="1.493,1.55" Click="Button_Click"/>
         <ProgressBar Height="10" Margin="0,299,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-        <ListBox x:Name="FileListBox" HorizontalAlignment="Left" Height="196" Margin="279,61,0,0" VerticalAlignment="Top" Width="219" Grid.ColumnSpan="2" FontSize="10">
+        <ListBox x:Name="FileListBox" HorizontalAlignment="Left" Height="196" Margin="279,61,0,0" VerticalAlignment="Top" Width="219" Grid.ColumnSpan="2" FontSize="11" MouseDoubleClick="OpenDocument">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <CheckBox IsEnabled="False" />
                         <TextBlock Text="{Binding Account}" Margin="2" />
-                        <TextBlock Text="{Binding FaxNumber}" Margin="2" />
                         <TextBlock Text="{Binding CustomerName}" Margin="2" />
-                        
+                        <TextBlock Text="{Binding FaxNumber}" Margin="2" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <RadioButton x:Name="ParseRadio" Content="Parse filename" HorizontalAlignment="Left" Margin="10,242,0,0" VerticalAlignment="Top" IsChecked="True"/>
-        <RadioButton x:Name="ManualRadio" Content="Manual" HorizontalAlignment="Left" Margin="10,262,0,0" VerticalAlignment="Top"/>
-        <RadioButton x:Name="OneRatio" Content="One Recipient" HorizontalAlignment="Left" Margin="10,279,0,0" VerticalAlignment="Top"/>
+        <RadioButton x:Name="ParseRadio" Content="Parse filename" HorizontalAlignment="Left" Margin="10,242,0,0" VerticalAlignment="Top" IsChecked="True" ToolTip="Parses data from the defined filename string."/>
+        <RadioButton x:Name="ManualRadio" Content="Manual" HorizontalAlignment="Left" Margin="10,262,0,0" VerticalAlignment="Top" ToolTip="Manually enter each recipient and fax number." IsEnabled="False"/>
+        <RadioButton x:Name="OneRatio" Content="One Recipient" HorizontalAlignment="Left" Margin="10,279,0,0" VerticalAlignment="Top" ToolTip="Fax multiple documents, in seperate faxes, to the same fax number." IsEnabled="False"/>
         <DockPanel Grid.ColumnSpan="2" Margin="0,0,0,258">
             <Menu DockPanel.Dock="Top" Margin="0,0,0,0">
                 <MenuItem x:Name="MenuBar" Header="_File">
@@ -38,9 +34,12 @@
             </Menu>
             <StackPanel Margin="0,0,0,301"/>
         </DockPanel>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="92,66,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="152" MaxLines="1"/>
-        <TextBox HorizontalAlignment="Left" Height="23" Margin="92,105,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="152" MaxLines="1"/>
-        <Label Content="Fax Number:" HorizontalAlignment="Left" Margin="10,102,0,0" VerticalAlignment="Top"/>
-        <Label Content="Recipient:" HorizontalAlignment="Left" Margin="25,66,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtName" HorizontalAlignment="Left" Height="23" Margin="86,117,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="173" MaxLines="1" IsEnabled="False"/>
+        <TextBox x:Name="txtNumber" HorizontalAlignment="Left" Height="23" Margin="86,146,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="173" MaxLines="1" IsEnabled="False"/>
+        <Label Content="Fax Number:" HorizontalAlignment="Left" Margin="4,143,0,0" VerticalAlignment="Top"/>
+        <Label Content="Recipient:" HorizontalAlignment="Left" Margin="19,117,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblMSG" Content="" HorizontalAlignment="Left" Margin="86,46,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="Red"/>
+        <TextBox x:Name="txtDocument" HorizontalAlignment="Left" Height="26" Margin="0,20,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="509" MaxLines="1" IsEnabled="False" Grid.ColumnSpan="2" FontSize="10"/>
+        <CheckBox Content="Skip invalid files" HorizontalAlignment="Left" Margin="10,222,0,0" VerticalAlignment="Top" IsChecked="True" IsEnabled="False"/>
     </Grid>
 </Window>

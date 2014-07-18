@@ -16,7 +16,10 @@ namespace RightFaxIt
         public string Account {get; set; }
         public string FileName { get; set; }
         public Boolean IsValid { get; set; }
+        public Boolean Sent { get; set; }
+        public Boolean Rejected { get; set; }
 
+        ~Fax() { }
         public Fax(){ }
 
         /// <summary>
@@ -40,6 +43,8 @@ namespace RightFaxIt
         public Fax(String document)
         {
             this.IsValid = true;
+            this.Sent = false;
+            this.Rejected = false;
             this.Document = document;
             this.FileName = System.IO.Path.GetFileNameWithoutExtension(document);
             ParseFileName(this.FileName);
@@ -62,7 +67,7 @@ namespace RightFaxIt
             }
             catch (IndexOutOfRangeException)
             {
-                this.CustomerName = "";
+                this.CustomerName = "NOT_FOUND";
                 this.IsValid = false;
             }
         }

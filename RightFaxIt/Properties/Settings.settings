@@ -8,5 +8,8 @@
     <Setting Name="FaxUserID" Type="System.String" Scope="User">
       <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
+    <Setting Name="LogLocation" Type="System.String" Scope="User">
+      <Value Profile="(Default)">DEFAULT</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
