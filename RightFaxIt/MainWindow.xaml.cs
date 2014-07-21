@@ -62,7 +62,7 @@ namespace RightFaxIt
 
             LogFaxes(ref faxes);
 
-            if (true)//SendFaxes(ref faxes))
+            if (SendFaxes(ref faxes))
             {
                 for (int i = 0; i < faxes.Count; i++)
                 {
