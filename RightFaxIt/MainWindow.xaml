@@ -3,12 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:RightFaxIt" x:Class="RightFaxIt.MainWindow"
         Title="RightFax It" Height="350" Width="525"
-        ResizeMode="CanMinimize" AllowDrop="True" Drop="FileDrop" DragOver="FileDrag" WindowStyle="ThreeDBorderWindow" Icon="fax.ico">
+        ResizeMode="CanMinimize" AllowDrop="True" Drop="FileDrop" DragOver="FileDrag" WindowStyle="ThreeDBorderWindow" Icon="Resources/fax.ico" Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}">
     <Grid x:Name="LayoutRoot" AllowDrop="True" Drop="FileDrop" DragOver="FileDrag">
 
 
-        <Button Content="Fax" HorizontalAlignment="Left" Margin="213,274,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="1.493,1.55" Click="Button_Click"/>
-        <ProgressBar Height="10" Margin="0,299,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <Button x:Name="btnFax" Content="Fax" HorizontalAlignment="Left" Margin="213,274,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="1.493,1.55" Click="Button_Click"/>
+        <ProgressBar x:Name="FaxProgress" Height="10" Margin="0,299,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
         <ListBox x:Name="FileListBox" HorizontalAlignment="Left" Height="196" Margin="279,61,0,0" VerticalAlignment="Top" Width="219" Grid.ColumnSpan="2" FontSize="11" MouseDoubleClick="OpenDocument">
             <ListBox.ItemTemplate>
                 <DataTemplate>

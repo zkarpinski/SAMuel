@@ -33,5 +33,10 @@ namespace RightFaxIt
             Properties.Settings.Default.Save();
             this.Close();
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+        }
+
     }
 }

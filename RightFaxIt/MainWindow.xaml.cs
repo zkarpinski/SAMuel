@@ -15,6 +15,7 @@ using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Threading;
 using System.IO;
+using System.ComponentModel;
 
 namespace RightFaxIt
 {
@@ -35,36 +36,17 @@ namespace RightFaxIt
 
         [Flags]
         private enum FaxInfoType { Parsed, Manual };
+        public List<Fax> faxes;
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            String[] files;
-
-            //Setup file dialog box
-            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-            dlg.Multiselect = true;
-            dlg.Filter = "Word Documents|*.doc;*.docx|All files (*.*)|*.*";
-            dlg.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            dlg.Title = "Select the documents you wish to fax.";
-            dlg.ReadOnlyChecked = true;
-            dlg.ShowDialog();
-
-            //Stop if no files were selected.
-            if (dlg.FileNames.Length <= 0) { System.Diagnostics.Debug.Print("No files selected to be faxed."); return; }
-            else { files = dlg.FileNames; }
-
-            BeginFaxProcess(files);
-
-        }
-
-
-        private void BeginFaxProcess(string[] files)
+        #region Background Worker
+        private void bworker_DoWork(object sender, DoWorkEventArgs e)
         {
 
+            String[] files = (String[])e.Argument;
+            List<String> invalidFiles = new List<string>();
             
-            List<Fax> faxes;
+
             faxes = CreateFaxes(files: ref files, faxInfoType: FaxInfoType.Parsed);
-            FileListBox.ItemsSource = faxes;
 
             for (int i = 0; i < faxes.Count; i++)
             {
@@ -72,17 +54,60 @@ namespace RightFaxIt
                 {
                     // TODO Invalid fax fixing
                     //Removes fax if invalid
+                    invalidFiles.Add(faxes[i].Document);
                     faxes.RemoveAt(i);
                     i -= 1;
                 }
             }
+
             LogFaxes(ref faxes);
+
             if (SendFaxes(ref faxes))
             {
-                MessageBox.Show("Faxes sent!");
-                // TODO Move fax
+                for (int i = 0; i < faxes.Count; i++)
+                {
+                    MoveCompletedFax(faxes[i].Document);
+                }
+                    e.Result = invalidFiles;
             }
         }
+
+        private void bworker_Completed(object sender,
+                                               RunWorkerCompletedEventArgs e)
+        {
+            //Retrieve the list of skipped files.
+            List<string> skippedFiles = (List<string>)e.Result;
+            string msg;
+
+            //Display message of skipped files.
+            if (skippedFiles.Count() > 0)
+            {
+                msg = skippedFiles.Count.ToString() + " document(s) skipped.";
+                for(int i = 0; i<skippedFiles.Count();i++)
+                {
+                    msg = msg + Environment.NewLine + skippedFiles[i];
+                }
+            }
+            else
+            {
+                msg = "All documents were faxed.";
+            }
+
+            //Update UI
+            this.AllowDrop = true;//update ui once worker complete his work
+            this.btnFax.IsEnabled = true;
+            FileListBox.ItemsSource = faxes;
+
+            String msgTitle = faxes.Count.ToString() + " items faxed.";
+            
+            MessageBox.Show(msg, msgTitle);
+        }
+
+        void bworker_CompletedProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            FaxProgress.Value = e.ProgressPercentage;
+        }
+        #endregion
 
         /// <summary>
         /// Creates an array of faxes from a string of files.
@@ -142,7 +167,7 @@ namespace RightFaxIt
                         newFax.Send();
                     }
                     else
-                        MessageBox.Show(fax.FileName + " is invalid. Skipping...");
+                    {  }
                 }
             return true;
 	        }
@@ -159,10 +184,12 @@ namespace RightFaxIt
         private void MoveCompletedFax(string pathToDocument) 
         {
             String fileName = System.IO.Path.GetFileName(pathToDocument);
-            String saveTo = @"‪C:\Users\zkarpinski\Desktop\fax\Complete\";
+            String saveTo = "PATH_" + fileName;
+            
             try
             {
-                System.IO.File.Move(pathToDocument, saveTo);
+                // TODO Fix moving files
+                //System.IO.File.Move(pathToDocument, saveTo);
             }
             catch (Exception)
             {
@@ -174,7 +201,10 @@ namespace RightFaxIt
 
         private void OpenDocument(object sender, MouseButtonEventArgs e)
         {
-            //FileListBox.SelectedItem;
+            Fax item = (Fax)FileListBox.SelectedItem;
+            String docPath = item.Document;
+            System.Diagnostics.Process.Start(docPath);
+            
         }
 
         private void LogFaxes(ref List<Fax> faxes)
@@ -198,12 +228,25 @@ namespace RightFaxIt
             }
         }
 
-        private void FileDrag(object sender, DragEventArgs e)
+        #region UI Interaction
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                e.Effects = DragDropEffects.Copy;
-            }
+            String[] files;
+
+            //Setup file dialog box
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.Multiselect = true;
+            dlg.Filter = "Word Documents|*.doc;*.docx|All files (*.*)|*.*";
+            dlg.InitialDirectory = System.Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            dlg.Title = "Select the documents you wish to fax.";
+            dlg.ReadOnlyChecked = true;
+            dlg.ShowDialog();
+
+            //Stop if no files were selected.
+            if (dlg.FileNames.Length <= 0) { System.Diagnostics.Debug.Print("No files selected to be faxed."); return; }
+            else { files = dlg.FileNames; }
+            initFaxWorker(files);
+
         }
 
         private void FileDrop(object sender, DragEventArgs e)
@@ -211,9 +254,32 @@ namespace RightFaxIt
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                BeginFaxProcess(files);
+                initFaxWorker(files);
+
             }
         }
+
+        private void initFaxWorker(string[] files)
+        {
+
+            this.AllowDrop = false;
+            this.btnFax.IsEnabled = false;
+
+            BackgroundWorker _backgroundWorker = new BackgroundWorker();
+            _backgroundWorker.WorkerReportsProgress = true;
+            _backgroundWorker.DoWork += bworker_DoWork;
+            _backgroundWorker.RunWorkerCompleted += bworker_Completed;
+            _backgroundWorker.RunWorkerAsync(files);
+        }
+
+        private void FileDrag(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effects = DragDropEffects.Link;
+            }
+        }
+
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -225,6 +291,8 @@ namespace RightFaxIt
             var newWindow = new Options();
             newWindow.Show();
         }
+
+#endregion
 
     }
 }
