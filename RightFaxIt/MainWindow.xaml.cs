@@ -184,7 +184,8 @@ namespace RightFaxIt
         private void MoveCompletedFax(string pathToDocument) 
         {
             String fileName = System.IO.Path.GetFileName(pathToDocument);
-            String saveTo = "PATH_" + fileName;
+            String saveTo;
+            saveTo = System.IO.Path.Combine("save", fileName);
             
             try
             {
