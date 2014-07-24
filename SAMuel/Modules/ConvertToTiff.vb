@@ -23,7 +23,7 @@ Module ConvertToTiff
             'Get the file name
             sFileName = Path.GetFileNameWithoutExtension(value)
             'Open the document within word and don't prompt  for conversion.
-            objWdDoc = objWord.Documents.Open(FileName:=value, ConfirmConversions:=False, AddToRecentFiles:=False, [ReadOnly]:=True, Visible:=False)
+            objWdDoc = objWord.Documents.Open(FileName:=value, ConfirmConversions:=False)
             objWord.Visible = False
             'Print to Tiff
             objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=sDestination & sFileName & ".tif")
