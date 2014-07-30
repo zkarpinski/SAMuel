@@ -58,5 +58,32 @@ namespace RightFaxIt.Properties {
                 this["LogLocation"] = value;
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DEFAULT")]
+        public string ActiveMoveLocation {
+            get {
+                return ((string)(this["ActiveMoveLocation"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DEFAULT")]
+        public string CutInMoveLocation {
+            get {
+                return ((string)(this["CutInMoveLocation"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DEFAULT")]
+        public string AIMoveLocation {
+            get {
+                return ((string)(this["AIMoveLocation"]));
+            }
+        }
     }
 }

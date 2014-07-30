@@ -21,25 +21,34 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <RadioButton x:Name="ParseRadio" Content="Parse filename" HorizontalAlignment="Left" Margin="10,242,0,0" VerticalAlignment="Top" IsChecked="True" ToolTip="Parses data from the defined filename string."/>
-        <RadioButton x:Name="ManualRadio" Content="Manual" HorizontalAlignment="Left" Margin="10,262,0,0" VerticalAlignment="Top" ToolTip="Manually enter each recipient and fax number." IsEnabled="False"/>
-        <RadioButton x:Name="OneRatio" Content="One Recipient" HorizontalAlignment="Left" Margin="10,279,0,0" VerticalAlignment="Top" ToolTip="Fax multiple documents, in seperate faxes, to the same fax number." IsEnabled="False"/>
+        <RadioButton x:Name="ParseRadio" Content="Parse filename" HorizontalAlignment="Left" Margin="10,242,0,0" VerticalAlignment="Top" IsChecked="True" ToolTip="Parses data from the defined filename string." Visibility="Hidden"/>
+        <RadioButton x:Name="ManualRadio" Content="Manual" HorizontalAlignment="Left" Margin="10,262,0,0" VerticalAlignment="Top" ToolTip="Manually enter each recipient and fax number." IsEnabled="False" Visibility="Hidden"/>
+        <RadioButton x:Name="OneRatio" Content="One Recipient" HorizontalAlignment="Left" Margin="10,279,0,0" VerticalAlignment="Top" ToolTip="Fax multiple documents, in seperate faxes, to the same fax number." IsEnabled="False" Visibility="Hidden"/>
         <DockPanel Grid.ColumnSpan="2" Margin="0,0,0,258">
             <Menu DockPanel.Dock="Top" Margin="0,0,0,0">
                 <MenuItem x:Name="MenuBar" Header="_File">
                     <MenuItem Header="_Exit" Click="MenuItem_Click"/>
                 </MenuItem>
                 <MenuItem Header="_Options" Click="OptionsItem_Click"/>
-                <MenuItem Header="_Help"/>
+                <MenuItem Header="_Help">
+                    <MenuItem Header="_About" Click="AboutItem_Click"/>    
+                </MenuItem>
             </Menu>
             <StackPanel Margin="0,0,0,301"/>
         </DockPanel>
-        <TextBox x:Name="txtName" HorizontalAlignment="Left" Height="23" Margin="86,117,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="173" MaxLines="1" IsEnabled="False"/>
-        <TextBox x:Name="txtNumber" HorizontalAlignment="Left" Height="23" Margin="86,146,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="173" MaxLines="1" IsEnabled="False"/>
-        <Label Content="Fax Number:" HorizontalAlignment="Left" Margin="4,143,0,0" VerticalAlignment="Top"/>
-        <Label Content="Recipient:" HorizontalAlignment="Left" Margin="19,117,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="txtName" HorizontalAlignment="Left" Height="23" Margin="86,78,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="173" MaxLines="1" IsEnabled="False"/>
+        <TextBox x:Name="txtNumber" HorizontalAlignment="Left" Height="23" Margin="86,102,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="173" MaxLines="1" IsEnabled="False"/>
+        <Label Content="Fax Number:" HorizontalAlignment="Left" Margin="4,99,0,0" VerticalAlignment="Top"/>
+        <Label Content="Recipient:" HorizontalAlignment="Left" Margin="19,78,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblMSG" Content="" HorizontalAlignment="Left" Margin="86,46,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="Red"/>
         <TextBox x:Name="txtDocument" HorizontalAlignment="Left" Height="26" Margin="0,20,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="509" MaxLines="1" IsEnabled="False" Grid.ColumnSpan="2" FontSize="10"/>
-        <CheckBox Content="Skip invalid files" HorizontalAlignment="Left" Margin="10,222,0,0" VerticalAlignment="Top" IsChecked="True" IsEnabled="False"/>
+        <CheckBox Content="Skip invalid files" HorizontalAlignment="Left" Margin="10,222,0,0" VerticalAlignment="Top" IsChecked="True" IsEnabled="False" Visibility="Hidden"/>
+        <GroupBox Header="User ID" HorizontalAlignment="Left" Margin="5,225,0,0" VerticalAlignment="Top" Height="69" Width="90" FontWeight="Bold">
+            <StackPanel HorizontalAlignment="Left" Height="56" VerticalAlignment="Top" Width="102">
+                <RadioButton x:Name="ActiveUserRatio" Content="Active" FontWeight="Normal" IsChecked="True" />
+                <RadioButton x:Name="CutinUserRatio" Content="Cut In" FontWeight="Normal" />
+                <RadioButton x:Name="AIUserRatio" Content="AI" FontWeight="Normal" />
+            </StackPanel>
+        </GroupBox>
     </Grid>
 </Window>

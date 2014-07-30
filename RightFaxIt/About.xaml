@@ -1,0 +1,11 @@
+﻿<Window x:Class="RightFaxIt.About"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="About" Height="154.511" Width="283.083" ResizeMode="NoResize">
+    <Grid>
+        <Label Content="Created By: Zachary Karpinski" HorizontalAlignment="Left" Margin="3,35,0,0" VerticalAlignment="Top"/>
+        <Label Content="Your Summer of 2014 Scanner." HorizontalAlignment="Left" Margin="3,48,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="lblURL" Content="http://www.github.com/zKarp" HorizontalAlignment="Left" Margin="48,85,0,0" VerticalAlignment="Top" MouseDoubleClick="Url_Link_Clicked" Foreground="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}" Cursor="Hand"/>
+
+    </Grid>
+</Window>

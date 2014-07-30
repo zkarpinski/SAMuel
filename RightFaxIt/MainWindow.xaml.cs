@@ -42,7 +42,8 @@ namespace RightFaxIt
         private void bworker_DoWork(object sender, DoWorkEventArgs e)
         {
 
-            String[] files = (String[])e.Argument;
+            String[] files = ((Tuple <string[],string>)e.Argument).Item1;
+            String userID = ((Tuple<string[], string>)e.Argument).Item2;
             List<String> invalidFiles = new List<string>();
             
 
@@ -60,13 +61,32 @@ namespace RightFaxIt
                 }
             }
 
-            LogFaxes(ref faxes);
+            LogFaxes(ref faxes,userID);
 
-            if (SendFaxes(ref faxes))
+            if (SendFaxes(ref faxes,userID))
             {
+                //Determine where to move the files.
+            String moveFolder;
+            switch (userID)
+            {
+                case "active":
+                    moveFolder = Properties.Settings.Default.ActiveMoveLocation;
+                    break;
+                case "cutin":
+                    moveFolder = Properties.Settings.Default.CutInMoveLocation;
+                    break;
+                case "ai":
+                    moveFolder = Properties.Settings.Default.AIMoveLocation;
+                    break;
+                default:
+                    moveFolder = Properties.Settings.Default.ActiveMoveLocation;
+                    break;
+            }
+                
+                //Move files when faxed successfully
                 for (int i = 0; i < faxes.Count; i++)
                 {
-                    MoveCompletedFax(faxes[i].Document);
+                    MoveCompletedFax(faxes[i].Document,moveFolder);
                 }
                     e.Result = invalidFiles;
             }
@@ -145,17 +165,19 @@ namespace RightFaxIt
 
         }
 
-        private Boolean SendFaxes(ref List<Fax> faxes)
+        private Boolean SendFaxes(ref List<Fax> faxes, String userID)
         {
             try 
 	        {	        
+                //Setup Rightfax Server Connection
 		        RFCOMAPILib.FaxServer faxsvr = new RFCOMAPILib.FaxServer();
                 faxsvr.ServerName = Properties.Settings.Default.FaxServerName;
-                faxsvr.AuthorizationUserID = Properties.Settings.Default.FaxUserID;
+                faxsvr.AuthorizationUserID = userID;
                 faxsvr.Protocol = RFCOMAPILib.CommunicationProtocolType.cpTCPIP;
                 faxsvr.UseNTAuthentication = RFCOMAPILib.BoolType.False;
                 faxsvr.OpenServer();
 
+                //Create each fax and send.
                 foreach (Fax fax in faxes)
                 {
                     if (fax.IsValid)
@@ -181,16 +203,15 @@ namespace RightFaxIt
 
 
 
-        private void MoveCompletedFax(string pathToDocument) 
+        private void MoveCompletedFax(string pathToDocument, string folderDestination) 
         {
             String fileName = System.IO.Path.GetFileName(pathToDocument);
-            String saveTo;
-            saveTo = System.IO.Path.Combine("save", fileName);
+            //String saveTo = @"C:\Users\zKarpinski\Documents\Libraries\";
+            String saveTo = System.IO.Path.Combine(folderDestination, fileName);
             
             try
             {
-                // TODO Fix moving files
-                //System.IO.File.Move(pathToDocument, saveTo);
+                System.IO.File.Move(pathToDocument, saveTo);
             }
             catch (Exception)
             {
@@ -208,7 +229,7 @@ namespace RightFaxIt
             
         }
 
-        private void LogFaxes(ref List<Fax> faxes)
+        private void LogFaxes(ref List<Fax> faxes,string userID)
         {
             String logFile = Properties.Settings.Default.LogLocation + "\\RightFax_It-log.txt";
             DateTime logTime = DateTime.Now;
@@ -219,7 +240,7 @@ namespace RightFaxIt
                 fs.Close();
             }
 
-            File.AppendAllText(logFile, System.Environment.NewLine + logTime.ToString() + System.Environment.NewLine);
+            File.AppendAllText(logFile, System.Environment.NewLine + logTime.ToString() + "\t" + userID + System.Environment.NewLine);
 
             foreach (Fax fax in faxes)
             {
@@ -262,15 +283,33 @@ namespace RightFaxIt
 
         private void initFaxWorker(string[] files)
         {
-
+            String SelectedUser;
             this.AllowDrop = false;
             this.btnFax.IsEnabled = false;
+            
+            if((bool)this.ActiveUserRatio.IsChecked)
+            {
+                SelectedUser = "active";
+            }
+            else if((bool)this.CutinUserRatio.IsChecked)
+            {
+                SelectedUser = "cutin";
+            }
+            else if ((bool)this.AIUserRatio.IsChecked)
+            {
+                SelectedUser = "ai";
+            }
+            else
+            {
+                SelectedUser = "active";
+            }
 
+            var arguments = Tuple.Create<string[], string>(files, SelectedUser);
             BackgroundWorker _backgroundWorker = new BackgroundWorker();
             _backgroundWorker.WorkerReportsProgress = true;
             _backgroundWorker.DoWork += bworker_DoWork;
             _backgroundWorker.RunWorkerCompleted += bworker_Completed;
-            _backgroundWorker.RunWorkerAsync(files);
+            _backgroundWorker.RunWorkerAsync(arguments);
         }
 
         private void FileDrag(object sender, DragEventArgs e)
@@ -290,6 +329,12 @@ namespace RightFaxIt
         private void OptionsItem_Click(object sender, RoutedEventArgs e)
         {
             var newWindow = new Options();
+            newWindow.Show();
+        }
+
+        private void AboutItem_Click(object sender, RoutedEventArgs e)
+        {
+            var newWindow = new About();
             newWindow.Show();
         }
 
