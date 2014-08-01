@@ -18,7 +18,8 @@ Module ConvertToTiff
 
         'Verify output folder exists
         GlobalModule.CheckFolder(sDestination)
-
+        frmMain.ProgressBar.Maximum = sFiles.Length
+        frmMain.ProgressBar.Value = 0
         For Each value In sFiles
             'Get the file name
             sFileName = Path.GetFileNameWithoutExtension(value)
@@ -30,7 +31,7 @@ Module ConvertToTiff
             'Release document
             objWdDoc.Close()
             'Progress the progress bar
-            'frmMain.ProgressBar.Value += 1
+            frmMain.ProgressBar.Value += 1
         Next
         'Cleanup
         objWord.Quit()

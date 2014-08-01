@@ -83,7 +83,8 @@ Public Class frmMain
                             System.IO.File.Delete(sFile)
                             Continue For
                         ElseIf sFileExt = ".pdf" Then
-                            EmailProcessing.ParsePDFImgs(sFile)
+                            ' TODO add
+                            'EmailProcessing.ParsePDFImgs(sFile)
                             Continue For
                         End If
                         'Load the attachment
@@ -276,6 +277,7 @@ Public Class frmMain
         Reset_RightFax_Tab()
         Reset_ProgressBar()
         clbSelectedEmails.Items.Clear()
+        cbKFBatchType.SelectedIndex = 2
     End Sub
 
     Private Sub Reset_ProgressBar()
@@ -459,12 +461,34 @@ Public Class frmMain
 
     Private Sub btnKFImport_Click(sender As Object, e As EventArgs) Handles btnKFImport.Click
         Dim batchName As String
+        Dim batchType As String
+        Dim batchSource As String
+        Dim comments As String
+
         batchName = Me.txtKFBatchName.Text
-        dlgOpen.Filter = "TIFF Images|*.tif;*.tiff"
-        If dlgOpen.ShowDialog() = DialogResult.OK Then
-            'Disabled until handle two different inputs
-            'KofaxModule.CreateXML((dlgOpen.FileNames).ToList, batchName)
+        batchType = cbKFBatchType.SelectedItem.ToString
+        comments = Me.txtKFComments.Text
+
+        If Me.rbKFEmail.Checked = True Then
+            batchSource = "02 - Email"
+        Else
+            batchSource = "01 - US Mail"
         End If
 
+        dlgOpen.Filter = "TIFF Images|*.tif;*.tiff"
+        If dlgOpen.ShowDialog() = DialogResult.OK Then
+            KofaxModule.CreateXML((dlgOpen.FileNames).ToList, batchName, batchType, batchSource, comments)
+        End If
+
+    End Sub
+
+    Private Sub btnCAddContact_Click(sender As Object, e As EventArgs) Handles btnCAddContact.Click
+        Dim strAccountNumber As String
+        Dim strContact As String
+
+        strAccountNumber = Me.mtxtCAccount.Text
+        strContact = rtbCContact.Text
+
+        AddContacts.MiscCollection(strAccountNumber, strContact)
     End Sub
 End Class

@@ -84,9 +84,6 @@
     <ApplicationIcon>Resources\default.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="pdflib">
-      <HintPath>libraries\PDFLib-v2.1\pdflib.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -125,6 +122,7 @@
     <Compile Include="frmOptions.vb">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Modules\AddContacts.vb" />
     <Compile Include="Modules\ConvertToTiff.vb" />
     <Compile Include="Modules\EmailProcessing.vb" />
     <Compile Include="Modules\GlobalModule.vb" />
@@ -180,6 +178,15 @@
     <None Include="SAMuel.zip" />
   </ItemGroup>
   <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>7</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
     <COMReference Include="Microsoft.Office.Interop.Outlook">
       <Guid>{00062FFF-0000-0000-C000-000000000046}</Guid>
       <VersionMajor>9</VersionMajor>

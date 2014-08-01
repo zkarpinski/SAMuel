@@ -77,6 +77,16 @@ Module GlobalModule
         End If
     End Function
 
+    Function RegexAcc(ByVal str As String, ByVal format As String) As String
+        Dim _reg As Regex = New Regex(format)
+        Dim m As Match = _reg.Match(str)
+        If m.Success Then
+            Return m.Value
+        Else
+            Return "X"
+        End If
+    End Function
+
     ''' <summary>
     ''' Creates the output folders used by SAMuel if they do not exist
     ''' </summary>

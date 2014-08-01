@@ -1,5 +1,5 @@
 ﻿Module modDPAHandle
-    Private Const sWait As Short = 200
+    Private Const sWait As Short = 300
 
     'Define Keys
     Private kAlt As String = "%"
@@ -28,10 +28,10 @@
         Threading.Thread.Sleep(sWait)
         'Open account
         SendKeys.Send(kEnter)
-        Threading.Thread.Sleep(400)
+        Threading.Thread.Sleep(700)
         'Handle random msgbox
-        SendKeys.Send("o")
-        Threading.Thread.Sleep(sWait)
+        'SendKeys.Send("o")
+        'Threading.Thread.Sleep(sWait)
     End Sub
 
     Public Sub OpenPA()

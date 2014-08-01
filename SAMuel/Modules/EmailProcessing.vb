@@ -78,33 +78,4 @@ Public Module EmailProcessing
             Return vbNullString
         End If
     End Function
-
-
-    'Test Function
-    Sub ParsePDFImgs(pdfPath As String) 'As List(Of pdflib.clsPDFImage)
-        Dim count As Integer
-        Dim imagelist As List(Of pdflib.clsPDFImage)
-        Dim image As pdflib.clsPDFImage
-        Dim page As pdflib.clsPDFPage
-
-        Dim myPDF As New pdflib.ClsPDF(pdfPath)
-
-        'We get the images of the pdf
-        imagelist = myPDF.GetImages
-
-        'We save them
-        count = 0
-        For Each image In imagelist
-            count += 1
-            image.Save(My.Settings.savePath + "_image_" + count.ToString)
-        Next
-
-        'Get Images from page 1 only
-        page = myPDF.GetPage(1)
-        imagelist = page.GetImages
-
-        myPDF.Close()
-
-    End Sub
-
 End Module

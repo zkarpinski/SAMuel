@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.IO;
 using System.ComponentModel;
+using System.Runtime.InteropServices;
 
 namespace RightFaxIt
 {
@@ -75,7 +77,7 @@ namespace RightFaxIt
                 case "cutin":
                     moveFolder = Properties.Settings.Default.CutInMoveLocation;
                     break;
-                case "ai":
+                case "acctinit":
                     moveFolder = Properties.Settings.Default.AIMoveLocation;
                     break;
                 default:
@@ -206,7 +208,6 @@ namespace RightFaxIt
         private void MoveCompletedFax(string pathToDocument, string folderDestination) 
         {
             String fileName = System.IO.Path.GetFileName(pathToDocument);
-            //String saveTo = @"C:\Users\zKarpinski\Documents\Libraries\";
             String saveTo = System.IO.Path.Combine(folderDestination, fileName);
             
             try
@@ -297,7 +298,7 @@ namespace RightFaxIt
             }
             else if ((bool)this.AIUserRatio.IsChecked)
             {
-                SelectedUser = "ai";
+                SelectedUser = "acctinit";
             }
             else
             {
@@ -319,7 +320,11 @@ namespace RightFaxIt
                 e.Effects = DragDropEffects.Link;
             }
         }
-
+        private void AddContactsItem_Click(object sender, RoutedEventArgs e)
+        {
+          
+           
+        }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -339,6 +344,7 @@ namespace RightFaxIt
         }
 
 #endregion
+
 
     }
 }

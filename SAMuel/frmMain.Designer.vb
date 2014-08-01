@@ -76,6 +76,13 @@ Partial Class frmMain
         Me.lblRFuser = New System.Windows.Forms.Label()
         Me.btnRFax = New System.Windows.Forms.Button()
         Me.tabKofax = New System.Windows.Forms.TabPage()
+        Me.lblKFComments = New System.Windows.Forms.Label()
+        Me.txtKFComments = New System.Windows.Forms.TextBox()
+        Me.gbKFSource = New System.Windows.Forms.GroupBox()
+        Me.rbKFUSMail = New System.Windows.Forms.RadioButton()
+        Me.rbKFEmail = New System.Windows.Forms.RadioButton()
+        Me.lblKFBatchType = New System.Windows.Forms.Label()
+        Me.cbKFBatchType = New System.Windows.Forms.ComboBox()
         Me.btnKFImport = New System.Windows.Forms.Button()
         Me.lblKFBatchName = New System.Windows.Forms.Label()
         Me.txtKFBatchName = New System.Windows.Forms.TextBox()
@@ -88,6 +95,12 @@ Partial Class frmMain
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
+        Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
+        Me.tabAddContact = New System.Windows.Forms.TabPage()
+        Me.btnCAddContact = New System.Windows.Forms.Button()
+        Me.mtxtCAccount = New System.Windows.Forms.MaskedTextBox()
+        Me.lblCAccount = New System.Windows.Forms.Label()
+        Me.rtbCContact = New System.Windows.Forms.RichTextBox()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
@@ -97,7 +110,9 @@ Partial Class frmMain
         Me.GroupBox2.SuspendLayout()
         Me.grpRFServer.SuspendLayout()
         Me.tabKofax.SuspendLayout()
+        Me.gbKFSource.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
+        Me.tabAddContact.SuspendLayout()
         Me.SuspendLayout()
         '
         'btnRun
@@ -138,6 +153,7 @@ Partial Class frmMain
         Me.TabControl1.Controls.Add(Me.tabDPA)
         Me.TabControl1.Controls.Add(Me.tabRFax)
         Me.TabControl1.Controls.Add(Me.tabKofax)
+        Me.TabControl1.Controls.Add(Me.tabAddContact)
         Me.TabControl1.Location = New System.Drawing.Point(-1, 27)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
@@ -618,6 +634,11 @@ Partial Class frmMain
         '
         'tabKofax
         '
+        Me.tabKofax.Controls.Add(Me.lblKFComments)
+        Me.tabKofax.Controls.Add(Me.txtKFComments)
+        Me.tabKofax.Controls.Add(Me.gbKFSource)
+        Me.tabKofax.Controls.Add(Me.lblKFBatchType)
+        Me.tabKofax.Controls.Add(Me.cbKFBatchType)
         Me.tabKofax.Controls.Add(Me.btnKFImport)
         Me.tabKofax.Controls.Add(Me.lblKFBatchName)
         Me.tabKofax.Controls.Add(Me.txtKFBatchName)
@@ -629,9 +650,79 @@ Partial Class frmMain
         Me.tabKofax.Text = "Kofax It"
         Me.tabKofax.UseVisualStyleBackColor = True
         '
+        'lblKFComments
+        '
+        Me.lblKFComments.AutoSize = True
+        Me.lblKFComments.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblKFComments.Location = New System.Drawing.Point(12, 94)
+        Me.lblKFComments.Name = "lblKFComments"
+        Me.lblKFComments.Size = New System.Drawing.Size(59, 13)
+        Me.lblKFComments.TabIndex = 19
+        Me.lblKFComments.Text = "Comments:"
+        '
+        'txtKFComments
+        '
+        Me.txtKFComments.Location = New System.Drawing.Point(87, 89)
+        Me.txtKFComments.Name = "txtKFComments"
+        Me.txtKFComments.Size = New System.Drawing.Size(165, 20)
+        Me.txtKFComments.TabIndex = 18
+        '
+        'gbKFSource
+        '
+        Me.gbKFSource.Controls.Add(Me.rbKFUSMail)
+        Me.gbKFSource.Controls.Add(Me.rbKFEmail)
+        Me.gbKFSource.Location = New System.Drawing.Point(273, 25)
+        Me.gbKFSource.Name = "gbKFSource"
+        Me.gbKFSource.Size = New System.Drawing.Size(106, 72)
+        Me.gbKFSource.TabIndex = 17
+        Me.gbKFSource.TabStop = False
+        Me.gbKFSource.Text = "Source"
+        '
+        'rbKFUSMail
+        '
+        Me.rbKFUSMail.AutoSize = True
+        Me.rbKFUSMail.Location = New System.Drawing.Point(7, 38)
+        Me.rbKFUSMail.Name = "rbKFUSMail"
+        Me.rbKFUSMail.Size = New System.Drawing.Size(62, 17)
+        Me.rbKFUSMail.TabIndex = 1
+        Me.rbKFUSMail.Text = "US Mail"
+        Me.rbKFUSMail.UseVisualStyleBackColor = True
+        '
+        'rbKFEmail
+        '
+        Me.rbKFEmail.AutoSize = True
+        Me.rbKFEmail.Checked = True
+        Me.rbKFEmail.Location = New System.Drawing.Point(7, 20)
+        Me.rbKFEmail.Name = "rbKFEmail"
+        Me.rbKFEmail.Size = New System.Drawing.Size(50, 17)
+        Me.rbKFEmail.TabIndex = 0
+        Me.rbKFEmail.TabStop = True
+        Me.rbKFEmail.Text = "Email"
+        Me.rbKFEmail.UseVisualStyleBackColor = True
+        '
+        'lblKFBatchType
+        '
+        Me.lblKFBatchType.AutoSize = True
+        Me.lblKFBatchType.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblKFBatchType.Location = New System.Drawing.Point(12, 51)
+        Me.lblKFBatchType.Name = "lblKFBatchType"
+        Me.lblKFBatchType.Size = New System.Drawing.Size(34, 13)
+        Me.lblKFBatchType.TabIndex = 16
+        Me.lblKFBatchType.Text = "Type:"
+        '
+        'cbKFBatchType
+        '
+        Me.cbKFBatchType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cbKFBatchType.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cbKFBatchType.FormattingEnabled = True
+        Me.cbKFBatchType.Items.AddRange(New Object() {"0014 - DENIAL OF SERVICE", "0084 - DPA-SYRACUSE PROCESSING", "0033 - SAMS"})
+        Me.cbKFBatchType.Location = New System.Drawing.Point(87, 48)
+        Me.cbKFBatchType.Name = "cbKFBatchType"
+        Me.cbKFBatchType.Size = New System.Drawing.Size(165, 20)
+        Me.cbKFBatchType.TabIndex = 15
+        '
         'btnKFImport
         '
-        Me.btnKFImport.Enabled = False
         Me.btnKFImport.Location = New System.Drawing.Point(177, 267)
         Me.btnKFImport.Name = "btnKFImport"
         Me.btnKFImport.Size = New System.Drawing.Size(75, 23)
@@ -653,7 +744,7 @@ Partial Class frmMain
         '
         Me.txtKFBatchName.Location = New System.Drawing.Point(87, 22)
         Me.txtKFBatchName.Name = "txtKFBatchName"
-        Me.txtKFBatchName.Size = New System.Drawing.Size(100, 20)
+        Me.txtKFBatchName.Size = New System.Drawing.Size(165, 20)
         Me.txtKFBatchName.TabIndex = 12
         '
         'ProgressBar
@@ -722,6 +813,62 @@ Partial Class frmMain
         Me.NotifyIcon1.Text = "SAMuel"
         Me.NotifyIcon1.Visible = True
         '
+        'BackgroundWorker1
+        '
+        Me.BackgroundWorker1.WorkerReportsProgress = True
+        '
+        'tabAddContact
+        '
+        Me.tabAddContact.Controls.Add(Me.rtbCContact)
+        Me.tabAddContact.Controls.Add(Me.mtxtCAccount)
+        Me.tabAddContact.Controls.Add(Me.lblCAccount)
+        Me.tabAddContact.Controls.Add(Me.btnCAddContact)
+        Me.tabAddContact.Location = New System.Drawing.Point(4, 22)
+        Me.tabAddContact.Name = "tabAddContact"
+        Me.tabAddContact.Size = New System.Drawing.Size(431, 290)
+        Me.tabAddContact.TabIndex = 6
+        Me.tabAddContact.Text = "Add Contact"
+        Me.tabAddContact.UseVisualStyleBackColor = True
+        '
+        'btnCAddContact
+        '
+        Me.btnCAddContact.Location = New System.Drawing.Point(175, 264)
+        Me.btnCAddContact.Name = "btnCAddContact"
+        Me.btnCAddContact.Size = New System.Drawing.Size(75, 23)
+        Me.btnCAddContact.TabIndex = 0
+        Me.btnCAddContact.Text = "Add Contact"
+        Me.btnCAddContact.UseVisualStyleBackColor = True
+        '
+        'mtxtCAccount
+        '
+        Me.mtxtCAccount.BackColor = System.Drawing.Color.Yellow
+        Me.mtxtCAccount.Location = New System.Drawing.Point(77, 31)
+        Me.mtxtCAccount.Mask = "00000-99999"
+        Me.mtxtCAccount.Name = "mtxtCAccount"
+        Me.mtxtCAccount.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
+        Me.mtxtCAccount.Size = New System.Drawing.Size(100, 20)
+        Me.mtxtCAccount.TabIndex = 6
+        Me.mtxtCAccount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.mtxtCAccount.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
+        '
+        'lblCAccount
+        '
+        Me.lblCAccount.AutoSize = True
+        Me.lblCAccount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblCAccount.Location = New System.Drawing.Point(14, 34)
+        Me.lblCAccount.Name = "lblCAccount"
+        Me.lblCAccount.Size = New System.Drawing.Size(63, 13)
+        Me.lblCAccount.TabIndex = 7
+        Me.lblCAccount.Text = "Account #: "
+        '
+        'rtbCContact
+        '
+        Me.rtbCContact.Location = New System.Drawing.Point(17, 78)
+        Me.rtbCContact.Name = "rtbCContact"
+        Me.rtbCContact.Size = New System.Drawing.Size(349, 126)
+        Me.rtbCContact.TabIndex = 8
+        Me.rtbCContact.Text = ""
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -753,8 +900,12 @@ Partial Class frmMain
         Me.grpRFServer.PerformLayout()
         Me.tabKofax.ResumeLayout(False)
         Me.tabKofax.PerformLayout()
+        Me.gbKFSource.ResumeLayout(False)
+        Me.gbKFSource.PerformLayout()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
+        Me.tabAddContact.ResumeLayout(False)
+        Me.tabAddContact.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -823,5 +974,18 @@ Partial Class frmMain
     Friend WithEvents chkAuditMode As System.Windows.Forms.CheckBox
     Friend WithEvents lblOutlookMessage As System.Windows.Forms.Label
     Friend WithEvents NotifyIcon1 As System.Windows.Forms.NotifyIcon
+    Friend WithEvents lblKFBatchType As System.Windows.Forms.Label
+    Friend WithEvents cbKFBatchType As System.Windows.Forms.ComboBox
+    Friend WithEvents gbKFSource As System.Windows.Forms.GroupBox
+    Friend WithEvents rbKFUSMail As System.Windows.Forms.RadioButton
+    Friend WithEvents rbKFEmail As System.Windows.Forms.RadioButton
+    Friend WithEvents lblKFComments As System.Windows.Forms.Label
+    Friend WithEvents txtKFComments As System.Windows.Forms.TextBox
+    Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
+    Friend WithEvents tabAddContact As System.Windows.Forms.TabPage
+    Friend WithEvents btnCAddContact As System.Windows.Forms.Button
+    Friend WithEvents mtxtCAccount As System.Windows.Forms.MaskedTextBox
+    Friend WithEvents lblCAccount As System.Windows.Forms.Label
+    Friend WithEvents rtbCContact As System.Windows.Forms.RichTextBox
 
 End Class
