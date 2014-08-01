@@ -100,6 +100,9 @@ Module KofaxModule
                 End If
             End If
 
+            'Remove Hyphen from account number
+            sAccountNumber.Replace("-", "")
+
             s1.Write(vbTab & vbTab & vbTab & vbTab & "<Document FormType = ""eCorrespondence Fax"">")
             s1.Write(vbTab & vbTab & vbTab & vbTab & vbTab & "<IndexFields>")
             If (_IsCustomerNumber) Then
