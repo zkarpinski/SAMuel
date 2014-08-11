@@ -2,6 +2,7 @@
 Imports Word = Microsoft.Office.Interop.Word
 Imports System.IO
 Imports System.Drawing.Imaging
+Imports System.Drawing.Printing
 
 
 Public Class frmMain
@@ -10,6 +11,9 @@ Public Class frmMain
     Dim bRejectPressed As Boolean
     Dim bCancelPressed As Boolean
     Dim bAuditMode As Boolean
+
+
+    Dim mBitmap As Bitmap
 
     Private Sub btnRun_Click(sender As Object, e As EventArgs) Handles btnRun.Click
         Dim oApp As Outlook.Application = New Outlook.Application
@@ -22,7 +26,6 @@ Public Class frmMain
         Dim samEmails As New List(Of SAM_Email)
         Dim sEmail As SAM_Email
         Dim rand As New Random
-        Dim mBitmap As Bitmap
 
         Me.Cursor = Cursors.WaitCursor
 
@@ -92,6 +95,7 @@ Public Class frmMain
                         mBitmap = Bitmap.FromFile(sFile)
                         'Display email info when in auditmode
                         If (bAuditMode) Then
+                            Outlook_Setup_Audit_View()
                             Me.Cursor = Cursors.Default
                             picImage.Image = mBitmap
                             txtAcc.Text = sEmail.Account
@@ -117,43 +121,51 @@ Public Class frmMain
                         If bCancelPressed Then
                             'When canceled, release image and reset form and end the routine
                             picImage.Image = Nothing
-                            Me.Dispose()
+                            mBitmap.Dispose()
                             Reset_Outlook_Tab()
+                            Reset_ProgressBar()
+                            Me.Cursor = Cursors.Default
                             Exit Sub
                         ElseIf bRejectPressed Then
                             '------ LOG reject action? ---------
                         ElseIf bNextPressed Or bAuditMode = False Then
                             i += 1
                             'Resize the image if it is too large
-                                lblStatus.Text = "Resizing Image..."
-                                Me.Refresh()
+                            lblStatus.Text = "Resizing Image..."
+                            Me.Refresh()
                             mBitmap = ImageProcessing.ResizeImage(mBitmap)
-                                Application.DoEvents()
-                                'Release original attachment so it can be removed when done processing
-                                picImage.Image = Nothing
+                            Application.DoEvents()
+                            'Release original attachment so it can be removed when done processing
+                            picImage.Image = Nothing
 
                             'Add account number as a watermark
-                                lblStatus.Text = "Adding Watermark..."
-                                Me.Refresh()
-                            EmailProcessing.Add_Watermark(mBitmap, sEmail.Account) ''add suffix handing
-                                'Convert the image to Grayscale
+                            lblStatus.Text = "Adding Watermark..."
+                            Me.Refresh()
+                            'EmailProcessing.Add_Watermark(mBitmap, sEmail.Account) ''add suffix handing
+                            'Convert the image to Grayscale
                             lblStatus.Text = "Converting to Bitonal..."
-                                Me.Refresh()
-                            EmailProcessing.MakeGrayscale(mBitmap)
+                            Me.Refresh()
+                            'EmailProcessing.MakeGrayscale(mBitmap)
 
-                            mBitmap = ImageProcessing.ConvertToRGB(mBitmap)
-                            mBitmap = ImageProcessing.ConvertToBitonal(mBitmap)
+                            'mBitmap = ImageProcessing.ConvertToRGB(mBitmap)
+                            'mBitmap = ImageProcessing.ConvertToBitonal(mBitmap)
 
 
-                                'Save the edited attachment as tiff and add to list
-                                lblStatus.Text = "Converting to Tiff..."
-                                Me.Refresh()
-                                sDestination = My.Settings.savePath + "tiffs\" + sEmail.From + "\"
-                                GlobalModule.CheckFolder(sDestination)
-                                outTiff = [String].Format("{0}{1}_{2}.tiff", sDestination, rand.Next(10000).ToString, sEmail.Account)
-                            ImageProcessing.CompressTiff(mBitmap, outTiff)
-                                docTiffList.Add(outTiff)
-                                Me.Refresh()
+                            'Save the edited attachment as tiff and add to list
+                            lblStatus.Text = "Converting to Tiff..."
+                            Me.Refresh()
+                            sDestination = My.Settings.savePath + "tiffs\"
+                            GlobalModule.CheckFolder(sDestination)
+                            outTiff = [String].Format("{0}{1}_{2}.tiff", sDestination, rand.Next(10000).ToString, sEmail.Account)
+                            'ImageProcessing.CompressTiff(mBitmap, outTiff)
+                            docTiffList.Add(outTiff)
+
+                            PrintDocument1.PrinterSettings.PrintToFile = True
+                            PrintDocument1.PrinterSettings.PrintFileName = outTiff
+                            PrintDialog1.PrintToFile = True
+                            PrintDocument1.Print()
+
+                            Me.Refresh()
                         Else
                             'Undesired state. Log this
                             LogAction(99, "Outlook buttonState: " & bCancelPressed.ToString & "," & bRejectPressed.ToString & "," & bNextPressed.ToString & "," & bAuditMode.ToString)
@@ -215,6 +227,12 @@ Public Class frmMain
     Private Sub btnConvert_Click(sender As Object, e As EventArgs) Handles btnConvert.Click
         'Converts Word Documents to .tif using MODI
         Reset()
+        'Dim prnDoc As New PrintDocument()
+        'PrintDialog1.PrintToFile = True
+        'PrintDialog1.Document = prnDoc
+        'e.graphics.tostring()
+        'prnDoc.Print()
+
         'If files are selected continue code
         If dlgOpen.ShowDialog() = DialogResult.OK Then
             Try
@@ -312,6 +330,7 @@ Public Class frmMain
         bNextPressed = False
         bRejectPressed = False
         bCancelPressed = False
+
         'settings
         picImage.Image = Nothing
         btnCancel.Enabled = False
@@ -320,6 +339,14 @@ Public Class frmMain
         btnNext.Enabled = False
         btnRun.Enabled = True
         btnRun.Visible = True
+        'newer
+        rtbEmailBody.Visible = False
+        btnReject.Visible = False
+        clbSelectedEmails.Visible = False
+        lblSelectedEmails.Visible = False
+        btnCancel.Visible = False
+        groupOLAudit.Visible = False
+
 
         'clear text fields
         rtbEmailBody.Text = ""
@@ -328,6 +355,15 @@ Public Class frmMain
         txtAcc.Text = ""
         txtSubject.Text = ""
         lblOutlookMessage.Text = ""
+    End Sub
+
+    Private Sub Outlook_Setup_Audit_View()
+        groupOLAudit.Visible = True
+        rtbEmailBody.Visible = True
+        btnReject.Visible = True
+        clbSelectedEmails.Visible = False
+        lblSelectedEmails.Visible = False
+        btnCancel.Visible = True
     End Sub
 
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
@@ -490,5 +526,18 @@ Public Class frmMain
         strContact = rtbCContact.Text
 
         AddContacts.MiscCollection(strAccountNumber, strContact)
+    End Sub
+
+    Private Sub tabWordToTiff_Click(sender As Object, e As EventArgs) Handles tabWordToTiff.Click
+
+    End Sub
+
+    Private Sub PrintDocument1_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocument1.PrintPage
+        Dim newImage As Image = CType(mBitmap, Image)
+        e.Graphics.DrawImage(newImage, 5, 5)
+    End Sub
+
+    Private Sub picImage_Click(sender As Object, e As EventArgs) Handles picImage.Click
+        System.Diagnostics.Process.Start(Me.picImage.ImageLocation.ToString)
     End Sub
 End Class
