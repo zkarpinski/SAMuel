@@ -27,8 +27,6 @@ Public Class frmMain
         Dim sEmail As SAM_Email
         Dim rand As New Random
 
-        Me.Cursor = Cursors.WaitCursor
-
         Reset_Outlook_Tab()
         clbSelectedEmails.Items.Clear()
         Reset_ProgressBar()
@@ -44,6 +42,7 @@ Public Class frmMain
         'Create each SAM Email
         Try
             For Each value In oApp.ActiveExplorer.Selection
+                Me.Cursor = Cursors.WaitCursor
                 Try
                     lblStatus.Text = "Saving attachments..."
                     Me.Refresh()
@@ -52,6 +51,7 @@ Public Class frmMain
                     samEmails.Add(sEmail)
                     clbSelectedEmails.Items.Add("[" & sEmail.AttachmentsCount.ToString & "] " & sEmail.Subject)
                 Catch ex As Exception
+                    LogAction(action:="An email was skipped.")
                     'Move to next email
                     Continue For
                 End Try
@@ -66,6 +66,7 @@ Public Class frmMain
 
         oApp = Nothing
         bAuditMode = chkAuditMode.Checked
+
         'Process each email
         For Each sEmail In samEmails
             Try
@@ -95,6 +96,7 @@ Public Class frmMain
                         mBitmap = Bitmap.FromFile(sFile)
                         'Display email info when in auditmode
                         If (bAuditMode) Then
+                            lblStatus.Text = "Waiting for user..."
                             Outlook_Setup_Audit_View()
                             Me.Cursor = Cursors.Default
                             picImage.Image = mBitmap
@@ -139,12 +141,12 @@ Public Class frmMain
                             picImage.Image = Nothing
 
                             'Add account number as a watermark
-                            lblStatus.Text = "Adding Watermark..."
+                            'lblStatus.Text = "Adding Watermark..."
                             Me.Refresh()
                             'EmailProcessing.Add_Watermark(mBitmap, sEmail.Account) ''add suffix handing
                             'Convert the image to Grayscale
-                            lblStatus.Text = "Converting to Bitonal..."
-                            Me.Refresh()
+                            'lblStatus.Text = "Converting to Bitonal..."
+                            'Me.Refresh()
                             'EmailProcessing.MakeGrayscale(mBitmap)
 
                             'mBitmap = ImageProcessing.ConvertToRGB(mBitmap)
@@ -227,11 +229,6 @@ Public Class frmMain
     Private Sub btnConvert_Click(sender As Object, e As EventArgs) Handles btnConvert.Click
         'Converts Word Documents to .tif using MODI
         Reset()
-        'Dim prnDoc As New PrintDocument()
-        'PrintDialog1.PrintToFile = True
-        'PrintDialog1.Document = prnDoc
-        'e.graphics.tostring()
-        'prnDoc.Print()
 
         'If files are selected continue code
         If dlgOpen.ShowDialog() = DialogResult.OK Then

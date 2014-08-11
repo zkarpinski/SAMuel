@@ -168,9 +168,9 @@ Partial Class frmMain
         '
         Me.GroupBox3.Controls.Add(Me.rbConvertTiff)
         Me.GroupBox3.Controls.Add(Me.RadioButton1)
-        Me.GroupBox3.Location = New System.Drawing.Point(177, 117)
+        Me.GroupBox3.Location = New System.Drawing.Point(95, 6)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(98, 77)
+        Me.GroupBox3.Size = New System.Drawing.Size(192, 66)
         Me.GroupBox3.TabIndex = 6
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Output"

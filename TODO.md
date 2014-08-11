@@ -14,15 +14,18 @@ List of what still is being worked on, features to be added, etc.
 * PDF and other file formart handling
 * ~~Overhaul tiff conversion~~
 * Scale watermark to image size.
+* Add unattended mode
+* Move completed emails
+* Visual feedback on progress
 
 #### DPA
 
 * Get it working...
 
-#### Word -> Tiff
+#### Convert Word Document
 
 * Convert without Microsoft Office Document Imaging (MODI)
-* Auto convert word files that aren't formated as word. Like RTF ones
+* ~~Auto convert word files that aren't formated as word. Like RTF ones~~ (Aug 2014)
 
 #### RightFax It
 
@@ -33,6 +36,7 @@ List of what still is being worked on, features to be added, etc.
 * Drag and Drop Capability
 * Multiple import types (All selected files for 1 document)
 * Options to change output folder and BatchClass
+* Use XML DOM instead of writing each line manually.
 
 #### Options Menus
 
