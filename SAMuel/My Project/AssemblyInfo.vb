@@ -1,4 +1,6 @@
-﻿Imports System
+﻿Imports System.Resources
+
+Imports System
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 
@@ -12,10 +14,10 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Service Application Manager Universal Expediting Library was designed and programmed by Associate CSR1, Zachary Karpinski.")> 
 <Assembly: AssemblyCompany("Zachary Karpinski")> 
 <Assembly: AssemblyProduct("SAMuel")> 
-<Assembly: AssemblyCopyright("Copyright ©  2014")> 
+<Assembly: AssemblyCopyright("© 2014 Zachary Karpinski. All rights reserved.")> 
 <Assembly: AssemblyTrademark("")> 
 
-<Assembly: ComVisible(False)>
+<Assembly: ComVisible(False)> 
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
 <Assembly: Guid("d006cd8e-9b6d-4c33-a6f5-649c11ab716d")> 
@@ -32,4 +34,6 @@ Imports System.Runtime.InteropServices
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
 <Assembly: AssemblyVersion("1.0.0.0")> 
-<Assembly: AssemblyFileVersion("1.0.0.0")> 
+<Assembly: AssemblyFileVersion("1.1.0.0")> 
+
+<Assembly: NeutralResourcesLanguageAttribute("en-US")> 

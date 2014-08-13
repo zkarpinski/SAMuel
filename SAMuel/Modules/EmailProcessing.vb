@@ -72,7 +72,8 @@ Public Module EmailProcessing
         If sFileExt = ".tiff" Or sFileExt = ".png" Or _
                 sFileExt = ".jpg" Or sFileExt = ".jpeg" Or _
                 sFileExt = ".tif" Or sFileExt = ".gif" Or _
-                sFileExt = ".bmp" Or sFileExt = ".pdf" Then
+                sFileExt = ".bmp" Or sFileExt = ".pdf" Or _
+                sFileExt = ".doc" Or sFileExt = ".docx" Then
             Return sFileExt
         Else
             Return vbNullString

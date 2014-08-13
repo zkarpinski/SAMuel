@@ -13,23 +13,29 @@ Public Class frmMain
     Dim bAuditMode As Boolean
 
 
-    Dim mBitmap As Bitmap
+    Dim sCurrentImage As String
 
     Private Sub btnRun_Click(sender As Object, e As EventArgs) Handles btnRun.Click
         Dim oApp As Outlook.Application = New Outlook.Application
+        Dim wApp As Word.Application
         Dim sDestination As String
         Dim sFile As String, sFileExt As String
         Dim outTiff As String
         Dim docList As New List(Of List(Of String))
         Dim docTiffList As New List(Of String)
-        Dim i As Integer = 0, emailCount As Integer
+        Dim emailCount As Integer
         Dim samEmails As New List(Of SAM_Email)
         Dim sEmail As SAM_Email
         Dim rand As New Random
 
+        'Define the save location and check if it exists
+        sDestination = My.Settings.savePath + "tiffs\"
+        GlobalModule.CheckFolder(sDestination)
+
         Reset_Outlook_Tab()
-        clbSelectedEmails.Items.Clear()
+        frmEmails.clbSelectedEmails.Items.Clear()
         Reset_ProgressBar()
+        frmEmails.Show()
 
         'enable buttons
         btnCancel.Enabled = True
@@ -49,7 +55,7 @@ Public Class frmMain
                     sEmail = New SAM_Email(value)
                     sEmail.Regex()
                     samEmails.Add(sEmail)
-                    clbSelectedEmails.Items.Add("[" & sEmail.AttachmentsCount.ToString & "] " & sEmail.Subject)
+                    frmEmails.clbSelectedEmails.Items.Add("[" & sEmail.AttachmentsCount.ToString & "] " & sEmail.Subject & vbTab & sEmail.From)
                 Catch ex As Exception
                     LogAction(action:="An email was skipped.")
                     'Move to next email
@@ -61,10 +67,13 @@ Public Class frmMain
             Exit Sub
         End Try
 
+        oApp = Nothing
+
+        'Get the email count and update the progress bar
         emailCount = samEmails.Count
         ProgressBar.Maximum = emailCount
 
-        oApp = Nothing
+        'Update audit value
         bAuditMode = chkAuditMode.Checked
 
         'Process each email
@@ -91,19 +100,25 @@ Public Class frmMain
                             'EmailProcessing.ParsePDFImgs(sFile)
                             Continue For
                         End If
-                        'Load the attachment
-                        'attachmentImg = Image.FromFile(sFile)
-                        mBitmap = Bitmap.FromFile(sFile)
+
                         'Display email info when in auditmode
                         If (bAuditMode) Then
+                            Me.Cursor = Cursors.Default
                             lblStatus.Text = "Waiting for user..."
                             Outlook_Setup_Audit_View()
-                            Me.Cursor = Cursors.Default
-                            picImage.Image = mBitmap
+
                             txtAcc.Text = sEmail.Account
                             txtSubject.Text = sEmail.Subject
                             txtFrom.Text = sEmail.From
                             rtbEmailBody.Text = sEmail.Body
+                            sCurrentImage = sFile
+
+                            If sFileExt = ".doc" Or sFileExt = ".docx" Then
+                                ' TODO Preview word doc
+                            Else
+                                'Load the attachment
+                                picImage.ImageLocation = sCurrentImage
+                            End If
                         End If
 
                         'Wait for user validation of attachment
@@ -123,7 +138,6 @@ Public Class frmMain
                         If bCancelPressed Then
                             'When canceled, release image and reset form and end the routine
                             picImage.Image = Nothing
-                            mBitmap.Dispose()
                             Reset_Outlook_Tab()
                             Reset_ProgressBar()
                             Me.Cursor = Cursors.Default
@@ -131,65 +145,64 @@ Public Class frmMain
                         ElseIf bRejectPressed Then
                             '------ LOG reject action? ---------
                         ElseIf bNextPressed Or bAuditMode = False Then
-                            i += 1
-                            'Resize the image if it is too large
-                            lblStatus.Text = "Resizing Image..."
-                            Me.Refresh()
-                            mBitmap = ImageProcessing.ResizeImage(mBitmap)
-                            Application.DoEvents()
-                            'Release original attachment so it can be removed when done processing
-                            picImage.Image = Nothing
-
-                            'Add account number as a watermark
-                            'lblStatus.Text = "Adding Watermark..."
-                            Me.Refresh()
-                            'EmailProcessing.Add_Watermark(mBitmap, sEmail.Account) ''add suffix handing
-                            'Convert the image to Grayscale
-                            'lblStatus.Text = "Converting to Bitonal..."
-                            'Me.Refresh()
-                            'EmailProcessing.MakeGrayscale(mBitmap)
-
-                            'mBitmap = ImageProcessing.ConvertToRGB(mBitmap)
-                            'mBitmap = ImageProcessing.ConvertToBitonal(mBitmap)
-
-
                             'Save the edited attachment as tiff and add to list
                             lblStatus.Text = "Converting to Tiff..."
                             Me.Refresh()
-                            sDestination = My.Settings.savePath + "tiffs\"
-                            GlobalModule.CheckFolder(sDestination)
-                            outTiff = [String].Format("{0}{1}_{2}.tiff", sDestination, rand.Next(10000).ToString, sEmail.Account)
-                            'ImageProcessing.CompressTiff(mBitmap, outTiff)
-                            docTiffList.Add(outTiff)
 
-                            PrintDocument1.PrinterSettings.PrintToFile = True
-                            PrintDocument1.PrinterSettings.PrintFileName = outTiff
-                            PrintDialog1.PrintToFile = True
-                            PrintDocument1.Print()
+                            'Handle how each file type is printed
+                            If sFileExt = ".doc" Or sFileExt = ".docx" Then
+                                If (wApp Is Nothing) Then
+                                    wApp = New Word.Application
+                                    wApp = CreateObject("Word.Application")
+                                    wApp.WindowState = Word.WdWindowState.wdWindowStateMinimize
+                                End If
+                                Dim objWdDoc As Word.Document
+                                outTiff = [String].Format("{0}{1}_{2}.tiff", sDestination, sEmail.Account, rand.Next(10000).ToString)
 
+                                'Open the document within word and don't prompt  for conversion.
+                                objWdDoc = wApp.Documents.Open(FileName:=sFile, ConfirmConversions:=False)
+                                wApp.Visible = False
+                                'Print to Tiff
+                                objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=outTiff)
+                                docTiffList.Add(outTiff)
+                                objWdDoc.Close()
+
+                            Else
+
+                                outTiff = [String].Format("{0}{1}_{2}.tiff", sDestination, sEmail.Account, rand.Next(10000).ToString)
+                                docTiffList.Add(outTiff)
+
+                                'Print the file to file with MODI
+                                PrintDocument1.PrinterSettings.PrintToFile = True
+                                PrintDocument1.PrinterSettings.PrintFileName = outTiff
+                                PrintDialog1.PrintToFile = True
+                                PrintDocument1.Print()
+
+                            End If
                             Me.Refresh()
                         Else
-                            'Undesired state. Log this
-                            LogAction(99, "Outlook buttonState: " & bCancelPressed.ToString & "," & bRejectPressed.ToString & "," & bNextPressed.ToString & "," & bAuditMode.ToString)
-                        End If
+                                'Undesired state. Log this
+                                LogAction(99, "Outlook buttonState: " & bCancelPressed.ToString & "," & bRejectPressed.ToString & "," & bNextPressed.ToString & "," & bAuditMode.ToString)
+                            End If
 
-                        'Reset variables
-                        bNextPressed = False
-                        bRejectPressed = False
+                            'Reset variables
+                            bNextPressed = False
+                            bRejectPressed = False
 
-                        'Release images
-                        If Not IsNothing(picImage.Image) Then picImage.Image.Dispose()
-                        picImage.Image = Nothing
+                            'Release images
+                            If Not IsNothing(picImage.Image) Then picImage.Image.Dispose()
+                            picImage.Image = Nothing
+                            picImage.ImageLocation = vbNullString
 
-                        lblStatus.Text = ""
-                        'Checks the email in the check list box
-                        clbSelectedEmails.SetItemChecked(ProgressBar.Value, True)
+                            lblStatus.Text = ""
+                            'Checks the email in the check list box
+                            frmEmails.clbSelectedEmails.SetItemChecked(ProgressBar.Value, True)
 
-                        Application.DoEvents()
-                        Me.Refresh()
+                            Application.DoEvents()
+                            Me.Refresh()
 
-                        'Delete the saved email attachment
-                        System.IO.File.Delete(sFile)
+                            'Delete the saved email attachment
+                            System.IO.File.Delete(sFile)
 
 
                     Next
@@ -211,16 +224,9 @@ Public Class frmMain
             End Try
         Next
         lblStatus.Text = "Finished processing emails."
-        ''**Handle No emails complete **''
 
-        'Create XML if user decides to.
-        If MsgBox("Email processing complete. Continue to create XML?", MsgBoxStyle.YesNo, "Email processing complete") = MsgBoxResult.Yes Then
-            lblStatus.Text = "Creating XML File..."
-            Me.Refresh()
-            KofaxModule.CreateXML(docList, "SAMuel - " & docList.Count.ToString & " emails.")
-        End If
+        ' TODO Handle No emails complete **''
 
-        lblStatus.Text = "DONE!"
         Me.Cursor = Cursors.Default
         Reset_Outlook_Tab()
 
@@ -291,7 +297,7 @@ Public Class frmMain
         Reset_DPA_Tab()
         Reset_RightFax_Tab()
         Reset_ProgressBar()
-        clbSelectedEmails.Items.Clear()
+        frmEmails.clbSelectedEmails.Items.Clear()
         cbKFBatchType.SelectedIndex = 2
     End Sub
 
@@ -336,13 +342,14 @@ Public Class frmMain
         btnNext.Enabled = False
         btnRun.Enabled = True
         btnRun.Visible = True
-        'newer
+        'Hide audit options
         rtbEmailBody.Visible = False
         btnReject.Visible = False
-        clbSelectedEmails.Visible = False
         lblSelectedEmails.Visible = False
         btnCancel.Visible = False
         groupOLAudit.Visible = False
+        picImage.Enabled = False
+        picImage.Visible = False
 
 
         'clear text fields
@@ -358,9 +365,10 @@ Public Class frmMain
         groupOLAudit.Visible = True
         rtbEmailBody.Visible = True
         btnReject.Visible = True
-        clbSelectedEmails.Visible = False
         lblSelectedEmails.Visible = False
         btnCancel.Visible = True
+        picImage.Enabled = True
+        picImage.Visible = True
     End Sub
 
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
@@ -530,8 +538,10 @@ Public Class frmMain
     End Sub
 
     Private Sub PrintDocument1_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocument1.PrintPage
-        Dim newImage As Image = CType(mBitmap, Image)
-        e.Graphics.DrawImage(newImage, 5, 5)
+        'Resize rotate image if needed then print within page bounds.
+        Dim mBitmap As Bitmap = Bitmap.FromFile(sCurrentImage)
+        mBitmap = ImageProcessing.ResizeImage(mBitmap)
+        e.Graphics.DrawImage(CType(mBitmap, Image), 0, 0, e.PageBounds.Width, e.PageBounds.Height)
     End Sub
 
     Private Sub picImage_Click(sender As Object, e As EventArgs) Handles picImage.Click

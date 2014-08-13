@@ -30,19 +30,20 @@ Partial Class frmOptions
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.tabGeneral = New System.Windows.Forms.TabPage()
         Me.tabOutlook = New System.Windows.Forms.TabPage()
-        Me.grpTiffOptions = New System.Windows.Forms.GroupBox()
-        Me.cmbColorDepth = New System.Windows.Forms.ComboBox()
-        Me.cmbCompression = New System.Windows.Forms.ComboBox()
-        Me.lblColorDepth = New System.Windows.Forms.Label()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.grpWatermarkOptions = New System.Windows.Forms.GroupBox()
         Me.lblFont = New System.Windows.Forms.Label()
         Me.cmbFont = New System.Windows.Forms.ComboBox()
+        Me.grpTiffOptions = New System.Windows.Forms.GroupBox()
+        Me.Label1 = New System.Windows.Forms.Label()
+        Me.lblColorDepth = New System.Windows.Forms.Label()
+        Me.cmbCompression = New System.Windows.Forms.ComboBox()
+        Me.cmbColorDepth = New System.Windows.Forms.ComboBox()
+        Me.grpOptionsSaveFolders = New System.Windows.Forms.GroupBox()
         Me.TabControl1.SuspendLayout()
         Me.tabGeneral.SuspendLayout()
         Me.tabOutlook.SuspendLayout()
-        Me.grpTiffOptions.SuspendLayout()
         Me.grpWatermarkOptions.SuspendLayout()
+        Me.grpTiffOptions.SuspendLayout()
         Me.SuspendLayout()
         '
         'txtSavePath
@@ -92,6 +93,7 @@ Partial Class frmOptions
         '
         'tabGeneral
         '
+        Me.tabGeneral.Controls.Add(Me.grpOptionsSaveFolders)
         Me.tabGeneral.Controls.Add(Me.txtSavePath)
         Me.tabGeneral.Controls.Add(Me.lblSaveTo)
         Me.tabGeneral.Controls.Add(Me.btnSelectSaveFolder)
@@ -114,57 +116,6 @@ Partial Class frmOptions
         Me.tabOutlook.TabIndex = 1
         Me.tabOutlook.Text = "Outlook"
         Me.tabOutlook.UseVisualStyleBackColor = True
-        '
-        'grpTiffOptions
-        '
-        Me.grpTiffOptions.Controls.Add(Me.Label1)
-        Me.grpTiffOptions.Controls.Add(Me.lblColorDepth)
-        Me.grpTiffOptions.Controls.Add(Me.cmbCompression)
-        Me.grpTiffOptions.Controls.Add(Me.cmbColorDepth)
-        Me.grpTiffOptions.Location = New System.Drawing.Point(7, 72)
-        Me.grpTiffOptions.Name = "grpTiffOptions"
-        Me.grpTiffOptions.Size = New System.Drawing.Size(179, 88)
-        Me.grpTiffOptions.TabIndex = 0
-        Me.grpTiffOptions.TabStop = False
-        Me.grpTiffOptions.Text = "Tiff Options"
-        '
-        'cmbColorDepth
-        '
-        Me.cmbColorDepth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmbColorDepth.FormattingEnabled = True
-        Me.cmbColorDepth.Items.AddRange(New Object() {"1-bit", "2-bit", "8-bit", "24-bit", "30-bit"})
-        Me.cmbColorDepth.Location = New System.Drawing.Point(77, 19)
-        Me.cmbColorDepth.Name = "cmbColorDepth"
-        Me.cmbColorDepth.Size = New System.Drawing.Size(96, 21)
-        Me.cmbColorDepth.TabIndex = 0
-        '
-        'cmbCompression
-        '
-        Me.cmbCompression.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cmbCompression.FormattingEnabled = True
-        Me.cmbCompression.Items.AddRange(New Object() {"LZW", "CCITT3", "CCITT4", "RLE", "None"})
-        Me.cmbCompression.Location = New System.Drawing.Point(77, 46)
-        Me.cmbCompression.Name = "cmbCompression"
-        Me.cmbCompression.Size = New System.Drawing.Size(96, 21)
-        Me.cmbCompression.TabIndex = 1
-        '
-        'lblColorDepth
-        '
-        Me.lblColorDepth.AutoSize = True
-        Me.lblColorDepth.Location = New System.Drawing.Point(8, 23)
-        Me.lblColorDepth.Name = "lblColorDepth"
-        Me.lblColorDepth.Size = New System.Drawing.Size(66, 13)
-        Me.lblColorDepth.TabIndex = 2
-        Me.lblColorDepth.Text = "Color Depth:"
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(4, 49)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(73, 13)
-        Me.Label1.TabIndex = 3
-        Me.Label1.Text = "Compression: "
         '
         'grpWatermarkOptions
         '
@@ -195,6 +146,66 @@ Partial Class frmOptions
         Me.cmbFont.Size = New System.Drawing.Size(96, 21)
         Me.cmbFont.TabIndex = 0
         '
+        'grpTiffOptions
+        '
+        Me.grpTiffOptions.Controls.Add(Me.Label1)
+        Me.grpTiffOptions.Controls.Add(Me.lblColorDepth)
+        Me.grpTiffOptions.Controls.Add(Me.cmbCompression)
+        Me.grpTiffOptions.Controls.Add(Me.cmbColorDepth)
+        Me.grpTiffOptions.Location = New System.Drawing.Point(7, 72)
+        Me.grpTiffOptions.Name = "grpTiffOptions"
+        Me.grpTiffOptions.Size = New System.Drawing.Size(179, 88)
+        Me.grpTiffOptions.TabIndex = 0
+        Me.grpTiffOptions.TabStop = False
+        Me.grpTiffOptions.Text = "Tiff Options"
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Location = New System.Drawing.Point(4, 49)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(73, 13)
+        Me.Label1.TabIndex = 3
+        Me.Label1.Text = "Compression: "
+        '
+        'lblColorDepth
+        '
+        Me.lblColorDepth.AutoSize = True
+        Me.lblColorDepth.Location = New System.Drawing.Point(8, 23)
+        Me.lblColorDepth.Name = "lblColorDepth"
+        Me.lblColorDepth.Size = New System.Drawing.Size(66, 13)
+        Me.lblColorDepth.TabIndex = 2
+        Me.lblColorDepth.Text = "Color Depth:"
+        '
+        'cmbCompression
+        '
+        Me.cmbCompression.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbCompression.FormattingEnabled = True
+        Me.cmbCompression.Items.AddRange(New Object() {"LZW", "CCITT3", "CCITT4", "RLE", "None"})
+        Me.cmbCompression.Location = New System.Drawing.Point(77, 46)
+        Me.cmbCompression.Name = "cmbCompression"
+        Me.cmbCompression.Size = New System.Drawing.Size(96, 21)
+        Me.cmbCompression.TabIndex = 1
+        '
+        'cmbColorDepth
+        '
+        Me.cmbColorDepth.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
+        Me.cmbColorDepth.FormattingEnabled = True
+        Me.cmbColorDepth.Items.AddRange(New Object() {"1-bit", "2-bit", "8-bit", "24-bit", "30-bit"})
+        Me.cmbColorDepth.Location = New System.Drawing.Point(77, 19)
+        Me.cmbColorDepth.Name = "cmbColorDepth"
+        Me.cmbColorDepth.Size = New System.Drawing.Size(96, 21)
+        Me.cmbColorDepth.TabIndex = 0
+        '
+        'grpOptionsSaveFolders
+        '
+        Me.grpOptionsSaveFolders.Location = New System.Drawing.Point(8, 98)
+        Me.grpOptionsSaveFolders.Name = "grpOptionsSaveFolders"
+        Me.grpOptionsSaveFolders.Size = New System.Drawing.Size(200, 62)
+        Me.grpOptionsSaveFolders.TabIndex = 4
+        Me.grpOptionsSaveFolders.TabStop = False
+        Me.grpOptionsSaveFolders.Text = "Save Folders"
+        '
         'frmOptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -208,10 +219,10 @@ Partial Class frmOptions
         Me.tabGeneral.ResumeLayout(False)
         Me.tabGeneral.PerformLayout()
         Me.tabOutlook.ResumeLayout(False)
-        Me.grpTiffOptions.ResumeLayout(False)
-        Me.grpTiffOptions.PerformLayout()
         Me.grpWatermarkOptions.ResumeLayout(False)
         Me.grpWatermarkOptions.PerformLayout()
+        Me.grpTiffOptions.ResumeLayout(False)
+        Me.grpTiffOptions.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -231,4 +242,5 @@ Partial Class frmOptions
     Friend WithEvents grpWatermarkOptions As System.Windows.Forms.GroupBox
     Friend WithEvents lblFont As System.Windows.Forms.Label
     Friend WithEvents cmbFont As System.Windows.Forms.ComboBox
+    Friend WithEvents grpOptionsSaveFolders As System.Windows.Forms.GroupBox
 End Class
