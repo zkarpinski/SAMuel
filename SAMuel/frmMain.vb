@@ -145,7 +145,7 @@ Public Class frmMain
                             Exit Sub
                         ElseIf bRejectPressed Then
                             '------ LOG reject action? ---------
-                        ElseIf bNextPressed Then
+                        ElseIf bNextPressed Or bAuditMode = False Then
                             'Save the edited attachment as tiff and add to list
                             lblStatus.Text = "Converting to Tiff..."
                             Me.Refresh()
