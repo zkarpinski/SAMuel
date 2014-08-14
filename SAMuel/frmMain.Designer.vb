@@ -261,7 +261,7 @@ Partial Class frmMain
         '
         Me.picImage.Location = New System.Drawing.Point(251, 27)
         Me.picImage.Name = "picImage"
-        Me.picImage.Size = New System.Drawing.Size(169, 160)
+        Me.picImage.Size = New System.Drawing.Size(169, 233)
         Me.picImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.picImage.TabIndex = 1
         Me.picImage.TabStop = False

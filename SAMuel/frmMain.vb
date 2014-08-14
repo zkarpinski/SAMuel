@@ -101,17 +101,18 @@ Public Class frmMain
                             Continue For
                         End If
 
+                        sCurrentImage = sFile
+
+
                         'Display email info when in auditmode
                         If (bAuditMode) Then
                             Me.Cursor = Cursors.Default
                             lblStatus.Text = "Waiting for user..."
                             Outlook_Setup_Audit_View()
-
                             txtAcc.Text = sEmail.Account
                             txtSubject.Text = sEmail.Subject
                             txtFrom.Text = sEmail.From
                             rtbEmailBody.Text = sEmail.Body
-                            sCurrentImage = sFile
 
                             If sFileExt = ".doc" Or sFileExt = ".docx" Then
                                 ' TODO Preview word doc
@@ -144,7 +145,7 @@ Public Class frmMain
                             Exit Sub
                         ElseIf bRejectPressed Then
                             '------ LOG reject action? ---------
-                        ElseIf bNextPressed Or bAuditMode = False Then
+                        ElseIf bNextPressed Then
                             'Save the edited attachment as tiff and add to list
                             lblStatus.Text = "Converting to Tiff..."
                             Me.Refresh()
@@ -190,7 +191,7 @@ Public Class frmMain
                             bRejectPressed = False
 
                             'Release images
-                            If Not IsNothing(picImage.Image) Then picImage.Image.Dispose()
+                        'If Not IsNothing(picImage.Image) Then picImage.Image.Dispose()
                             picImage.Image = Nothing
                             picImage.ImageLocation = vbNullString
 
@@ -202,7 +203,7 @@ Public Class frmMain
                             Me.Refresh()
 
                             'Delete the saved email attachment
-                            System.IO.File.Delete(sFile)
+                        System.IO.File.Delete(sFile)
 
 
                     Next
