@@ -1,4 +1,4 @@
-﻿Scripts
+Scripts
 ==========
 
 ### Fax-C&I
@@ -18,3 +18,6 @@ Purpose: Faxes the selected files to the name an number within in file name usin
 
 ### bb
 Purpose: A test hotkey script to automate setting up a customer with a specific financial program.
+
+### AddContact
+Purpose: A hotkey script for automating the task of adding contacts to customer accounts after documents are faxed.

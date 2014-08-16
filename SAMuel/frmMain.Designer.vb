@@ -28,6 +28,7 @@ Partial Class frmMain
         Me.btnConvert = New System.Windows.Forms.Button()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.chkValidOnly = New System.Windows.Forms.CheckBox()
         Me.groupOLAudit = New System.Windows.Forms.GroupBox()
         Me.txtFrom = New System.Windows.Forms.TextBox()
         Me.lblSubject = New System.Windows.Forms.Label()
@@ -106,6 +107,9 @@ Partial Class frmMain
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.PrintDialog1 = New System.Windows.Forms.PrintDialog()
         Me.PrintDocument1 = New System.Drawing.Printing.PrintDocument()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.rbConvertDOC = New System.Windows.Forms.RadioButton()
+        Me.rbConvertIMAGE = New System.Windows.Forms.RadioButton()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.groupOLAudit.SuspendLayout()
@@ -120,6 +124,7 @@ Partial Class frmMain
         Me.tabAddContact.SuspendLayout()
         Me.tabDPA.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
+        Me.GroupBox4.SuspendLayout()
         Me.SuspendLayout()
         '
         'dlgOpen
@@ -153,6 +158,7 @@ Partial Class frmMain
         '
         Me.TabPage1.BackgroundImage = Global.SAMuel.My.Resources.Resources.ny_map_f
         Me.TabPage1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.TabPage1.Controls.Add(Me.chkValidOnly)
         Me.TabPage1.Controls.Add(Me.groupOLAudit)
         Me.TabPage1.Controls.Add(Me.picImage)
         Me.TabPage1.Controls.Add(Me.btnReject)
@@ -169,6 +175,16 @@ Partial Class frmMain
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Outlook"
         Me.TabPage1.UseVisualStyleBackColor = True
+        '
+        'chkValidOnly
+        '
+        Me.chkValidOnly.AutoSize = True
+        Me.chkValidOnly.Location = New System.Drawing.Point(91, 270)
+        Me.chkValidOnly.Name = "chkValidOnly"
+        Me.chkValidOnly.Size = New System.Drawing.Size(73, 17)
+        Me.chkValidOnly.TabIndex = 17
+        Me.chkValidOnly.Text = "Valid Only"
+        Me.chkValidOnly.UseVisualStyleBackColor = True
         '
         'groupOLAudit
         '
@@ -189,7 +205,6 @@ Partial Class frmMain
         '
         'txtFrom
         '
-        Me.txtFrom.Enabled = False
         Me.txtFrom.Location = New System.Drawing.Point(55, 34)
         Me.txtFrom.Name = "txtFrom"
         Me.txtFrom.ReadOnly = True
@@ -243,7 +258,6 @@ Partial Class frmMain
         '
         'txtSubject
         '
-        Me.txtSubject.Enabled = False
         Me.txtSubject.Location = New System.Drawing.Point(55, 11)
         Me.txtSubject.Name = "txtSubject"
         Me.txtSubject.ReadOnly = True
@@ -259,10 +273,11 @@ Partial Class frmMain
         '
         'picImage
         '
-        Me.picImage.Location = New System.Drawing.Point(251, 27)
+        Me.picImage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
+        Me.picImage.Location = New System.Drawing.Point(242, 6)
         Me.picImage.Name = "picImage"
-        Me.picImage.Size = New System.Drawing.Size(169, 233)
-        Me.picImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.picImage.Size = New System.Drawing.Size(169, 254)
+        Me.picImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.picImage.TabIndex = 1
         Me.picImage.TabStop = False
         '
@@ -319,12 +334,13 @@ Partial Class frmMain
         '
         'rtbEmailBody
         '
-        Me.rtbEmailBody.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.rtbEmailBody.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.rtbEmailBody.Location = New System.Drawing.Point(4, 106)
         Me.rtbEmailBody.Name = "rtbEmailBody"
         Me.rtbEmailBody.Size = New System.Drawing.Size(219, 154)
         Me.rtbEmailBody.TabIndex = 9
-        Me.rtbEmailBody.Text = ""
+        Me.rtbEmailBody.Text = "This is a sample email body. With multiple lines and jibberish..." & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & "Ctrl+Scroll " & _
+    "changes font size!" & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & "Scroll down to see this!."
         '
         'btnRun
         '
@@ -338,6 +354,7 @@ Partial Class frmMain
         'tabWordToTiff
         '
         Me.tabWordToTiff.AllowDrop = True
+        Me.tabWordToTiff.Controls.Add(Me.GroupBox4)
         Me.tabWordToTiff.Controls.Add(Me.GroupBox3)
         Me.tabWordToTiff.Controls.Add(Me.lblDragAndDropWord)
         Me.tabWordToTiff.Controls.Add(Me.btnConvert)
@@ -346,16 +363,16 @@ Partial Class frmMain
         Me.tabWordToTiff.Padding = New System.Windows.Forms.Padding(3)
         Me.tabWordToTiff.Size = New System.Drawing.Size(431, 290)
         Me.tabWordToTiff.TabIndex = 1
-        Me.tabWordToTiff.Text = "Word Convert"
+        Me.tabWordToTiff.Text = "Convert Files"
         Me.tabWordToTiff.UseVisualStyleBackColor = True
         '
         'GroupBox3
         '
         Me.GroupBox3.Controls.Add(Me.rbConvertTiff)
         Me.GroupBox3.Controls.Add(Me.RadioButton1)
-        Me.GroupBox3.Location = New System.Drawing.Point(95, 6)
+        Me.GroupBox3.Location = New System.Drawing.Point(87, 224)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(192, 66)
+        Me.GroupBox3.Size = New System.Drawing.Size(75, 66)
         Me.GroupBox3.TabIndex = 6
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Output"
@@ -386,12 +403,11 @@ Partial Class frmMain
         'lblDragAndDropWord
         '
         Me.lblDragAndDropWord.AutoSize = True
-        Me.lblDragAndDropWord.Location = New System.Drawing.Point(14, 197)
+        Me.lblDragAndDropWord.Location = New System.Drawing.Point(38, 128)
         Me.lblDragAndDropWord.Name = "lblDragAndDropWord"
-        Me.lblDragAndDropWord.Size = New System.Drawing.Size(406, 13)
+        Me.lblDragAndDropWord.Size = New System.Drawing.Size(343, 13)
         Me.lblDragAndDropWord.TabIndex = 3
-        Me.lblDragAndDropWord.Text = "Click Convert or Drag and Drop Word documents to convert into the selected format" & _
-    "."
+        Me.lblDragAndDropWord.Text = "Click Convert or Drag and Drop files to convert into the selected format."
         '
         'tabRFax
         '
@@ -926,6 +942,39 @@ Partial Class frmMain
         'PrintDocument1
         '
         '
+        'GroupBox4
+        '
+        Me.GroupBox4.Controls.Add(Me.rbConvertDOC)
+        Me.GroupBox4.Controls.Add(Me.rbConvertIMAGE)
+        Me.GroupBox4.Location = New System.Drawing.Point(6, 224)
+        Me.GroupBox4.Name = "GroupBox4"
+        Me.GroupBox4.Size = New System.Drawing.Size(81, 66)
+        Me.GroupBox4.TabIndex = 7
+        Me.GroupBox4.TabStop = False
+        Me.GroupBox4.Text = "Input"
+        '
+        'rbConvertDOC
+        '
+        Me.rbConvertDOC.AutoSize = True
+        Me.rbConvertDOC.Checked = True
+        Me.rbConvertDOC.Location = New System.Drawing.Point(6, 19)
+        Me.rbConvertDOC.Name = "rbConvertDOC"
+        Me.rbConvertDOC.Size = New System.Drawing.Size(74, 17)
+        Me.rbConvertDOC.TabIndex = 5
+        Me.rbConvertDOC.TabStop = True
+        Me.rbConvertDOC.Text = "Word Doc"
+        Me.rbConvertDOC.UseVisualStyleBackColor = True
+        '
+        'rbConvertIMAGE
+        '
+        Me.rbConvertIMAGE.AutoSize = True
+        Me.rbConvertIMAGE.Location = New System.Drawing.Point(6, 42)
+        Me.rbConvertIMAGE.Name = "rbConvertIMAGE"
+        Me.rbConvertIMAGE.Size = New System.Drawing.Size(54, 17)
+        Me.rbConvertIMAGE.TabIndex = 4
+        Me.rbConvertIMAGE.Text = "Image"
+        Me.rbConvertIMAGE.UseVisualStyleBackColor = True
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -967,6 +1016,8 @@ Partial Class frmMain
         Me.tabDPA.PerformLayout()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
+        Me.GroupBox4.ResumeLayout(False)
+        Me.GroupBox4.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1053,5 +1104,9 @@ Partial Class frmMain
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
     Friend WithEvents PrintDocument1 As System.Drawing.Printing.PrintDocument
     Friend WithEvents groupOLAudit As System.Windows.Forms.GroupBox
+    Friend WithEvents chkValidOnly As System.Windows.Forms.CheckBox
+    Friend WithEvents GroupBox4 As System.Windows.Forms.GroupBox
+    Friend WithEvents rbConvertDOC As System.Windows.Forms.RadioButton
+    Friend WithEvents rbConvertIMAGE As System.Windows.Forms.RadioButton
 
 End Class

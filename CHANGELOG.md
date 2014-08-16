@@ -1,15 +1,20 @@
-## 2014-06-29 12:45AM
-
+## 2014-08-11
 Bugfixes:
 
-  - Outlook: Attachment preview changed to show only during audit mode. Otherwise GC couldn't release images fast enough.
+  - Outlook: Fixed reject button where it still printed the images.
 
 Features:
 
-  - Outlook: added bitonal conversion to allow CCITT (fax group) compression.
-  - started c# converison.
+  - General: Added empty folders function in options.
+  - General: Added view logfile button in options.
+  - Outlook: Added unattended mode where emails without account numbers will be skipped automatically.
+  - Convert Files: Added ability to convert image files to tiff
  
-Coding:
+Code Improvements:
 
-  - Outlook: changed passing of image object to bitmap.
+  - Email Processing: Moved all deprecated code to image processing module.
+  
+UI Improvements:
+  - Outlook: Increased default email body font size to 10.
+    
 

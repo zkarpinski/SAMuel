@@ -8,13 +8,13 @@ List of what still is being worked on, features to be added, etc.
 #### Outlook Email Handling
 
 * Look into background worker for processing the images
-* Dither tiff images
+* ~~Dither tiff images~~ (Not Needed)
 * ~~Work on naming convention~~ and string cleaning (#,:,/)
 * Error handling
 * PDF and other file formart handling
 * ~~Overhaul tiff conversion~~
-* Scale watermark to image size.
-* Add unattended mode
+* ~~Scale watermark to image size.~~ (Not Needed)
+* ~~Add unattended mode~~ (Aug 16 2014)
 * Move completed emails
 * Visual feedback on progress
 

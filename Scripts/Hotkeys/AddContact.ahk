@@ -13,53 +13,96 @@ If SelectedFiles =
 }
 Loop, parse, SelectedFiles, `n
 {
-        MsgBox, 4, , The file is %A_LoopField%.  Continue?
-        IfMsgBox, No, break
-	; //RegExMatch(%A_LoopField%,(?P<AccNum>\d{5}-\d{5}))
-	; //MsgBox AccNum
-}
+	if a_index = 1 
+	{}
+	else
+{
+	StringSplit, splitArray, A_LoopField, -
+	AccNum := splitArray2 . splitArray3
+	; //RegExMatch(A_LoopField,(?P<AccNum>\d{5}-\d{5}))
+	; //  MsgBox %AccNum%
 WinWait, Customer Service System Retrieval
 WinActivate, Customer Service System Retrieval
 
-Sleep, 500
+Send, {ALT down}
+Sleep, 50
+Send, d
+Sleep, 100
+Send {ALT up}
+
+Send {TAB 4}
+Sleep, 250
+Send, %AccNum%
+
+
+Sleep, 250
 Send, {ENTER}
+Sleep, 600
+
+IfWinExist, Premise For
+{
+Sleep, 5000
+}
+
+Send, o
+Sleep, 250
+Send, o
 Sleep, 500
+
+; // Wait for Account
+; //WinWait, Account, 120
+
 
 ; // Open Contact Window
 Send, {ALT}
-Sleep, 500
+Sleep, 250
 Send, a
-Sleep, 200
+Sleep, 100
 Send, a
-Sleep, 200
+Sleep, 100
 Send, c
-Sleep, 200
+Sleep, 100
 Send, a
 
 ; // Wait for add account contact window (2 minutes)
-WinWait, , Add Account Contact For, 120
+;//WinWait, Add Account Contact for, 120
 if ErrorLevel
 {
 	MsgBox, Waiting for contact window timed out.
 	return
 }
-Sleep, 100
+Sleep, 500
 
 ; // Select Contact Type
 Send, {TAB 8}
-Sleep, 200
+Sleep, 100
 Send, Miscellaneous Collections
-Sleep, 400
+Sleep, 200
 
 ; //Enter Contact
 Send, {TAB}
+Sleep, 100
+Send, emailed active dpa
 Sleep, 200
-Send, faxed active dpa
-Sleep, 400
 
 ; //Process
 Send, {ALT}
-Sleep, 200
+Sleep, 100
 Send, c
+Sleep, 100
+Send, p
 Sleep, 200
-; //Send, p
+Send, o
+Sleep, 150
+
+; // Exit Account
+Send, {ALT}
+Sleep, 100
+Send, c
+Sleep, 100
+Send, e
+Sleep 300
+
+}
+}
+

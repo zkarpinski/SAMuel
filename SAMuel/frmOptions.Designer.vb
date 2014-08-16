@@ -29,6 +29,7 @@ Partial Class frmOptions
         Me.lblSaveTo = New System.Windows.Forms.Label()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.tabGeneral = New System.Windows.Forms.TabPage()
+        Me.grpOptionsSaveFolders = New System.Windows.Forms.GroupBox()
         Me.tabOutlook = New System.Windows.Forms.TabPage()
         Me.grpWatermarkOptions = New System.Windows.Forms.GroupBox()
         Me.lblFont = New System.Windows.Forms.Label()
@@ -38,9 +39,11 @@ Partial Class frmOptions
         Me.lblColorDepth = New System.Windows.Forms.Label()
         Me.cmbCompression = New System.Windows.Forms.ComboBox()
         Me.cmbColorDepth = New System.Windows.Forms.ComboBox()
-        Me.grpOptionsSaveFolders = New System.Windows.Forms.GroupBox()
+        Me.btnEmpty = New System.Windows.Forms.Button()
+        Me.btnViewLog = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.tabGeneral.SuspendLayout()
+        Me.grpOptionsSaveFolders.SuspendLayout()
         Me.tabOutlook.SuspendLayout()
         Me.grpWatermarkOptions.SuspendLayout()
         Me.grpTiffOptions.SuspendLayout()
@@ -93,6 +96,7 @@ Partial Class frmOptions
         '
         'tabGeneral
         '
+        Me.tabGeneral.Controls.Add(Me.btnViewLog)
         Me.tabGeneral.Controls.Add(Me.grpOptionsSaveFolders)
         Me.tabGeneral.Controls.Add(Me.txtSavePath)
         Me.tabGeneral.Controls.Add(Me.lblSaveTo)
@@ -104,6 +108,16 @@ Partial Class frmOptions
         Me.tabGeneral.TabIndex = 0
         Me.tabGeneral.Text = "General"
         Me.tabGeneral.UseVisualStyleBackColor = True
+        '
+        'grpOptionsSaveFolders
+        '
+        Me.grpOptionsSaveFolders.Controls.Add(Me.btnEmpty)
+        Me.grpOptionsSaveFolders.Location = New System.Drawing.Point(8, 98)
+        Me.grpOptionsSaveFolders.Name = "grpOptionsSaveFolders"
+        Me.grpOptionsSaveFolders.Size = New System.Drawing.Size(104, 62)
+        Me.grpOptionsSaveFolders.TabIndex = 4
+        Me.grpOptionsSaveFolders.TabStop = False
+        Me.grpOptionsSaveFolders.Text = "Save Folders"
         '
         'tabOutlook
         '
@@ -197,14 +211,23 @@ Partial Class frmOptions
         Me.cmbColorDepth.Size = New System.Drawing.Size(96, 21)
         Me.cmbColorDepth.TabIndex = 0
         '
-        'grpOptionsSaveFolders
+        'btnEmpty
         '
-        Me.grpOptionsSaveFolders.Location = New System.Drawing.Point(8, 98)
-        Me.grpOptionsSaveFolders.Name = "grpOptionsSaveFolders"
-        Me.grpOptionsSaveFolders.Size = New System.Drawing.Size(200, 62)
-        Me.grpOptionsSaveFolders.TabIndex = 4
-        Me.grpOptionsSaveFolders.TabStop = False
-        Me.grpOptionsSaveFolders.Text = "Save Folders"
+        Me.btnEmpty.Location = New System.Drawing.Point(6, 39)
+        Me.btnEmpty.Name = "btnEmpty"
+        Me.btnEmpty.Size = New System.Drawing.Size(75, 23)
+        Me.btnEmpty.TabIndex = 0
+        Me.btnEmpty.Text = "Empty"
+        Me.btnEmpty.UseVisualStyleBackColor = True
+        '
+        'btnViewLog
+        '
+        Me.btnViewLog.Location = New System.Drawing.Point(246, 127)
+        Me.btnViewLog.Name = "btnViewLog"
+        Me.btnViewLog.Size = New System.Drawing.Size(75, 23)
+        Me.btnViewLog.TabIndex = 5
+        Me.btnViewLog.Text = "View Logfile"
+        Me.btnViewLog.UseVisualStyleBackColor = True
         '
         'frmOptions
         '
@@ -218,6 +241,7 @@ Partial Class frmOptions
         Me.TabControl1.ResumeLayout(False)
         Me.tabGeneral.ResumeLayout(False)
         Me.tabGeneral.PerformLayout()
+        Me.grpOptionsSaveFolders.ResumeLayout(False)
         Me.tabOutlook.ResumeLayout(False)
         Me.grpWatermarkOptions.ResumeLayout(False)
         Me.grpWatermarkOptions.PerformLayout()
@@ -243,4 +267,6 @@ Partial Class frmOptions
     Friend WithEvents lblFont As System.Windows.Forms.Label
     Friend WithEvents cmbFont As System.Windows.Forms.ComboBox
     Friend WithEvents grpOptionsSaveFolders As System.Windows.Forms.GroupBox
+    Friend WithEvents btnEmpty As System.Windows.Forms.Button
+    Friend WithEvents btnViewLog As System.Windows.Forms.Button
 End Class

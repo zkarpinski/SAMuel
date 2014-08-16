@@ -1,4 +1,6 @@
-﻿Public Class frmOptions
+﻿Imports System.IO
+
+Public Class frmOptions
 
     Private Sub btnSelectSaveFolder_Click(sender As Object, e As EventArgs) Handles btnSelectSaveFolder.Click
         If FolderBrowserDialog1.ShowDialog() = DialogResult.OK Then
@@ -41,5 +43,18 @@
         Me.cmbColorDepth.SelectedItem = My.Settings.colorDepth.ToString & "-bit"
         Me.cmbCompression.SelectedItem = My.Settings.tiffCompression
         Me.cmbFont.SelectedItem = My.Settings.wmFont
+    End Sub
+
+    Private Sub btnEmpty_Click(sender As Object, e As EventArgs) Handles btnEmpty.Click
+
+        If (Directory.Exists(My.Settings.savePath + "tiffs\")) Then Directory.Delete(My.Settings.savePath + "tiffs\", True)
+        If (Directory.Exists(My.Settings.savePath + "faxed\")) Then Directory.Delete(My.Settings.savePath + "faxed\", True)
+        If (Directory.Exists(My.Settings.savePath + "converted\")) Then Directory.Delete(My.Settings.savePath + "converted\", True)
+        If (Directory.Exists(My.Settings.savePath + "emails\")) Then Directory.Delete(My.Settings.savePath + "emails\", True)
+        MsgBox("SAMuel save folder cleared!", MsgBoxStyle.OkOnly)
+    End Sub
+
+    Private Sub btnViewLog_Click(sender As Object, e As EventArgs) Handles btnViewLog.Click
+        If (File.Exists(My.Settings.savePath + "SAMuel.log")) Then System.Diagnostics.Process.Start(My.Settings.savePath + "SAMuel.log")
     End Sub
 End Class

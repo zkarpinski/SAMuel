@@ -4,16 +4,16 @@ Imports System.IO
 Imports System.Drawing.Imaging
 Imports System.Drawing.Printing
 
-
 Public Class frmMain
     'Form wide variables
     Dim bNextPressed As Boolean
     Dim bRejectPressed As Boolean
     Dim bCancelPressed As Boolean
     Dim bAuditMode As Boolean
+    Dim bUnAttendedMode As Boolean
 
+    Public sImageToPrint As String
 
-    Dim sCurrentImage As String
 
     Private Sub btnRun_Click(sender As Object, e As EventArgs) Handles btnRun.Click
         Dim oApp As Outlook.Application = New Outlook.Application
@@ -73,16 +73,21 @@ Public Class frmMain
         emailCount = samEmails.Count
         ProgressBar.Maximum = emailCount
 
-        'Update audit value
+        'Update audit and unattended values
         bAuditMode = chkAuditMode.Checked
+        bUnAttendedMode = chkValidOnly.Checked
 
         'Process each email
         For Each sEmail In samEmails
             Try
-                'Force an audit if the email is found to be not valid.
-                If (Not sEmail.IsValid) Then
+                'Force an audit if the email is found to be not valid and not in unattendedmode.
+                If (Not sEmail.IsValid) And (bUnAttendedMode = False) Then
                     bAuditMode = True
                     lblOutlookMessage.Text = "Invalid Email Found!"
+                ElseIf (Not sEmail.IsValid) And (bUnAttendedMode = True) Then
+                    'Skip the email
+                    ProgressBar.Value += 1
+                    Continue For
                 End If
 
                 'Process each attachment within the email
@@ -101,7 +106,7 @@ Public Class frmMain
                             Continue For
                         End If
 
-                        sCurrentImage = sFile
+                        sImageToPrint = sFile
 
 
                         'Display email info when in auditmode
@@ -118,7 +123,7 @@ Public Class frmMain
                                 ' TODO Preview word doc
                             Else
                                 'Load the attachment
-                                picImage.ImageLocation = sCurrentImage
+                                picImage.ImageLocation = sImageToPrint
                             End If
                         End If
 
@@ -145,7 +150,7 @@ Public Class frmMain
                             Exit Sub
                         ElseIf bRejectPressed Then
                             '------ LOG reject action? ---------
-                        ElseIf bNextPressed Or bAuditMode = False Then
+                        ElseIf (bNextPressed Or bAuditMode = False) And bRejectPressed = False Then
                             'Save the edited attachment as tiff and add to list
                             lblStatus.Text = "Converting to Tiff..."
                             Me.Refresh()
@@ -191,18 +196,17 @@ Public Class frmMain
                             bRejectPressed = False
 
                             'Release images
-                        'If Not IsNothing(picImage.Image) Then picImage.Image.Dispose()
-                            picImage.Image = Nothing
-                            picImage.ImageLocation = vbNullString
+                        If Not IsNothing(picImage.Image) Then picImage.Image.Dispose()
+                        picImage.Image = Nothing
+                        picImage.ImageLocation = vbNullString
 
-                            lblStatus.Text = ""
-                            'Checks the email in the check list box
-                            frmEmails.clbSelectedEmails.SetItemChecked(ProgressBar.Value, True)
+                        lblStatus.Text = ""
 
-                            Application.DoEvents()
-                            Me.Refresh()
 
-                            'Delete the saved email attachment
+                        Application.DoEvents()
+                        Me.Refresh()
+
+                        'Delete the saved email attachment
                         System.IO.File.Delete(sFile)
 
 
@@ -215,10 +219,12 @@ Public Class frmMain
                     LogAction(50, String.Format("{0} - {1} was skipped. No attachments", sEmail.Subject, sEmail.From))
                 End If
 
+                'Checks the email in the check list box
+                frmEmails.clbSelectedEmails.SetItemChecked(ProgressBar.Value, True)
+
                 bNextPressed = False
                 ProgressBar.Value += 1
                 Me.Refresh()
-                Application.DoEvents()
             Catch ex As Exception
                 'Unknown error with email.
                 LogAction(98, String.Format("{0} - {1} : {2}", sEmail.Subject, sEmail.From, ex.ToString))
@@ -240,8 +246,11 @@ Public Class frmMain
         'If files are selected continue code
         If dlgOpen.ShowDialog() = DialogResult.OK Then
             Try
-                ConvertToTiff.WordDocs(dlgOpen.FileNames)
-
+                If (Me.rbConvertDOC.Checked) Then
+                    ConvertToTiff.WordDocs(dlgOpen.FileNames)
+                Else
+                    ConvertToTiff.ImageFiles(dlgOpen.FileNames)
+                End If
             Catch ex As Exception
                 MessageBox.Show(ex.Message)
                 Exit Sub
@@ -483,8 +492,11 @@ Public Class frmMain
 
             Dim files As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
             Try
-                ConvertToTiff.WordDocs(files)
-
+                If (Me.rbConvertDOC.Checked) Then
+                    ConvertToTiff.WordDocs(files)
+                Else
+                    ConvertToTiff.ImageFiles(files)
+                End If
             Catch ex As Exception
                 MessageBox.Show(ex.Message)
                 Return
@@ -540,7 +552,7 @@ Public Class frmMain
 
     Private Sub PrintDocument1_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocument1.PrintPage
         'Resize rotate image if needed then print within page bounds.
-        Dim mBitmap As Bitmap = Bitmap.FromFile(sCurrentImage)
+        Dim mBitmap As Bitmap = Bitmap.FromFile(sImageToPrint)
         mBitmap = ImageProcessing.ResizeImage(mBitmap)
         e.Graphics.DrawImage(CType(mBitmap, Image), 0, 0, e.PageBounds.Width, e.PageBounds.Height)
     End Sub
