@@ -45,6 +45,7 @@ Public Class frmMain
         btnRun.Enabled = False
         btnRun.Visible = False
 
+
         'Create each SAM Email
         Try
             For Each value In oApp.ActiveExplorer.Selection
