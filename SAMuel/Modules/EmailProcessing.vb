@@ -17,6 +17,7 @@ Public Module EmailProcessing
                 sFileExt = ".xps" Then
             Return vbNullString
         Else
+            LogAction(51, sFileExt)
             Return vbNullString
         End If
     End Function

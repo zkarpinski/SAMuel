@@ -26,6 +26,6 @@ A toolset designed to automate critical tasks performed daily with my work at Na
 ![Outlook](https://raw.github.com/zKarp/SAMuel/master/images/Outlook-preview.JPG "Outlook tab preview")
 ![Outlook](https://raw.github.com/zKarp/SAMuel/master/images/Outlook-preview2.JPG "Outlook tab preview with email opened.")
 ![RightFax It](https://raw.github.com/zKarp/SAMuel/master/images/RightFaxIt-preview.JPG "RightFax tab preview")
-![Kofax It](https://raw.github.com/zKarp/SAMuel/master/images/KofaxfaxIt-preview.JPG "Kofax tab preview")
+![Kofax It](https://raw.github.com/zKarp/SAMuel/master/images/KofaxIt-preview.JPG "Kofax tab preview")
 
 

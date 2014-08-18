@@ -28,7 +28,6 @@ Partial Class frmEmails
         '
         'clbSelectedEmails
         '
-        Me.clbSelectedEmails.AllowDrop = True
         Me.clbSelectedEmails.ForeColor = System.Drawing.SystemColors.WindowText
         Me.clbSelectedEmails.FormattingEnabled = True
         Me.clbSelectedEmails.Location = New System.Drawing.Point(-2, 42)
@@ -37,6 +36,7 @@ Partial Class frmEmails
         Me.clbSelectedEmails.Size = New System.Drawing.Size(387, 349)
         Me.clbSelectedEmails.TabIndex = 13
         Me.clbSelectedEmails.TabStop = False
+        Me.clbSelectedEmails.ThreeDCheckBoxes = True
         '
         'Label1
         '

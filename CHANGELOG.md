@@ -1,3 +1,14 @@
+## 2014-08-17
+
+Features:
+
+  - Outlook: Now processes emails from a selected folder rather than selected mail items.
+ 
+Code Improvements:
+
+  - Email Processing: Added dispose method to SAM_Email class.
+    
+
 ## 2014-08-11
 Bugfixes:
 

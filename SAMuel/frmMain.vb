@@ -21,12 +21,12 @@ Public Class frmMain
         Dim sDestination As String
         Dim sFile As String, sFileExt As String
         Dim outTiff As String
-        Dim docList As New List(Of List(Of String))
-        Dim docTiffList As New List(Of String)
         Dim emailCount As Integer
         Dim samEmails As New List(Of SAM_Email)
         Dim sEmail As SAM_Email
         Dim rand As New Random
+        Dim emailItem As Outlook.MailItem
+        Dim completedEmailsCount As Integer = 0
 
         'Define the save location and check if it exists
         sDestination = My.Settings.savePath + "tiffs\"
@@ -45,29 +45,37 @@ Public Class frmMain
         btnRun.Enabled = False
         btnRun.Visible = False
 
+        Dim workingOutlookFolder As Outlook.MAPIFolder
+        workingOutlookFolder = oApp.GetNamespace("MAPI").PickFolder()
+        If workingOutlookFolder Is Nothing Then
+            Reset_Outlook_Tab()
+            Exit Sub
+        End If
+
+        Dim startTime As DateTime = DateTime.Now
+
         'Create each SAM Email
         Try
-            For Each value In oApp.ActiveExplorer.Selection
+            For Each emailItem In workingOutlookFolder.Items
                 Me.Cursor = Cursors.WaitCursor
                 Try
                     lblStatus.Text = "Saving attachments..."
                     Me.Refresh()
-                    sEmail = New SAM_Email(value)
-                    sEmail.Regex()
+                    sEmail = New SAM_Email(emailItem)
                     samEmails.Add(sEmail)
-                    frmEmails.clbSelectedEmails.Items.Add("[" & sEmail.AttachmentsCount.ToString & "] " & sEmail.Subject & vbTab & sEmail.From)
                 Catch ex As Exception
-                    LogAction(action:="An email was skipped.")
+                    LogAction(action:="An email was skipped because " & ex.Message)
                     'Move to next email
                     Continue For
                 End Try
             Next
         Catch ex As Exception
-            MsgBox("No emails within Outlook selected.", MsgBoxStyle.Exclamation)
+            MsgBox("Something happened... Sorry", MsgBoxStyle.Exclamation)
+            LogAction(action:=ex.Message)
+            Reset_Outlook_Tab()
+            Me.Cursor = Cursors.Default
             Exit Sub
         End Try
-
-        oApp = Nothing
 
         'Get the email count and update the progress bar
         emailCount = samEmails.Count
@@ -86,13 +94,16 @@ Public Class frmMain
                     lblOutlookMessage.Text = "Invalid Email Found!"
                 ElseIf (Not sEmail.IsValid) And (bUnAttendedMode = True) Then
                     'Skip the email
+                    frmEmails.clbSelectedEmails.Items.Add("[SKIP] " & sEmail.Subject & vbTab & sEmail.From)
                     ProgressBar.Value += 1
                     Continue For
                 End If
 
+                sEmail.DownloadAttachments()
+
                 'Process each attachment within the email
                 If sEmail.AttachmentsCount > 0 Then
-                    docTiffList = New List(Of String)
+                    frmEmails.clbSelectedEmails.Items.Add("[" & sEmail.AttachmentsCount.ToString & "] " & sEmail.Account & vbTab & vbTab & sEmail.Subject & vbTab & sEmail.From)
                     For Each sFile In sEmail.Attachments
                         'Verify a valid attachment file type.
                         sFileExt = EmailProcessing.ValidateAttachmentType(sFile)
@@ -101,8 +112,9 @@ Public Class frmMain
                             System.IO.File.Delete(sFile)
                             Continue For
                         ElseIf sFileExt = ".pdf" Then
-                            ' TODO add
+                            ' TODO add PDF handling
                             'EmailProcessing.ParsePDFImgs(sFile)
+                            LogAction(0, "PDF detected. " & sEmail.Subject & " " & sEmail.From)
                             Continue For
                         End If
 
@@ -170,13 +182,13 @@ Public Class frmMain
                                 wApp.Visible = False
                                 'Print to Tiff
                                 objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=outTiff)
-                                docTiffList.Add(outTiff)
+
                                 objWdDoc.Close()
 
                             Else
 
                                 outTiff = [String].Format("{0}{1}_{2}.tiff", sDestination, sEmail.Account, rand.Next(10000).ToString)
-                                docTiffList.Add(outTiff)
+
 
                                 'Print the file to file with MODI
                                 PrintDocument1.PrinterSettings.PrintToFile = True
@@ -187,15 +199,15 @@ Public Class frmMain
                             End If
                             Me.Refresh()
                         Else
-                                'Undesired state. Log this
-                                LogAction(99, "Outlook buttonState: " & bCancelPressed.ToString & "," & bRejectPressed.ToString & "," & bNextPressed.ToString & "," & bAuditMode.ToString)
-                            End If
+                            'Undesired state. Log this
+                            LogAction(99, "Outlook buttonState: " & bCancelPressed.ToString & "," & bRejectPressed.ToString & "," & bNextPressed.ToString & "," & bAuditMode.ToString)
+                        End If
 
-                            'Reset variables
-                            bNextPressed = False
-                            bRejectPressed = False
+                        'Reset variables
+                        bNextPressed = False
+                        bRejectPressed = False
 
-                            'Release images
+                        'Release images
                         If Not IsNothing(picImage.Image) Then picImage.Image.Dispose()
                         picImage.Image = Nothing
                         picImage.ImageLocation = vbNullString
@@ -211,16 +223,21 @@ Public Class frmMain
 
 
                     Next
-                    'Add document to list of documents with tiffs
-                    docList.Add(docTiffList)
+                    sEmail.EmailObject.FlagStatus = Microsoft.Office.Interop.Outlook.OlFlagStatus.olFlagComplete
+                    sEmail.EmailObject.Save()
 
+                    sEmail.Dispose()
+
+                    'Checks the email in the check list box
+                    frmEmails.clbSelectedEmails.SetItemChecked(ProgressBar.Value, True)
+                    completedEmailsCount += 1
                 Else
                     'No attachments
+                    frmEmails.clbSelectedEmails.Items.Add("[SKIP] " & sEmail.Account & vbTab & vbTab & sEmail.Subject & vbTab & sEmail.From)
                     LogAction(50, String.Format("{0} - {1} was skipped. No attachments", sEmail.Subject, sEmail.From))
                 End If
 
-                'Checks the email in the check list box
-                frmEmails.clbSelectedEmails.SetItemChecked(ProgressBar.Value, True)
+
 
                 bNextPressed = False
                 ProgressBar.Value += 1
@@ -230,12 +247,21 @@ Public Class frmMain
                 LogAction(98, String.Format("{0} - {1} : {2}", sEmail.Subject, sEmail.From, ex.ToString))
             End Try
         Next
-        lblStatus.Text = "Finished processing emails."
 
-        ' TODO Handle No emails complete **''
+        Dim endTime As DateTime = DateTime.Now
+        Dim totalTime As TimeSpan = endTime - startTime
+
+        LogAction(0, String.Format("Finished {0} emails in {1} time span.", completedEmailsCount, totalTime))
+
+        If completedEmailsCount > 0 Then
+            lblStatus.Text = "Finished processing emails."
+        Else
+            lblStatus.Text = "No emails were processed. See Log."
+        End If
 
         Me.Cursor = Cursors.Default
         Reset_Outlook_Tab()
+
 
     End Sub
 
@@ -386,6 +412,7 @@ Public Class frmMain
     End Sub
 
     Private Sub btnNext_Click_1(sender As Object, e As EventArgs) Handles btnNext.Click
+        ' TODO add validation of account number.
         bNextPressed = True
     End Sub
 
@@ -552,9 +579,11 @@ Public Class frmMain
 
     Private Sub PrintDocument1_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocument1.PrintPage
         'Resize rotate image if needed then print within page bounds.
-        Dim mBitmap As Bitmap = Bitmap.FromFile(sImageToPrint)
-        mBitmap = ImageProcessing.ResizeImage(mBitmap)
-        e.Graphics.DrawImage(CType(mBitmap, Image), 0, 0, e.PageBounds.Width, e.PageBounds.Height)
+        Using mBitmap As Bitmap = Bitmap.FromFile(sImageToPrint)
+            Using bm As Bitmap = ImageProcessing.ResizeImage(mBitmap)
+                e.Graphics.DrawImage(CType(bm, Image), 0, 0, e.PageBounds.Width, e.PageBounds.Height)
+            End Using
+        End Using
     End Sub
 
     Private Sub picImage_Click(sender As Object, e As EventArgs) Handles picImage.Click
