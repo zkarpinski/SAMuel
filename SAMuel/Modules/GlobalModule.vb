@@ -9,6 +9,8 @@ Module GlobalModule
     ''' </summary>
     ''' <param name="actionCode">
     ''' Optional action code to log a predefined event.
+    ''' 0: Custom Log  1: Faxed file  2: Save Path Changed  3:Email Processed  50: Email Skipped  51: Unknown Filetype  98: SAM email error  99: Undesired state reached
+    ''' 
     ''' </param>
     ''' <param name="action">
     ''' Optional description of the action.
@@ -42,6 +44,8 @@ Module GlobalModule
                 logAction = "Notice  : Email - " + action + " was processed"
             Case 50 'Email Skipped
                 logAction = "Warning : Email - " + action
+            Case 51 'Unknown Filetype'
+                logAction = "Unknown filetype (" + action + ")."
             Case 98 'SAM email error
                 logAction = "Error 98: Email Error: " + action
             Case 99 'Reached undesired state

@@ -17,6 +17,7 @@ List of what still is being worked on, features to be added, etc.
 * ~~Add unattended mode~~ (Aug 16 2014)
 * Move completed emails
 * Visual feedback on progress
+* Find memory leaks
 
 #### DPA
 
