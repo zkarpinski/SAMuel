@@ -3,6 +3,7 @@
 Features:
 
   - Outlook: Now processes emails from a selected folder rather than selected mail items.
+  - Convert Files: Added PDF testing functionality using PDF995.
  
 Code Improvements:
 
