@@ -26,6 +26,7 @@ Public Class frmMain
         Dim sEmail As SAM_Email
         Dim rand As New Random
         Dim emailItem As Outlook.MailItem
+        Dim completedEmailsCount As Integer = 0
 
         'Define the save location and check if it exists
         sDestination = My.Settings.savePath + "tiffs\"
@@ -51,6 +52,8 @@ Public Class frmMain
             Exit Sub
         End If
 
+        Dim startTime As DateTime = DateTime.Now
+
         'Create each SAM Email
         Try
             For Each emailItem In workingOutlookFolder.Items
@@ -61,7 +64,7 @@ Public Class frmMain
                     sEmail = New SAM_Email(emailItem)
                     samEmails.Add(sEmail)
                 Catch ex As Exception
-                    LogAction(action:="An email was skipped.")
+                    LogAction(action:="An email was skipped because " & ex.Message)
                     'Move to next email
                     Continue For
                 End Try
@@ -70,6 +73,7 @@ Public Class frmMain
             MsgBox("Something happened... Sorry", MsgBoxStyle.Exclamation)
             LogAction(action:=ex.Message)
             Reset_Outlook_Tab()
+            Me.Cursor = Cursors.Default
             Exit Sub
         End Try
 
@@ -110,7 +114,7 @@ Public Class frmMain
                         ElseIf sFileExt = ".pdf" Then
                             ' TODO add PDF handling
                             'EmailProcessing.ParsePDFImgs(sFile)
-                            LogAction(1, "PDF detected. " & sEmail.Subject & " " & sEmail.From)
+                            LogAction(0, "PDF detected. " & sEmail.Subject & " " & sEmail.From)
                             Continue For
                         End If
 
@@ -226,7 +230,7 @@ Public Class frmMain
 
                     'Checks the email in the check list box
                     frmEmails.clbSelectedEmails.SetItemChecked(ProgressBar.Value, True)
-
+                    completedEmailsCount += 1
                 Else
                     'No attachments
                     frmEmails.clbSelectedEmails.Items.Add("[SKIP] " & sEmail.Account & vbTab & vbTab & sEmail.Subject & vbTab & sEmail.From)
@@ -243,9 +247,17 @@ Public Class frmMain
                 LogAction(98, String.Format("{0} - {1} : {2}", sEmail.Subject, sEmail.From, ex.ToString))
             End Try
         Next
-        lblStatus.Text = "Finished processing emails."
 
-        ' TODO Handle No emails complete **''
+        Dim endTime As DateTime = DateTime.Now
+        Dim totalTime As TimeSpan = endTime - startTime
+
+        LogAction(0, String.Format("Finished {0} emails in {1} time span.", completedEmailsCount, totalTime))
+
+        If completedEmailsCount > 0 Then
+            lblStatus.Text = "Finished processing emails."
+        Else
+            lblStatus.Text = "No emails were processed. See Log."
+        End If
 
         Me.Cursor = Cursors.Default
         Reset_Outlook_Tab()
