@@ -46,9 +46,12 @@ Partial Class frmMain
         Me.rtbEmailBody = New System.Windows.Forms.RichTextBox()
         Me.btnRun = New System.Windows.Forms.Button()
         Me.tabWordToTiff = New System.Windows.Forms.TabPage()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.rbConvertDOC = New System.Windows.Forms.RadioButton()
+        Me.rbConvertIMAGE = New System.Windows.Forms.RadioButton()
         Me.GroupBox3 = New System.Windows.Forms.GroupBox()
         Me.rbConvertTiff = New System.Windows.Forms.RadioButton()
-        Me.RadioButton1 = New System.Windows.Forms.RadioButton()
+        Me.rbConvertPDF = New System.Windows.Forms.RadioButton()
         Me.lblDragAndDropWord = New System.Windows.Forms.Label()
         Me.tabRFax = New System.Windows.Forms.TabPage()
         Me.chkRFSaveRec = New System.Windows.Forms.CheckBox()
@@ -107,14 +110,12 @@ Partial Class frmMain
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.PrintDialog1 = New System.Windows.Forms.PrintDialog()
         Me.PrintDocument1 = New System.Drawing.Printing.PrintDocument()
-        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
-        Me.rbConvertDOC = New System.Windows.Forms.RadioButton()
-        Me.rbConvertIMAGE = New System.Windows.Forms.RadioButton()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.groupOLAudit.SuspendLayout()
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tabWordToTiff.SuspendLayout()
+        Me.GroupBox4.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.tabRFax.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -124,7 +125,6 @@ Partial Class frmMain
         Me.tabAddContact.SuspendLayout()
         Me.tabDPA.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
-        Me.GroupBox4.SuspendLayout()
         Me.SuspendLayout()
         '
         'dlgOpen
@@ -366,10 +366,43 @@ Partial Class frmMain
         Me.tabWordToTiff.Text = "Convert Files"
         Me.tabWordToTiff.UseVisualStyleBackColor = True
         '
+        'GroupBox4
+        '
+        Me.GroupBox4.Controls.Add(Me.rbConvertDOC)
+        Me.GroupBox4.Controls.Add(Me.rbConvertIMAGE)
+        Me.GroupBox4.Location = New System.Drawing.Point(6, 224)
+        Me.GroupBox4.Name = "GroupBox4"
+        Me.GroupBox4.Size = New System.Drawing.Size(81, 66)
+        Me.GroupBox4.TabIndex = 7
+        Me.GroupBox4.TabStop = False
+        Me.GroupBox4.Text = "Input"
+        '
+        'rbConvertDOC
+        '
+        Me.rbConvertDOC.AutoSize = True
+        Me.rbConvertDOC.Checked = True
+        Me.rbConvertDOC.Location = New System.Drawing.Point(6, 19)
+        Me.rbConvertDOC.Name = "rbConvertDOC"
+        Me.rbConvertDOC.Size = New System.Drawing.Size(74, 17)
+        Me.rbConvertDOC.TabIndex = 5
+        Me.rbConvertDOC.TabStop = True
+        Me.rbConvertDOC.Text = "Word Doc"
+        Me.rbConvertDOC.UseVisualStyleBackColor = True
+        '
+        'rbConvertIMAGE
+        '
+        Me.rbConvertIMAGE.AutoSize = True
+        Me.rbConvertIMAGE.Location = New System.Drawing.Point(6, 42)
+        Me.rbConvertIMAGE.Name = "rbConvertIMAGE"
+        Me.rbConvertIMAGE.Size = New System.Drawing.Size(54, 17)
+        Me.rbConvertIMAGE.TabIndex = 4
+        Me.rbConvertIMAGE.Text = "Image"
+        Me.rbConvertIMAGE.UseVisualStyleBackColor = True
+        '
         'GroupBox3
         '
         Me.GroupBox3.Controls.Add(Me.rbConvertTiff)
-        Me.GroupBox3.Controls.Add(Me.RadioButton1)
+        Me.GroupBox3.Controls.Add(Me.rbConvertPDF)
         Me.GroupBox3.Location = New System.Drawing.Point(87, 224)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(75, 66)
@@ -389,16 +422,15 @@ Partial Class frmMain
         Me.rbConvertTiff.Text = "Tiff"
         Me.rbConvertTiff.UseVisualStyleBackColor = True
         '
-        'RadioButton1
+        'rbConvertPDF
         '
-        Me.RadioButton1.AutoSize = True
-        Me.RadioButton1.Enabled = False
-        Me.RadioButton1.Location = New System.Drawing.Point(6, 42)
-        Me.RadioButton1.Name = "RadioButton1"
-        Me.RadioButton1.Size = New System.Drawing.Size(46, 17)
-        Me.RadioButton1.TabIndex = 4
-        Me.RadioButton1.Text = "PDF"
-        Me.RadioButton1.UseVisualStyleBackColor = True
+        Me.rbConvertPDF.AutoSize = True
+        Me.rbConvertPDF.Location = New System.Drawing.Point(6, 42)
+        Me.rbConvertPDF.Name = "rbConvertPDF"
+        Me.rbConvertPDF.Size = New System.Drawing.Size(46, 17)
+        Me.rbConvertPDF.TabIndex = 4
+        Me.rbConvertPDF.Text = "PDF"
+        Me.rbConvertPDF.UseVisualStyleBackColor = True
         '
         'lblDragAndDropWord
         '
@@ -942,39 +974,6 @@ Partial Class frmMain
         'PrintDocument1
         '
         '
-        'GroupBox4
-        '
-        Me.GroupBox4.Controls.Add(Me.rbConvertDOC)
-        Me.GroupBox4.Controls.Add(Me.rbConvertIMAGE)
-        Me.GroupBox4.Location = New System.Drawing.Point(6, 224)
-        Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(81, 66)
-        Me.GroupBox4.TabIndex = 7
-        Me.GroupBox4.TabStop = False
-        Me.GroupBox4.Text = "Input"
-        '
-        'rbConvertDOC
-        '
-        Me.rbConvertDOC.AutoSize = True
-        Me.rbConvertDOC.Checked = True
-        Me.rbConvertDOC.Location = New System.Drawing.Point(6, 19)
-        Me.rbConvertDOC.Name = "rbConvertDOC"
-        Me.rbConvertDOC.Size = New System.Drawing.Size(74, 17)
-        Me.rbConvertDOC.TabIndex = 5
-        Me.rbConvertDOC.TabStop = True
-        Me.rbConvertDOC.Text = "Word Doc"
-        Me.rbConvertDOC.UseVisualStyleBackColor = True
-        '
-        'rbConvertIMAGE
-        '
-        Me.rbConvertIMAGE.AutoSize = True
-        Me.rbConvertIMAGE.Location = New System.Drawing.Point(6, 42)
-        Me.rbConvertIMAGE.Name = "rbConvertIMAGE"
-        Me.rbConvertIMAGE.Size = New System.Drawing.Size(54, 17)
-        Me.rbConvertIMAGE.TabIndex = 4
-        Me.rbConvertIMAGE.Text = "Image"
-        Me.rbConvertIMAGE.UseVisualStyleBackColor = True
-        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -998,6 +997,8 @@ Partial Class frmMain
         CType(Me.picImage, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tabWordToTiff.ResumeLayout(False)
         Me.tabWordToTiff.PerformLayout()
+        Me.GroupBox4.ResumeLayout(False)
+        Me.GroupBox4.PerformLayout()
         Me.GroupBox3.ResumeLayout(False)
         Me.GroupBox3.PerformLayout()
         Me.tabRFax.ResumeLayout(False)
@@ -1016,8 +1017,6 @@ Partial Class frmMain
         Me.tabDPA.PerformLayout()
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
-        Me.GroupBox4.ResumeLayout(False)
-        Me.GroupBox4.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1100,7 +1099,7 @@ Partial Class frmMain
     Friend WithEvents rtbCContact As System.Windows.Forms.RichTextBox
     Friend WithEvents PrintDialog1 As System.Windows.Forms.PrintDialog
     Friend WithEvents rbConvertTiff As System.Windows.Forms.RadioButton
-    Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
+    Friend WithEvents rbConvertPDF As System.Windows.Forms.RadioButton
     Friend WithEvents GroupBox3 As System.Windows.Forms.GroupBox
     Friend WithEvents PrintDocument1 As System.Drawing.Printing.PrintDocument
     Friend WithEvents groupOLAudit As System.Windows.Forms.GroupBox

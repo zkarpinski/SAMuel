@@ -262,15 +262,31 @@ Public Class frmMain
         Me.Cursor = Cursors.Default
         Reset_Outlook_Tab()
 
-
     End Sub
 
     Private Sub btnConvert_Click(sender As Object, e As EventArgs) Handles btnConvert.Click
-        'Converts Word Documents to .tif using MODI
+        'Converts Word Documents to .tif or PDF using MODI
         Reset()
+
+        Dim oPrinter As Object
 
         'If files are selected continue code
         If dlgOpen.ShowDialog() = DialogResult.OK Then
+            If rbConvertPDF.Checked = True Then
+                Try
+                    For Each value In dlgOpen.FileNames
+                        oPrinter = New cPDF995
+                        oPrinter.fileToPrint = value
+                        oPrinter.printFile()
+                        oPrinter = Nothing
+                    Next
+                Catch ex As Exception
+                    MessageBox.Show(ex.Message)
+                    btnConvert.Enabled = True
+                    Exit Sub
+                End Try
+            End If
+
             Try
                 If (Me.rbConvertDOC.Checked) Then
                     ConvertToTiff.WordDocs(dlgOpen.FileNames)
@@ -279,6 +295,7 @@ Public Class frmMain
                 End If
             Catch ex As Exception
                 MessageBox.Show(ex.Message)
+                btnConvert.Enabled = True
                 Exit Sub
             End Try
         End If
