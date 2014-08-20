@@ -110,6 +110,7 @@ Partial Class frmMain
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.PrintDialog1 = New System.Windows.Forms.PrintDialog()
         Me.PrintDocument1 = New System.Drawing.Printing.PrintDocument()
+        Me.lblBranding = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.groupOLAudit.SuspendLayout()
@@ -133,7 +134,7 @@ Partial Class frmMain
         '
         'btnConvert
         '
-        Me.btnConvert.Location = New System.Drawing.Point(177, 267)
+        Me.btnConvert.Location = New System.Drawing.Point(177, 265)
         Me.btnConvert.Name = "btnConvert"
         Me.btnConvert.Size = New System.Drawing.Size(75, 23)
         Me.btnConvert.TabIndex = 2
@@ -328,7 +329,7 @@ Partial Class frmMain
         Me.btnNext.Name = "btnNext"
         Me.btnNext.Size = New System.Drawing.Size(75, 23)
         Me.btnNext.TabIndex = 10
-        Me.btnNext.Text = "Next"
+        Me.btnNext.Text = "&Next"
         Me.btnNext.UseVisualStyleBackColor = True
         Me.btnNext.Visible = False
         '
@@ -370,7 +371,7 @@ Partial Class frmMain
         '
         Me.GroupBox4.Controls.Add(Me.rbConvertDOC)
         Me.GroupBox4.Controls.Add(Me.rbConvertIMAGE)
-        Me.GroupBox4.Location = New System.Drawing.Point(6, 224)
+        Me.GroupBox4.Location = New System.Drawing.Point(6, 223)
         Me.GroupBox4.Name = "GroupBox4"
         Me.GroupBox4.Size = New System.Drawing.Size(81, 66)
         Me.GroupBox4.TabIndex = 7
@@ -403,7 +404,7 @@ Partial Class frmMain
         '
         Me.GroupBox3.Controls.Add(Me.rbConvertTiff)
         Me.GroupBox3.Controls.Add(Me.rbConvertPDF)
-        Me.GroupBox3.Location = New System.Drawing.Point(87, 224)
+        Me.GroupBox3.Location = New System.Drawing.Point(87, 223)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(75, 66)
         Me.GroupBox3.TabIndex = 6
@@ -598,7 +599,7 @@ Partial Class frmMain
         '
         'btnRFax
         '
-        Me.btnRFax.Location = New System.Drawing.Point(177, 267)
+        Me.btnRFax.Location = New System.Drawing.Point(177, 265)
         Me.btnRFax.Name = "btnRFax"
         Me.btnRFax.Size = New System.Drawing.Size(75, 23)
         Me.btnRFax.TabIndex = 3
@@ -688,7 +689,7 @@ Partial Class frmMain
         Me.cbKFBatchType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbKFBatchType.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cbKFBatchType.FormattingEnabled = True
-        Me.cbKFBatchType.Items.AddRange(New Object() {"0014 - DENIAL OF SERVICE", "0084 - DPA-SYRACUSE PROCESSING", "0033 - SAMS"})
+        Me.cbKFBatchType.Items.AddRange(New Object() {"0003 - BILLING DISPUTE", "0014 - DENIAL OF SERVICE", "0084 - DPA-SYRACUSE PROCESSING", "0026 - LIFE SUPPORT", "0049 - MEDICAL-INFO ONLY", "0046 - NO ACTION-INFO ONLY", "0033 - SAMS"})
         Me.cbKFBatchType.Location = New System.Drawing.Point(87, 48)
         Me.cbKFBatchType.Name = "cbKFBatchType"
         Me.cbKFBatchType.Size = New System.Drawing.Size(165, 20)
@@ -696,7 +697,7 @@ Partial Class frmMain
         '
         'btnKFImport
         '
-        Me.btnKFImport.Location = New System.Drawing.Point(177, 267)
+        Me.btnKFImport.Location = New System.Drawing.Point(177, 265)
         Me.btnKFImport.Name = "btnKFImport"
         Me.btnKFImport.Size = New System.Drawing.Size(75, 23)
         Me.btnKFImport.TabIndex = 14
@@ -765,7 +766,7 @@ Partial Class frmMain
         '
         'btnCAddContact
         '
-        Me.btnCAddContact.Location = New System.Drawing.Point(175, 264)
+        Me.btnCAddContact.Location = New System.Drawing.Point(177, 265)
         Me.btnCAddContact.Name = "btnCAddContact"
         Me.btnCAddContact.Size = New System.Drawing.Size(75, 23)
         Me.btnCAddContact.TabIndex = 0
@@ -804,7 +805,7 @@ Partial Class frmMain
         '
         'btnBudgetBill
         '
-        Me.btnBudgetBill.Location = New System.Drawing.Point(273, 267)
+        Me.btnBudgetBill.Location = New System.Drawing.Point(273, 265)
         Me.btnBudgetBill.Name = "btnBudgetBill"
         Me.btnBudgetBill.Size = New System.Drawing.Size(75, 23)
         Me.btnBudgetBill.TabIndex = 13
@@ -869,7 +870,7 @@ Partial Class frmMain
         '
         'btnDPAprocess
         '
-        Me.btnDPAprocess.Location = New System.Drawing.Point(177, 267)
+        Me.btnDPAprocess.Location = New System.Drawing.Point(177, 265)
         Me.btnDPAprocess.Name = "btnDPAprocess"
         Me.btnDPAprocess.Size = New System.Drawing.Size(75, 23)
         Me.btnDPAprocess.TabIndex = 10
@@ -909,11 +910,12 @@ Partial Class frmMain
         Me.lblStatus.AutoSize = True
         Me.lblStatus.BackColor = System.Drawing.Color.Transparent
         Me.lblStatus.ForeColor = System.Drawing.Color.Black
-        Me.lblStatus.Location = New System.Drawing.Point(203, 346)
+        Me.lblStatus.Location = New System.Drawing.Point(191, 346)
         Me.lblStatus.Name = "lblStatus"
         Me.lblStatus.Size = New System.Drawing.Size(38, 13)
         Me.lblStatus.TabIndex = 3
         Me.lblStatus.Text = "DONE"
+        Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.TopCenter
         '
         'MenuStrip1
         '
@@ -974,11 +976,23 @@ Partial Class frmMain
         'PrintDocument1
         '
         '
+        'lblBranding
+        '
+        Me.lblBranding.AutoSize = True
+        Me.lblBranding.BackColor = System.Drawing.Color.Transparent
+        Me.lblBranding.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblBranding.Location = New System.Drawing.Point(330, 356)
+        Me.lblBranding.Name = "lblBranding"
+        Me.lblBranding.Size = New System.Drawing.Size(108, 9)
+        Me.lblBranding.TabIndex = 6
+        Me.lblBranding.Text = "Created by: Zachary Karpinski"
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(435, 363)
+        Me.Controls.Add(Me.lblBranding)
         Me.Controls.Add(Me.lblStatus)
         Me.Controls.Add(Me.ProgressBar)
         Me.Controls.Add(Me.TabControl1)
@@ -1107,5 +1121,6 @@ Partial Class frmMain
     Friend WithEvents GroupBox4 As System.Windows.Forms.GroupBox
     Friend WithEvents rbConvertDOC As System.Windows.Forms.RadioButton
     Friend WithEvents rbConvertIMAGE As System.Windows.Forms.RadioButton
+    Friend WithEvents lblBranding As System.Windows.Forms.Label
 
 End Class

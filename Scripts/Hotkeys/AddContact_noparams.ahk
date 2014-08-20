@@ -4,19 +4,23 @@
 ; // usage: Autohotkey http://www.autohotkey.com/
 ; //	Enter account number, run script then make the CSS window active
 
-; // Read Parameters http://www.autohotkey.com/board/topic/6953-processing-command-line-parameters/
-Loop, %0% {
-    If (%A_Index% = "/account")	{ 
-        AccNum := A_Index + 1
-		AccNum := %AccNum%
-		}
-    Else If (%A_Index% = "/contact") {
-        Contact := A_Index + 1
-		Contact := %Contact%
-		}
-  }
-
-; // Wait until CSS is loaded.
+; // Open file dialog with multiselect
+FileSelectFile, SelectedFiles, M3
+If SelectedFiles =
+{
+	MsgBox, No items selected.
+	return
+}
+Loop, parse, SelectedFiles, `n
+{
+	if a_index = 1 
+	{}
+	else
+{
+	StringSplit, splitArray, A_LoopField, -
+	AccNum := splitArray2 . splitArray3
+	; //RegExMatch(A_LoopField,(?P<AccNum>\d{5}-\d{5}))
+	; //  MsgBox %AccNum%
 WinWait, Customer Service System Retrieval
 WinActivate, Customer Service System Retrieval
 
@@ -29,6 +33,8 @@ Send {ALT up}
 Send {TAB 4}
 Sleep, 250
 Send, %AccNum%
+
+
 Sleep, 250
 Send, {ENTER}
 Sleep, 600
@@ -76,8 +82,8 @@ Sleep, 200
 ; //Enter Contact
 Send, {TAB}
 Sleep, 100
-Send, %Contact%
-Sleep, 400
+Send, emailed active dpa
+Sleep, 200
 
 ; //Process
 Send, {ALT}
@@ -85,7 +91,7 @@ Sleep, 100
 Send, c
 Sleep, 100
 Send, p
-Sleep, 350
+Sleep, 200
 Send, o
 Sleep, 150
 
@@ -96,4 +102,7 @@ Send, c
 Sleep, 100
 Send, e
 Sleep 300
+
+}
+}
 

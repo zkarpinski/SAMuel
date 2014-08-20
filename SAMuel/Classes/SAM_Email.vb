@@ -45,7 +45,16 @@ Public Class SAM_Email
         Dim sFile As String
         Dim sPath As String
         Dim rand As New Random
-        sPath = My.Settings.savePath + "emails\" + From + "\"
+        Dim subFolder As String
+
+        subFolder = From + "\"
+        subFolder = subFolder.Replace(":", "")
+        subFolder = subFolder.Replace("*", "")
+        subFolder = subFolder.Replace("?", "")
+        subFolder = subFolder.Replace("<", "")
+        subFolder = subFolder.Replace(">", "")
+        ' TODO Remove invalid path characters
+        sPath = My.Settings.savePath + "emails\" + subFolder
         GlobalModule.CheckFolder(sPath)
 
         If EmailObject.Attachments.Count > 0 Then
@@ -65,10 +74,6 @@ Public Class SAM_Email
             Return Attachments.Count
         End Get
     End Property
-
-
-
-
 
     ' IDisposable
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)

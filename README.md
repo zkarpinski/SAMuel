@@ -28,4 +28,8 @@ A toolset designed to automate critical tasks performed daily with my work at Na
 ![RightFax It](https://raw.github.com/zKarp/SAMuel/master/images/RightFaxIt-preview.JPG "RightFax tab preview")
 ![Kofax It](https://raw.github.com/zKarp/SAMuel/master/images/KofaxIt-preview.JPG "Kofax tab preview")
 
+##Programming Techniques
 
+* Hashtables/Dictionaries
+* Custom Classes
+* Overloaded Functions

@@ -53,6 +53,8 @@ Public Class frmMain
         End If
 
         Dim startTime As DateTime = DateTime.Now
+        Dim endTime As DateTime
+        Dim totalTime As TimeSpan
 
         'Create each SAM Email
         Try
@@ -99,6 +101,8 @@ Public Class frmMain
                     Continue For
                 End If
 
+                lblStatus.Text = "Downloading attachments..."
+                Me.Refresh()
                 sEmail.DownloadAttachments()
 
                 'Process each attachment within the email
@@ -119,7 +123,6 @@ Public Class frmMain
                         End If
 
                         sImageToPrint = sFile
-
 
                         'Display email info when in auditmode
                         If (bAuditMode) Then
@@ -158,6 +161,9 @@ Public Class frmMain
                             picImage.Image = Nothing
                             Reset_Outlook_Tab()
                             Reset_ProgressBar()
+                            endTime = DateTime.Now
+                            totalTime = endTime - startTime
+                            LogAction(0, String.Format("Finished {0} emails in {1} time span.", completedEmailsCount, totalTime))
                             Me.Cursor = Cursors.Default
                             Exit Sub
                         ElseIf bRejectPressed Then
@@ -188,7 +194,6 @@ Public Class frmMain
                             Else
 
                                 outTiff = [String].Format("{0}{1}_{2}.tiff", sDestination, sEmail.Account, rand.Next(10000).ToString)
-
 
                                 'Print the file to file with MODI
                                 PrintDocument1.PrinterSettings.PrintToFile = True
@@ -248,8 +253,8 @@ Public Class frmMain
             End Try
         Next
 
-        Dim endTime As DateTime = DateTime.Now
-        Dim totalTime As TimeSpan = endTime - startTime
+        endTime = DateTime.Now
+        totalTime = endTime - startTime
 
         LogAction(0, String.Format("Finished {0} emails in {1} time span.", completedEmailsCount, totalTime))
 
@@ -299,7 +304,6 @@ Public Class frmMain
                 Exit Sub
             End Try
         End If
-
         'Cleanup
         btnConvert.Enabled = True
     End Sub
@@ -322,8 +326,6 @@ Public Class frmMain
     End Sub
 
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        lblStatus.BackColor = Color.Transparent
-
         'Resets the form state to default
         Reset_All_Forms()
 
@@ -336,6 +338,8 @@ Public Class frmMain
 
         'Verify all output folders exist
         GlobalModule.InitOutputFolders()
+
+        lblStatus.Text = String.Format("Welcome {0}!", Environment.UserName)
 
     End Sub
 
@@ -351,7 +355,7 @@ Public Class frmMain
         Reset_RightFax_Tab()
         Reset_ProgressBar()
         frmEmails.clbSelectedEmails.Items.Clear()
-        cbKFBatchType.SelectedIndex = 2
+        Reset_Kofax_Tab()
     End Sub
 
     Private Sub Reset_ProgressBar()
@@ -412,6 +416,13 @@ Public Class frmMain
         txtAcc.Text = ""
         txtSubject.Text = ""
         lblOutlookMessage.Text = ""
+    End Sub
+
+    Private Sub Reset_Kofax_Tab()
+        'Reset the KofaxIt tab to default
+        txtKFBatchName.Text = ""
+        txtKFComments.Text = ""
+        cbKFBatchType.SelectedIndex = 2
     End Sub
 
     Private Sub Outlook_Setup_Audit_View()
@@ -563,31 +574,59 @@ Public Class frmMain
         Dim batchSource As String
         Dim comments As String
 
+        'Setup the progress bar.
+        Reset_ProgressBar()
+        Me.ProgressBar.Maximum = 1
+
+        'Set values from the form.
         batchName = Me.txtKFBatchName.Text
         batchType = cbKFBatchType.SelectedItem.ToString
         comments = Me.txtKFComments.Text
 
+        'Determine the source type.
         If Me.rbKFEmail.Checked = True Then
             batchSource = "02 - Email"
         Else
             batchSource = "01 - US Mail"
         End If
 
+        'Open the file dialog with tiffs only selectable.
         dlgOpen.Filter = "TIFF Images|*.tif;*.tiff"
         If dlgOpen.ShowDialog() = DialogResult.OK Then
             KofaxModule.CreateXML((dlgOpen.FileNames).ToList, batchName, batchType, batchSource, comments)
         End If
 
+        'Update UI
+        Me.lblStatus.Text = "Conversion Complete."
+        Me.ProgressBar.Value = 1
+        Reset_Kofax_Tab()
     End Sub
 
     Private Sub btnCAddContact_Click(sender As Object, e As EventArgs) Handles btnCAddContact.Click
         Dim strAccountNumber As String
         Dim strContact As String
 
-        strAccountNumber = Me.mtxtCAccount.Text
-        strContact = rtbCContact.Text
+        Me.btnCAddContact.Enabled = False
 
-        AddContacts.MiscCollection(strAccountNumber, strContact)
+        'Set variable values from the form.
+        strAccountNumber = Me.mtxtCAccount.Text
+        strContact = Me.rtbCContact.Text
+        Dim arguments As String = String.Format(" /account {0} /contact ""{1}", strAccountNumber, strContact)
+
+        Try
+            'Call the script
+            Dim p As New Process
+            Dim psi As New ProcessStartInfo(Application.StartupPath + "\addContact.exe", arguments)
+            p.StartInfo = psi
+            p.Start()
+            p.WaitForExit()
+        Catch ex As FileNotFoundException
+            MsgBox("addContact.exe not found.", MsgBoxStyle.Exclamation)
+            Me.btnCAddContact.Enabled = True
+            Exit Sub
+        End Try
+
+        Me.btnCAddContact.Enabled = True
     End Sub
 
     Private Sub tabWordToTiff_Click(sender As Object, e As EventArgs) Handles tabWordToTiff.Click

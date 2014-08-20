@@ -14,7 +14,7 @@ Public Module EmailProcessing
             'Known attachment types. 
         ElseIf sFileExt = ".psd" Or sFileExt = ".bin" Or _
                 sFileExt = ".htm" Or sFileExt = ".html" Or _
-                sFileExt = ".xps" Then
+                sFileExt = ".xps" Or sFileExt = ".txt." Then
             Return vbNullString
         Else
             LogAction(51, sFileExt)

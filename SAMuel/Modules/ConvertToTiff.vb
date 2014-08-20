@@ -22,14 +22,21 @@ Module ConvertToTiff
 
         'Verify output folder exists
         GlobalModule.CheckFolder(sDestination)
+
+        'Update UI
         frmMain.ProgressBar.Maximum = sFiles.Length
         frmMain.ProgressBar.Value = 0
+
+
         For Each value In sFiles
+            frmMain.lblStatus.Text = String.Format("Converting {0} of {1}", frmMain.ProgressBar.Value + 1, sFiles.Length)
+            frmMain.Refresh()
             'Get the file name
             sFileName = Path.GetFileNameWithoutExtension(value)
             'Open the document within word and don't prompt  for conversion.
             objWdDoc = objWord.Documents.Open(FileName:=value, ConfirmConversions:=False)
             objWord.Visible = False
+            objWord.WindowState = Word.WdWindowState.wdWindowStateMinimize
             'Print to Tiff
             objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=sDestination & sFileName & ".tif")
             'Release document
@@ -59,6 +66,8 @@ Module ConvertToTiff
         frmMain.ProgressBar.Value = 0
 
         For Each value In sFiles
+            frmMain.lblStatus.Text = String.Format("Converting {0} of {1}", frmMain.ProgressBar.Value + 1, sFiles.Length)
+            frmMain.Refresh()
             sFileToPrint = value
             sFileName = Path.GetFileNameWithoutExtension(value)
             sOutTIFF = [String].Format("{0}{1}.tiff", sDestination, sFileName)
