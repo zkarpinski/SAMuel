@@ -3,21 +3,58 @@ Imports Word = Microsoft.Office.Interop.Word
 Imports System.IO
 Imports System.Drawing.Imaging
 Imports System.Drawing.Printing
+Imports System.ComponentModel
 
 Public Class frmMain
     'Form wide variables
+    Public sImageToPrint As String
+
+    Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        'Resets the form state to default
+        Reset_All_Forms()
+
+        'Check initial user settings for a save path
+        If My.Settings.savePath = "" Then
+            Dim defaultPath As String = Environment.GetEnvironmentVariable("userprofile") & "\SAMuel\"
+            My.Settings.savePath = defaultPath
+            My.Settings.Save()
+        End If
+
+        'Verify all output folders exist
+        GlobalModule.InitOutputFolders()
+
+        'Welcome the user.
+        lblStatus.Text = String.Format("Welcome {0}!", Environment.UserName)
+    End Sub
+
+    Private Sub _DragEnter(ByVal sender As Object, ByVal e As DragEventArgs) Handles tabWordToTiff.DragEnter, tabAddContact.DragEnter
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            e.Effect = DragDropEffects.Copy
+        Else
+            e.Effect = DragDropEffects.None
+        End If
+    End Sub
+
+    Private Sub PrintDocument1_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocument1.PrintPage
+        'Resize rotate image if needed then print within page bounds.
+        Using mBitmap As Bitmap = Bitmap.FromFile(sImageToPrint)
+            Using bm As Bitmap = ImageProcessing.ResizeImage(mBitmap)
+                e.Graphics.DrawImage(CType(bm, Image), 0, 0, e.PageBounds.Width, e.PageBounds.Height)
+            End Using
+        End Using
+    End Sub
+
+#Region "Outlook Tab Region --------------------------------------------------------------------------------------"
+    'Outlook Tab wide varibles
     Dim bNextPressed As Boolean
     Dim bRejectPressed As Boolean
     Dim bCancelPressed As Boolean
     Dim bAuditMode As Boolean
     Dim bUnAttendedMode As Boolean
 
-    Public sImageToPrint As String
-
-
     Private Sub btnRun_Click(sender As Object, e As EventArgs) Handles btnRun.Click
         Dim oApp As Outlook.Application = New Outlook.Application
-        Dim wApp As Word.Application
+        Dim wApp As Word.Application = Nothing
         Dim sDestination As String
         Dim sFile As String, sFileExt As String
         Dim outTiff As String
@@ -99,6 +136,8 @@ Public Class frmMain
                     frmEmails.clbSelectedEmails.Items.Add("[SKIP] " & sEmail.Subject & vbTab & sEmail.From)
                     ProgressBar.Value += 1
                     Continue For
+                Else
+                    lblOutlookMessage.Text = ""
                 End If
 
                 lblStatus.Text = "Downloading attachments..."
@@ -192,7 +231,6 @@ Public Class frmMain
                                 objWdDoc.Close()
 
                             Else
-
                                 outTiff = [String].Format("{0}{1}_{2}.tiff", sDestination, sEmail.Account, rand.Next(10000).ToString)
 
                                 'Print the file to file with MODI
@@ -219,15 +257,14 @@ Public Class frmMain
 
                         lblStatus.Text = ""
 
-
                         Application.DoEvents()
                         Me.Refresh()
 
                         'Delete the saved email attachment
                         System.IO.File.Delete(sFile)
-
-
                     Next
+
+                    'Flag email in outlook as complete.
                     sEmail.EmailObject.FlagStatus = Microsoft.Office.Interop.Outlook.OlFlagStatus.olFlagComplete
                     sEmail.EmailObject.Save()
 
@@ -266,122 +303,33 @@ Public Class frmMain
 
         Me.Cursor = Cursors.Default
         Reset_Outlook_Tab()
-
-    End Sub
-
-    Private Sub btnConvert_Click(sender As Object, e As EventArgs) Handles btnConvert.Click
-        'Converts Word Documents to .tif or PDF using MODI
-        Reset()
-
-        Dim oPrinter As Object
-
-        'If files are selected continue code
-        If dlgOpen.ShowDialog() = DialogResult.OK Then
-            If rbConvertPDF.Checked = True Then
-                Try
-                    For Each value In dlgOpen.FileNames
-                        oPrinter = New cPDF995
-                        oPrinter.fileToPrint = value
-                        oPrinter.printFile()
-                        oPrinter = Nothing
-                    Next
-                Catch ex As Exception
-                    MessageBox.Show(ex.Message)
-                    btnConvert.Enabled = True
-                    Exit Sub
-                End Try
-            End If
-
-            Try
-                If (Me.rbConvertDOC.Checked) Then
-                    ConvertToTiff.WordDocs(dlgOpen.FileNames)
-                Else
-                    ConvertToTiff.ImageFiles(dlgOpen.FileNames)
-                End If
-            Catch ex As Exception
-                MessageBox.Show(ex.Message)
-                btnConvert.Enabled = True
-                Exit Sub
-            End Try
-        End If
-        'Cleanup
-        btnConvert.Enabled = True
     End Sub
 
     Private Sub btnReject_Click(sender As Object, e As EventArgs) Handles btnReject.Click
         bRejectPressed = True
     End Sub
 
-    Private Sub chkMinPayment_CheckedChanged(sender As Object, e As EventArgs) Handles chkMinPayment.CheckedChanged
-        'Enters the minimum payment info when checked.
-        If chkMinPayment.Checked Then
-            txtDPAdown.Text = "$0.00"
-            txtDPAmonthly.Text = "$10.00"
-            txtDPAmonthly.Enabled = False
-        Else
-            txtDPAdown.Text = ""
-            txtDPAmonthly.Text = ""
-            txtDPAmonthly.Enabled = True
-        End If
+    Private Sub Outlook_Setup_Audit_View()
+        groupOLAudit.Visible = True
+        rtbEmailBody.Visible = True
+        btnReject.Visible = True
+        lblSelectedEmails.Visible = False
+        btnCancel.Visible = True
+        picImage.Enabled = True
+        picImage.Visible = True
     End Sub
 
-    Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        'Resets the form state to default
-        Reset_All_Forms()
-
-        'Check initial user settings for a save path
-        If My.Settings.savePath = "" Then
-            Dim defaultPath As String = Environment.GetEnvironmentVariable("userprofile") & "\SAMuel\"
-            My.Settings.savePath = defaultPath
-            My.Settings.Save()
-        End If
-
-        'Verify all output folders exist
-        GlobalModule.InitOutputFolders()
-
-        lblStatus.Text = String.Format("Welcome {0}!", Environment.UserName)
-
+    Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
+        bCancelPressed = True
     End Sub
 
-    Private Sub TabControl1_Changed(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
-        'Resets the form state to default
-        Reset_All_Forms()
+    Private Sub btnNext_Click_1(sender As Object, e As EventArgs) Handles btnNext.Click
+        ' TODO add validation of account number.
+        bNextPressed = True
     End Sub
 
-    Private Sub Reset_All_Forms()
-        'Resets the form state to default
-        Reset_Outlook_Tab()
-        Reset_DPA_Tab()
-        Reset_RightFax_Tab()
-        Reset_ProgressBar()
-        frmEmails.clbSelectedEmails.Items.Clear()
-        Reset_Kofax_Tab()
-    End Sub
-
-    Private Sub Reset_ProgressBar()
-        'Progress bar reset
-        ProgressBar.Value = 0
-        lblStatus.Text = ""
-    End Sub
-
-    Private Sub Reset_RightFax_Tab()
-        'Reset the RightFax tab  to default
-        txtRFuser.Text = My.Settings.rfUser
-        txtRFsvr.Text = My.Settings.rfServer
-        txtRFpw.Text = My.Settings.rfPW
-        chkRFNTauth.Checked = My.Settings.rfUseNT
-        txtRFRecFax.Text = My.Settings.rfRecFax
-        txtRFRecName.Text = My.Settings.rfRecName
-        chkRFSaveRec.Checked = False
-        chkRFCoverSheet.Checked = True
-    End Sub
-
-    Private Sub Reset_DPA_Tab()
-        'Reset the DPA tab to default
-        mtxtDPAAcc.Text = ""
-        txtDPAdown.Text = ""
-        txtDPAmonthly.Text = ""
-        chkMinPayment.Checked = False
+    Private Sub picImage_Click(sender As Object, e As EventArgs) Handles picImage.Click
+        System.Diagnostics.Process.Start(Me.picImage.ImageLocation.ToString)
     End Sub
 
     Private Sub Reset_Outlook_Tab()
@@ -417,6 +365,42 @@ Public Class frmMain
         txtSubject.Text = ""
         lblOutlookMessage.Text = ""
     End Sub
+#End Region
+
+#Region "Kofax It Tab Region -------------------------------------------------------------------------------------"
+    Private Sub btnKFImport_Click(sender As Object, e As EventArgs) Handles btnKFImport.Click
+        Dim batchName As String
+        Dim batchType As String
+        Dim batchSource As String
+        Dim comments As String
+
+        'Setup the progress bar.
+        Reset_ProgressBar()
+        Me.ProgressBar.Maximum = 1
+
+        'Set values from the form.
+        batchName = Me.txtKFBatchName.Text
+        batchType = cbKFBatchType.SelectedItem.ToString
+        comments = Me.txtKFComments.Text
+
+        'Determine the source type.
+        If Me.rbKFEmail.Checked = True Then
+            batchSource = "02 - Email"
+        Else
+            batchSource = "01 - US Mail"
+        End If
+
+        'Open the file dialog with tiffs only selectable.
+        dlgOpen.Filter = "TIFF Images|*.tif;*.tiff"
+        If dlgOpen.ShowDialog() = DialogResult.OK Then
+            KofaxModule.CreateXML((dlgOpen.FileNames).ToList, batchName, batchType, batchSource, comments)
+        End If
+
+        'Update UI
+        Me.lblStatus.Text = "Conversion Complete."
+        Me.ProgressBar.Value = 1
+        Reset_Kofax_Tab()
+    End Sub
 
     Private Sub Reset_Kofax_Tab()
         'Reset the KofaxIt tab to default
@@ -424,50 +408,9 @@ Public Class frmMain
         txtKFComments.Text = ""
         cbKFBatchType.SelectedIndex = 2
     End Sub
+#End Region
 
-    Private Sub Outlook_Setup_Audit_View()
-        groupOLAudit.Visible = True
-        rtbEmailBody.Visible = True
-        btnReject.Visible = True
-        lblSelectedEmails.Visible = False
-        btnCancel.Visible = True
-        picImage.Enabled = True
-        picImage.Visible = True
-    End Sub
-
-    Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
-        bCancelPressed = True
-    End Sub
-
-    Private Sub btnNext_Click_1(sender As Object, e As EventArgs) Handles btnNext.Click
-        ' TODO add validation of account number.
-        bNextPressed = True
-    End Sub
-
-    Private Sub btnDPAprocess_Click(sender As Object, e As EventArgs) Handles btnDPAprocess.Click
-        'Process the DPA for the desired account
-        Dim accNumber As String
-        accNumber = mtxtDPAAcc.Text
-        Call OpenCSSAcc(accNumber)
-        Call OpenPA()
-    End Sub
-
-    Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
-        End
-    End Sub
-
-    Private Sub btnBudgetBill_Click(sender As Object, e As EventArgs) Handles btnBudgetBill.Click
-        Dim accNumber As String
-        accNumber = mtxtDPAAcc.Text
-        Call OpenCSSAcc(accNumber)
-        Threading.Thread.Sleep(400)
-        Call EnrollBB()
-    End Sub
-
-    Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
-        frmAbout.Show()
-    End Sub
-
+#Region "RightFax It Tab Region ----------------------------------------------------------------------------------"
     Private Sub btnRFax_Click(sender As Object, e As EventArgs) Handles btnRFax.Click
         Dim strServerName As String, strUsername As String, strPassword As String 'RightFax Server Strings
         Dim strRecName As String, strRecFax As String 'Fax Recipient Strings
@@ -537,8 +480,125 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub OptionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.Click
-        frmOptions.Show()
+    Private Sub Reset_RightFax_Tab()
+        'Reset the RightFax tab  to default
+        txtRFuser.Text = My.Settings.rfUser
+        txtRFsvr.Text = My.Settings.rfServer
+        txtRFpw.Text = My.Settings.rfPW
+        chkRFNTauth.Checked = My.Settings.rfUseNT
+        txtRFRecFax.Text = My.Settings.rfRecFax
+        txtRFRecName.Text = My.Settings.rfRecName
+        chkRFSaveRec.Checked = False
+        chkRFCoverSheet.Checked = True
+    End Sub
+#End Region
+
+#Region "Contacts Tab Region -------------------------------------------------------------------------------------"
+    'Contacts Tab Wide Variables
+    Dim _bStopContacts As Boolean = False
+
+    Private Sub btnCAddContact_Click(sender As Object, e As EventArgs) Handles btnCAddContact.Click
+        Dim strAccountNumber As String
+        Dim strContact As String
+
+        ResetContacts_Tab()
+        Me.btnCAddContact.Enabled = False
+
+        'Set variable values from the form.
+        strAccountNumber = Me.mtxtCAccount.Text
+        strContact = Me.rtbCContact.Text
+
+        'Call the script
+        Try
+            AddContact.RunScript(strAccountNumber, strContact)
+        Catch ex As FileNotFoundException
+            MsgBox("addContact.exe not found.", MsgBoxStyle.Exclamation)
+            Me.btnCAddContact.Enabled = True
+            Exit Sub
+        End Try
+
+        Me.btnCAddContact.Enabled = True
+    End Sub
+
+    Private Sub _DragDropContact(sender As Object, e As DragEventArgs) Handles tabAddContact.DragDrop
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            ResetContacts_Tab()
+
+            Dim files As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
+            Dim strContact As String = Me.rtbCContact.Text
+
+            Me.btnCAddContact.Enabled = False
+            btnStopAddContacts.Enabled = True
+            For Each sFile As String In files
+                Dim strAcc As String = GlobalModule.RegexAcc(Path.GetFileNameWithoutExtension(sFile), "\d{5}-\d{5}")
+
+                'Skip files without and account number.
+                If strAcc = "X" Then
+                    lbxContactAlerts.Visible = True
+                    lbxContactAlerts.Items.Add(String.Format("{0} was skipped.", Path.GetFileName(sFile)))
+                    Me.Refresh()
+                    Continue For
+                End If
+
+                'Check if user interupted process.
+                If (_bStopContacts) Then
+                    Me.btnCAddContact.Enabled = True
+                    Exit Sub
+                End If
+
+                'TODO Make this a Background worker.
+
+                'Call the script
+                Try
+                    Dim bgContactWorker As BackgroundWorker = New BackgroundWorker
+                    AddContact.RunScript(strAcc, strContact)
+                Catch ex As FileNotFoundException
+                    MsgBox("addContact.exe not found.", MsgBoxStyle.Exclamation)
+                    Me.btnCAddContact.Enabled = True
+                    Exit Sub
+                End Try
+            Next
+
+        End If
+    End Sub
+
+    Private Sub btnStopAddContacts_Click(sender As Object, e As EventArgs) Handles btnStopAddContacts.Click
+        _bStopContacts = True
+    End Sub
+
+    Private Sub ResetContacts_Tab()
+        btnStopAddContacts.Enabled = False
+        _bStopContacts = False
+        btnCAddContact.Enabled = True
+        rtbCContact.Text = ""
+        mtxtCAccount.Text = ""
+        lbxContactAlerts.Visible = False
+        lbxContactAlerts.Items.Clear()
+    End Sub
+#End Region
+
+#Region "Convert Tab Region --------------------------------------------------------------------------------------"
+
+    Private Sub btnConvert_Click(sender As Object, e As EventArgs) Handles btnConvert.Click
+        'Converts Word Documents to .tif or PDF using MODI
+        Reset()
+
+        'If files are selected continue code
+        If dlgOpen.ShowDialog() = DialogResult.OK Then
+            Try
+                If (Me.rbConvertDOC.Checked) Then
+                    ConvertToTiff.WordDocs(dlgOpen.FileNames)
+                Else
+                    ConvertToTiff.ImageFiles(dlgOpen.FileNames)
+                End If
+            Catch ex As Exception
+                MessageBox.Show(ex.Message)
+                btnConvert.Enabled = True
+                Exit Sub
+            End Try
+        End If
+        'Cleanup
+        btnConvert.Enabled = True
     End Sub
 
     Private Sub _DragDrop(ByVal sender As Object, ByVal e As DragEventArgs) Handles tabWordToTiff.DragDrop
@@ -559,90 +619,78 @@ Public Class frmMain
         End If
 
     End Sub
+#End Region
 
-    Private Sub _DragEnter(ByVal sender As Object, ByVal e As DragEventArgs) Handles tabWordToTiff.DragEnter
-        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
-            e.Effect = DragDropEffects.Copy
+#Region "DPA Tab Region ------------------------------------------------------------------------------------------"
+    Private Sub chkMinPayment_CheckedChanged(sender As Object, e As EventArgs) Handles chkMinPayment.CheckedChanged
+        'Enters the minimum payment info when checked.
+        If chkMinPayment.Checked Then
+            txtDPAdown.Text = "$0.00"
+            txtDPAmonthly.Text = "$10.00"
+            txtDPAmonthly.Enabled = False
         Else
-            e.Effect = DragDropEffects.None
+            txtDPAdown.Text = ""
+            txtDPAmonthly.Text = ""
+            txtDPAmonthly.Enabled = True
         End If
     End Sub
 
-    Private Sub btnKFImport_Click(sender As Object, e As EventArgs) Handles btnKFImport.Click
-        Dim batchName As String
-        Dim batchType As String
-        Dim batchSource As String
-        Dim comments As String
+    Private Sub btnBudgetBill_Click(sender As Object, e As EventArgs) Handles btnBudgetBill.Click
+        Dim accNumber As String
+        accNumber = mtxtDPAAcc.Text
+        Call OpenCSSAcc(accNumber)
+        Threading.Thread.Sleep(400)
+        Call EnrollBB()
+    End Sub
 
-        'Setup the progress bar.
+    Private Sub btnDPAprocess_Click(sender As Object, e As EventArgs) Handles btnDPAprocess.Click
+        'Process the DPA for the desired account
+        Dim accNumber As String
+        accNumber = mtxtDPAAcc.Text
+        Call OpenCSSAcc(accNumber)
+        Call OpenPA()
+    End Sub
+
+    Private Sub Reset_DPA_Tab()
+        'Reset the DPA tab to default
+        mtxtDPAAcc.Text = ""
+        txtDPAdown.Text = ""
+        txtDPAmonthly.Text = ""
+        chkMinPayment.Checked = False
+    End Sub
+#End Region
+
+#Region "Form UI Region ------------------------------------------------------------------------------------------"
+    Private Sub Reset_All_Forms()
+        'Resets the form state to default
+        Reset_Outlook_Tab()
+        Reset_DPA_Tab()
+        Reset_RightFax_Tab()
         Reset_ProgressBar()
-        Me.ProgressBar.Maximum = 1
-
-        'Set values from the form.
-        batchName = Me.txtKFBatchName.Text
-        batchType = cbKFBatchType.SelectedItem.ToString
-        comments = Me.txtKFComments.Text
-
-        'Determine the source type.
-        If Me.rbKFEmail.Checked = True Then
-            batchSource = "02 - Email"
-        Else
-            batchSource = "01 - US Mail"
-        End If
-
-        'Open the file dialog with tiffs only selectable.
-        dlgOpen.Filter = "TIFF Images|*.tif;*.tiff"
-        If dlgOpen.ShowDialog() = DialogResult.OK Then
-            KofaxModule.CreateXML((dlgOpen.FileNames).ToList, batchName, batchType, batchSource, comments)
-        End If
-
-        'Update UI
-        Me.lblStatus.Text = "Conversion Complete."
-        Me.ProgressBar.Value = 1
+        frmEmails.clbSelectedEmails.Items.Clear()
         Reset_Kofax_Tab()
+        ResetContacts_Tab()
     End Sub
 
-    Private Sub btnCAddContact_Click(sender As Object, e As EventArgs) Handles btnCAddContact.Click
-        Dim strAccountNumber As String
-        Dim strContact As String
-
-        Me.btnCAddContact.Enabled = False
-
-        'Set variable values from the form.
-        strAccountNumber = Me.mtxtCAccount.Text
-        strContact = Me.rtbCContact.Text
-        Dim arguments As String = String.Format(" /account {0} /contact ""{1}", strAccountNumber, strContact)
-
-        Try
-            'Call the script
-            Dim p As New Process
-            Dim psi As New ProcessStartInfo(Application.StartupPath + "\addContact.exe", arguments)
-            p.StartInfo = psi
-            p.Start()
-            p.WaitForExit()
-        Catch ex As FileNotFoundException
-            MsgBox("addContact.exe not found.", MsgBoxStyle.Exclamation)
-            Me.btnCAddContact.Enabled = True
-            Exit Sub
-        End Try
-
-        Me.btnCAddContact.Enabled = True
+    Private Sub Reset_ProgressBar()
+        'Progress bar reset
+        ProgressBar.Value = 0
+        lblStatus.Text = ""
     End Sub
 
-    Private Sub tabWordToTiff_Click(sender As Object, e As EventArgs) Handles tabWordToTiff.Click
-
+    Private Sub TabControl1_Changed(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
+        'Resets the form state to default
+        Reset_All_Forms()
     End Sub
-
-    Private Sub PrintDocument1_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocument1.PrintPage
-        'Resize rotate image if needed then print within page bounds.
-        Using mBitmap As Bitmap = Bitmap.FromFile(sImageToPrint)
-            Using bm As Bitmap = ImageProcessing.ResizeImage(mBitmap)
-                e.Graphics.DrawImage(CType(bm, Image), 0, 0, e.PageBounds.Width, e.PageBounds.Height)
-            End Using
-        End Using
+    Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
+        End
     End Sub
-
-    Private Sub picImage_Click(sender As Object, e As EventArgs) Handles picImage.Click
-        System.Diagnostics.Process.Start(Me.picImage.ImageLocation.ToString)
+    Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
+        frmAbout.Show()
     End Sub
+    Private Sub OptionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.Click
+        frmOptions.Show()
+    End Sub
+#End Region
+
 End Class

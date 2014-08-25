@@ -8,11 +8,11 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("RightFax It")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Right Fax It was designed and programmed by Associate CSR1, Zachary Karpinski, during the Summer of 2014. It automates or expediates the critical day to day task of faxing DPAs to customers using RightFax.")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Zachary Karpinski")]
 [assembly: AssemblyProduct("RightFaxIt")]
-[assembly: AssemblyCopyright("Copyright ©  2014")]
+[assembly: AssemblyCopyright("© 2014 Zachary Karpinski. All rights reserved.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

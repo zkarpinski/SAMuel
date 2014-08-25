@@ -13,32 +13,32 @@ Public Class SAM_Email
     Private disposed As Boolean = False ' To detect dispose redundant calls
 
     Public Sub New(ByRef objEmail As Object)
-        Subject = objEmail.Subject
-        From = objEmail.SenderName
-        Body = objEmail.body
-        Regex()
-        EmailObject = objEmail
+        Me.Subject = objEmail.Subject
+        Me.From = objEmail.SenderName
+        Me.Body = objEmail.body
+        Me.Regex()
+        Me.EmailObject = objEmail
 
     End Sub
 
     Private Sub Regex()
-        Dim strRegex As String
-        strRegex = GlobalModule.RegexAccount(Subject)
-        If strRegex = "ACC# NOT FOUND" Then
-            strRegex = GlobalModule.RegexCustomer(Subject)
-            If strRegex = "CUST# NOT FOUND" Then
-                strRegex = GlobalModule.RegexAccount(Body)
-                If strRegex = "ACC# NOT FOUND" Then
-                    strRegex = GlobalModule.RegexCustomer(Body)
-                    If strRegex = "CUST# NOT FOUND" Then
-                        strRegex = ""
-                        IsValid = False
-                    End If
-                End If
-            End If
+        Dim strAccNum As String = "X"
+        Dim strRegFormats() As String = {"\d{5}-\d{5}", "\d{10}", "\d{9}"} ' 'Regex Formats for Bill Account Numbers and Customer Numbers.
+
+        'Use regular expressions to search for an account number.
+        For Each rFormat As String In strRegFormats
+            strAccNum = GlobalModule.RegexAcc(Me.Subject, rFormat)
+            If strAccNum <> "X" Then Exit For
+            strAccNum = GlobalModule.RegexAcc(Me.Body, rFormat)
+            If strAccNum <> "X" Then Exit For
+        Next
+        'If nothing was found, flag the email.
+        If strAccNum = "X" Then
+            strAccNum = ""
+            Me.IsValid = False
         End If
 
-        Account = strRegex
+        Me.Account = strAccNum
     End Sub
 
     Public Sub DownloadAttachments()
@@ -47,22 +47,23 @@ Public Class SAM_Email
         Dim rand As New Random
         Dim subFolder As String
 
-        subFolder = From + "\"
+        subFolder = Me.From + "\"
         subFolder = subFolder.Replace(":", "")
         subFolder = subFolder.Replace("*", "")
         subFolder = subFolder.Replace("?", "")
         subFolder = subFolder.Replace("<", "")
         subFolder = subFolder.Replace(">", "")
-        ' TODO Remove invalid path characters
+        subFolder = subFolder.Replace("#", "")
+        ' TODO Remove ALL invalid path characters from string.
         sPath = My.Settings.savePath + "emails\" + subFolder
         GlobalModule.CheckFolder(sPath)
 
-        If EmailObject.Attachments.Count > 0 Then
-            For Each value In EmailObject.Attachments
+        If Me.EmailObject.Attachments.Count > 0 Then
+            For Each value In Me.EmailObject.Attachments
                 'Added random number for same filename handling cases
                 sFile = sPath & rand.Next(10000).ToString & value.FileName
                 value.SaveAsFile(sFile)
-                Attachments.Add(sFile)
+                Me.Attachments.Add(sFile)
             Next
         Else
             IsValid = False
@@ -71,7 +72,7 @@ Public Class SAM_Email
 
     ReadOnly Property AttachmentsCount As Integer
         Get
-            Return Attachments.Count
+            Return Me.Attachments.Count
         End Get
     End Property
 
@@ -82,10 +83,10 @@ Public Class SAM_Email
                 ' Free other state (managed objects).
             End If
             ' Free your own state (unmanaged objects).
-            EmailObject = Nothing
-            Attachments = Nothing
-            Subject = vbNullString
-            Body = vbNullString
+            Me.EmailObject = Nothing
+            Me.Attachments = Nothing
+            Me.Subject = vbNullString
+            Me.Body = vbNullString
         End If
         Me.disposed = True
     End Sub

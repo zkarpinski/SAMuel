@@ -105,12 +105,16 @@ Partial Class frmMain
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.OptionsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.HelpToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.PrintDialog1 = New System.Windows.Forms.PrintDialog()
         Me.PrintDocument1 = New System.Drawing.Printing.PrintDocument()
         Me.lblBranding = New System.Windows.Forms.Label()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.lbxContactAlerts = New System.Windows.Forms.ListBox()
+        Me.btnStopAddContacts = New System.Windows.Forms.Button()
+        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.groupOLAudit.SuspendLayout()
@@ -209,7 +213,7 @@ Partial Class frmMain
         Me.txtFrom.Location = New System.Drawing.Point(55, 34)
         Me.txtFrom.Name = "txtFrom"
         Me.txtFrom.ReadOnly = True
-        Me.txtFrom.Size = New System.Drawing.Size(123, 20)
+        Me.txtFrom.Size = New System.Drawing.Size(158, 20)
         Me.txtFrom.TabIndex = 6
         '
         'lblSubject
@@ -262,14 +266,14 @@ Partial Class frmMain
         Me.txtSubject.Location = New System.Drawing.Point(55, 11)
         Me.txtSubject.Name = "txtSubject"
         Me.txtSubject.ReadOnly = True
-        Me.txtSubject.Size = New System.Drawing.Size(123, 20)
+        Me.txtSubject.Size = New System.Drawing.Size(158, 20)
         Me.txtSubject.TabIndex = 5
         '
         'txtAcc
         '
         Me.txtAcc.Location = New System.Drawing.Point(55, 56)
         Me.txtAcc.Name = "txtAcc"
-        Me.txtAcc.Size = New System.Drawing.Size(123, 20)
+        Me.txtAcc.Size = New System.Drawing.Size(158, 20)
         Me.txtAcc.TabIndex = 7
         '
         'picImage
@@ -371,6 +375,7 @@ Partial Class frmMain
         '
         Me.GroupBox4.Controls.Add(Me.rbConvertDOC)
         Me.GroupBox4.Controls.Add(Me.rbConvertIMAGE)
+        Me.GroupBox4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox4.Location = New System.Drawing.Point(6, 223)
         Me.GroupBox4.Name = "GroupBox4"
         Me.GroupBox4.Size = New System.Drawing.Size(81, 66)
@@ -382,6 +387,7 @@ Partial Class frmMain
         '
         Me.rbConvertDOC.AutoSize = True
         Me.rbConvertDOC.Checked = True
+        Me.rbConvertDOC.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.rbConvertDOC.Location = New System.Drawing.Point(6, 19)
         Me.rbConvertDOC.Name = "rbConvertDOC"
         Me.rbConvertDOC.Size = New System.Drawing.Size(74, 17)
@@ -393,6 +399,7 @@ Partial Class frmMain
         'rbConvertIMAGE
         '
         Me.rbConvertIMAGE.AutoSize = True
+        Me.rbConvertIMAGE.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.rbConvertIMAGE.Location = New System.Drawing.Point(6, 42)
         Me.rbConvertIMAGE.Name = "rbConvertIMAGE"
         Me.rbConvertIMAGE.Size = New System.Drawing.Size(54, 17)
@@ -404,6 +411,7 @@ Partial Class frmMain
         '
         Me.GroupBox3.Controls.Add(Me.rbConvertTiff)
         Me.GroupBox3.Controls.Add(Me.rbConvertPDF)
+        Me.GroupBox3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox3.Location = New System.Drawing.Point(87, 223)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(75, 66)
@@ -415,6 +423,7 @@ Partial Class frmMain
         '
         Me.rbConvertTiff.AutoSize = True
         Me.rbConvertTiff.Checked = True
+        Me.rbConvertTiff.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.rbConvertTiff.Location = New System.Drawing.Point(6, 19)
         Me.rbConvertTiff.Name = "rbConvertTiff"
         Me.rbConvertTiff.Size = New System.Drawing.Size(40, 17)
@@ -426,6 +435,8 @@ Partial Class frmMain
         'rbConvertPDF
         '
         Me.rbConvertPDF.AutoSize = True
+        Me.rbConvertPDF.Enabled = False
+        Me.rbConvertPDF.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.rbConvertPDF.Location = New System.Drawing.Point(6, 42)
         Me.rbConvertPDF.Name = "rbConvertPDF"
         Me.rbConvertPDF.Size = New System.Drawing.Size(46, 17)
@@ -436,9 +447,10 @@ Partial Class frmMain
         'lblDragAndDropWord
         '
         Me.lblDragAndDropWord.AutoSize = True
-        Me.lblDragAndDropWord.Location = New System.Drawing.Point(38, 128)
+        Me.lblDragAndDropWord.Font = New System.Drawing.Font("Arial Narrow", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblDragAndDropWord.Location = New System.Drawing.Point(41, 127)
         Me.lblDragAndDropWord.Name = "lblDragAndDropWord"
-        Me.lblDragAndDropWord.Size = New System.Drawing.Size(343, 13)
+        Me.lblDragAndDropWord.Size = New System.Drawing.Size(338, 15)
         Me.lblDragAndDropWord.TabIndex = 3
         Me.lblDragAndDropWord.Text = "Click Convert or Drag and Drop files to convert into the selected format."
         '
@@ -723,6 +735,10 @@ Partial Class frmMain
         '
         'tabAddContact
         '
+        Me.tabAddContact.AllowDrop = True
+        Me.tabAddContact.Controls.Add(Me.btnStopAddContacts)
+        Me.tabAddContact.Controls.Add(Me.lbxContactAlerts)
+        Me.tabAddContact.Controls.Add(Me.Label4)
         Me.tabAddContact.Controls.Add(Me.rtbCContact)
         Me.tabAddContact.Controls.Add(Me.mtxtCAccount)
         Me.tabAddContact.Controls.Add(Me.lblCAccount)
@@ -736,9 +752,10 @@ Partial Class frmMain
         '
         'rtbCContact
         '
-        Me.rtbCContact.Location = New System.Drawing.Point(17, 78)
+        Me.rtbCContact.Location = New System.Drawing.Point(35, 212)
         Me.rtbCContact.Name = "rtbCContact"
-        Me.rtbCContact.Size = New System.Drawing.Size(349, 126)
+        Me.rtbCContact.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical
+        Me.rtbCContact.Size = New System.Drawing.Size(349, 47)
         Me.rtbCContact.TabIndex = 8
         Me.rtbCContact.Text = ""
         '
@@ -919,7 +936,7 @@ Partial Class frmMain
         '
         'MenuStrip1
         '
-        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.AboutToolStripMenuItem})
+        Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.HelpToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
         Me.MenuStrip1.Size = New System.Drawing.Size(435, 24)
@@ -936,7 +953,7 @@ Partial Class frmMain
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(92, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.ExitToolStripMenuItem.Text = "&Exit"
         '
         'ToolsToolStripMenuItem
@@ -949,14 +966,15 @@ Partial Class frmMain
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.OptionsToolStripMenuItem.Text = "&Options"
         '
-        'AboutToolStripMenuItem
+        'HelpToolStripMenuItem
         '
-        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(52, 20)
-        Me.AboutToolStripMenuItem.Text = "About"
+        Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AboutToolStripMenuItem})
+        Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
+        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
+        Me.HelpToolStripMenuItem.Text = "&Help"
         '
         'NotifyIcon1
         '
@@ -986,6 +1004,39 @@ Partial Class frmMain
         Me.lblBranding.Size = New System.Drawing.Size(108, 9)
         Me.lblBranding.TabIndex = 6
         Me.lblBranding.Text = "Created by: Zachary Karpinski"
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(188, 196)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(55, 13)
+        Me.Label4.TabIndex = 9
+        Me.Label4.Text = "Contact:"
+        '
+        'lbxContactAlerts
+        '
+        Me.lbxContactAlerts.FormattingEnabled = True
+        Me.lbxContactAlerts.Location = New System.Drawing.Point(35, 72)
+        Me.lbxContactAlerts.Name = "lbxContactAlerts"
+        Me.lbxContactAlerts.Size = New System.Drawing.Size(349, 95)
+        Me.lbxContactAlerts.TabIndex = 10
+        '
+        'btnStopAddContacts
+        '
+        Me.btnStopAddContacts.Location = New System.Drawing.Point(301, 264)
+        Me.btnStopAddContacts.Name = "btnStopAddContacts"
+        Me.btnStopAddContacts.Size = New System.Drawing.Size(75, 23)
+        Me.btnStopAddContacts.TabIndex = 11
+        Me.btnStopAddContacts.Text = "Stop"
+        Me.btnStopAddContacts.UseVisualStyleBackColor = True
+        '
+        'AboutToolStripMenuItem
+        '
+        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.AboutToolStripMenuItem.Text = "&About"
         '
         'frmMain
         '
@@ -1066,7 +1117,7 @@ Partial Class frmMain
     Friend WithEvents mtxtDPAAcc As System.Windows.Forms.MaskedTextBox
     Friend WithEvents MenuStrip1 As System.Windows.Forms.MenuStrip
     Friend WithEvents FileToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents HelpToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExitToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents btnBudgetBill As System.Windows.Forms.Button
     Friend WithEvents tabRFax As System.Windows.Forms.TabPage
@@ -1122,5 +1173,9 @@ Partial Class frmMain
     Friend WithEvents rbConvertDOC As System.Windows.Forms.RadioButton
     Friend WithEvents rbConvertIMAGE As System.Windows.Forms.RadioButton
     Friend WithEvents lblBranding As System.Windows.Forms.Label
+    Friend WithEvents Label4 As System.Windows.Forms.Label
+    Friend WithEvents lbxContactAlerts As System.Windows.Forms.ListBox
+    Friend WithEvents btnStopAddContacts As System.Windows.Forms.Button
+    Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class

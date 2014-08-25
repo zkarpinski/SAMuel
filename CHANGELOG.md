@@ -1,3 +1,20 @@
+## 2014-08-24
+
+Features:
+
+  - Add Contact: Add contacts to multiple account by parsing file names with drag 'n drop. (Still in progress.) 
+
+Code Improvements:
+
+  - RightFaxIt: Checks if file to be move exists in destination. If it does, delete it then move.
+  - Email Processing: Cleaned Regex code.
+  - General: Blocked of code depending on the tab it belonged to.
+
+UI Improvements:
+
+  - General: Converting with printer no longer shows printing x of y dialog.
+  - RightFaxIt: Removed access to options until it's useful.
+
 ## 2014-08-19
 
 Features:

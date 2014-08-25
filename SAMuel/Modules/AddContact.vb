@@ -1,4 +1,18 @@
-﻿Module AddContacts
+﻿Module AddContact
+
+    Public Sub RunScript(strBillAccount As String, strContact As String)
+        Dim arguments As String = String.Format(" /account {0} /contact ""{1}", strBillAccount, strContact)
+
+        'Call the script and wait.
+        Dim p As New Process
+        Dim psi As New ProcessStartInfo(Application.StartupPath + "\addContact.exe", arguments)
+        p.StartInfo = psi
+        p.Start()
+        p.WaitForExit()
+
+    End Sub
+
+#Region "Deprecated Code. Save it for later."
     Private Const sWait As Short = 300
 
     'Define Keys
@@ -65,5 +79,8 @@
         Threading.Thread.Sleep(sWait)
         SendKeys.Send("e")
     End Sub
+
+
+#End Region
 
 End Module

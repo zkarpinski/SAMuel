@@ -61,26 +61,13 @@ Module GlobalModule
         sw.Close()
     End Sub
 
-    Function RegexAccount(ByVal str As String) As String
-        Dim _reg As Regex = New Regex("\d{5}-\d{5}")
-        Dim m As Match = _reg.Match(str)
-        If m.Success Then
-            Return m.Value
-        Else
-            Return "ACC# NOT FOUND"
-        End If
-    End Function
-
-    Function RegexCustomer(ByVal str As String) As String
-        Dim _reg As Regex = New Regex("\d{9}")
-        Dim m As Match = _reg.Match(str)
-        If m.Success Then
-            Return m.Value
-        Else
-            Return "CUST# NOT FOUND"
-        End If
-    End Function
-
+    ''' <summary>
+    ''' Calls regex.
+    ''' </summary>
+    ''' <param name="str">String to process.</param>
+    ''' <param name="format">Regex format as a string.</param>
+    ''' <returns>String of the found match or X if no match.</returns>
+    ''' <remarks></remarks>
     Function RegexAcc(ByVal str As String, ByVal format As String) As String
         Dim _reg As Regex = New Regex(format)
         Dim m As Match = _reg.Match(str)

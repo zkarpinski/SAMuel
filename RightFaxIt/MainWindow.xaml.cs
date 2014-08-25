@@ -212,6 +212,12 @@ namespace RightFaxIt
             
             try
             {
+                //Delete the file in the destination if it exists already.
+                // since File.Move does not overwrite.
+                if (System.IO.File.Exists(saveTo))
+                {
+                    System.IO.File.Delete(saveTo);
+                }
                 System.IO.File.Move(pathToDocument, saveTo);
             }
             catch (Exception)
@@ -320,21 +326,13 @@ namespace RightFaxIt
                 e.Effects = DragDropEffects.Link;
             }
         }
-        private void AddContactsItem_Click(object sender, RoutedEventArgs e)
-        {
-          
-           
-        }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
+        private void MenuItem_Click(object sender, RoutedEventArgs e) { this.Close();}
 
         private void OptionsItem_Click(object sender, RoutedEventArgs e)
         {
-            var newWindow = new Options();
-            newWindow.Show();
+            //var newWindow = new Options();
+            //newWindow.Show();
         }
 
         private void AboutItem_Click(object sender, RoutedEventArgs e)

@@ -11,7 +11,7 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("SAMuel")> 
-<Assembly: AssemblyDescription("Service Application Manager Universal Expediting Library was designed and programmed by Associate CSR1, Zachary Karpinski.")> 
+<Assembly: AssemblyDescription("Service Application Manager Universal Expediting Library. SAMuel was designed and programmed by Associate CSR1, Zachary Karpinski, during the Summer of 2014. It automates or expediates various critical day to day tasks.")> 
 <Assembly: AssemblyCompany("Zachary Karpinski")> 
 <Assembly: AssemblyProduct("SAMuel")> 
 <Assembly: AssemblyCopyright("© 2014 Zachary Karpinski. All rights reserved.")> 

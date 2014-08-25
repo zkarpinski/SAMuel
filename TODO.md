@@ -8,20 +8,22 @@ List of what still is being worked on, features to be added, etc.
 #### Outlook Email Handling
 
 * Look into background worker for processing the images
-* ~~Dither tiff images~~ (Not Needed)
-* ~~Work on naming convention~~ and string cleaning (#,:,/)
+* Find memory leaks
+* Add InValid emails to seperate list to process at the end.
 * Error handling
-* PDF and other file formart handling
+* PDF and other file format handling
+* Break up the Run button function into multiple sub-functions.
+* ~~Work on naming convention~~ and string cleaning (#,:,/)
+* ~~Dither tiff images~~ (Not Needed)
 * ~~Overhaul tiff conversion~~
 * ~~Scale watermark to image size.~~ (Not Needed)
 * ~~Add unattended mode~~ (Aug 16 2014)
-* Move completed emails
-* Visual feedback on progress
-* Find memory leaks
+* ~~Move completed emails~~ (Marked with complete flag)
+* ~~Visual feedback on progress~~
 
 #### DPA
 
-* Get it working...
+* Get it working... (Back burner)
 
 #### Convert Word Document
 
@@ -35,8 +37,7 @@ List of what still is being worked on, features to be added, etc.
 #### Kofax It
 
 * Drag and Drop Capability
-* Multiple import types (All selected files for 1 document)
-* Options to change output folder and BatchClass
+* Options to change output folder ~~and BatchClass~~ (Aug 2014)
 * Use XML DOM instead of writing each line manually.
 
 #### Options Menus

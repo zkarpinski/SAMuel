@@ -19,7 +19,7 @@ namespace RightFaxIt
         public Boolean Sent { get; set; }
         public Boolean Rejected { get; set; }
 
-        ~Fax() { }
+        //~Fax() { }
         public Fax(){ }
 
         /// <summary>

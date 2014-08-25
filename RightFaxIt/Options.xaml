@@ -8,6 +8,5 @@
         <Label Content="User ID:" HorizontalAlignment="Left" Margin="57,64,0,0" VerticalAlignment="Top" Width="50"/>
         <TextBox x:Name="txtUserID" HorizontalAlignment="Left" Height="23" Margin="107,68,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="138"/>
         <Button Content="Save" HorizontalAlignment="Left" Height="40" Margin="88,221,0,0" VerticalAlignment="Top" Width="113" Click="Button_Click"/>
-        <TextBox x:Name="txtUserID_Copy" HorizontalAlignment="Left" Height="23" Margin="10,122,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="223"/>
     </Grid>
 </Window>

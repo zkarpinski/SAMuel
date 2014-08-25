@@ -5,11 +5,15 @@
         Title="RightFax It" Height="350" Width="525"
         ResizeMode="CanMinimize" AllowDrop="True" Drop="FileDrop" DragOver="FileDrag" WindowStyle="ThreeDBorderWindow" Icon="Resources/fax.ico" Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}">
     <Grid x:Name="LayoutRoot" AllowDrop="True" Drop="FileDrop" DragOver="FileDrag">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="110*"/>
+            <ColumnDefinition Width="409*"/>
+        </Grid.ColumnDefinitions>
 
 
-        <Button x:Name="btnFax" Content="Fax" HorizontalAlignment="Left" Margin="213,274,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="1.493,1.55" Click="Button_Click"/>
+        <Button x:Name="btnFax" Content="Fax" HorizontalAlignment="Left" Margin="103.356,274,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="1.493,1.55" Click="Button_Click" Grid.Column="1"/>
         <ProgressBar x:Name="FaxProgress" Height="10" Margin="0,299,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-        <ListBox x:Name="FileListBox" HorizontalAlignment="Left" Height="196" Margin="279,61,0,0" VerticalAlignment="Top" Width="219" Grid.ColumnSpan="2" FontSize="11" MouseDoubleClick="OpenDocument">
+        <ListBox x:Name="FileListBox" HorizontalAlignment="Left" Height="196" Margin="169.356,61,0,0" VerticalAlignment="Top" Width="219" FontSize="11" MouseDoubleClick="OpenDocument" Grid.Column="1">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -27,29 +31,29 @@
         <DockPanel Grid.ColumnSpan="2" Margin="0,0,0,258">
             <Menu DockPanel.Dock="Top" Margin="0,0,0,0">
                 <MenuItem x:Name="MenuBar" Header="_File">
-                    <MenuItem Header="_AddContacts" Click="AddContactsItem_Click"/>
                     <MenuItem Header="_Exit" Click="MenuItem_Click"/>
                 </MenuItem>
                 <MenuItem Header="_Options" Click="OptionsItem_Click"/>
                 <MenuItem Header="_Help">
-                    <MenuItem Header="_About" Click="AboutItem_Click"/>    
+                    <MenuItem Header="_About" Click="AboutItem_Click"/>
                 </MenuItem>
             </Menu>
             <StackPanel Margin="0,0,0,301"/>
         </DockPanel>
-        <TextBox x:Name="txtName" HorizontalAlignment="Left" Height="23" Margin="86,78,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="173" MaxLines="1" IsEnabled="False"/>
-        <TextBox x:Name="txtNumber" HorizontalAlignment="Left" Height="23" Margin="86,102,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="173" MaxLines="1" IsEnabled="False"/>
+        <TextBox x:Name="txtName" HorizontalAlignment="Left" Height="23" Margin="86,78,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="173" MaxLines="1" IsEnabled="False" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="txtNumber" HorizontalAlignment="Left" Height="23" Margin="86,102,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="173" MaxLines="1" IsEnabled="False" Grid.ColumnSpan="2"/>
         <Label Content="Fax Number:" HorizontalAlignment="Left" Margin="4,99,0,0" VerticalAlignment="Top"/>
         <Label Content="Recipient:" HorizontalAlignment="Left" Margin="19,78,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblMSG" Content="" HorizontalAlignment="Left" Margin="86,46,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="Red"/>
         <TextBox x:Name="txtDocument" HorizontalAlignment="Left" Height="26" Margin="0,20,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="509" MaxLines="1" IsEnabled="False" Grid.ColumnSpan="2" FontSize="10"/>
-        <CheckBox Content="Skip invalid files" HorizontalAlignment="Left" Margin="10,222,0,0" VerticalAlignment="Top" IsChecked="True" IsEnabled="False" Visibility="Hidden"/>
+        <CheckBox Content="Skip invalid files" HorizontalAlignment="Left" Margin="10,222,0,0" VerticalAlignment="Top" IsChecked="True" IsEnabled="False" Visibility="Hidden" Grid.ColumnSpan="2"/>
         <GroupBox Header="User ID" HorizontalAlignment="Left" Margin="5,225,0,0" VerticalAlignment="Top" Height="69" Width="90" FontWeight="Bold">
             <StackPanel HorizontalAlignment="Left" Height="56" VerticalAlignment="Top" Width="102">
                 <RadioButton x:Name="ActiveUserRatio" Content="Active" FontWeight="Normal" IsChecked="True" />
-                <RadioButton x:Name="CutinUserRatio" Content="Cut In" FontWeight="Normal" />
+                <RadioButton x:Name="CutinUserRatio" Content="CutIn" FontWeight="Normal" />
                 <RadioButton x:Name="AIUserRatio" Content="AcctInit" FontWeight="Normal" />
             </StackPanel>
         </GroupBox>
+        <Label Content="Created By: Zachary Karpinski" HorizontalAlignment="Left" Margin="253,278,0,0" VerticalAlignment="Top" Grid.Column="1" FontSize="10"/>
     </Grid>
 </Window>

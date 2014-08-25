@@ -17,8 +17,15 @@ Module ConvertToTiff
         'Initiate word application object and minimize it
         objWord = CreateObject("Word.Application")
         objWord.WindowState = Word.WdWindowState.wdWindowStateMinimize
+
         'Set active printer to Fax
-        objWord.ActivePrinter = "Microsoft Office Document Image Writer"
+        Try
+            objWord.ActivePrinter = "Microsoft Office Document Image Writer"
+        Catch ex As Exception
+            MsgBox("Printer error. Is the 'Microsoft Office Document Image Writer' printer installed?", MsgBoxStyle.Critical)
+            objWord.Quit()
+            Exit Sub
+        End Try
 
         'Verify output folder exists
         GlobalModule.CheckFolder(sDestination)
@@ -26,7 +33,6 @@ Module ConvertToTiff
         'Update UI
         frmMain.ProgressBar.Maximum = sFiles.Length
         frmMain.ProgressBar.Value = 0
-
 
         For Each value In sFiles
             frmMain.lblStatus.Text = String.Format("Converting {0} of {1}", frmMain.ProgressBar.Value + 1, sFiles.Length)
@@ -44,20 +50,29 @@ Module ConvertToTiff
             'Progress the progress bar
             frmMain.ProgressBar.Value += 1
         Next
-        'Cleanup
+
         objWord.Quit()
-        objWdDoc = Nothing
-        objWord = Nothing
     End Sub
 
     Sub ImageFiles(sFiles() As String)
         Dim sDestination As String = My.Settings.savePath + "converted\"
         Dim sFileName As String
         Dim sOutTIFF As String
+
         Dim printDocument As New PrintDocument()
         AddHandler printDocument.PrintPage, AddressOf printDocument_PrintPage
-        'TODO Set active printer to Fax
 
+        'Controller hides the "printing page x of y dialog (http://stackoverflow.com/questions/5511138/can-i-disable-the-printing-page-x-of-y-dialog)
+        Dim printController As PrintController = New StandardPrintController
+        printDocument.PrintController = printController
+
+        'Set printer settings
+        printDocument.PrinterSettings.PrintToFile = True
+        printDocument.PrinterSettings.PrinterName = "Microsoft Office Document Image Writer"
+        If Not printDocument.PrinterSettings.IsValid Then
+            MsgBox("Printer error. Is the 'Microsoft Office Document Image Writer' printer installed?", MsgBoxStyle.Critical)
+            Exit Sub
+        End If
 
         'Verify output folder exists
         GlobalModule.CheckFolder(sDestination)
@@ -72,10 +87,10 @@ Module ConvertToTiff
             sFileName = Path.GetFileNameWithoutExtension(value)
             sOutTIFF = [String].Format("{0}{1}.tiff", sDestination, sFileName)
 
-            'Print the file to file with MODI
-            printDocument.PrinterSettings.PrintToFile = True
+            'Print the image
             printDocument.PrinterSettings.PrintFileName = sOutTIFF
             printDocument.Print()
+
             frmMain.ProgressBar.Value += 1
         Next
     End Sub

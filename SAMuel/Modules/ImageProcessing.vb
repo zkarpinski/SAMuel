@@ -22,7 +22,6 @@ Module ImageProcessing
         Dim myBitmap As Bitmap
         Dim wRatio As Double = 1700 / bm.Width
         Dim hRatio As Double = 2200 / bm.Height
-        Dim sRatio As Double
 
         'Rotate image
         If bm.Width > bm.Height Then
@@ -31,7 +30,7 @@ Module ImageProcessing
             hRatio = 2200 / bm.Height
         End If
 
-
+        'Dim sRatio As Double
         'If bm.Height > 2200 Or bm.Width > 1700 Then
 
         '    'Determine the scale
