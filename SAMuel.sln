@@ -7,20 +7,24 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SAMuel", "SAMuel\SAMuel.vbp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{29D2D132-83E3-4F41-8E64-A8AAE5C40CA1}"
 	ProjectSection(SolutionItems) = preProject
-		Scripts\Hotkeys\AddContact.ahk = Scripts\Hotkeys\AddContact.ahk
-		Scripts\Hotkeys\AddContact_noparams.ahk = Scripts\Hotkeys\AddContact_noparams.ahk
-		Scripts\Hotkeys\bb.ahk = Scripts\Hotkeys\bb.ahk
 		CHANGELOG.md = CHANGELOG.md
-		Scripts\Fax-C&I.vbs = Scripts\Fax-C&I.vbs
-		Scripts\OpenFile-XP.vbs = Scripts\OpenFile-XP.vbs
 		README.md = README.md
-		Scripts\README.md = Scripts\README.md
-		Scripts\MS Office Macros\RightFax_It.bas = Scripts\MS Office Macros\RightFax_It.bas
 		TODO.md = TODO.md
-		Scripts\Word_To_Tiff.vbs = Scripts\Word_To_Tiff.vbs
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RightFax_It", "RightFaxIt\RightFax_It.csproj", "{639BF440-08B3-4982-8273-002E1E13A2F1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{1BA243FB-4CD6-4652-BACF-56D39F518685}"
+	ProjectSection(SolutionItems) = preProject
+		Scripts\Hotkeys\AddContact.ahk = Scripts\Hotkeys\AddContact.ahk
+		Scripts\Hotkeys\AddContact_noparams.ahk = Scripts\Hotkeys\AddContact_noparams.ahk
+		Scripts\Hotkeys\bb.ahk = Scripts\Hotkeys\bb.ahk
+		Scripts\Fax-C&I.vbs = Scripts\Fax-C&I.vbs
+		Scripts\OpenFile-XP.vbs = Scripts\OpenFile-XP.vbs
+		Scripts\README.md = Scripts\README.md
+		Scripts\MS Office Macros\RightFax_It.bas = Scripts\MS Office Macros\RightFax_It.bas
+		Scripts\Word_To_Tiff.vbs = Scripts\Word_To_Tiff.vbs
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,5 +44,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1BA243FB-4CD6-4652-BACF-56D39F518685} = {29D2D132-83E3-4F41-8E64-A8AAE5C40CA1}
 	EndGlobalSection
 EndGlobal
