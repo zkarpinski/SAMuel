@@ -11,16 +11,18 @@ Public Module EmailProcessing
                 sFileExt = ".bmp" Or sFileExt = ".pdf" Or _
                 sFileExt = ".doc" Or sFileExt = ".docx" Then
             Return sFileExt
-            'Known attachment types that are skipped (for now). 
+            'Known attachment types that are skipped (for now).     
         ElseIf sFileExt = ".psd" Or sFileExt = ".bin" Or _
                 sFileExt = ".htm" Or sFileExt = ".html" Or _
                 sFileExt = ".xps" Or sFileExt = ".txt" Or _
-                sFileExt = ".msg" Then
+                sFileExt = ".msg" Or sFileExt = ".vcf" Then
             Return vbNullString
         Else
             LogAction(51, sFileExt)
             Return vbNullString
         End If
     End Function
+
+
 
 End Module

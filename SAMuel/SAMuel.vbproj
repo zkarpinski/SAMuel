@@ -134,6 +134,7 @@
     <Compile Include="Modules\AddContact.vb" />
     <Compile Include="Modules\ConvertToTiff.vb" />
     <Compile Include="Modules\EmailProcessing.vb" />
+    <Compile Include="Modules\GhostscriptDllLib.vb" />
     <Compile Include="Modules\GlobalModule.vb" />
     <Compile Include="Modules\ImageProcessing.vb" />
     <Compile Include="Modules\KofaxModule.vb" />
@@ -177,6 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="lib\gsdll32.lib" />
     <None Include="My Project\app.manifest" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
@@ -190,15 +192,6 @@
     <None Include="SAMuel.zip" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="Microsoft.Office.Core">
-      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>7</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>primary</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
     <COMReference Include="Microsoft.Office.Interop.Outlook">
       <Guid>{00062FFF-0000-0000-C000-000000000046}</Guid>
       <VersionMajor>9</VersionMajor>
@@ -251,6 +244,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="gsdll32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Boston_gas_tank.bmp" />
     <Content Include="Resources\default.ico" />
     <Content Include="Resources\ny_map_f.gif" />

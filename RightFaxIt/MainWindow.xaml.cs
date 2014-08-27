@@ -109,20 +109,14 @@ namespace RightFaxIt
                 {
                     msg = msg + Environment.NewLine + skippedFiles[i];
                 }
-            }
-            else
-            {
-                msg = "All documents were faxed.";
+                String msgTitle = faxes.Count.ToString() + " items faxed.";
+                MessageBox.Show(msg, msgTitle);
             }
 
             //Update UI
             this.AllowDrop = true;//update ui once worker complete his work
             this.btnFax.IsEnabled = true;
             FileListBox.ItemsSource = faxes;
-
-            String msgTitle = faxes.Count.ToString() + " items faxed.";
-            
-            MessageBox.Show(msg, msgTitle);
         }
 
         void bworker_CompletedProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -284,7 +278,6 @@ namespace RightFaxIt
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 initFaxWorker(files);
-
             }
         }
 
@@ -294,9 +287,9 @@ namespace RightFaxIt
             this.AllowDrop = false;
             this.btnFax.IsEnabled = false;
             
-            if((bool)this.ActiveUserRatio.IsChecked)
-            {
-                SelectedUser = "active";
+            if((bool)this.ActiveUserRatio.IsChecked) 
+            { 
+                SelectedUser = "active"; 
             }
             else if((bool)this.CutinUserRatio.IsChecked)
             {
@@ -342,7 +335,5 @@ namespace RightFaxIt
         }
 
 #endregion
-
-
     }
 }

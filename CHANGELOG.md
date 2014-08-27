@@ -1,3 +1,18 @@
+## 2014-08-26
+
+Features:
+
+  - Outlook: Now handles pdf files using [Ghostscript](http://ghostscript.com/).
+
+Code Improvements:
+
+  - Convert Files: Word documents are opened as read-only.
+  - Outlook: Images now use same function as the convert files tab.
+
+UI Improvements:
+
+  - RightFaxIt: Removed the completed faxing messagebox.
+
 ## 2014-08-24
 
 Features:

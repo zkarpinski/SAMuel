@@ -40,7 +40,7 @@ Module ConvertToTiff
             'Get the file name
             sFileName = Path.GetFileNameWithoutExtension(value)
             'Open the document within word and don't prompt  for conversion.
-            objWdDoc = objWord.Documents.Open(FileName:=value, ConfirmConversions:=False)
+            objWdDoc = objWord.Documents.Open(FileName:=value, ConfirmConversions:=False, [ReadOnly]:=False, AddToRecentFiles:=False)
             objWord.Visible = False
             objWord.WindowState = Word.WdWindowState.wdWindowStateMinimize
             'Print to Tiff
@@ -59,21 +59,6 @@ Module ConvertToTiff
         Dim sFileName As String
         Dim sOutTIFF As String
 
-        Dim printDocument As New PrintDocument()
-        AddHandler printDocument.PrintPage, AddressOf printDocument_PrintPage
-
-        'Controller hides the "printing page x of y dialog (http://stackoverflow.com/questions/5511138/can-i-disable-the-printing-page-x-of-y-dialog)
-        Dim printController As PrintController = New StandardPrintController
-        printDocument.PrintController = printController
-
-        'Set printer settings
-        printDocument.PrinterSettings.PrintToFile = True
-        printDocument.PrinterSettings.PrinterName = "Microsoft Office Document Image Writer"
-        If Not printDocument.PrinterSettings.IsValid Then
-            MsgBox("Printer error. Is the 'Microsoft Office Document Image Writer' printer installed?", MsgBoxStyle.Critical)
-            Exit Sub
-        End If
-
         'Verify output folder exists
         GlobalModule.CheckFolder(sDestination)
 
@@ -83,16 +68,38 @@ Module ConvertToTiff
         For Each value In sFiles
             frmMain.lblStatus.Text = String.Format("Converting {0} of {1}", frmMain.ProgressBar.Value + 1, sFiles.Length)
             frmMain.Refresh()
-            sFileToPrint = value
             sFileName = Path.GetFileNameWithoutExtension(value)
             sOutTIFF = [String].Format("{0}{1}.tiff", sDestination, sFileName)
 
-            'Print the image
-            printDocument.PrinterSettings.PrintFileName = sOutTIFF
-            printDocument.Print()
+            Image(value, sOutTIFF)
 
             frmMain.ProgressBar.Value += 1
         Next
+    End Sub
+
+    Sub Image(inputFile As String, outputTiff As String)
+
+        Dim printDocument As New PrintDocument()
+        AddHandler printDocument.PrintPage, AddressOf printDocument_PrintPage
+
+        'Controller hides the "printing page x of y dialog (http://stackoverflow.com/questions/5511138/can-i-disable-the-printing-page-x-of-y-dialog)
+        Dim printController As PrintController = New StandardPrintController
+        printDocument.PrintController = printController
+
+        'Set printer settings
+        printDocument.PrinterSettings.PrintToFile = True
+        'printDocument.PrinterSettings.PrinterName = "Microsoft Office Document Image Writer"
+        If Not printDocument.PrinterSettings.IsValid Then
+            MsgBox("Printer error. Is the 'Microsoft Office Document Image Writer' printer installed?", MsgBoxStyle.Critical)
+            Return
+        End If
+
+        sFileToPrint = inputFile
+
+        'Print the image
+        printDocument.PrinterSettings.PrintFileName = outputTiff
+        printDocument.Print()
+
     End Sub
 
     Private Sub printDocument_PrintPage(ByVal sender As Object, ByVal e As PrintPageEventArgs)
@@ -100,6 +107,21 @@ Module ConvertToTiff
         Dim mBitmap As Bitmap = Bitmap.FromFile(sFileToPrint)
         mBitmap = ImageProcessing.ResizeImage(mBitmap)
         e.Graphics.DrawImage(CType(mBitmap, Image), 0, 0, e.PageBounds.Width, e.PageBounds.Height)
+    End Sub
+
+    ''' <summary>
+    ''' Converts PDFs to multi-page tiffs
+    ''' </summary>
+    ''' <param name="inputPDF"></param>
+    ''' <param name="outputTiff"></param>
+    ''' <remarks></remarks>
+    Sub PDF(inputPDF As String, outputTiff As String)
+
+        Dim Args() As String = {"-q", "-dNOPAUSE", "-dBATCH", "-dSAFER", _
+          "-sDEVICE=tiffg4", "-sPAPERSIZE=letter", _
+          "-sOutputFile=" & outputTiff, inputPDF}
+
+        RunGS(Args)
     End Sub
 
 End Module

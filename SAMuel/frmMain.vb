@@ -35,15 +35,6 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub PrintDocument1_PrintPage(sender As Object, e As PrintPageEventArgs) Handles PrintDocument1.PrintPage
-        'Resize rotate image if needed then print within page bounds.
-        Using mBitmap As Bitmap = Bitmap.FromFile(sImageToPrint)
-            Using bm As Bitmap = ImageProcessing.ResizeImage(mBitmap)
-                e.Graphics.DrawImage(CType(bm, Image), 0, 0, e.PageBounds.Width, e.PageBounds.Height)
-            End Using
-        End Using
-    End Sub
-
 #Region "Outlook Tab Region --------------------------------------------------------------------------------------"
     'Outlook Tab wide varibles
     Dim bNextPressed As Boolean
@@ -154,11 +145,6 @@ Public Class frmMain
                             'Delete the file and move to next attachment
                             System.IO.File.Delete(sFile)
                             Continue For
-                        ElseIf sFileExt = ".pdf" Then
-                            ' TODO add PDF handling
-                            'EmailProcessing.ParsePDFImgs(sFile)
-                            LogAction(0, "PDF detected. " & sEmail.Subject & " " & sEmail.From)
-                            Continue For
                         End If
 
                         sImageToPrint = sFile
@@ -173,8 +159,8 @@ Public Class frmMain
                             txtFrom.Text = sEmail.From
                             rtbEmailBody.Text = sEmail.Body
 
-                            If sFileExt = ".doc" Or sFileExt = ".docx" Then
-                                ' TODO Preview word doc
+                            If sFileExt = ".doc" Or sFileExt = ".docx" Or sFileExt = ".pdf" Then
+                                ' TODO Preview word/pdf doc
                             Else
                                 'Load the attachment
                                 picImage.ImageLocation = sImageToPrint
@@ -202,15 +188,18 @@ Public Class frmMain
                             Reset_ProgressBar()
                             endTime = DateTime.Now
                             totalTime = endTime - startTime
-                            LogAction(0, String.Format("Finished {0} emails in {1} time span.", completedEmailsCount, totalTime))
+                            LogAction(0, String.Format("{0}: Finished {1} emails in {2} seconds.", workingOutlookFolder.Parent, completedEmailsCount, totalTime.TotalSeconds))
                             Me.Cursor = Cursors.Default
                             Exit Sub
                         ElseIf bRejectPressed Then
                             '------ LOG reject action? ---------
                         ElseIf (bNextPressed Or bAuditMode = False) And bRejectPressed = False Then
                             'Save the edited attachment as tiff and add to list
-                            lblStatus.Text = "Converting to Tiff..."
+                            lblStatus.Text = "Converting  Tiff..."
                             Me.Refresh()
+
+                            'Name the tiff files to be created.
+                            outTiff = [String].Format("{0}{1}_{2}.tiff", sDestination, sEmail.Account, rand.Next(10000).ToString)
 
                             'Handle how each file type is printed
                             If sFileExt = ".doc" Or sFileExt = ".docx" Then
@@ -220,7 +209,6 @@ Public Class frmMain
                                     wApp.WindowState = Word.WdWindowState.wdWindowStateMinimize
                                 End If
                                 Dim objWdDoc As Word.Document
-                                outTiff = [String].Format("{0}{1}_{2}.tiff", sDestination, sEmail.Account, rand.Next(10000).ToString)
 
                                 'Open the document within word and don't prompt  for conversion.
                                 objWdDoc = wApp.Documents.Open(FileName:=sFile, ConfirmConversions:=False)
@@ -229,18 +217,13 @@ Public Class frmMain
                                 objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=outTiff)
 
                                 objWdDoc.Close()
-
+                            ElseIf sFileExt = ".pdf" Then
+                                'Convert PDFs to tiff
+                                ConvertToTiff.PDF(sFile, outTiff)
                             Else
-                                outTiff = [String].Format("{0}{1}_{2}.tiff", sDestination, sEmail.Account, rand.Next(10000).ToString)
-
-                                'Print the file to file with MODI
-                                PrintDocument1.PrinterSettings.PrintToFile = True
-                                PrintDocument1.PrinterSettings.PrintFileName = outTiff
-                                PrintDialog1.PrintToFile = True
-                                PrintDocument1.Print()
-
+                                'Print images to tiff
+                                ConvertToTiff.Image(sFile, outTiff)
                             End If
-                            Me.Refresh()
                         Else
                             'Undesired state. Log this
                             LogAction(99, "Outlook buttonState: " & bCancelPressed.ToString & "," & bRejectPressed.ToString & "," & bNextPressed.ToString & "," & bAuditMode.ToString)
@@ -279,8 +262,6 @@ Public Class frmMain
                     LogAction(50, String.Format("{0} - {1} was skipped. No attachments", sEmail.Subject, sEmail.From))
                 End If
 
-
-
                 bNextPressed = False
                 ProgressBar.Value += 1
                 Me.Refresh()
@@ -293,7 +274,7 @@ Public Class frmMain
         endTime = DateTime.Now
         totalTime = endTime - startTime
 
-        LogAction(0, String.Format("Finished {0} emails in {1} time span.", completedEmailsCount, totalTime))
+        LogAction(0, String.Format("{0}: Finished {1} emails in {2} seconds.", workingOutlookFolder.Parent, completedEmailsCount, totalTime.TotalSeconds))
 
         If completedEmailsCount > 0 Then
             lblStatus.Text = "Finished processing emails."
