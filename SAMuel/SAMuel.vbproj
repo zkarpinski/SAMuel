@@ -84,6 +84,9 @@
     <ApplicationIcon>Resources\default.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Ghostscript.NET">
+      <HintPath>..\packages\Ghostscript.NET.1.1.9\lib\net40\Ghostscript.NET.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -189,6 +192,7 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <None Include="packages.config" />
     <None Include="SAMuel.zip" />
   </ItemGroup>
   <ItemGroup>

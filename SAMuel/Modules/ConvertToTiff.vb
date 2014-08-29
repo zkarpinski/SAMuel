@@ -3,6 +3,9 @@ Imports Word = Microsoft.Office.Interop.Word
 Imports System.IO
 Imports System.Drawing.Printing
 
+Imports Ghostscript.NET
+
+
 Module ConvertToTiff
 
     Dim sFileToPrint As String
@@ -117,11 +120,15 @@ Module ConvertToTiff
     ''' <remarks></remarks>
     Sub PDF(inputPDF As String, outputTiff As String)
 
-        Dim Args() As String = {"-q", "-dNOPAUSE", "-dBATCH", "-dSAFER", _
-          "-sDEVICE=tiffg4", "-sPAPERSIZE=letter", _
-          "-sOutputFile=" & outputTiff, inputPDF}
+        'Run ghostscript with arguments.
+        'http://www.ghostscript.com/doc/current/Use.htm
+        Dim Args() As String = {"-q", "-dNOPAUSE", "-dBATCH", "-dSAFER", "-sDEVICE=tiffg4", "-sPAPERSIZE=letter", "-dNumRenderingThreads=" & Environment.ProcessorCount.ToString(), _
+          "-sOutputFile=" & outputTiff, "-f" & inputPDF}
+        'RunGS(Args)
 
-        RunGS(Args)
+        Dim gvi As GhostscriptVersionInfo = New GhostscriptVersionInfo(New Version(0, 0, 0), Directory.GetCurrentDirectory() + "\gsdll32.dll", String.Empty, GhostscriptLicense.GPL)
+        Dim processor As Processor.GhostscriptProcessor = New Processor.GhostscriptProcessor(gvi, True)
+        processor.StartProcessing(Args, Nothing)
     End Sub
 
 End Module
