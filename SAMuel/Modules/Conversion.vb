@@ -6,11 +6,11 @@ Imports System.Drawing.Printing
 Imports Ghostscript.NET
 
 
-Module ConvertToTiff
+Module Conversion
 
     Dim sFileToPrint As String
 
-    Sub WordDocs(sFiles() As String)
+    Sub docsToTiff(sFiles() As String)
         'Converts Word Documents to .tif using MODI
         Dim objWdDoc As Word.Document
         Dim objWord As Word.Application
@@ -57,7 +57,7 @@ Module ConvertToTiff
         objWord.Quit()
     End Sub
 
-    Sub ImageFiles(sFiles() As String)
+    Sub imagesToTiff(sFiles() As String)
         Dim sDestination As String = My.Settings.savePath + "converted\"
         Dim sFileName As String
         Dim sOutTIFF As String
@@ -74,13 +74,13 @@ Module ConvertToTiff
             sFileName = Path.GetFileNameWithoutExtension(value)
             sOutTIFF = [String].Format("{0}{1}.tiff", sDestination, sFileName)
 
-            Image(value, sOutTIFF)
+            imgToTiff(value, sOutTIFF)
 
             frmMain.ProgressBar.Value += 1
         Next
     End Sub
 
-    Sub Image(inputFile As String, outputTiff As String)
+    Sub imgToTiff(inputFile As String, outputTiff As String)
 
         Dim printDocument As New PrintDocument()
         AddHandler printDocument.PrintPage, AddressOf printDocument_PrintPage
@@ -91,7 +91,7 @@ Module ConvertToTiff
 
         'Set printer settings
         printDocument.PrinterSettings.PrintToFile = True
-        'printDocument.PrinterSettings.PrinterName = "Microsoft Office Document Image Writer"
+        printDocument.PrinterSettings.PrinterName = "Microsoft Office Document Image Writer"
         If Not printDocument.PrinterSettings.IsValid Then
             MsgBox("Printer error. Is the 'Microsoft Office Document Image Writer' printer installed?", MsgBoxStyle.Critical)
             Return
@@ -118,17 +118,53 @@ Module ConvertToTiff
     ''' <param name="inputPDF"></param>
     ''' <param name="outputTiff"></param>
     ''' <remarks></remarks>
-    Sub PDF(inputPDF As String, outputTiff As String)
+    Public Sub pdfToTiff(inputPDF As String, outputTiff As String)
 
         'Run ghostscript with arguments.
         'http://www.ghostscript.com/doc/current/Use.htm
-        Dim Args() As String = {"-q", "-dNOPAUSE", "-dBATCH", "-dSAFER", "-sDEVICE=tiffg4", "-sPAPERSIZE=letter", "-dNumRenderingThreads=" & Environment.ProcessorCount.ToString(), _
-          "-sOutputFile=" & outputTiff, "-f" & inputPDF}
-        'RunGS(Args)
-
+        Dim Args() As String = {"-q", "-dNOPAUSE", "-dBATCH", "-dSAFER", "-sDEVICE=tiffg4", "-sPAPERSIZE=letter", _
+                                "-dNumRenderingThreads=" & Environment.ProcessorCount.ToString(), _
+                                "-sOutputFile=" & outputTiff, "-f" & inputPDF}
         Dim gvi As GhostscriptVersionInfo = New GhostscriptVersionInfo(New Version(0, 0, 0), Directory.GetCurrentDirectory() + "\gsdll32.dll", String.Empty, GhostscriptLicense.GPL)
         Dim processor As Processor.GhostscriptProcessor = New Processor.GhostscriptProcessor(gvi, True)
+
         processor.StartProcessing(Args, Nothing)
     End Sub
+
+    ''' <summary>
+    ''' Prints a word document to tiff using Microsoft Office Document Image Writer
+    ''' </summary>
+    ''' <param name="inputDoc">Word document to be converted.</param>
+    ''' <param name="outputTiff">Full path of the resulting tiff file.</param>
+    ''' <param name="wordApp">Reference to an active word application.</param>
+    ''' <remarks></remarks>
+    Public Function docToTiff(ByVal inputDoc As String, ByVal outputTiff As String, ByRef wordApp As Word.Application) As Boolean
+        Dim objWdDoc As Word.Document
+
+        'Initiate word application object and minimize it
+        wordApp = CreateObject("Word.Application")
+        wordApp.WindowState = Word.WdWindowState.wdWindowStateMinimize
+
+        'Set active printer to Fax
+        Try
+            wordApp.ActivePrinter = "Microsoft Office Document Image Writer"
+        Catch ex As Exception
+            MsgBox("Printer error. Is the 'Microsoft Office Document Image Writer' printer installed?", MsgBoxStyle.Critical)
+            wordApp.Quit()
+            Return False
+        End Try
+
+        objWdDoc = wordApp.Documents.Open(FileName:=inputDoc, ConfirmConversions:=False, [ReadOnly]:=True, AddToRecentFiles:=False)
+        wordApp.Visible = False
+        wordApp.WindowState = Word.WdWindowState.wdWindowStateMinimize
+
+        'Print to Tiff
+        objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=outputTiff)
+
+        'Release document and close word.
+        objWdDoc.Close()
+        wordApp.Quit()
+        Return True
+    End Function
 
 End Module

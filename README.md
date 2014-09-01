@@ -2,6 +2,8 @@ SAMuel
 ===================
 __Service Application Manager Unified Expediting Library (work in progress)__
 
+![Outlook](https://raw.github.com/zKarp/SAMuel/master/images/Outlook-preview2.JPG "Outlook tab preview with email opened.")
+
 ##Purpose
 A toolset designed to automate critical tasks performed daily with my work at National Grid, during my free time at home.
 
@@ -21,15 +23,16 @@ A toolset designed to automate critical tasks performed daily with my work at Na
 * Windows XP, Vista, 7, 8 or 8.1
 * Microsoft Office Document Imaging
 * RightFax 8.7+
-
-##Preview
-![Outlook](https://raw.github.com/zKarp/SAMuel/master/images/Outlook-preview.JPG "Outlook tab preview")
-![Outlook](https://raw.github.com/zKarp/SAMuel/master/images/Outlook-preview2.JPG "Outlook tab preview with email opened.")
-![RightFax It](https://raw.github.com/zKarp/SAMuel/master/images/RightFaxIt-preview.JPG "RightFax tab preview")
-![Kofax It](https://raw.github.com/zKarp/SAMuel/master/images/KofaxIt-preview.JPG "Kofax tab preview")
+* [Ghostscript(included)](http://www.ghostscript.com/)
 
 ##Programming Techniques
 
 * Hashtables/Dictionaries
 * Custom Classes
 * Overloaded Functions
+
+
+##FEEDBACK
+
+Please submit feedback via the [issue tracker](https://github.com/zKarp/SAMuel/issues)
+Copyright (c) 2014 Zachary Karpinski

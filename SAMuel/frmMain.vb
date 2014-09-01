@@ -6,8 +6,6 @@ Imports System.Drawing.Printing
 Imports System.ComponentModel
 
 Public Class frmMain
-    'Form wide variables
-    Public sImageToPrint As String
 
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Resets the form state to default
@@ -42,6 +40,8 @@ Public Class frmMain
     Dim bCancelPressed As Boolean
     Dim bAuditMode As Boolean
     Dim bUnAttendedMode As Boolean
+
+    Dim currentEmailAttachment As String
 
     Private Sub btnRun_Click(sender As Object, e As EventArgs) Handles btnRun.Click
         Dim oApp As Outlook.Application = New Outlook.Application
@@ -147,7 +147,7 @@ Public Class frmMain
                             Continue For
                         End If
 
-                        sImageToPrint = sFile
+                        currentEmailAttachment = sFile
 
                         'Display email info when in auditmode
                         If (bAuditMode) Then
@@ -163,7 +163,7 @@ Public Class frmMain
                                 ' TODO Preview word/pdf doc
                             Else
                                 'Load the attachment
-                                picImage.ImageLocation = sImageToPrint
+                                picImage.ImageLocation = currentEmailAttachment
                             End If
                         End If
 
@@ -203,26 +203,19 @@ Public Class frmMain
 
                             'Handle how each file type is printed
                             If sFileExt = ".doc" Or sFileExt = ".docx" Then
+                                'Convert Word documents to tiff
                                 If (wApp Is Nothing) Then
                                     wApp = New Word.Application
                                     wApp = CreateObject("Word.Application")
                                     wApp.WindowState = Word.WdWindowState.wdWindowStateMinimize
                                 End If
-                                Dim objWdDoc As Word.Document
-
-                                'Open the document within word and don't prompt  for conversion.
-                                objWdDoc = wApp.Documents.Open(FileName:=sFile, ConfirmConversions:=False)
-                                wApp.Visible = False
-                                'Print to Tiff
-                                objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=outTiff)
-
-                                objWdDoc.Close()
+                                Conversion.docToTiff(sFile, outTiff, wApp)
                             ElseIf sFileExt = ".pdf" Then
                                 'Convert PDFs to tiff
-                                ConvertToTiff.PDF(sFile, outTiff)
+                                Conversion.pdfToTiff(sFile, outTiff)
                             Else
                                 'Print images to tiff
-                                ConvertToTiff.Image(sFile, outTiff)
+                                Conversion.imgToTiff(sFile, outTiff)
                             End If
                         Else
                             'Undesired state. Log this
@@ -310,7 +303,7 @@ Public Class frmMain
     End Sub
 
     Private Sub picImage_Click(sender As Object, e As EventArgs) Handles picImage.Click
-        System.Diagnostics.Process.Start(Me.picImage.ImageLocation.ToString)
+        System.Diagnostics.Process.Start(Me.currentEmailAttachment)
     End Sub
 
     Private Sub Reset_Outlook_Tab()
@@ -568,9 +561,9 @@ Public Class frmMain
         If dlgOpen.ShowDialog() = DialogResult.OK Then
             Try
                 If (Me.rbConvertDOC.Checked) Then
-                    ConvertToTiff.WordDocs(dlgOpen.FileNames)
+                    Conversion.docsToTiff(dlgOpen.FileNames)
                 Else
-                    ConvertToTiff.ImageFiles(dlgOpen.FileNames)
+                    Conversion.imagesToTiff(dlgOpen.FileNames)
                 End If
             Catch ex As Exception
                 MessageBox.Show(ex.Message)
@@ -589,9 +582,9 @@ Public Class frmMain
             Dim files As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
             Try
                 If (Me.rbConvertDOC.Checked) Then
-                    ConvertToTiff.WordDocs(files)
+                    Conversion.docsToTiff(files)
                 Else
-                    ConvertToTiff.ImageFiles(files)
+                    Conversion.imagesToTiff(files)
                 End If
             Catch ex As Exception
                 MessageBox.Show(ex.Message)

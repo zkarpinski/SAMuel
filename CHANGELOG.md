@@ -1,3 +1,10 @@
+## 2014-08-29
+
+Code Improvements:
+
+  - Convert Files: Removed duplicate code.
+  - Outlook: Imagebox on click, opens non-images now. Preview still in the works.
+
 ## 2014-08-26
 
 Features:

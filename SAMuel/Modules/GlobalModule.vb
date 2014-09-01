@@ -91,14 +91,31 @@ Module GlobalModule
         Next
     End Sub
 
-
     ''' <summary>
     ''' Creates a folder if the path does not exist
     ''' </summary>
-    Sub CheckFolder(ByVal path As String)
+    Public Sub CheckFolder(ByVal path As String)
         If (Not System.IO.Directory.Exists(path)) Then
             System.IO.Directory.CreateDirectory(path)
         End If
     End Sub
 
+    ''' <summary>
+    ''' Generates a random string
+    ''' </summary>
+    ''' <param name="length"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function RandomString(ByVal length As Integer) As String
+        Dim random As New Random()
+        Dim charOutput As Char() = New Char(length - 1) {}
+        For i As Integer = 0 To length - 1
+            Dim selector As Integer = random.[Next](65, 101)
+            If selector > 90 Then
+                selector -= 43
+            End If
+            charOutput(i) = Convert.ToChar(selector)
+        Next
+        Return New String(charOutput)
+    End Function
 End Module

@@ -3,6 +3,7 @@ Public Class SAM_Email
     Implements IDisposable
     Public Property Subject As String
     Public Property From As String
+    Public Property SenderEmailAddress As String
     Public Property Body As String
     Public Property Account As String
     Public Property Attachments As New List(Of String)
@@ -16,12 +17,12 @@ Public Class SAM_Email
         Me.Subject = objEmail.Subject
         Me.From = objEmail.SenderName
         Me.Body = objEmail.body
-        Me.Regex()
+        Me.SenderEmailAddress = objEmail.SenderEmailAddress
+        Me.Account = Me.Regex()
         Me.EmailObject = objEmail
-
     End Sub
 
-    Private Sub Regex()
+    Private Function Regex() As String
         Dim strAccNum As String = "X"
         Dim strRegFormats() As String = {"\d{5}-\d{5}", "\d{10}", "\d{9}"} ' 'Regex Formats for Bill Account Numbers and Customer Numbers.
 
@@ -38,8 +39,8 @@ Public Class SAM_Email
             Me.IsValid = False
         End If
 
-        Me.Account = strAccNum
-    End Sub
+        Return strAccNum
+    End Function
 
     Public Sub DownloadAttachments()
         Dim sFile As String
@@ -47,13 +48,7 @@ Public Class SAM_Email
         Dim rand As New Random
         Dim subFolder As String
 
-        subFolder = Me.From + "\"
-        subFolder = subFolder.Replace(":", "")
-        subFolder = subFolder.Replace("*", "")
-        subFolder = subFolder.Replace("?", "")
-        subFolder = subFolder.Replace("<", "")
-        subFolder = subFolder.Replace(">", "")
-        subFolder = subFolder.Replace("#", "")
+        subFolder = SenderEmailAddress + "\"
         ' TODO Remove ALL invalid path characters from string.
         sPath = My.Settings.savePath + "emails\" + subFolder
         GlobalModule.CheckFolder(sPath)
@@ -61,7 +56,7 @@ Public Class SAM_Email
         If Me.EmailObject.Attachments.Count > 0 Then
             For Each value In Me.EmailObject.Attachments
                 'Added random number for same filename handling cases
-                sFile = sPath & rand.Next(10000).ToString & value.FileName
+                sFile = sPath + value.FileName + "_" + rand.Next(10000).ToString
                 value.SaveAsFile(sFile)
                 Me.Attachments.Add(sFile)
             Next

@@ -107,8 +107,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
-    <Compile Include="Classes\cPDF995.vb" />
-    <Compile Include="Classes\cPrinter.vb" />
     <Compile Include="Classes\SAM_Email.vb" />
     <Compile Include="frmEmails.Designer.vb">
       <DependentUpon>frmEmails.vb</DependentUpon>
@@ -135,7 +133,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Modules\AddContact.vb" />
-    <Compile Include="Modules\ConvertToTiff.vb" />
+    <Compile Include="Modules\Conversion.vb" />
     <Compile Include="Modules\EmailProcessing.vb" />
     <Compile Include="Modules\GhostscriptDllLib.vb" />
     <Compile Include="Modules\GlobalModule.vb" />
