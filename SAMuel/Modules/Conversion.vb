@@ -91,7 +91,9 @@ Module Conversion
 
         'Set printer settings
         printDocument.PrinterSettings.PrintToFile = True
+#If CONFIG = "Release" Then
         printDocument.PrinterSettings.PrinterName = "Microsoft Office Document Image Writer"
+#End If
         If Not printDocument.PrinterSettings.IsValid Then
             MsgBox("Printer error. Is the 'Microsoft Office Document Image Writer' printer installed?", MsgBoxStyle.Critical)
             Return
@@ -145,6 +147,7 @@ Module Conversion
         wordApp = CreateObject("Word.Application")
         wordApp.WindowState = Word.WdWindowState.wdWindowStateMinimize
 
+#If CONFIG = "Release" Then
         'Set active printer to Fax
         Try
             wordApp.ActivePrinter = "Microsoft Office Document Image Writer"
@@ -153,6 +156,8 @@ Module Conversion
             wordApp.Quit()
             Return False
         End Try
+
+#End If
 
         objWdDoc = wordApp.Documents.Open(FileName:=inputDoc, ConfirmConversions:=False, [ReadOnly]:=True, AddToRecentFiles:=False)
         wordApp.Visible = False

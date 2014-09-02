@@ -6,7 +6,6 @@ Imports System.Drawing.Printing
 Imports System.ComponentModel
 
 Public Class frmMain
-
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Resets the form state to default
         Reset_All_Forms()
@@ -20,7 +19,6 @@ Public Class frmMain
 
         'Verify all output folders exist
         GlobalModule.InitOutputFolders()
-
         'Welcome the user.
         lblStatus.Text = String.Format("Welcome {0}!", Environment.UserName)
     End Sub
@@ -47,7 +45,7 @@ Public Class frmMain
         Dim oApp As Outlook.Application = New Outlook.Application
         Dim wApp As Word.Application = Nothing
         Dim sDestination As String
-        Dim sFile As String, sFileExt As String
+        Dim sFileExt As String
         Dim outTiff As String
         Dim emailCount As Integer
         Dim samEmails As New List(Of SAM_Email)
@@ -134,69 +132,72 @@ Public Class frmMain
                 lblStatus.Text = "Downloading attachments..."
                 Me.Refresh()
                 sEmail.DownloadAttachments()
-
                 'Process each attachment within the email
-                If sEmail.AttachmentsCount > 0 Then
-                    frmEmails.clbSelectedEmails.Items.Add("[" & sEmail.AttachmentsCount.ToString & "] " & sEmail.Account & vbTab & vbTab & sEmail.Subject & vbTab & sEmail.From)
-                    For Each sFile In sEmail.Attachments
-                        'Verify a valid attachment file type.
-                        sFileExt = EmailProcessing.ValidateAttachmentType(sFile)
-                        If (sFileExt Is vbNullString) Then
-                            'Delete the file and move to next attachment
-                            System.IO.File.Delete(sFile)
-                            Continue For
-                        End If
+                If sEmail.AttachmentCount > 0 Then
+                    frmEmails.clbSelectedEmails.Items.Add("[" & sEmail.AttachmentCount.ToString & "] " & sEmail.Account & vbTab & vbTab & sEmail.Subject & vbTab & sEmail.From)
 
-                        currentEmailAttachment = sFile
+                    'Display email info when in auditmode
+                    If (bAuditMode) Then
+                        Me.Cursor = Cursors.Default
+                        lblStatus.Text = "Waiting for user..."
+                        Outlook_Setup_Audit_View()
+                        txtAcc.Text = sEmail.Account
+                        txtSubject.Text = sEmail.Subject
+                        txtFrom.Text = sEmail.From
+                        rtbEmailBody.Text = sEmail.Body
 
-                        'Display email info when in auditmode
-                        If (bAuditMode) Then
-                            Me.Cursor = Cursors.Default
-                            lblStatus.Text = "Waiting for user..."
-                            Outlook_Setup_Audit_View()
-                            txtAcc.Text = sEmail.Account
-                            txtSubject.Text = sEmail.Subject
-                            txtFrom.Text = sEmail.From
-                            rtbEmailBody.Text = sEmail.Body
+                        'Fill the listview with all the attachments within the email.
+                        lstEmailAttachments.Visible = True
+                        For j As Integer = 0 To (sEmail.AttachmentCount - 1)
+                            Dim lvi As ListViewItem = New ListViewItem(sEmail.Attachments(j).Filetype)
+                            lvi.SubItems.Add(sEmail.Attachments(j).Filename)
+                            lvi.Tag = sEmail.Attachments(j).File
+                            lstEmailAttachments.Items.Add(lvi)
+                        Next
+                    End If
 
-                            If sFileExt = ".doc" Or sFileExt = ".docx" Or sFileExt = ".pdf" Then
-                                ' TODO Preview word/pdf doc
-                            Else
-                                'Load the attachment
-                                picImage.ImageLocation = currentEmailAttachment
+                    'Wait for user validation of attachment
+                    Do Until (bNextPressed = True Or bRejectPressed = True Or bCancelPressed = True Or bAuditMode = False)
+                        Application.DoEvents()
+                    Loop
+
+                    Me.Cursor = Cursors.WaitCursor
+
+                    'Update sEmail account if its in audit mode
+                    If (bAuditMode) Then
+                        sEmail.Account = txtAcc.Text
+                    End If
+
+                    bAuditMode = chkAuditMode.Checked
+
+                    If bCancelPressed Then
+                        'When canceled, release image and reset form and end the routine
+                        Reset_Outlook_Tab()
+                        Reset_ProgressBar()
+                        endTime = DateTime.Now
+                        totalTime = endTime - startTime
+                        LogAction(0, String.Format("{0}: Finished {1} emails in {2} seconds.", workingOutlookFolder.Parent, completedEmailsCount, totalTime.TotalSeconds))
+                        Me.Cursor = Cursors.Default
+                        Exit Sub
+                    ElseIf bRejectPressed Then
+                        '------ LOG reject action? ---------
+                    ElseIf (bNextPressed Or bAuditMode = False) And bRejectPressed = False Then
+                        'Save the edited attachment as tiff and add to list
+                        lblStatus.Text = "Converting  Tiff..."
+                        Me.Refresh()
+                        lstEmailAttachments.Items.Clear()
+                        For j As Integer = 0 To (sEmail.AttachmentCount - 1)
+
+                            Dim currentAttachmentFile As String = sEmail.Attachments(j).File
+                            'Verify a valid attachment file type.
+                            sFileExt = EmailProcessing.ValidateAttachmentType(currentAttachmentFile)
+                            If (sFileExt Is vbNullString) Then
+                                'Delete the file and move to next attachment
+                                System.IO.File.Delete(sEmail.Attachments(j).File)
+                                Continue For
                             End If
-                        End If
 
-                        'Wait for user validation of attachment
-                        Do Until (bNextPressed = True Or bRejectPressed = True Or bCancelPressed = True Or bAuditMode = False)
-                            Application.DoEvents()
-                        Loop
-
-                        Me.Cursor = Cursors.WaitCursor
-
-                        'Update sEmail account if its in audit mode
-                        If (bAuditMode) Then
-                            sEmail.Account = txtAcc.Text
-                        End If
-
-                        bAuditMode = chkAuditMode.Checked
-
-                        If bCancelPressed Then
-                            'When canceled, release image and reset form and end the routine
-                            picImage.Image = Nothing
-                            Reset_Outlook_Tab()
-                            Reset_ProgressBar()
-                            endTime = DateTime.Now
-                            totalTime = endTime - startTime
-                            LogAction(0, String.Format("{0}: Finished {1} emails in {2} seconds.", workingOutlookFolder.Parent, completedEmailsCount, totalTime.TotalSeconds))
-                            Me.Cursor = Cursors.Default
-                            Exit Sub
-                        ElseIf bRejectPressed Then
-                            '------ LOG reject action? ---------
-                        ElseIf (bNextPressed Or bAuditMode = False) And bRejectPressed = False Then
-                            'Save the edited attachment as tiff and add to list
-                            lblStatus.Text = "Converting  Tiff..."
-                            Me.Refresh()
+                            currentEmailAttachment = sEmail.Attachments(j).File
 
                             'Name the tiff files to be created.
                             outTiff = [String].Format("{0}{1}_{2}.tiff", sDestination, sEmail.Account, rand.Next(10000).ToString)
@@ -209,36 +210,31 @@ Public Class frmMain
                                     wApp = CreateObject("Word.Application")
                                     wApp.WindowState = Word.WdWindowState.wdWindowStateMinimize
                                 End If
-                                Conversion.docToTiff(sFile, outTiff, wApp)
+                                Conversion.docToTiff(currentAttachmentFile, outTiff, wApp)
                             ElseIf sFileExt = ".pdf" Then
                                 'Convert PDFs to tiff
-                                Conversion.pdfToTiff(sFile, outTiff)
+                                Conversion.pdfToTiff(currentAttachmentFile, outTiff)
                             Else
                                 'Print images to tiff
-                                Conversion.imgToTiff(sFile, outTiff)
+                                Conversion.imgToTiff(currentAttachmentFile, outTiff)
                             End If
-                        Else
-                            'Undesired state. Log this
-                            LogAction(99, "Outlook buttonState: " & bCancelPressed.ToString & "," & bRejectPressed.ToString & "," & bNextPressed.ToString & "," & bAuditMode.ToString)
-                        End If
 
-                        'Reset variables
-                        bNextPressed = False
-                        bRejectPressed = False
+                            'Delete the saved email attachment
+                            System.IO.File.Delete(currentAttachmentFile)
+                        Next
+                    Else
+                        'Undesired state. Log this
+                        LogAction(99, "Outlook buttonState: " & bCancelPressed.ToString & "," & bRejectPressed.ToString & "," & bNextPressed.ToString & "," & bAuditMode.ToString)
+                    End If
 
-                        'Release images
-                        If Not IsNothing(picImage.Image) Then picImage.Image.Dispose()
-                        picImage.Image = Nothing
-                        picImage.ImageLocation = vbNullString
+                    'Reset variables
+                    bNextPressed = False
+                    bRejectPressed = False
 
-                        lblStatus.Text = ""
+                    lblStatus.Text = ""
 
-                        Application.DoEvents()
-                        Me.Refresh()
-
-                        'Delete the saved email attachment
-                        System.IO.File.Delete(sFile)
-                    Next
+                    Application.DoEvents()
+                    Me.Refresh()
 
                     'Flag email in outlook as complete.
                     sEmail.EmailObject.FlagStatus = Microsoft.Office.Interop.Outlook.OlFlagStatus.olFlagComplete
@@ -287,10 +283,8 @@ Public Class frmMain
         groupOLAudit.Visible = True
         rtbEmailBody.Visible = True
         btnReject.Visible = True
-        lblSelectedEmails.Visible = False
         btnCancel.Visible = True
-        picImage.Enabled = True
-        picImage.Visible = True
+        lstEmailAttachments.Visible = True
     End Sub
 
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
@@ -302,10 +296,6 @@ Public Class frmMain
         bNextPressed = True
     End Sub
 
-    Private Sub picImage_Click(sender As Object, e As EventArgs) Handles picImage.Click
-        System.Diagnostics.Process.Start(Me.currentEmailAttachment)
-    End Sub
-
     Private Sub Reset_Outlook_Tab()
         'Reset the Outlook tab to default
         'variables
@@ -314,7 +304,7 @@ Public Class frmMain
         bCancelPressed = False
 
         'settings
-        picImage.Image = Nothing
+        lstEmailAttachments.Items.Clear()
         btnCancel.Enabled = False
         btnReject.Enabled = False
         btnNext.Visible = False
@@ -324,12 +314,9 @@ Public Class frmMain
         'Hide audit options
         rtbEmailBody.Visible = False
         btnReject.Visible = False
-        lblSelectedEmails.Visible = False
         btnCancel.Visible = False
         groupOLAudit.Visible = False
-        picImage.Enabled = False
-        picImage.Visible = False
-
+        lstEmailAttachments.Visible = False
 
         'clear text fields
         rtbEmailBody.Text = ""
@@ -339,6 +326,11 @@ Public Class frmMain
         txtSubject.Text = ""
         lblOutlookMessage.Text = ""
     End Sub
+
+    Private Sub itmEmailAttachment_Click(sender As Object, e As EventArgs) Handles lstEmailAttachments.ItemActivate
+        System.Diagnostics.Process.Start(lstEmailAttachments.SelectedItems(0).Tag)
+    End Sub
+
 #End Region
 
 #Region "Kofax It Tab Region -------------------------------------------------------------------------------------"
@@ -666,5 +658,4 @@ Public Class frmMain
         frmOptions.Show()
     End Sub
 #End Region
-
 End Class

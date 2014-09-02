@@ -6,7 +6,7 @@ Public Class SAM_Email
     Public Property SenderEmailAddress As String
     Public Property Body As String
     Public Property Account As String
-    Public Property Attachments As New List(Of String)
+    Public Property Attachments As New List(Of SAM_File)
     Public Property IsValid As Boolean = True
     Public Property IsBillAccount As Boolean = True
     Public Property EmailObject As Object
@@ -56,16 +56,16 @@ Public Class SAM_Email
         If Me.EmailObject.Attachments.Count > 0 Then
             For Each value In Me.EmailObject.Attachments
                 'Added random number for same filename handling cases
-                sFile = sPath + value.FileName + "_" + rand.Next(10000).ToString
+                sFile = sPath + rand.Next(100).ToString + "_" + value.FileName
                 value.SaveAsFile(sFile)
-                Me.Attachments.Add(sFile)
+                Me.Attachments.Add(New SAM_File(sFile))
             Next
         Else
             IsValid = False
         End If
     End Sub
 
-    ReadOnly Property AttachmentsCount As Integer
+    ReadOnly Property AttachmentCount As Integer
         Get
             Return Me.Attachments.Count
         End Get

@@ -1,5 +1,26 @@
 ## 2014-08-29
 
+Features:
+
+  - Outlook: Removed picture box. Replaced by listview.
+   -Outlook: Added listview of current email attachments. Clicking the entry, opens the file with the default program.
+   -RightFaxIt: Added polling feature for one folder. (Testing)
+
+Code Improvements:
+
+  - Convert Files: Release sets MODI as active printer, Debug does not. (Since I don't have MODI on my machine)
+  - General: Added new SAM_File class to be used for easier file attribute references.
+  - Outlook: SAM_Email's use the new SAM_File class
+  - Outlook: Groups all attachments from an email as one audit. Previously SAMuel audited each individual attachment within an email.
+  - RightFaxIt: Skips generic phone number files like 1-999-999-9999.
+
+UI Improvements:
+
+  - Outlook: Removed a hidden label.
+  - Outlook: Removed picturebox.
+
+## 2014-08-29
+
 Code Improvements:
 
   - Convert Files: Removed duplicate code.

@@ -108,6 +108,7 @@
   <ItemGroup>
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Classes\SAM_Email.vb" />
+    <Compile Include="Classes\SAM_File.vb" />
     <Compile Include="frmEmails.Designer.vb">
       <DependentUpon>frmEmails.vb</DependentUpon>
     </Compile>

@@ -55,5 +55,6 @@
             </StackPanel>
         </GroupBox>
         <Label Content="Created By: Zachary Karpinski" HorizontalAlignment="Left" Margin="253,278,0,0" VerticalAlignment="Top" Grid.Column="1" FontSize="10"/>
+        <Button x:Name="btnPoll" Content="Poll" HorizontalAlignment="Left" Margin="10,205,0,0" VerticalAlignment="Top" Width="58" Click="btnPoll_Click"/>
     </Grid>
 </Window>

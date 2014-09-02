@@ -85,5 +85,14 @@ namespace RightFaxIt.Properties {
                 return ((string)(this["AIMoveLocation"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("DEFAULT")]
+        public string PollingFolder {
+            get {
+                return ((string)(this["PollingFolder"]));
+            }
+        }
     }
 }

@@ -29,6 +29,8 @@ namespace RightFaxIt
         public MainWindow()
         {
             InitializeComponent();
+
+            //Setups the the log location on first run unless the user changed it.
             if (Properties.Settings.Default.LogLocation == "DEFAULT")
             {
                 Properties.Settings.Default.LogLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -63,39 +65,52 @@ namespace RightFaxIt
                 }
             }
 
-            LogFaxes(ref faxes,userID);
+            if (faxes.Count <= 0)
+            {
+                 e.Result = invalidFiles;
+                return;
+            }
+
+            
 
             if (SendFaxes(ref faxes,userID))
             {
+                //Log all the faxed files.
+                LogFaxes(ref faxes, userID);
+
                 //Determine where to move the files.
-            String moveFolder;
-            switch (userID)
-            {
-                case "active":
-                    moveFolder = Properties.Settings.Default.ActiveMoveLocation;
+                String moveFolder;
+                switch (userID)
+                {
+                    case "active":
+                        moveFolder = Properties.Settings.Default.ActiveMoveLocation;
+                        break;
+                    case "cutin":
+                        moveFolder = Properties.Settings.Default.CutInMoveLocation;
+                        break;
+                    case "acctinit":
+                        moveFolder = Properties.Settings.Default.AIMoveLocation;
+                        break;
+                    default:
+                        moveFolder = Properties.Settings.Default.ActiveMoveLocation;
                     break;
-                case "cutin":
-                    moveFolder = Properties.Settings.Default.CutInMoveLocation;
-                    break;
-                case "acctinit":
-                    moveFolder = Properties.Settings.Default.AIMoveLocation;
-                    break;
-                default:
-                    moveFolder = Properties.Settings.Default.ActiveMoveLocation;
-                    break;
-            }
+                }
                 
                 //Move files when faxed successfully
                 for (int i = 0; i < faxes.Count; i++)
                 {
                     MoveCompletedFax(faxes[i].Document,moveFolder);
                 }
-                    e.Result = invalidFiles;
             }
+            else
+            {
+                //TODO Add failed send fax handling
+            }
+            e.Result = invalidFiles;
+            return;
         }
 
-        private void bworker_Completed(object sender,
-                                               RunWorkerCompletedEventArgs e)
+        private void bworker_Completed(object sender, RunWorkerCompletedEventArgs e)
         {
             //Retrieve the list of skipped files.
             List<string> skippedFiles = (List<string>)e.Result;
@@ -109,14 +124,15 @@ namespace RightFaxIt
                 {
                     msg = msg + Environment.NewLine + skippedFiles[i];
                 }
-                String msgTitle = faxes.Count.ToString() + " items faxed.";
-                MessageBox.Show(msg, msgTitle);
+                Console.WriteLine(msg);
+                //String msgTitle = faxes.Count.ToString() + " items faxed.";
+                //MessageBox.Show(msg, msgTitle);
             }
 
             //Update UI
-            this.AllowDrop = true;//update ui once worker complete his work
-            this.btnFax.IsEnabled = true;
-            FileListBox.ItemsSource = faxes;
+            //this.AllowDrop = true;//update ui once worker complete his work
+            //this.btnFax.IsEnabled = true;
+            //FileListBox.ItemsSource = faxes;
         }
 
         void bworker_CompletedProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -282,8 +298,8 @@ namespace RightFaxIt
         private void initFaxWorker(string[] files)
         {
             String SelectedUser;
-            this.AllowDrop = false;
-            this.btnFax.IsEnabled = false;
+            //this.AllowDrop = false;
+            //this.btnFax.IsEnabled = false;
             
             if((bool)this.ActiveUserRatio.IsChecked) 
             { 
@@ -333,5 +349,35 @@ namespace RightFaxIt
         }
 
 #endregion
+
+        /// <summary>
+        /// Polls the desired folder.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnPoll_Click(object sender, RoutedEventArgs e)
+        {
+            btnPoll.IsEnabled = false;
+            FileSystemWatcher fsw = new FileSystemWatcher(Properties.Settings.Default.PollingFolder);
+            fsw.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.FileName;
+            fsw.Created += new FileSystemEventHandler(FaxPolledFile);
+
+            fsw.EnableRaisingEvents = true;
+        }
+
+        private void FaxPolledFile(object source, FileSystemEventArgs e)
+        {
+            String[] file = { e.FullPath };
+            String sUser = "active";
+            
+
+            var arguments = Tuple.Create<string[], string>(file, sUser);
+            BackgroundWorker _backgroundWorker = new BackgroundWorker();
+            _backgroundWorker.WorkerReportsProgress = true;
+            _backgroundWorker.DoWork += bworker_DoWork;
+            _backgroundWorker.RunWorkerCompleted += bworker_Completed;
+            _backgroundWorker.RunWorkerAsync(arguments);
+        }
+
     }
 }

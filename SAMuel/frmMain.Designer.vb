@@ -23,11 +23,15 @@ Partial Class frmMain
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim ListViewItem7 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
         Me.dlgOpen = New System.Windows.Forms.OpenFileDialog()
         Me.btnConvert = New System.Windows.Forms.Button()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.lstEmailAttachments = New System.Windows.Forms.ListView()
+        Me.hType = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.hName = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.chkValidOnly = New System.Windows.Forms.CheckBox()
         Me.groupOLAudit = New System.Windows.Forms.GroupBox()
         Me.txtFrom = New System.Windows.Forms.TextBox()
@@ -37,13 +41,10 @@ Partial Class frmMain
         Me.lblAcc = New System.Windows.Forms.Label()
         Me.txtSubject = New System.Windows.Forms.TextBox()
         Me.txtAcc = New System.Windows.Forms.TextBox()
-        Me.picImage = New System.Windows.Forms.PictureBox()
         Me.btnReject = New System.Windows.Forms.Button()
         Me.chkAuditMode = New System.Windows.Forms.CheckBox()
-        Me.lblSelectedEmails = New System.Windows.Forms.Label()
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.btnNext = New System.Windows.Forms.Button()
-        Me.rtbEmailBody = New System.Windows.Forms.RichTextBox()
         Me.btnRun = New System.Windows.Forms.Button()
         Me.tabWordToTiff = New System.Windows.Forms.TabPage()
         Me.GroupBox4 = New System.Windows.Forms.GroupBox()
@@ -113,10 +114,11 @@ Partial Class frmMain
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.lblBranding = New System.Windows.Forms.Label()
+        Me.rtbEmailBody = New System.Windows.Forms.RichTextBox()
+        Me.Label5 = New System.Windows.Forms.Label()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.groupOLAudit.SuspendLayout()
-        CType(Me.picImage, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.tabWordToTiff.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
@@ -161,15 +163,13 @@ Partial Class frmMain
         '
         Me.TabPage1.BackgroundImage = Global.SAMuel.My.Resources.Resources.ny_map_f
         Me.TabPage1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.TabPage1.Controls.Add(Me.lstEmailAttachments)
         Me.TabPage1.Controls.Add(Me.chkValidOnly)
         Me.TabPage1.Controls.Add(Me.groupOLAudit)
-        Me.TabPage1.Controls.Add(Me.picImage)
         Me.TabPage1.Controls.Add(Me.btnReject)
         Me.TabPage1.Controls.Add(Me.chkAuditMode)
-        Me.TabPage1.Controls.Add(Me.lblSelectedEmails)
         Me.TabPage1.Controls.Add(Me.btnCancel)
         Me.TabPage1.Controls.Add(Me.btnNext)
-        Me.TabPage1.Controls.Add(Me.rtbEmailBody)
         Me.TabPage1.Controls.Add(Me.btnRun)
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
@@ -178,6 +178,29 @@ Partial Class frmMain
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Outlook"
         Me.TabPage1.UseVisualStyleBackColor = True
+        '
+        'lstEmailAttachments
+        '
+        Me.lstEmailAttachments.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.hType, Me.hName})
+        Me.lstEmailAttachments.FullRowSelect = True
+        ListViewItem7.StateImageIndex = 0
+        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem7})
+        Me.lstEmailAttachments.Location = New System.Drawing.Point(229, 7)
+        Me.lstEmailAttachments.Name = "lstEmailAttachments"
+        Me.lstEmailAttachments.Size = New System.Drawing.Size(196, 254)
+        Me.lstEmailAttachments.TabIndex = 18
+        Me.lstEmailAttachments.UseCompatibleStateImageBehavior = False
+        Me.lstEmailAttachments.View = System.Windows.Forms.View.Details
+        '
+        'hType
+        '
+        Me.hType.Text = "Type"
+        Me.hType.Width = 46
+        '
+        'hName
+        '
+        Me.hName.Text = "Filename"
+        Me.hName.Width = 146
         '
         'chkValidOnly
         '
@@ -192,6 +215,8 @@ Partial Class frmMain
         'groupOLAudit
         '
         Me.groupOLAudit.BackColor = System.Drawing.Color.White
+        Me.groupOLAudit.Controls.Add(Me.rtbEmailBody)
+        Me.groupOLAudit.Controls.Add(Me.Label5)
         Me.groupOLAudit.Controls.Add(Me.txtFrom)
         Me.groupOLAudit.Controls.Add(Me.lblSubject)
         Me.groupOLAudit.Controls.Add(Me.lblFrom)
@@ -201,7 +226,7 @@ Partial Class frmMain
         Me.groupOLAudit.Controls.Add(Me.txtAcc)
         Me.groupOLAudit.Location = New System.Drawing.Point(4, 1)
         Me.groupOLAudit.Name = "groupOLAudit"
-        Me.groupOLAudit.Size = New System.Drawing.Size(219, 100)
+        Me.groupOLAudit.Size = New System.Drawing.Size(219, 260)
         Me.groupOLAudit.TabIndex = 16
         Me.groupOLAudit.TabStop = False
         Me.groupOLAudit.Text = "Email"
@@ -274,16 +299,6 @@ Partial Class frmMain
         Me.txtAcc.Size = New System.Drawing.Size(158, 20)
         Me.txtAcc.TabIndex = 7
         '
-        'picImage
-        '
-        Me.picImage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D
-        Me.picImage.Location = New System.Drawing.Point(242, 6)
-        Me.picImage.Name = "picImage"
-        Me.picImage.Size = New System.Drawing.Size(169, 254)
-        Me.picImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
-        Me.picImage.TabIndex = 1
-        Me.picImage.TabStop = False
-        '
         'btnReject
         '
         Me.btnReject.Enabled = False
@@ -304,17 +319,6 @@ Partial Class frmMain
         Me.chkAuditMode.Text = "Audit Mode"
         Me.chkAuditMode.UseVisualStyleBackColor = True
         '
-        'lblSelectedEmails
-        '
-        Me.lblSelectedEmails.AutoSize = True
-        Me.lblSelectedEmails.BackColor = System.Drawing.Color.White
-        Me.lblSelectedEmails.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblSelectedEmails.Location = New System.Drawing.Point(283, 174)
-        Me.lblSelectedEmails.Name = "lblSelectedEmails"
-        Me.lblSelectedEmails.Size = New System.Drawing.Size(101, 13)
-        Me.lblSelectedEmails.TabIndex = 13
-        Me.lblSelectedEmails.Text = "Selected Emails:"
-        '
         'btnCancel
         '
         Me.btnCancel.Enabled = False
@@ -334,16 +338,6 @@ Partial Class frmMain
         Me.btnNext.Text = "&Next"
         Me.btnNext.UseVisualStyleBackColor = True
         Me.btnNext.Visible = False
-        '
-        'rtbEmailBody
-        '
-        Me.rtbEmailBody.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rtbEmailBody.Location = New System.Drawing.Point(4, 106)
-        Me.rtbEmailBody.Name = "rtbEmailBody"
-        Me.rtbEmailBody.Size = New System.Drawing.Size(219, 154)
-        Me.rtbEmailBody.TabIndex = 9
-        Me.rtbEmailBody.Text = "This is a sample email body. With multiple lines and jibberish..." & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & "Ctrl+Scroll " & _
-    "changes font size!" & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & "Scroll down to see this!."
         '
         'btnRun
         '
@@ -1029,6 +1023,29 @@ Partial Class frmMain
         Me.lblBranding.TabIndex = 6
         Me.lblBranding.Text = "Created by: Zachary Karpinski"
         '
+        'rtbEmailBody
+        '
+        Me.rtbEmailBody.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.rtbEmailBody.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.rtbEmailBody.Location = New System.Drawing.Point(-1, 106)
+        Me.rtbEmailBody.Name = "rtbEmailBody"
+        Me.rtbEmailBody.ReadOnly = True
+        Me.rtbEmailBody.Size = New System.Drawing.Size(219, 154)
+        Me.rtbEmailBody.TabIndex = 16
+        Me.rtbEmailBody.Text = "This is a sample email body. With multiple lines and jibberish..." & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & "Ctrl+Scroll " & _
+    "changes font size!" & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & "Scroll down to see this!."
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.BackColor = System.Drawing.Color.Transparent
+        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Location = New System.Drawing.Point(2, 94)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(34, 13)
+        Me.Label5.TabIndex = 17
+        Me.Label5.Text = "Body:"
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1050,7 +1067,6 @@ Partial Class frmMain
         Me.TabPage1.PerformLayout()
         Me.groupOLAudit.ResumeLayout(False)
         Me.groupOLAudit.PerformLayout()
-        CType(Me.picImage, System.ComponentModel.ISupportInitialize).EndInit()
         Me.tabWordToTiff.ResumeLayout(False)
         Me.tabWordToTiff.PerformLayout()
         Me.GroupBox4.ResumeLayout(False)
@@ -1078,7 +1094,6 @@ Partial Class frmMain
 
     End Sub
     Friend WithEvents btnRun As System.Windows.Forms.Button
-    Friend WithEvents picImage As System.Windows.Forms.PictureBox
     Friend WithEvents dlgOpen As System.Windows.Forms.OpenFileDialog
     Friend WithEvents btnConvert As System.Windows.Forms.Button
     Friend WithEvents TabControl1 As System.Windows.Forms.TabControl
@@ -1099,7 +1114,6 @@ Partial Class frmMain
     Friend WithEvents txtDPAmonthly As System.Windows.Forms.TextBox
     Friend WithEvents Label2 As System.Windows.Forms.Label
     Friend WithEvents txtDPAdown As System.Windows.Forms.TextBox
-    Friend WithEvents rtbEmailBody As System.Windows.Forms.RichTextBox
     Friend WithEvents ProgressBar As System.Windows.Forms.ProgressBar
     Friend WithEvents lblStatus As System.Windows.Forms.Label
     Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
@@ -1131,7 +1145,6 @@ Partial Class frmMain
     Friend WithEvents lblRFRecFax As System.Windows.Forms.Label
     Friend WithEvents chkRFCoverSheet As System.Windows.Forms.CheckBox
     Friend WithEvents chkRFSaveRec As System.Windows.Forms.CheckBox
-    Friend WithEvents lblSelectedEmails As System.Windows.Forms.Label
     Friend WithEvents lblDragAndDropWord As System.Windows.Forms.Label
     Friend WithEvents tabKofax As System.Windows.Forms.TabPage
     Friend WithEvents btnKFImport As System.Windows.Forms.Button
@@ -1166,5 +1179,10 @@ Partial Class frmMain
     Friend WithEvents lbxContactAlerts As System.Windows.Forms.ListBox
     Friend WithEvents btnStopAddContacts As System.Windows.Forms.Button
     Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents lstEmailAttachments As System.Windows.Forms.ListView
+    Friend WithEvents hType As System.Windows.Forms.ColumnHeader
+    Friend WithEvents hName As System.Windows.Forms.ColumnHeader
+    Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents rtbEmailBody As System.Windows.Forms.RichTextBox
 
 End Class
