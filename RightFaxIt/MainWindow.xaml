@@ -13,7 +13,7 @@
 
         <Button x:Name="btnFax" Content="Fax" HorizontalAlignment="Left" Margin="103.356,274,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="1.493,1.55" Click="Button_Click" Grid.Column="1"/>
         <ProgressBar x:Name="FaxProgress" Height="10" Margin="0,299,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
-        <ListBox x:Name="FileListBox" HorizontalAlignment="Left" Height="196" Margin="169.356,61,0,0" VerticalAlignment="Top" Width="219" FontSize="11" MouseDoubleClick="OpenDocument" Grid.Column="1">
+        <ListBox x:Name="FileListBox" HorizontalAlignment="Left" Height="196" Margin="169.356,61,0,0" VerticalAlignment="Top" Width="219" FontSize="11" MouseDoubleClick="OpenDocument" Grid.Column="1" AllowDrop="False">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -40,8 +40,8 @@
             </Menu>
             <StackPanel Margin="0,0,0,301"/>
         </DockPanel>
-        <TextBox x:Name="txtName" HorizontalAlignment="Left" Height="23" Margin="86,78,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="173" MaxLines="1" IsEnabled="False" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="txtNumber" HorizontalAlignment="Left" Height="23" Margin="86,102,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="173" MaxLines="1" IsEnabled="False" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="txtName" HorizontalAlignment="Left" Height="23" Margin="86,78,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Width="173" MaxLines="1" IsEnabled="False" Grid.ColumnSpan="2" AllowDrop="False"/>
+        <TextBox x:Name="txtNumber" HorizontalAlignment="Left" Height="23" Margin="86,102,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="173" MaxLines="1" IsEnabled="False" Grid.ColumnSpan="2" AllowDrop="False"/>
         <Label Content="Fax Number:" HorizontalAlignment="Left" Margin="4,99,0,0" VerticalAlignment="Top"/>
         <Label Content="Recipient:" HorizontalAlignment="Left" Margin="19,78,0,0" VerticalAlignment="Top"/>
         <Label x:Name="lblMSG" Content="" HorizontalAlignment="Left" Margin="86,46,0,0" VerticalAlignment="Top" FontWeight="Bold" FontSize="14" Foreground="Red"/>

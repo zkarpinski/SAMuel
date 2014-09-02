@@ -216,7 +216,6 @@ namespace RightFaxIt
             }
             catch (Exception)
             {
-                
                 throw;
             }
             
@@ -226,8 +225,7 @@ namespace RightFaxIt
         {
             Fax item = (Fax)FileListBox.SelectedItem;
             String docPath = item.Document;
-            System.Diagnostics.Process.Start(docPath);
-            
+            System.Diagnostics.Process.Start(docPath);            
         }
 
         private void LogFaxes(ref List<Fax> faxes,string userID)

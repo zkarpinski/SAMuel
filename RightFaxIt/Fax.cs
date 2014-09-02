@@ -50,6 +50,10 @@ namespace RightFaxIt
             ParseFileName(this.FileName);
             this.Account = RegexFileName(@"\d{5}-\d{5}");
             this.FaxNumber = RegexFileName(@"\d{1}-\d{3}-\d{3}-\d{4}");
+            if ((this.FaxNumber == "1-999-999-9999") || (this.FaxNumber == "1-888-888-8888"))
+            {
+                this.IsValid = false;
+            }
         }
         
         /// <summary>
