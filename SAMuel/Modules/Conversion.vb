@@ -54,7 +54,7 @@ Module Conversion
             frmMain.ProgressBar.Value += 1
         Next
 
-        objWord.Quit()
+        objWord.Quit(False)
     End Sub
 
     Sub imagesToTiff(sFiles() As String)
@@ -104,7 +104,6 @@ Module Conversion
         'Print the image
         printDocument.PrinterSettings.PrintFileName = outputTiff
         printDocument.Print()
-
     End Sub
 
     Private Sub printDocument_PrintPage(ByVal sender As Object, ByVal e As PrintPageEventArgs)
@@ -153,7 +152,7 @@ Module Conversion
             wordApp.ActivePrinter = "Microsoft Office Document Image Writer"
         Catch ex As Exception
             MsgBox("Printer error. Is the 'Microsoft Office Document Image Writer' printer installed?", MsgBoxStyle.Critical)
-            wordApp.Quit()
+            wordApp.Quit(False)
             Return False
         End Try
 
@@ -168,7 +167,7 @@ Module Conversion
 
         'Release document and close word.
         objWdDoc.Close()
-        wordApp.Quit()
+        wordApp.Quit(False)
         Return True
     End Function
 

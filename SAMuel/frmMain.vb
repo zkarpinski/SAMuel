@@ -6,6 +6,10 @@ Imports System.Drawing.Printing
 Imports System.ComponentModel
 
 Public Class frmMain
+
+    Private Sub frmMain_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
+        Application.Exit()
+    End Sub
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Resets the form state to default
         Reset_All_Forms()
@@ -21,6 +25,9 @@ Public Class frmMain
         GlobalModule.InitOutputFolders()
         'Welcome the user.
         lblStatus.Text = String.Format("Welcome {0}!", Environment.UserName)
+
+        'Hide DPA Tab for now.
+        tabDPA.Dispose()
     End Sub
 
     Private Sub _DragEnter(ByVal sender As Object, ByVal e As DragEventArgs) Handles tabWordToTiff.DragEnter, tabAddContact.DragEnter
@@ -58,6 +65,7 @@ Public Class frmMain
         sDestination = My.Settings.savePath + "tiffs\"
         GlobalModule.CheckFolder(sDestination)
 
+        'Make sure everything is at initial state.
         Reset_Outlook_Tab()
         frmEmails.clbSelectedEmails.Items.Clear()
         Reset_ProgressBar()
@@ -172,9 +180,9 @@ Public Class frmMain
 
                     If bCancelPressed Then
                         'When canceled, release image and reset form and end the routine
+                        endTime = DateTime.Now
                         Reset_Outlook_Tab()
                         Reset_ProgressBar()
-                        endTime = DateTime.Now
                         totalTime = endTime - startTime
                         LogAction(0, String.Format("{0}: Finished {1} emails in {2} seconds.", workingOutlookFolder.Parent, completedEmailsCount, totalTime.TotalSeconds))
                         Me.Cursor = Cursors.Default
@@ -227,15 +235,6 @@ Public Class frmMain
                         LogAction(99, "Outlook buttonState: " & bCancelPressed.ToString & "," & bRejectPressed.ToString & "," & bNextPressed.ToString & "," & bAuditMode.ToString)
                     End If
 
-                    'Reset variables
-                    bNextPressed = False
-                    bRejectPressed = False
-
-                    lblStatus.Text = ""
-
-                    Application.DoEvents()
-                    Me.Refresh()
-
                     'Flag email in outlook as complete.
                     sEmail.EmailObject.FlagStatus = Microsoft.Office.Interop.Outlook.OlFlagStatus.olFlagComplete
                     sEmail.EmailObject.Save()
@@ -247,23 +246,30 @@ Public Class frmMain
                     completedEmailsCount += 1
                 Else
                     'No attachments
-                    frmEmails.clbSelectedEmails.Items.Add("[SKIP] " & sEmail.Account & vbTab & vbTab & sEmail.Subject & vbTab & sEmail.From)
-                    LogAction(50, String.Format("{0} - {1} was skipped. No attachments", sEmail.Subject, sEmail.From))
+                    'TODO Add print option to no attachments case
+                    frmEmails.clbSelectedEmails.Items.Add("[0] " & sEmail.Account & vbTab & vbTab & sEmail.Subject & vbTab & sEmail.From)
                 End If
 
-                bNextPressed = False
-                ProgressBar.Value += 1
-                Me.Refresh()
             Catch ex As Exception
                 'Unknown error with email.
                 LogAction(98, String.Format("{0} - {1} : {2}", sEmail.Subject, sEmail.From, ex.ToString))
             End Try
+
+            'Reset variables
+            bNextPressed = False
+            bRejectPressed = False
+            lstEmailAttachments.Items.Clear()
+            lblOutlookMessage.Text = ""
+
+            'Update Progress
+            ProgressBar.Value += 1
+            Me.Refresh()
         Next
 
         endTime = DateTime.Now
         totalTime = endTime - startTime
 
-        LogAction(0, String.Format("{0}: Finished {1} emails in {2} seconds.", workingOutlookFolder.Parent, completedEmailsCount, totalTime.TotalSeconds))
+        LogAction(0, String.Format("{0}: Finished {1} emails in {2} seconds.", workingOutlookFolder.FolderPath, completedEmailsCount, totalTime.TotalSeconds))
 
         If completedEmailsCount > 0 Then
             lblStatus.Text = "Finished processing emails."
@@ -325,6 +331,8 @@ Public Class frmMain
         txtAcc.Text = ""
         txtSubject.Text = ""
         lblOutlookMessage.Text = ""
+
+        Me.Cursor = Cursors.Default
     End Sub
 
     Private Sub itmEmailAttachment_Click(sender As Object, e As EventArgs) Handles lstEmailAttachments.ItemActivate
@@ -658,4 +666,5 @@ Public Class frmMain
         frmOptions.Show()
     End Sub
 #End Region
+
 End Class

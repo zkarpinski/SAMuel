@@ -15,12 +15,35 @@
         Me.LabelProductName.Text = My.Application.Info.ProductName
         Me.LabelVersion.Text = String.Format("Version {0}", My.Application.Info.Version.ToString)
         Me.LabelCopyright.Text = My.Application.Info.Copyright
-        Me.LabelCompanyName.Text = My.Application.Info.CompanyName
-        Me.TextBoxDescription.Text = My.Application.Info.Description
     End Sub
 
     Private Sub OKButton_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles OKButton.Click
         Me.Close()
     End Sub
 
+    Private Sub TableLayoutPanel_Paint(sender As Object, e As PaintEventArgs) Handles TableLayoutPanel.Paint
+
+    End Sub
+
+    Private Sub OpenIE(sender As Object, e As LinkClickedEventArgs) Handles RichTextBox1.LinkClicked
+        Dim p As New System.Diagnostics.Process
+        p = System.Diagnostics.Process.Start("IExplore.exe", e.LinkText)
+    End Sub
+
+    Private Sub LabelCompanyName_Click(sender As Object, e As EventArgs) Handles LabelCompanyName.Click
+        Dim p As New System.Diagnostics.Process
+        p = System.Diagnostics.Process.Start("mailto:Zachary.Karpinski@nationalgrid.com?subject=SAMuel")
+    End Sub
+
+    Private Sub ShowClickIcon(sender As Object, e As EventArgs) Handles LabelCompanyName.MouseEnter
+        Me.Cursor = Cursors.Hand
+    End Sub
+
+    Private Sub ShowDefaultIcon(sender As Object, e As EventArgs) Handles LabelCompanyName.MouseLeave
+        Me.Cursor = Cursors.Default
+    End Sub
+
+    Private Sub RichTextBox1_TextChanged(sender As Object, e As EventArgs) Handles RichTextBox1.TextChanged
+
+    End Sub
 End Class

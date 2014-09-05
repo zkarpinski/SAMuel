@@ -26,32 +26,14 @@ Module ImageProcessing
         'Rotate image
         If bm.Width > bm.Height Then
             bm.RotateFlip(RotateFlipType.Rotate90FlipNone)
-            wRatio = 1700 / bm.Width
-            hRatio = 2200 / bm.Height
         End If
-
-        'Dim sRatio As Double
-        'If bm.Height > 2200 Or bm.Width > 1700 Then
-
-        '    'Determine the scale
-        '    If wRatio > hRatio Then
-        '        sRatio = wRatio
-        '    Else : sRatio = hRatio
-        '    End If
-
-        '    width = bm.Width * sRatio
-        '    height = bm.Height * sRatio
-        'Else
-        '    width = bm.Width
-        '    height = bm.Height
-        'End If
 
         width = bm.Width
         height = bm.Height
 
         ' Create a newBitmap object based on a src
         myBitmap = New Bitmap(width, height)
-        myBitmap.SetResolution(200, 200)
+        'myBitmap.SetResolution(200, 200)
 
         Dim g As Graphics = Graphics.FromImage(myBitmap)
         g.InterpolationMode = Drawing2D.InterpolationMode.Default

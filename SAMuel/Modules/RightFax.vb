@@ -16,14 +16,17 @@ Module RightFax
     End Function
 
     Function CreateFax(ByRef objRightFax As RFCOMAPILib.FaxServer, receipiantName As String, _
-                       receipiantFax As String, path_to_doc As String) As RFCOMAPILib.Fax
+                       receipiantFax As String, path_to_doc As String, Optional ByVal coverSheetNotes As String = vbNullString) As RFCOMAPILib.Fax
         Dim newFax As RFCOMAPILib.Fax
 
         newFax = objRightFax.CreateObject(RFCOMAPILib.CreateObjectType.coFax)
 
         newFax.ToName = receipiantName
         newFax.ToFaxNumber = receipiantFax
+        newFax.CoverSheetNotes(0) = coverSheetNotes
+        newFax.UserComments = "Sent via RightFaxIt. Contact Zachary Karpinski if there are any issues."
         newFax.Attachments.Add(path_to_doc, False) ' false = don't delete file after faxing
+
         Return newFax
     End Function
 
