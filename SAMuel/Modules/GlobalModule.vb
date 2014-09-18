@@ -3,6 +3,7 @@ Imports System.IO
 Imports System.Text.RegularExpressions
 
 Module GlobalModule
+    ' Global Variables (Loaded from .ini)
 
     ''' <summary>
     ''' Logs actions and events from within SAMuel
@@ -118,4 +119,17 @@ Module GlobalModule
         Next
         Return New String(charOutput)
     End Function
+
+    ''' <summary>
+    '''  Strips invalid characters from a string.
+    ''' </summary>
+    ''' <param name="strIn"></param>
+    ''' <returns>Clean string</returns>
+    ''' <remarks>http://msdn.microsoft.com/en-us/library/844skk0h</remarks>
+    Function CleanInput(strIn As String) As String
+        ' Replace invalid characters with empty strings.
+        ' Allows all punctuation, letters, numbers, @ symbol, hyphen and space.
+        Return Regex.Replace(strIn, "[^\w\s\.@-]", "")
+    End Function
+
 End Module

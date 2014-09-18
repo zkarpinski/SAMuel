@@ -32,5 +32,14 @@
     <Setting Name="wmFont" Type="System.String" Scope="User">
       <Value Profile="(Default)">Courier New</Value>
     </Setting>
+    <Setting Name="SMTP_SERVER" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="FROM_EMAIL" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="TO_EMAIL" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

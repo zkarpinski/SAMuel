@@ -23,8 +23,8 @@ Module RightFax
 
         newFax.ToName = receipiantName
         newFax.ToFaxNumber = receipiantFax
-        newFax.CoverSheetNotes(0) = coverSheetNotes
-        newFax.UserComments = "Sent via RightFaxIt. Contact Zachary Karpinski if there are any issues."
+        'newFax.CoverSheetNotes(0) = coverSheetNotes
+        newFax.UserComments = "Sent via SAMuel."
         newFax.Attachments.Add(path_to_doc, False) ' false = don't delete file after faxing
 
         Return newFax

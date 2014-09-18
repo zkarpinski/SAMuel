@@ -21,6 +21,7 @@ Module Conversion
         objWord = CreateObject("Word.Application")
         objWord.WindowState = Word.WdWindowState.wdWindowStateMinimize
 
+#If CONFIG = "Release" Then
         'Set active printer to Fax
         Try
             objWord.ActivePrinter = "Microsoft Office Document Image Writer"
@@ -29,6 +30,7 @@ Module Conversion
             objWord.Quit()
             Exit Sub
         End Try
+#End If
 
         'Verify output folder exists
         GlobalModule.CheckFolder(sDestination)
@@ -43,18 +45,21 @@ Module Conversion
             'Get the file name
             sFileName = Path.GetFileNameWithoutExtension(value)
             'Open the document within word and don't prompt  for conversion.
-            objWdDoc = objWord.Documents.Open(FileName:=value, ConfirmConversions:=False, [ReadOnly]:=False, AddToRecentFiles:=False)
+            objWdDoc = objWord.Documents.Open(FileName:=value, ConfirmConversions:=False, AddToRecentFiles:=False)
             objWord.Visible = False
             objWord.WindowState = Word.WdWindowState.wdWindowStateMinimize
             'Print to Tiff
             objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=sDestination & sFileName & ".tif")
+            Do Until (objWord.BackgroundPrintingStatus = 0)
+                'Wait until the document has been placed inside the printer queue.
+            Loop
             'Release document
             objWdDoc.Close()
             'Progress the progress bar
             frmMain.ProgressBar.Value += 1
         Next
 
-        objWord.Quit(False)
+        objWord.Quit()
     End Sub
 
     Sub imagesToTiff(sFiles() As String)
@@ -158,7 +163,7 @@ Module Conversion
 
 #End If
 
-        objWdDoc = wordApp.Documents.Open(FileName:=inputDoc, ConfirmConversions:=False, [ReadOnly]:=True, AddToRecentFiles:=False)
+        objWdDoc = wordApp.Documents.Open(FileName:=inputDoc, ConfirmConversions:=False, AddToRecentFiles:=False)
         wordApp.Visible = False
         wordApp.WindowState = Word.WdWindowState.wdWindowStateMinimize
 
@@ -167,7 +172,7 @@ Module Conversion
 
         'Release document and close word.
         objWdDoc.Close()
-        wordApp.Quit(False)
+        wordApp.Quit()
         Return True
     End Function
 

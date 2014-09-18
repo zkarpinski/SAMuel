@@ -33,6 +33,7 @@ Partial Class frmOptions
         Me.grpOptionsSaveFolders = New System.Windows.Forms.GroupBox()
         Me.btnEmpty = New System.Windows.Forms.Button()
         Me.tabOutlook = New System.Windows.Forms.TabPage()
+        Me.chkSuggestedAccountNumber = New System.Windows.Forms.CheckBox()
         Me.grpWatermarkOptions = New System.Windows.Forms.GroupBox()
         Me.lblFont = New System.Windows.Forms.Label()
         Me.cmbFont = New System.Windows.Forms.ComboBox()
@@ -41,7 +42,7 @@ Partial Class frmOptions
         Me.lblColorDepth = New System.Windows.Forms.Label()
         Me.cmbCompression = New System.Windows.Forms.ComboBox()
         Me.cmbColorDepth = New System.Windows.Forms.ComboBox()
-        Me.chkSuggestedAccountNumber = New System.Windows.Forms.CheckBox()
+        Me.btnShow = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.tabGeneral.SuspendLayout()
         Me.grpOptionsSaveFolders.SuspendLayout()
@@ -112,7 +113,7 @@ Partial Class frmOptions
         '
         'btnViewLog
         '
-        Me.btnViewLog.Location = New System.Drawing.Point(246, 127)
+        Me.btnViewLog.Location = New System.Drawing.Point(420, 140)
         Me.btnViewLog.Name = "btnViewLog"
         Me.btnViewLog.Size = New System.Drawing.Size(75, 23)
         Me.btnViewLog.TabIndex = 5
@@ -121,17 +122,18 @@ Partial Class frmOptions
         '
         'grpOptionsSaveFolders
         '
+        Me.grpOptionsSaveFolders.Controls.Add(Me.btnShow)
         Me.grpOptionsSaveFolders.Controls.Add(Me.btnEmpty)
-        Me.grpOptionsSaveFolders.Location = New System.Drawing.Point(8, 98)
+        Me.grpOptionsSaveFolders.Location = New System.Drawing.Point(8, 91)
         Me.grpOptionsSaveFolders.Name = "grpOptionsSaveFolders"
-        Me.grpOptionsSaveFolders.Size = New System.Drawing.Size(104, 62)
+        Me.grpOptionsSaveFolders.Size = New System.Drawing.Size(91, 69)
         Me.grpOptionsSaveFolders.TabIndex = 4
         Me.grpOptionsSaveFolders.TabStop = False
         Me.grpOptionsSaveFolders.Text = "Save Folders"
         '
         'btnEmpty
         '
-        Me.btnEmpty.Location = New System.Drawing.Point(6, 39)
+        Me.btnEmpty.Location = New System.Drawing.Point(6, 42)
         Me.btnEmpty.Name = "btnEmpty"
         Me.btnEmpty.Size = New System.Drawing.Size(75, 23)
         Me.btnEmpty.TabIndex = 0
@@ -150,6 +152,16 @@ Partial Class frmOptions
         Me.tabOutlook.TabIndex = 1
         Me.tabOutlook.Text = "Outlook"
         Me.tabOutlook.UseVisualStyleBackColor = True
+        '
+        'chkSuggestedAccountNumber
+        '
+        Me.chkSuggestedAccountNumber.AutoSize = True
+        Me.chkSuggestedAccountNumber.Location = New System.Drawing.Point(18, 20)
+        Me.chkSuggestedAccountNumber.Name = "chkSuggestedAccountNumber"
+        Me.chkSuggestedAccountNumber.Size = New System.Drawing.Size(182, 17)
+        Me.chkSuggestedAccountNumber.TabIndex = 5
+        Me.chkSuggestedAccountNumber.Text = "Use suggested account numbers"
+        Me.chkSuggestedAccountNumber.UseVisualStyleBackColor = True
         '
         'grpWatermarkOptions
         '
@@ -233,15 +245,14 @@ Partial Class frmOptions
         Me.cmbColorDepth.Size = New System.Drawing.Size(96, 21)
         Me.cmbColorDepth.TabIndex = 0
         '
-        'chkSuggestedAccountNumber
+        'btnShow
         '
-        Me.chkSuggestedAccountNumber.AutoSize = True
-        Me.chkSuggestedAccountNumber.Location = New System.Drawing.Point(18, 20)
-        Me.chkSuggestedAccountNumber.Name = "chkSuggestedAccountNumber"
-        Me.chkSuggestedAccountNumber.Size = New System.Drawing.Size(182, 17)
-        Me.chkSuggestedAccountNumber.TabIndex = 5
-        Me.chkSuggestedAccountNumber.Text = "Use suggested account numbers"
-        Me.chkSuggestedAccountNumber.UseVisualStyleBackColor = True
+        Me.btnShow.Location = New System.Drawing.Point(6, 13)
+        Me.btnShow.Name = "btnShow"
+        Me.btnShow.Size = New System.Drawing.Size(75, 23)
+        Me.btnShow.TabIndex = 1
+        Me.btnShow.Text = "Show"
+        Me.btnShow.UseVisualStyleBackColor = True
         '
         'frmOptions
         '
@@ -285,4 +296,5 @@ Partial Class frmOptions
     Friend WithEvents btnEmpty As System.Windows.Forms.Button
     Friend WithEvents btnViewLog As System.Windows.Forms.Button
     Friend WithEvents chkSuggestedAccountNumber As System.Windows.Forms.CheckBox
+    Friend WithEvents btnShow As System.Windows.Forms.Button
 End Class

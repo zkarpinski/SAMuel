@@ -34,7 +34,6 @@ Public Class frmOptions
         My.Settings.wmFont = cmbFont.SelectedItem.ToString
         My.Settings.Save()
 
-
         Me.Close()
     End Sub
 
@@ -56,5 +55,10 @@ Public Class frmOptions
 
     Private Sub btnViewLog_Click(sender As Object, e As EventArgs) Handles btnViewLog.Click
         If (File.Exists(My.Settings.savePath + "SAMuel.log")) Then System.Diagnostics.Process.Start(My.Settings.savePath + "SAMuel.log")
+    End Sub
+
+    Private Sub btnShow_Click(sender As Object, e As EventArgs) Handles btnShow.Click
+        'Open the saved path folder with windows explorer.
+        Process.Start("explorer.exe", My.Settings.savePath)
     End Sub
 End Class

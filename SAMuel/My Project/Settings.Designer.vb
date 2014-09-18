@@ -173,6 +173,42 @@ Namespace My
                 Me("wmFont") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property SMTP_SERVER() As String
+            Get
+                Return CType(Me("SMTP_SERVER"),String)
+            End Get
+            Set
+                Me("SMTP_SERVER") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(), _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.Configuration.DefaultSettingValueAttribute("")> _
+        Public Property FROM_EMAIL() As String
+            Get
+                Return CType(Me("FROM_EMAIL"), String)
+            End Get
+            Set(value As String)
+                Me("FROM_EMAIL") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public Property TO_EMAIL() As String
+            Get
+                Return CType(Me("TO_EMAIL"),String)
+            End Get
+            Set
+                Me("TO_EMAIL") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

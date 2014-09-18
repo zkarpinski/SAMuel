@@ -20,6 +20,7 @@ List of what still is being worked on, features to be added, etc.
 * ~~Add unattended mode~~ (Aug 16 2014)
 * ~~Move completed emails~~ (Marked with complete flag)
 * ~~Visual feedback on progress~~
+* Add unit testing.
 
 #### DPA
 

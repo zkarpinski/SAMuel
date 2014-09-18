@@ -4,6 +4,7 @@ Imports System.IO
 Imports System.Drawing.Imaging
 Imports System.Drawing.Printing
 Imports System.ComponentModel
+Imports System.Net.Mail
 
 Public Class frmMain
 
@@ -30,13 +31,7 @@ Public Class frmMain
         tabDPA.Dispose()
     End Sub
 
-    Private Sub _DragEnter(ByVal sender As Object, ByVal e As DragEventArgs) Handles tabWordToTiff.DragEnter, tabAddContact.DragEnter
-        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
-            e.Effect = DragDropEffects.Copy
-        Else
-            e.Effect = DragDropEffects.None
-        End If
-    End Sub
+
 
 #Region "Outlook Tab Region --------------------------------------------------------------------------------------"
     'Outlook Tab wide varibles
@@ -334,11 +329,6 @@ Public Class frmMain
 
         Me.Cursor = Cursors.Default
     End Sub
-
-    Private Sub itmEmailAttachment_Click(sender As Object, e As EventArgs) Handles lstEmailAttachments.ItemActivate
-        System.Diagnostics.Process.Start(lstEmailAttachments.SelectedItems(0).Tag)
-    End Sub
-
 #End Region
 
 #Region "Kofax It Tab Region -------------------------------------------------------------------------------------"
@@ -567,12 +557,13 @@ Public Class frmMain
                 End If
             Catch ex As Exception
                 MessageBox.Show(ex.Message)
-                btnConvert.Enabled = True
+                Me.btnConvert.Enabled = True
                 Exit Sub
             End Try
         End If
         'Cleanup
-        btnConvert.Enabled = True
+        Me.lblStatus.Text = "Conversion Complete!"
+        Me.btnConvert.Enabled = True
     End Sub
 
     Private Sub _DragDrop(ByVal sender As Object, ByVal e As DragEventArgs) Handles tabWordToTiff.DragDrop
@@ -591,7 +582,7 @@ Public Class frmMain
                 Return
             End Try
         End If
-
+        Me.lblStatus.Text = "Conversion Complete!"
     End Sub
 #End Region
 
@@ -652,6 +643,17 @@ Public Class frmMain
         lblStatus.Text = ""
     End Sub
 
+    Private Sub _DragEnter(ByVal sender As Object, ByVal e As DragEventArgs) Handles tabWordToTiff.DragEnter, tabAddContact.DragEnter, tabTDrive.DragEnter
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+            e.Effect = DragDropEffects.Copy
+        Else
+            e.Effect = DragDropEffects.None
+        End If
+    End Sub
+
+    Private Sub ListViewItemActivate_Open(sender As Object, e As EventArgs) Handles lvTDriveFiles.ItemActivate, lstEmailAttachments.ItemActivate
+        System.Diagnostics.Process.Start(sender.SelectedItems(0).Tag)
+    End Sub
     Private Sub TabControl1_Changed(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
         'Resets the form state to default
         Reset_All_Forms()
@@ -664,6 +666,68 @@ Public Class frmMain
     End Sub
     Private Sub OptionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.Click
         frmOptions.Show()
+    End Sub
+#End Region
+
+#Region "T: Drive Tab Region -------------------------------------------------------------------------------------"
+    Private Sub DragDropTDrive(sender As Object, e As DragEventArgs) Handles tabTDrive.DragDrop
+        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
+
+            Dim files As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
+            Try
+                TDriveModule.ProcessFiles(files)
+            Catch ex As Exception
+                MessageBox.Show(ex.Message)
+                Return
+            End Try
+        End If
+    End Sub
+    Private Sub btnTDCreateEmail_Click(sender As Object, e As EventArgs) Handles btnTDCreateEmail.Click
+        For Each entry As ListViewItem In Me.lvTDriveFiles.Items
+            Try
+
+                Dim e_mail As New MailMessage()
+                Dim currentADUser As System.DirectoryServices.AccountManagement.UserPrincipal
+                Dim mailClient As New System.Net.Mail.SmtpClient(My.Settings.SMTP_SERVER)
+
+                currentADUser = System.DirectoryServices.AccountManagement.UserPrincipal.Current
+                mailClient.UseDefaultCredentials = True
+                mailClient.DeliveryMethod = SmtpDeliveryMethod.Network
+
+                'Create the email
+                e_mail = New MailMessage(My.Settings.FROM_EMAIL, My.Settings.TO_EMAIL)
+                e_mail.Subject = entry.Text & " Deferred Payment Agreement" & entry.SubItems(2).Text
+                e_mail.IsBodyHtml = False
+                e_mail.Body = entry.SubItems(2).Text & " " + entry.SubItems(3).Text
+                ' 'Add Attachment
+                Dim e_attachment As New System.Net.Mail.Attachment(entry.Tag)
+                e_mail.Attachments.Add(e_attachment)
+                mailClient.Send(e_mail)
+                MsgBox("Mail Sent")
+            Catch ex As Exception
+                LogAction(action:=ex.Message.ToString)
+
+                'Send using outlook on error **TEST PURPOSE**
+                Dim olApp As Outlook.Application = New Outlook.Application
+                Dim olEmail As Outlook.MailItem
+
+                Dim objNS As Outlook._NameSpace = olApp.Session
+                Dim objFolder As Outlook.MAPIFolder
+                objFolder = objNS.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderDrafts)
+
+                olEmail = olApp.CreateItem(Outlook.OlItemType.olMailItem)
+                Dim Recipents As Outlook.Recipients = olEmail.Recipients
+                Recipents.Add(My.Settings.TO_EMAIL)
+                olEmail.Subject = entry.SubItems(2).Text & "Deferred Payment Agreement"
+                olEmail.Body = entry.SubItems(1).Text & " " & entry.SubItems(3).Text
+                olEmail.BodyFormat = Outlook.OlBodyFormat.olFormatHTML
+                olEmail.Attachments.Add(entry.Tag)
+                olEmail.Send()
+            End Try
+        Next
+    End Sub
+    Private Sub btnTDClear_Click(sender As Object, e As EventArgs) Handles btnTDClear.Click
+        Me.lvTDriveFiles.Items.Clear()
     End Sub
 #End Region
 

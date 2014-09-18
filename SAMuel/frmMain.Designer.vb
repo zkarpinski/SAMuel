@@ -23,10 +23,39 @@ Partial Class frmMain
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim ListViewItem1 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
-        Dim ListViewItem2 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
         Me.dlgOpen = New System.Windows.Forms.OpenFileDialog()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
+        Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.lstEmailAttachments = New System.Windows.Forms.ListView()
+        Me.hType = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.hName = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.chkValidOnly = New System.Windows.Forms.CheckBox()
+        Me.groupOLAudit = New System.Windows.Forms.GroupBox()
+        Me.rtbEmailBody = New System.Windows.Forms.RichTextBox()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.txtFrom = New System.Windows.Forms.TextBox()
+        Me.lblSubject = New System.Windows.Forms.Label()
+        Me.lblFrom = New System.Windows.Forms.Label()
+        Me.lblOutlookMessage = New System.Windows.Forms.Label()
+        Me.lblAcc = New System.Windows.Forms.Label()
+        Me.txtSubject = New System.Windows.Forms.TextBox()
+        Me.txtAcc = New System.Windows.Forms.TextBox()
+        Me.btnReject = New System.Windows.Forms.Button()
+        Me.chkAuditMode = New System.Windows.Forms.CheckBox()
+        Me.btnCancel = New System.Windows.Forms.Button()
+        Me.btnNext = New System.Windows.Forms.Button()
+        Me.btnRun = New System.Windows.Forms.Button()
+        Me.tabWordToTiff = New System.Windows.Forms.TabPage()
+        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
+        Me.rbConvertDOC = New System.Windows.Forms.RadioButton()
+        Me.rbConvertIMAGE = New System.Windows.Forms.RadioButton()
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
+        Me.rbConvertTiff = New System.Windows.Forms.RadioButton()
+        Me.rbConvertPDF = New System.Windows.Forms.RadioButton()
+        Me.lblDragAndDropWord = New System.Windows.Forms.Label()
+        Me.btnConvert = New System.Windows.Forms.Button()
         Me.tabRFax = New System.Windows.Forms.TabPage()
         Me.chkRFSaveRec = New System.Windows.Forms.CheckBox()
         Me.GroupBox2 = New System.Windows.Forms.GroupBox()
@@ -75,6 +104,14 @@ Partial Class frmMain
         Me.btnDPAprocess = New System.Windows.Forms.Button()
         Me.chkMinPayment = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
+        Me.tabTDrive = New System.Windows.Forms.TabPage()
+        Me.btnTDClear = New System.Windows.Forms.Button()
+        Me.btnTDCreateEmail = New System.Windows.Forms.Button()
+        Me.lvTDriveFiles = New System.Windows.Forms.ListView()
+        Me.colType = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.colSendTo = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.colAcc = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
+        Me.colName = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
         Me.ProgressBar = New System.Windows.Forms.ProgressBar()
         Me.lblStatus = New System.Windows.Forms.Label()
         Me.MenuStrip1 = New System.Windows.Forms.MenuStrip()
@@ -87,36 +124,13 @@ Partial Class frmMain
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.lblBranding = New System.Windows.Forms.Label()
-        Me.TabPage1 = New System.Windows.Forms.TabPage()
-        Me.lstEmailAttachments = New System.Windows.Forms.ListView()
-        Me.hType = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.hName = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
-        Me.chkValidOnly = New System.Windows.Forms.CheckBox()
-        Me.groupOLAudit = New System.Windows.Forms.GroupBox()
-        Me.rtbEmailBody = New System.Windows.Forms.RichTextBox()
-        Me.Label5 = New System.Windows.Forms.Label()
-        Me.txtFrom = New System.Windows.Forms.TextBox()
-        Me.lblSubject = New System.Windows.Forms.Label()
-        Me.lblFrom = New System.Windows.Forms.Label()
-        Me.lblOutlookMessage = New System.Windows.Forms.Label()
-        Me.lblAcc = New System.Windows.Forms.Label()
-        Me.txtSubject = New System.Windows.Forms.TextBox()
-        Me.txtAcc = New System.Windows.Forms.TextBox()
-        Me.btnReject = New System.Windows.Forms.Button()
-        Me.chkAuditMode = New System.Windows.Forms.CheckBox()
-        Me.btnCancel = New System.Windows.Forms.Button()
-        Me.btnNext = New System.Windows.Forms.Button()
-        Me.btnRun = New System.Windows.Forms.Button()
-        Me.tabWordToTiff = New System.Windows.Forms.TabPage()
-        Me.GroupBox4 = New System.Windows.Forms.GroupBox()
-        Me.rbConvertDOC = New System.Windows.Forms.RadioButton()
-        Me.rbConvertIMAGE = New System.Windows.Forms.RadioButton()
-        Me.GroupBox3 = New System.Windows.Forms.GroupBox()
-        Me.rbConvertTiff = New System.Windows.Forms.RadioButton()
-        Me.rbConvertPDF = New System.Windows.Forms.RadioButton()
-        Me.lblDragAndDropWord = New System.Windows.Forms.Label()
-        Me.btnConvert = New System.Windows.Forms.Button()
+        Me.timerConvert = New System.Windows.Forms.Timer(Me.components)
         Me.TabControl1.SuspendLayout()
+        Me.TabPage1.SuspendLayout()
+        Me.groupOLAudit.SuspendLayout()
+        Me.tabWordToTiff.SuspendLayout()
+        Me.GroupBox4.SuspendLayout()
+        Me.GroupBox3.SuspendLayout()
         Me.tabRFax.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
         Me.grpRFServer.SuspendLayout()
@@ -124,12 +138,8 @@ Partial Class frmMain
         Me.gbKFSource.SuspendLayout()
         Me.tabAddContact.SuspendLayout()
         Me.tabDPA.SuspendLayout()
+        Me.tabTDrive.SuspendLayout()
         Me.MenuStrip1.SuspendLayout()
-        Me.TabPage1.SuspendLayout()
-        Me.groupOLAudit.SuspendLayout()
-        Me.tabWordToTiff.SuspendLayout()
-        Me.GroupBox4.SuspendLayout()
-        Me.GroupBox3.SuspendLayout()
         Me.SuspendLayout()
         '
         'dlgOpen
@@ -144,11 +154,331 @@ Partial Class frmMain
         Me.TabControl1.Controls.Add(Me.tabKofax)
         Me.TabControl1.Controls.Add(Me.tabAddContact)
         Me.TabControl1.Controls.Add(Me.tabDPA)
+        Me.TabControl1.Controls.Add(Me.tabTDrive)
         Me.TabControl1.Location = New System.Drawing.Point(-1, 27)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
         Me.TabControl1.Size = New System.Drawing.Size(439, 316)
         Me.TabControl1.TabIndex = 3
+        '
+        'TabPage1
+        '
+        Me.TabPage1.BackgroundImage = Global.SAMuel.My.Resources.Resources.ny_map_f
+        Me.TabPage1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
+        Me.TabPage1.Controls.Add(Me.lstEmailAttachments)
+        Me.TabPage1.Controls.Add(Me.chkValidOnly)
+        Me.TabPage1.Controls.Add(Me.groupOLAudit)
+        Me.TabPage1.Controls.Add(Me.btnReject)
+        Me.TabPage1.Controls.Add(Me.chkAuditMode)
+        Me.TabPage1.Controls.Add(Me.btnCancel)
+        Me.TabPage1.Controls.Add(Me.btnNext)
+        Me.TabPage1.Controls.Add(Me.btnRun)
+        Me.TabPage1.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage1.Name = "TabPage1"
+        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPage1.Size = New System.Drawing.Size(431, 290)
+        Me.TabPage1.TabIndex = 0
+        Me.TabPage1.Text = "Outlook"
+        Me.TabPage1.UseVisualStyleBackColor = True
+        '
+        'lstEmailAttachments
+        '
+        Me.lstEmailAttachments.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.hType, Me.hName})
+        Me.lstEmailAttachments.FullRowSelect = True
+        ListViewItem1.StateImageIndex = 0
+        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1})
+        Me.lstEmailAttachments.Location = New System.Drawing.Point(229, 7)
+        Me.lstEmailAttachments.Name = "lstEmailAttachments"
+        Me.lstEmailAttachments.Size = New System.Drawing.Size(196, 254)
+        Me.lstEmailAttachments.TabIndex = 18
+        Me.lstEmailAttachments.UseCompatibleStateImageBehavior = False
+        Me.lstEmailAttachments.View = System.Windows.Forms.View.Details
+        '
+        'hType
+        '
+        Me.hType.Text = "Type"
+        Me.hType.Width = 46
+        '
+        'hName
+        '
+        Me.hName.Text = "Filename"
+        Me.hName.Width = 146
+        '
+        'chkValidOnly
+        '
+        Me.chkValidOnly.AutoSize = True
+        Me.chkValidOnly.Location = New System.Drawing.Point(91, 270)
+        Me.chkValidOnly.Name = "chkValidOnly"
+        Me.chkValidOnly.Size = New System.Drawing.Size(73, 17)
+        Me.chkValidOnly.TabIndex = 17
+        Me.chkValidOnly.Text = "Valid Only"
+        Me.chkValidOnly.UseVisualStyleBackColor = True
+        '
+        'groupOLAudit
+        '
+        Me.groupOLAudit.BackColor = System.Drawing.Color.White
+        Me.groupOLAudit.Controls.Add(Me.rtbEmailBody)
+        Me.groupOLAudit.Controls.Add(Me.Label5)
+        Me.groupOLAudit.Controls.Add(Me.txtFrom)
+        Me.groupOLAudit.Controls.Add(Me.lblSubject)
+        Me.groupOLAudit.Controls.Add(Me.lblFrom)
+        Me.groupOLAudit.Controls.Add(Me.lblOutlookMessage)
+        Me.groupOLAudit.Controls.Add(Me.lblAcc)
+        Me.groupOLAudit.Controls.Add(Me.txtSubject)
+        Me.groupOLAudit.Controls.Add(Me.txtAcc)
+        Me.groupOLAudit.Location = New System.Drawing.Point(4, 1)
+        Me.groupOLAudit.Name = "groupOLAudit"
+        Me.groupOLAudit.Size = New System.Drawing.Size(219, 260)
+        Me.groupOLAudit.TabIndex = 16
+        Me.groupOLAudit.TabStop = False
+        Me.groupOLAudit.Text = "Email"
+        '
+        'rtbEmailBody
+        '
+        Me.rtbEmailBody.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+        Me.rtbEmailBody.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.rtbEmailBody.Location = New System.Drawing.Point(-1, 106)
+        Me.rtbEmailBody.Name = "rtbEmailBody"
+        Me.rtbEmailBody.ReadOnly = True
+        Me.rtbEmailBody.Size = New System.Drawing.Size(219, 154)
+        Me.rtbEmailBody.TabIndex = 16
+        Me.rtbEmailBody.Text = "This is a sample email body. With multiple lines and jibberish..." & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & "Ctrl+Scroll " & _
+    "changes font size!" & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & "Scroll down to see this!."
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.BackColor = System.Drawing.Color.Transparent
+        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Location = New System.Drawing.Point(2, 94)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(34, 13)
+        Me.Label5.TabIndex = 17
+        Me.Label5.Text = "Body:"
+        '
+        'txtFrom
+        '
+        Me.txtFrom.Location = New System.Drawing.Point(55, 34)
+        Me.txtFrom.Name = "txtFrom"
+        Me.txtFrom.ReadOnly = True
+        Me.txtFrom.Size = New System.Drawing.Size(158, 20)
+        Me.txtFrom.TabIndex = 6
+        '
+        'lblSubject
+        '
+        Me.lblSubject.AutoSize = True
+        Me.lblSubject.BackColor = System.Drawing.Color.Transparent
+        Me.lblSubject.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSubject.Location = New System.Drawing.Point(2, 14)
+        Me.lblSubject.Name = "lblSubject"
+        Me.lblSubject.Size = New System.Drawing.Size(46, 13)
+        Me.lblSubject.TabIndex = 2
+        Me.lblSubject.Text = "Subject:"
+        '
+        'lblFrom
+        '
+        Me.lblFrom.AutoSize = True
+        Me.lblFrom.BackColor = System.Drawing.Color.Transparent
+        Me.lblFrom.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblFrom.Location = New System.Drawing.Point(2, 37)
+        Me.lblFrom.Name = "lblFrom"
+        Me.lblFrom.Size = New System.Drawing.Size(44, 13)
+        Me.lblFrom.TabIndex = 3
+        Me.lblFrom.Text = "Sender:"
+        '
+        'lblOutlookMessage
+        '
+        Me.lblOutlookMessage.AutoSize = True
+        Me.lblOutlookMessage.BackColor = System.Drawing.Color.White
+        Me.lblOutlookMessage.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblOutlookMessage.ForeColor = System.Drawing.Color.Red
+        Me.lblOutlookMessage.Location = New System.Drawing.Point(50, 84)
+        Me.lblOutlookMessage.Name = "lblOutlookMessage"
+        Me.lblOutlookMessage.Size = New System.Drawing.Size(125, 13)
+        Me.lblOutlookMessage.TabIndex = 15
+        Me.lblOutlookMessage.Text = "Email Error/Warning!"
+        '
+        'lblAcc
+        '
+        Me.lblAcc.AutoSize = True
+        Me.lblAcc.BackColor = System.Drawing.Color.Transparent
+        Me.lblAcc.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblAcc.Location = New System.Drawing.Point(2, 59)
+        Me.lblAcc.Name = "lblAcc"
+        Me.lblAcc.Size = New System.Drawing.Size(53, 13)
+        Me.lblAcc.TabIndex = 4
+        Me.lblAcc.Text = "Account: "
+        '
+        'txtSubject
+        '
+        Me.txtSubject.Location = New System.Drawing.Point(55, 11)
+        Me.txtSubject.Name = "txtSubject"
+        Me.txtSubject.ReadOnly = True
+        Me.txtSubject.Size = New System.Drawing.Size(158, 20)
+        Me.txtSubject.TabIndex = 5
+        '
+        'txtAcc
+        '
+        Me.txtAcc.Location = New System.Drawing.Point(55, 56)
+        Me.txtAcc.Name = "txtAcc"
+        Me.txtAcc.Size = New System.Drawing.Size(158, 20)
+        Me.txtAcc.TabIndex = 7
+        '
+        'btnReject
+        '
+        Me.btnReject.Enabled = False
+        Me.btnReject.Location = New System.Drawing.Point(265, 267)
+        Me.btnReject.Name = "btnReject"
+        Me.btnReject.Size = New System.Drawing.Size(75, 23)
+        Me.btnReject.TabIndex = 8
+        Me.btnReject.Text = "Reject"
+        Me.btnReject.UseVisualStyleBackColor = True
+        '
+        'chkAuditMode
+        '
+        Me.chkAuditMode.AutoSize = True
+        Me.chkAuditMode.Location = New System.Drawing.Point(4, 270)
+        Me.chkAuditMode.Name = "chkAuditMode"
+        Me.chkAuditMode.Size = New System.Drawing.Size(80, 17)
+        Me.chkAuditMode.TabIndex = 14
+        Me.chkAuditMode.Text = "Audit Mode"
+        Me.chkAuditMode.UseVisualStyleBackColor = True
+        '
+        'btnCancel
+        '
+        Me.btnCancel.Enabled = False
+        Me.btnCancel.Location = New System.Drawing.Point(353, 267)
+        Me.btnCancel.Name = "btnCancel"
+        Me.btnCancel.Size = New System.Drawing.Size(75, 23)
+        Me.btnCancel.TabIndex = 11
+        Me.btnCancel.Text = "Cancel"
+        Me.btnCancel.UseVisualStyleBackColor = True
+        '
+        'btnNext
+        '
+        Me.btnNext.Location = New System.Drawing.Point(177, 267)
+        Me.btnNext.Name = "btnNext"
+        Me.btnNext.Size = New System.Drawing.Size(75, 23)
+        Me.btnNext.TabIndex = 10
+        Me.btnNext.Text = "&Next"
+        Me.btnNext.UseVisualStyleBackColor = True
+        Me.btnNext.Visible = False
+        '
+        'btnRun
+        '
+        Me.btnRun.Location = New System.Drawing.Point(177, 267)
+        Me.btnRun.Name = "btnRun"
+        Me.btnRun.Size = New System.Drawing.Size(75, 23)
+        Me.btnRun.TabIndex = 0
+        Me.btnRun.Text = "Run"
+        Me.btnRun.UseVisualStyleBackColor = True
+        '
+        'tabWordToTiff
+        '
+        Me.tabWordToTiff.AllowDrop = True
+        Me.tabWordToTiff.Controls.Add(Me.GroupBox4)
+        Me.tabWordToTiff.Controls.Add(Me.GroupBox3)
+        Me.tabWordToTiff.Controls.Add(Me.lblDragAndDropWord)
+        Me.tabWordToTiff.Controls.Add(Me.btnConvert)
+        Me.tabWordToTiff.Location = New System.Drawing.Point(4, 22)
+        Me.tabWordToTiff.Name = "tabWordToTiff"
+        Me.tabWordToTiff.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabWordToTiff.Size = New System.Drawing.Size(431, 290)
+        Me.tabWordToTiff.TabIndex = 1
+        Me.tabWordToTiff.Text = "Convert Files"
+        Me.tabWordToTiff.UseVisualStyleBackColor = True
+        '
+        'GroupBox4
+        '
+        Me.GroupBox4.Controls.Add(Me.rbConvertDOC)
+        Me.GroupBox4.Controls.Add(Me.rbConvertIMAGE)
+        Me.GroupBox4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox4.Location = New System.Drawing.Point(6, 223)
+        Me.GroupBox4.Name = "GroupBox4"
+        Me.GroupBox4.Size = New System.Drawing.Size(81, 66)
+        Me.GroupBox4.TabIndex = 7
+        Me.GroupBox4.TabStop = False
+        Me.GroupBox4.Text = "Input"
+        '
+        'rbConvertDOC
+        '
+        Me.rbConvertDOC.AutoSize = True
+        Me.rbConvertDOC.Checked = True
+        Me.rbConvertDOC.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.rbConvertDOC.Location = New System.Drawing.Point(6, 19)
+        Me.rbConvertDOC.Name = "rbConvertDOC"
+        Me.rbConvertDOC.Size = New System.Drawing.Size(74, 17)
+        Me.rbConvertDOC.TabIndex = 5
+        Me.rbConvertDOC.TabStop = True
+        Me.rbConvertDOC.Text = "Word Doc"
+        Me.rbConvertDOC.UseVisualStyleBackColor = True
+        '
+        'rbConvertIMAGE
+        '
+        Me.rbConvertIMAGE.AutoSize = True
+        Me.rbConvertIMAGE.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.rbConvertIMAGE.Location = New System.Drawing.Point(6, 42)
+        Me.rbConvertIMAGE.Name = "rbConvertIMAGE"
+        Me.rbConvertIMAGE.Size = New System.Drawing.Size(54, 17)
+        Me.rbConvertIMAGE.TabIndex = 4
+        Me.rbConvertIMAGE.Text = "Image"
+        Me.rbConvertIMAGE.UseVisualStyleBackColor = True
+        '
+        'GroupBox3
+        '
+        Me.GroupBox3.Controls.Add(Me.rbConvertTiff)
+        Me.GroupBox3.Controls.Add(Me.rbConvertPDF)
+        Me.GroupBox3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox3.Location = New System.Drawing.Point(87, 223)
+        Me.GroupBox3.Name = "GroupBox3"
+        Me.GroupBox3.Size = New System.Drawing.Size(75, 66)
+        Me.GroupBox3.TabIndex = 6
+        Me.GroupBox3.TabStop = False
+        Me.GroupBox3.Text = "Output"
+        '
+        'rbConvertTiff
+        '
+        Me.rbConvertTiff.AutoSize = True
+        Me.rbConvertTiff.Checked = True
+        Me.rbConvertTiff.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.rbConvertTiff.Location = New System.Drawing.Point(6, 19)
+        Me.rbConvertTiff.Name = "rbConvertTiff"
+        Me.rbConvertTiff.Size = New System.Drawing.Size(40, 17)
+        Me.rbConvertTiff.TabIndex = 5
+        Me.rbConvertTiff.TabStop = True
+        Me.rbConvertTiff.Text = "Tiff"
+        Me.rbConvertTiff.UseVisualStyleBackColor = True
+        '
+        'rbConvertPDF
+        '
+        Me.rbConvertPDF.AutoSize = True
+        Me.rbConvertPDF.Enabled = False
+        Me.rbConvertPDF.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.rbConvertPDF.Location = New System.Drawing.Point(6, 42)
+        Me.rbConvertPDF.Name = "rbConvertPDF"
+        Me.rbConvertPDF.Size = New System.Drawing.Size(46, 17)
+        Me.rbConvertPDF.TabIndex = 4
+        Me.rbConvertPDF.Text = "PDF"
+        Me.rbConvertPDF.UseVisualStyleBackColor = True
+        '
+        'lblDragAndDropWord
+        '
+        Me.lblDragAndDropWord.AutoSize = True
+        Me.lblDragAndDropWord.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblDragAndDropWord.Location = New System.Drawing.Point(9, 129)
+        Me.lblDragAndDropWord.Name = "lblDragAndDropWord"
+        Me.lblDragAndDropWord.Size = New System.Drawing.Size(416, 13)
+        Me.lblDragAndDropWord.TabIndex = 3
+        Me.lblDragAndDropWord.Text = "Click Convert or Drag and Drop files to convert into the selected format."
+        '
+        'btnConvert
+        '
+        Me.btnConvert.Location = New System.Drawing.Point(177, 265)
+        Me.btnConvert.Name = "btnConvert"
+        Me.btnConvert.Size = New System.Drawing.Size(75, 23)
+        Me.btnConvert.TabIndex = 2
+        Me.btnConvert.Text = "Convert"
+        Me.btnConvert.UseVisualStyleBackColor = True
         '
         'tabRFax
         '
@@ -198,6 +528,7 @@ Partial Class frmMain
         Me.chkRFCoverSheet.TabIndex = 11
         Me.chkRFCoverSheet.Text = "Include Cover Sheet"
         Me.chkRFCoverSheet.UseVisualStyleBackColor = True
+        Me.chkRFCoverSheet.Visible = False
         '
         'txtRFRecFax
         '
@@ -256,6 +587,7 @@ Partial Class frmMain
         Me.chkRFNTauth.TabIndex = 8
         Me.chkRFNTauth.Text = "Use NT Authentication"
         Me.chkRFNTauth.UseVisualStyleBackColor = True
+        Me.chkRFNTauth.Visible = False
         '
         'lblRFpassword
         '
@@ -637,9 +969,74 @@ Partial Class frmMain
         Me.Label1.TabIndex = 5
         Me.Label1.Text = "Account #: "
         '
+        'tabTDrive
+        '
+        Me.tabTDrive.AllowDrop = True
+        Me.tabTDrive.Controls.Add(Me.btnTDClear)
+        Me.tabTDrive.Controls.Add(Me.btnTDCreateEmail)
+        Me.tabTDrive.Controls.Add(Me.lvTDriveFiles)
+        Me.tabTDrive.Location = New System.Drawing.Point(4, 22)
+        Me.tabTDrive.Name = "tabTDrive"
+        Me.tabTDrive.Size = New System.Drawing.Size(431, 290)
+        Me.tabTDrive.TabIndex = 7
+        Me.tabTDrive.Text = "T: Drive"
+        Me.tabTDrive.UseVisualStyleBackColor = True
+        '
+        'btnTDClear
+        '
+        Me.btnTDClear.Location = New System.Drawing.Point(356, 128)
+        Me.btnTDClear.Name = "btnTDClear"
+        Me.btnTDClear.Size = New System.Drawing.Size(64, 22)
+        Me.btnTDClear.TabIndex = 2
+        Me.btnTDClear.Text = "Clear"
+        Me.btnTDClear.UseVisualStyleBackColor = True
+        '
+        'btnTDCreateEmail
+        '
+        Me.btnTDCreateEmail.Location = New System.Drawing.Point(162, 264)
+        Me.btnTDCreateEmail.Name = "btnTDCreateEmail"
+        Me.btnTDCreateEmail.Size = New System.Drawing.Size(89, 23)
+        Me.btnTDCreateEmail.TabIndex = 1
+        Me.btnTDCreateEmail.Text = "Create Emails"
+        Me.btnTDCreateEmail.UseVisualStyleBackColor = True
+        '
+        'lvTDriveFiles
+        '
+        Me.lvTDriveFiles.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.colType, Me.colSendTo, Me.colAcc, Me.colName})
+        Me.lvTDriveFiles.FullRowSelect = True
+        Me.lvTDriveFiles.Location = New System.Drawing.Point(4, 14)
+        Me.lvTDriveFiles.Name = "lvTDriveFiles"
+        Me.lvTDriveFiles.Size = New System.Drawing.Size(424, 108)
+        Me.lvTDriveFiles.TabIndex = 0
+        Me.lvTDriveFiles.UseCompatibleStateImageBehavior = False
+        Me.lvTDriveFiles.View = System.Windows.Forms.View.Details
+        '
+        'colType
+        '
+        Me.colType.Text = "Type"
+        Me.colType.Width = 55
+        '
+        'colSendTo
+        '
+        Me.colSendTo.Text = "Send To"
+        Me.colSendTo.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.colSendTo.Width = 100
+        '
+        'colAcc
+        '
+        Me.colAcc.Text = "Account"
+        Me.colAcc.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.colAcc.Width = 85
+        '
+        'colName
+        '
+        Me.colName.Text = "Name"
+        Me.colName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
+        Me.colName.Width = 150
+        '
         'ProgressBar
         '
-        Me.ProgressBar.Location = New System.Drawing.Point(-1, 343)
+        Me.ProgressBar.Location = New System.Drawing.Point(-1, 342)
         Me.ProgressBar.Name = "ProgressBar"
         Me.ProgressBar.Size = New System.Drawing.Size(439, 23)
         Me.ProgressBar.TabIndex = 4
@@ -727,324 +1124,9 @@ Partial Class frmMain
         Me.lblBranding.TabIndex = 6
         Me.lblBranding.Text = "Created by: Zachary Karpinski"
         '
-        'TabPage1
+        'timerConvert
         '
-        Me.TabPage1.BackgroundImage = Global.SAMuel.My.Resources.Resources.ny_map_f
-        Me.TabPage1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch
-        Me.TabPage1.Controls.Add(Me.lstEmailAttachments)
-        Me.TabPage1.Controls.Add(Me.chkValidOnly)
-        Me.TabPage1.Controls.Add(Me.groupOLAudit)
-        Me.TabPage1.Controls.Add(Me.btnReject)
-        Me.TabPage1.Controls.Add(Me.chkAuditMode)
-        Me.TabPage1.Controls.Add(Me.btnCancel)
-        Me.TabPage1.Controls.Add(Me.btnNext)
-        Me.TabPage1.Controls.Add(Me.btnRun)
-        Me.TabPage1.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(431, 290)
-        Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = "Outlook"
-        Me.TabPage1.UseVisualStyleBackColor = True
-        '
-        'lstEmailAttachments
-        '
-        Me.lstEmailAttachments.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.hType, Me.hName})
-        Me.lstEmailAttachments.FullRowSelect = True
-        ListViewItem2.StateImageIndex = 0
-        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem2})
-        Me.lstEmailAttachments.Location = New System.Drawing.Point(229, 7)
-        Me.lstEmailAttachments.Name = "lstEmailAttachments"
-        Me.lstEmailAttachments.Size = New System.Drawing.Size(196, 254)
-        Me.lstEmailAttachments.TabIndex = 18
-        Me.lstEmailAttachments.UseCompatibleStateImageBehavior = False
-        Me.lstEmailAttachments.View = System.Windows.Forms.View.Details
-        '
-        'hType
-        '
-        Me.hType.Text = "Type"
-        Me.hType.Width = 46
-        '
-        'hName
-        '
-        Me.hName.Text = "Filename"
-        Me.hName.Width = 146
-        '
-        'chkValidOnly
-        '
-        Me.chkValidOnly.AutoSize = True
-        Me.chkValidOnly.Location = New System.Drawing.Point(91, 270)
-        Me.chkValidOnly.Name = "chkValidOnly"
-        Me.chkValidOnly.Size = New System.Drawing.Size(73, 17)
-        Me.chkValidOnly.TabIndex = 17
-        Me.chkValidOnly.Text = "Valid Only"
-        Me.chkValidOnly.UseVisualStyleBackColor = True
-        '
-        'groupOLAudit
-        '
-        Me.groupOLAudit.BackColor = System.Drawing.Color.White
-        Me.groupOLAudit.Controls.Add(Me.rtbEmailBody)
-        Me.groupOLAudit.Controls.Add(Me.Label5)
-        Me.groupOLAudit.Controls.Add(Me.txtFrom)
-        Me.groupOLAudit.Controls.Add(Me.lblSubject)
-        Me.groupOLAudit.Controls.Add(Me.lblFrom)
-        Me.groupOLAudit.Controls.Add(Me.lblOutlookMessage)
-        Me.groupOLAudit.Controls.Add(Me.lblAcc)
-        Me.groupOLAudit.Controls.Add(Me.txtSubject)
-        Me.groupOLAudit.Controls.Add(Me.txtAcc)
-        Me.groupOLAudit.Location = New System.Drawing.Point(4, 1)
-        Me.groupOLAudit.Name = "groupOLAudit"
-        Me.groupOLAudit.Size = New System.Drawing.Size(219, 260)
-        Me.groupOLAudit.TabIndex = 16
-        Me.groupOLAudit.TabStop = False
-        Me.groupOLAudit.Text = "Email"
-        '
-        'rtbEmailBody
-        '
-        Me.rtbEmailBody.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-        Me.rtbEmailBody.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rtbEmailBody.Location = New System.Drawing.Point(-1, 106)
-        Me.rtbEmailBody.Name = "rtbEmailBody"
-        Me.rtbEmailBody.ReadOnly = True
-        Me.rtbEmailBody.Size = New System.Drawing.Size(219, 154)
-        Me.rtbEmailBody.TabIndex = 16
-        Me.rtbEmailBody.Text = "This is a sample email body. With multiple lines and jibberish..." & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & "Ctrl+Scroll " & _
-    "changes font size!" & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & "Scroll down to see this!."
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.BackColor = System.Drawing.Color.Transparent
-        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(2, 94)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(34, 13)
-        Me.Label5.TabIndex = 17
-        Me.Label5.Text = "Body:"
-        '
-        'txtFrom
-        '
-        Me.txtFrom.Location = New System.Drawing.Point(55, 34)
-        Me.txtFrom.Name = "txtFrom"
-        Me.txtFrom.ReadOnly = True
-        Me.txtFrom.Size = New System.Drawing.Size(158, 20)
-        Me.txtFrom.TabIndex = 6
-        '
-        'lblSubject
-        '
-        Me.lblSubject.AutoSize = True
-        Me.lblSubject.BackColor = System.Drawing.Color.Transparent
-        Me.lblSubject.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblSubject.Location = New System.Drawing.Point(2, 14)
-        Me.lblSubject.Name = "lblSubject"
-        Me.lblSubject.Size = New System.Drawing.Size(46, 13)
-        Me.lblSubject.TabIndex = 2
-        Me.lblSubject.Text = "Subject:"
-        '
-        'lblFrom
-        '
-        Me.lblFrom.AutoSize = True
-        Me.lblFrom.BackColor = System.Drawing.Color.Transparent
-        Me.lblFrom.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblFrom.Location = New System.Drawing.Point(2, 37)
-        Me.lblFrom.Name = "lblFrom"
-        Me.lblFrom.Size = New System.Drawing.Size(44, 13)
-        Me.lblFrom.TabIndex = 3
-        Me.lblFrom.Text = "Sender:"
-        '
-        'lblOutlookMessage
-        '
-        Me.lblOutlookMessage.AutoSize = True
-        Me.lblOutlookMessage.BackColor = System.Drawing.Color.White
-        Me.lblOutlookMessage.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblOutlookMessage.ForeColor = System.Drawing.Color.Red
-        Me.lblOutlookMessage.Location = New System.Drawing.Point(50, 84)
-        Me.lblOutlookMessage.Name = "lblOutlookMessage"
-        Me.lblOutlookMessage.Size = New System.Drawing.Size(125, 13)
-        Me.lblOutlookMessage.TabIndex = 15
-        Me.lblOutlookMessage.Text = "Email Error/Warning!"
-        '
-        'lblAcc
-        '
-        Me.lblAcc.AutoSize = True
-        Me.lblAcc.BackColor = System.Drawing.Color.Transparent
-        Me.lblAcc.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblAcc.Location = New System.Drawing.Point(2, 59)
-        Me.lblAcc.Name = "lblAcc"
-        Me.lblAcc.Size = New System.Drawing.Size(53, 13)
-        Me.lblAcc.TabIndex = 4
-        Me.lblAcc.Text = "Account: "
-        '
-        'txtSubject
-        '
-        Me.txtSubject.Location = New System.Drawing.Point(55, 11)
-        Me.txtSubject.Name = "txtSubject"
-        Me.txtSubject.ReadOnly = True
-        Me.txtSubject.Size = New System.Drawing.Size(158, 20)
-        Me.txtSubject.TabIndex = 5
-        '
-        'txtAcc
-        '
-        Me.txtAcc.Location = New System.Drawing.Point(55, 56)
-        Me.txtAcc.Name = "txtAcc"
-        Me.txtAcc.Size = New System.Drawing.Size(158, 20)
-        Me.txtAcc.TabIndex = 7
-        '
-        'btnReject
-        '
-        Me.btnReject.Enabled = False
-        Me.btnReject.Location = New System.Drawing.Point(265, 267)
-        Me.btnReject.Name = "btnReject"
-        Me.btnReject.Size = New System.Drawing.Size(75, 23)
-        Me.btnReject.TabIndex = 8
-        Me.btnReject.Text = "Reject"
-        Me.btnReject.UseVisualStyleBackColor = True
-        '
-        'chkAuditMode
-        '
-        Me.chkAuditMode.AutoSize = True
-        Me.chkAuditMode.Location = New System.Drawing.Point(4, 270)
-        Me.chkAuditMode.Name = "chkAuditMode"
-        Me.chkAuditMode.Size = New System.Drawing.Size(80, 17)
-        Me.chkAuditMode.TabIndex = 14
-        Me.chkAuditMode.Text = "Audit Mode"
-        Me.chkAuditMode.UseVisualStyleBackColor = True
-        '
-        'btnCancel
-        '
-        Me.btnCancel.Enabled = False
-        Me.btnCancel.Location = New System.Drawing.Point(353, 267)
-        Me.btnCancel.Name = "btnCancel"
-        Me.btnCancel.Size = New System.Drawing.Size(75, 23)
-        Me.btnCancel.TabIndex = 11
-        Me.btnCancel.Text = "Cancel"
-        Me.btnCancel.UseVisualStyleBackColor = True
-        '
-        'btnNext
-        '
-        Me.btnNext.Location = New System.Drawing.Point(177, 267)
-        Me.btnNext.Name = "btnNext"
-        Me.btnNext.Size = New System.Drawing.Size(75, 23)
-        Me.btnNext.TabIndex = 10
-        Me.btnNext.Text = "&Next"
-        Me.btnNext.UseVisualStyleBackColor = True
-        Me.btnNext.Visible = False
-        '
-        'btnRun
-        '
-        Me.btnRun.Location = New System.Drawing.Point(177, 267)
-        Me.btnRun.Name = "btnRun"
-        Me.btnRun.Size = New System.Drawing.Size(75, 23)
-        Me.btnRun.TabIndex = 0
-        Me.btnRun.Text = "Run"
-        Me.btnRun.UseVisualStyleBackColor = True
-        '
-        'tabWordToTiff
-        '
-        Me.tabWordToTiff.AllowDrop = True
-        Me.tabWordToTiff.Controls.Add(Me.GroupBox4)
-        Me.tabWordToTiff.Controls.Add(Me.GroupBox3)
-        Me.tabWordToTiff.Controls.Add(Me.lblDragAndDropWord)
-        Me.tabWordToTiff.Controls.Add(Me.btnConvert)
-        Me.tabWordToTiff.Location = New System.Drawing.Point(4, 22)
-        Me.tabWordToTiff.Name = "tabWordToTiff"
-        Me.tabWordToTiff.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabWordToTiff.Size = New System.Drawing.Size(431, 290)
-        Me.tabWordToTiff.TabIndex = 1
-        Me.tabWordToTiff.Text = "Convert Files"
-        Me.tabWordToTiff.UseVisualStyleBackColor = True
-        '
-        'GroupBox4
-        '
-        Me.GroupBox4.Controls.Add(Me.rbConvertDOC)
-        Me.GroupBox4.Controls.Add(Me.rbConvertIMAGE)
-        Me.GroupBox4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox4.Location = New System.Drawing.Point(6, 223)
-        Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(81, 66)
-        Me.GroupBox4.TabIndex = 7
-        Me.GroupBox4.TabStop = False
-        Me.GroupBox4.Text = "Input"
-        '
-        'rbConvertDOC
-        '
-        Me.rbConvertDOC.AutoSize = True
-        Me.rbConvertDOC.Checked = True
-        Me.rbConvertDOC.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rbConvertDOC.Location = New System.Drawing.Point(6, 19)
-        Me.rbConvertDOC.Name = "rbConvertDOC"
-        Me.rbConvertDOC.Size = New System.Drawing.Size(74, 17)
-        Me.rbConvertDOC.TabIndex = 5
-        Me.rbConvertDOC.TabStop = True
-        Me.rbConvertDOC.Text = "Word Doc"
-        Me.rbConvertDOC.UseVisualStyleBackColor = True
-        '
-        'rbConvertIMAGE
-        '
-        Me.rbConvertIMAGE.AutoSize = True
-        Me.rbConvertIMAGE.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rbConvertIMAGE.Location = New System.Drawing.Point(6, 42)
-        Me.rbConvertIMAGE.Name = "rbConvertIMAGE"
-        Me.rbConvertIMAGE.Size = New System.Drawing.Size(54, 17)
-        Me.rbConvertIMAGE.TabIndex = 4
-        Me.rbConvertIMAGE.Text = "Image"
-        Me.rbConvertIMAGE.UseVisualStyleBackColor = True
-        '
-        'GroupBox3
-        '
-        Me.GroupBox3.Controls.Add(Me.rbConvertTiff)
-        Me.GroupBox3.Controls.Add(Me.rbConvertPDF)
-        Me.GroupBox3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox3.Location = New System.Drawing.Point(87, 223)
-        Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(75, 66)
-        Me.GroupBox3.TabIndex = 6
-        Me.GroupBox3.TabStop = False
-        Me.GroupBox3.Text = "Output"
-        '
-        'rbConvertTiff
-        '
-        Me.rbConvertTiff.AutoSize = True
-        Me.rbConvertTiff.Checked = True
-        Me.rbConvertTiff.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rbConvertTiff.Location = New System.Drawing.Point(6, 19)
-        Me.rbConvertTiff.Name = "rbConvertTiff"
-        Me.rbConvertTiff.Size = New System.Drawing.Size(40, 17)
-        Me.rbConvertTiff.TabIndex = 5
-        Me.rbConvertTiff.TabStop = True
-        Me.rbConvertTiff.Text = "Tiff"
-        Me.rbConvertTiff.UseVisualStyleBackColor = True
-        '
-        'rbConvertPDF
-        '
-        Me.rbConvertPDF.AutoSize = True
-        Me.rbConvertPDF.Enabled = False
-        Me.rbConvertPDF.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rbConvertPDF.Location = New System.Drawing.Point(6, 42)
-        Me.rbConvertPDF.Name = "rbConvertPDF"
-        Me.rbConvertPDF.Size = New System.Drawing.Size(46, 17)
-        Me.rbConvertPDF.TabIndex = 4
-        Me.rbConvertPDF.Text = "PDF"
-        Me.rbConvertPDF.UseVisualStyleBackColor = True
-        '
-        'lblDragAndDropWord
-        '
-        Me.lblDragAndDropWord.AutoSize = True
-        Me.lblDragAndDropWord.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblDragAndDropWord.Location = New System.Drawing.Point(9, 129)
-        Me.lblDragAndDropWord.Name = "lblDragAndDropWord"
-        Me.lblDragAndDropWord.Size = New System.Drawing.Size(416, 13)
-        Me.lblDragAndDropWord.TabIndex = 3
-        Me.lblDragAndDropWord.Text = "Click Convert or Drag and Drop files to convert into the selected format."
-        '
-        'btnConvert
-        '
-        Me.btnConvert.Location = New System.Drawing.Point(177, 265)
-        Me.btnConvert.Name = "btnConvert"
-        Me.btnConvert.Size = New System.Drawing.Size(75, 23)
-        Me.btnConvert.TabIndex = 2
-        Me.btnConvert.Text = "Convert"
-        Me.btnConvert.UseVisualStyleBackColor = True
+        Me.timerConvert.Interval = 1000
         '
         'frmMain
         '
@@ -1063,6 +1145,16 @@ Partial Class frmMain
         Me.Name = "frmMain"
         Me.Text = "SAMuel"
         Me.TabControl1.ResumeLayout(False)
+        Me.TabPage1.ResumeLayout(False)
+        Me.TabPage1.PerformLayout()
+        Me.groupOLAudit.ResumeLayout(False)
+        Me.groupOLAudit.PerformLayout()
+        Me.tabWordToTiff.ResumeLayout(False)
+        Me.tabWordToTiff.PerformLayout()
+        Me.GroupBox4.ResumeLayout(False)
+        Me.GroupBox4.PerformLayout()
+        Me.GroupBox3.ResumeLayout(False)
+        Me.GroupBox3.PerformLayout()
         Me.tabRFax.ResumeLayout(False)
         Me.tabRFax.PerformLayout()
         Me.GroupBox2.ResumeLayout(False)
@@ -1077,18 +1169,9 @@ Partial Class frmMain
         Me.tabAddContact.PerformLayout()
         Me.tabDPA.ResumeLayout(False)
         Me.tabDPA.PerformLayout()
+        Me.tabTDrive.ResumeLayout(False)
         Me.MenuStrip1.ResumeLayout(False)
         Me.MenuStrip1.PerformLayout()
-        Me.TabPage1.ResumeLayout(False)
-        Me.TabPage1.PerformLayout()
-        Me.groupOLAudit.ResumeLayout(False)
-        Me.groupOLAudit.PerformLayout()
-        Me.tabWordToTiff.ResumeLayout(False)
-        Me.tabWordToTiff.PerformLayout()
-        Me.GroupBox4.ResumeLayout(False)
-        Me.GroupBox4.PerformLayout()
-        Me.GroupBox3.ResumeLayout(False)
-        Me.GroupBox3.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1184,5 +1267,14 @@ Partial Class frmMain
     Friend WithEvents hName As System.Windows.Forms.ColumnHeader
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents rtbEmailBody As System.Windows.Forms.RichTextBox
+    Friend WithEvents tabTDrive As System.Windows.Forms.TabPage
+    Friend WithEvents lvTDriveFiles As System.Windows.Forms.ListView
+    Friend WithEvents colType As System.Windows.Forms.ColumnHeader
+    Friend WithEvents colSendTo As System.Windows.Forms.ColumnHeader
+    Friend WithEvents colAcc As System.Windows.Forms.ColumnHeader
+    Friend WithEvents colName As System.Windows.Forms.ColumnHeader
+    Friend WithEvents btnTDCreateEmail As System.Windows.Forms.Button
+    Friend WithEvents btnTDClear As System.Windows.Forms.Button
+    Friend WithEvents timerConvert As System.Windows.Forms.Timer
 
 End Class

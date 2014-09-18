@@ -88,7 +88,11 @@
       <HintPath>..\packages\Ghostscript.NET.1.1.9\lib\net40\Ghostscript.NET.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.DirectoryServices.AccountManagement" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
@@ -142,6 +146,7 @@
     <Compile Include="Modules\KofaxModule.vb" />
     <Compile Include="Modules\modDPAHandle.vb" />
     <Compile Include="Modules\RightFax.vb" />
+    <Compile Include="Modules\TDriveModule.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -186,13 +191,18 @@
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
     </None>
+    <None Include="My Project\DataSources\frmAbout.datasource" />
+    <None Include="My Project\DataSources\frmEmails.datasource" />
+    <None Include="My Project\DataSources\frmMain.datasource" />
+    <None Include="My Project\DataSources\frmOptions.datasource" />
+    <None Include="My Project\DataSources\SAM_Email.datasource" />
+    <None Include="My Project\DataSources\SAM_File.datasource" />
     <None Include="My Project\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <None Include="packages.config" />
-    <None Include="SAMuel.zip" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Interop.Outlook">
