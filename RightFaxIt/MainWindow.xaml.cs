@@ -50,21 +50,22 @@ namespace RightFaxIt
             String userID = ((Tuple<string[], string>)e.Argument).Item2;
             List<String> invalidFiles = new List<string>();
             
-
+            //Create each fax object from the list of files.
             faxes = CreateFaxes(files: ref files, faxInfoType: FaxInfoType.Parsed);
 
+            //Removes fax from list if invalid
             for (int i = 0; i < faxes.Count; i++)
             {
                 if (!faxes[i].IsValid)
                 {
                     // TODO Invalid fax fixing
-                    //Removes fax if invalid
                     invalidFiles.Add(faxes[i].Document);
                     faxes.RemoveAt(i);
                     i -= 1;
                 }
             }
 
+            //Exit if there are no valid faxes to send out.
             if (faxes.Count <= 0)
             {
                  e.Result = invalidFiles;
@@ -72,7 +73,7 @@ namespace RightFaxIt
             }
 
             
-
+            //Send all faxes out and move them if all were successful.
             if (SendFaxes(ref faxes,userID))
             {
                 //Log all the faxed files.
@@ -87,9 +88,6 @@ namespace RightFaxIt
                         break;
                     case "cutin":
                         moveFolder = Properties.Settings.Default.CutInMoveLocation;
-                        break;
-                    case "acctinit":
-                        moveFolder = Properties.Settings.Default.AIMoveLocation;
                         break;
                     default:
                         moveFolder = Properties.Settings.Default.ActiveMoveLocation;
@@ -106,6 +104,8 @@ namespace RightFaxIt
             {
                 //TODO Add failed send fax handling
             }
+
+            //Return the skipped file list
             e.Result = invalidFiles;
             return;
         }
@@ -140,6 +140,32 @@ namespace RightFaxIt
             FaxProgress.Value = e.ProgressPercentage;
         }
         #endregion
+
+        /// <summary>
+        /// Creates a single fax.
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="faxInfoType"></param>
+        /// <param name="recipient"></param>
+        /// <param name="faxNumber"></param>
+        /// <returns></returns>
+        private Fax CreateFax(string file, FaxInfoType faxInfoType = FaxInfoType.Manual, string recipient = "DEFAULT", string faxNumber = "DEFAULT")
+        {
+            Fax fax;
+                if (faxInfoType == FaxInfoType.Parsed)
+                {
+                    fax = new Fax(file);
+                }
+                else if (faxInfoType == FaxInfoType.Manual)
+                {
+                    fax = new Fax(file, recipient, faxNumber);
+                }
+                else
+                {
+                    fax = new Fax();
+                }
+            return fax;
+        }
 
         /// <summary>
         /// Creates an array of faxes from a string of files.
@@ -198,11 +224,14 @@ namespace RightFaxIt
                         newFax.ToName = fax.CustomerName;
                         newFax.ToFaxNumber = Regex.Replace(fax.FaxNumber, "-", "");
                         newFax.Attachments.Add(fax.Document);
+                        newFax.UserComments = "Sent using SAMuel.";
                         newFax.Send();
+                        // TODO newFax.MoveToFolder
                     }
                     else
                     {  }
                 }
+                faxsvr.CloseServer();
             return true;
 	        }
 
@@ -309,10 +338,6 @@ namespace RightFaxIt
             {
                 SelectedUser = "cutin";
             }
-            else if ((bool)this.AIUserRatio.IsChecked)
-            {
-                SelectedUser = "acctinit";
-            }
             else
             {
                 SelectedUser = "active";
@@ -334,6 +359,11 @@ namespace RightFaxIt
             }
         }
 
+        /// <summary>
+        /// Closes the form.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MenuItem_Click(object sender, RoutedEventArgs e) { this.Close();}
 
         private void OptionsItem_Click(object sender, RoutedEventArgs e)
@@ -350,6 +380,9 @@ namespace RightFaxIt
 
 #endregion
 
+        /* Folder watching region of code --------------------------------------------------------*/
+        #region Folder Watching
+
         /// <summary>
         /// Polls the desired folder.
         /// </summary>
@@ -357,19 +390,22 @@ namespace RightFaxIt
         /// <param name="e"></param>
         private void btnPoll_Click(object sender, RoutedEventArgs e)
         {
+            StartQWorker();
             btnPoll.IsEnabled = false;
-            FileSystemWatcher fsw = new FileSystemWatcher(Properties.Settings.Default.PollingFolder);
-            fsw.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.FileName;
-            fsw.Created += new FileSystemEventHandler(FaxPolledFile);
+            //FileSystemWatcher fsw = new FileSystemWatcher(Properties.Settings.Default.PollingFolder);
+            //fsw.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.FileName;
+            //fsw.Created += new FileSystemEventHandler(FaxPolledFile);
 
-            fsw.EnableRaisingEvents = true;
+            //fsw.EnableRaisingEvents = true;
+
+           WatchFolder(Properties.Settings.Default.ActiveFolder, "active");
+           WatchFolder(Properties.Settings.Default.CutinFolder, "cutin");
         }
 
         private void FaxPolledFile(object source, FileSystemEventArgs e)
         {
             String[] file = { e.FullPath };
             String sUser = "active";
-            
 
             var arguments = Tuple.Create<string[], string>(file, sUser);
             BackgroundWorker _backgroundWorker = new BackgroundWorker();
@@ -379,5 +415,187 @@ namespace RightFaxIt
             _backgroundWorker.RunWorkerAsync(arguments);
         }
 
+        private void WatchFolder(string sPath, string rightFaxUser)
+        {
+            // Create a new watcher for every folder we want to monitor.
+            try
+            {
+            FileSystemWatcher fsw = new FileSystemWatcher(sPath, "*.doc");
+            fsw.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.FileName;
+            fsw.Created += (sender, e) => _NewFileCreated(sender,e,rightFaxUser);
+            fsw.EnableRaisingEvents = true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return;
+            }
+        }
+
+        private void _NewFileCreated(object sender, FileSystemEventArgs e, String rightFaxUser)
+        {
+            Console.WriteLine("New File detected!");
+            String file = e.FullPath;
+
+            //Wait 2 seconds incase the file is being created still.
+            Thread.Sleep(2000);
+            
+            //Create each fax object from the file.
+            Fax fax = CreateFax(file,FaxInfoType.Parsed);
+
+            //Skips the file if the fax is invalid.
+             if (!fax.IsValid)
+                {
+                 fax = null;
+                 return;
+                }
+             else
+             {
+                 Tuple<Fax, String> work = new Tuple<Fax, string>(fax, rightFaxUser);
+                 AddFaxToQueue(work);
+             }
+            }
+        #endregion
+
+
+        #region FaxingQueue
+        /// <summary>
+        /// http://social.msdn.microsoft.com/forums/vstudio/en-US/500cb664-e2ca-4d76-88b9-0faab7e7c443/queuing-backgroundworker-tasks
+        /// </summary>
+
+        private Thread QueueWorker;
+        private Object zLock = new object();
+        private Queue<Tuple<Fax, String>> FaxQueue = new Queue<Tuple<Fax, String>>(50);
+        private Boolean  QuitWork;
+        private EventWaitHandle DoQWork = new EventWaitHandle(false,EventResetMode.ManualReset);
+
+        private void StopQWorker()
+        {
+            QuitWork = true;
+            DoQWork.Set();
+            QueueWorker.Join(1000);
+        }
+
+        private void StartQWorker()
+        {
+            QueueWorker = new Thread(QThread);
+            QueueWorker.IsBackground = true;
+            QueueWorker.Start();
+        }
+
+        private void AddFaxToQueue (Tuple<Fax,String> work )
+        {
+            lock(zLock)
+            {
+                FaxQueue.Enqueue(work);
+            }
+            DoQWork.Set();
+        }
+
+        private void QThread()
+        {
+            Console.WriteLine("Thread Started.");
+          do
+          {
+              Console.WriteLine("Thread Waiting.");
+              DoQWork.WaitOne(-1,false);
+              Console.WriteLine("Checking for work.");
+              if (QuitWork) { break;}
+              Tuple<Fax,String> dequeuedWork;
+              do
+              {
+                  dequeuedWork = null;
+                  Console.WriteLine("Dequeueing");
+                  lock(zLock)
+                  {
+                      if (FaxQueue.Count > 0)
+                      {
+                          dequeuedWork = FaxQueue.Dequeue();
+                      }
+                  }
+
+                  if (dequeuedWork != null)
+                  {
+                      Console.WriteLine("Working");
+
+                      ProcessFax(dequeuedWork);
+                      Console.WriteLine("Work Completed!");
+                  }
+              }while(dequeuedWork != null);
+
+              lock(zLock)
+              {
+                  if (FaxQueue.Count == 0)
+                  {
+                      DoQWork.Reset();
+                  }
+              }
+
+          }while(true);
+          Console.WriteLine("THREAD ENDED");
+        }
+
+        #endregion
+
+        private void ProcessFax(Tuple<Fax,String> work)
+        {
+            if (SendFax(work.Item1, work.Item2))
+            {
+                //Determine where to move the files.
+                String moveFolder;
+                switch (work.Item2)
+                {
+                    case "active":
+                        moveFolder = Properties.Settings.Default.ActiveMoveLocation;
+                        break;
+                    case "cutin":
+                        moveFolder = Properties.Settings.Default.CutInMoveLocation;
+                        break;
+                    default:
+                        moveFolder = Properties.Settings.Default.ActiveMoveLocation;
+                    break;
+                }
+                MoveCompletedFax(work.Item1.Document, moveFolder);
+            }   
+        }
+
+        private bool SendFax(Fax fax, String userID)
+        {
+            try
+            {
+                //Setup Rightfax Server Connection
+                RFCOMAPILib.FaxServer faxsvr = new RFCOMAPILib.FaxServer();
+                faxsvr.ServerName = Properties.Settings.Default.FaxServerName;
+                faxsvr.AuthorizationUserID = userID;
+                faxsvr.Protocol = RFCOMAPILib.CommunicationProtocolType.cpTCPIP;
+                faxsvr.UseNTAuthentication = RFCOMAPILib.BoolType.False;
+                faxsvr.OpenServer();
+
+                //Create the fax and send.
+                if (fax.IsValid)
+                    {
+                        RFCOMAPILib.Fax newFax = (RFCOMAPILib.Fax)faxsvr.get_CreateObject(RFCOMAPILib.CreateObjectType.coFax);
+                        newFax.ToName = fax.CustomerName;
+                        newFax.ToFaxNumber = Regex.Replace(fax.FaxNumber, "-", "");
+                        newFax.Attachments.Add(fax.Document);
+                        newFax.UserComments = "Sent using SAMuel.";
+                        newFax.Send();
+                        // TODO newFax.MoveToFolder
+                    }
+                    else
+                    { return false; }
+                faxsvr.CloseServer();
+                return true;
+            }
+
+            catch (Exception e)
+            {
+                MessageBox.Show(System.Environment.NewLine + e, "RightFax Error");
+                return false;
+            }
+        }
+
+
     }
 }
+

@@ -23,27 +23,12 @@ namespace RightFaxIt.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DEFAULT")]
         public string FaxServerName {
             get {
                 return ((string)(this["FaxServerName"]));
-            }
-            set {
-                this["FaxServerName"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("DEFAULT")]
-        public string FaxUserID {
-            get {
-                return ((string)(this["FaxUserID"]));
-            }
-            set {
-                this["FaxUserID"] = value;
             }
         }
         
@@ -80,18 +65,27 @@ namespace RightFaxIt.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("DEFAULT")]
-        public string AIMoveLocation {
+        public string PollingFolder {
             get {
-                return ((string)(this["AIMoveLocation"]));
+                return ((string)(this["PollingFolder"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("DEFAULT")]
-        public string PollingFolder {
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\zkarpinski\\Desktop\\New folder")]
+        public string ActiveFolder {
             get {
-                return ((string)(this["PollingFolder"]));
+                return ((string)(this["ActiveFolder"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\zkarpinski\\Desktop\\New")]
+        public string CutinFolder {
+            get {
+                return ((string)(this["CutinFolder"]));
             }
         }
     }

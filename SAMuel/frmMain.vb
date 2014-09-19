@@ -718,9 +718,9 @@ Public Class frmMain
                 olEmail = olApp.CreateItem(Outlook.OlItemType.olMailItem)
                 Dim Recipents As Outlook.Recipients = olEmail.Recipients
                 Recipents.Add(My.Settings.TO_EMAIL)
-                olEmail.Subject = entry.SubItems(2).Text & "Deferred Payment Agreement"
+                olEmail.Subject = entry.SubItems(2).Text & " Deferred Payment Agreement"
                 olEmail.Body = entry.SubItems(1).Text & " " & entry.SubItems(3).Text
-                olEmail.BodyFormat = Outlook.OlBodyFormat.olFormatHTML
+                olEmail.BodyFormat = Outlook.OlBodyFormat.olFormatRichText
                 olEmail.Attachments.Add(entry.Tag)
                 olEmail.Send()
             End Try

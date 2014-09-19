@@ -1142,6 +1142,7 @@ Partial Class frmMain
         Me.HelpButton = True
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
+        Me.MaximizeBox = False
         Me.Name = "frmMain"
         Me.Text = "SAMuel"
         Me.TabControl1.ResumeLayout(False)

@@ -50,15 +50,13 @@ Module Conversion
             objWord.WindowState = Word.WdWindowState.wdWindowStateMinimize
             'Print to Tiff
             objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=sDestination & sFileName & ".tif")
-            Do Until (objWord.BackgroundPrintingStatus = 0)
-                'Wait until the document has been placed inside the printer queue.
-            Loop
+            Threading.Thread.Sleep(1000)
             'Release document
             objWdDoc.Close()
             'Progress the progress bar
             frmMain.ProgressBar.Value += 1
         Next
-
+        Threading.Thread.Sleep(2000)
         objWord.Quit()
     End Sub
 
@@ -169,7 +167,7 @@ Module Conversion
 
         'Print to Tiff
         objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=outputTiff)
-
+        Threading.Thread.Sleep(1000)
         'Release document and close word.
         objWdDoc.Close()
         wordApp.Quit()

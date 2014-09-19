@@ -2,10 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="RightFaxIt.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="FaxServerName" Type="System.String" Scope="User">
-      <Value Profile="(Default)">DEFAULT</Value>
-    </Setting>
-    <Setting Name="FaxUserID" Type="System.String" Scope="User">
+    <Setting Name="FaxServerName" Type="System.String" Scope="Application">
       <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
     <Setting Name="LogLocation" Type="System.String" Scope="User">
@@ -17,11 +14,14 @@
     <Setting Name="CutInMoveLocation" Type="System.String" Scope="Application">
       <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
-    <Setting Name="AIMoveLocation" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">DEFAULT</Value>
-    </Setting>
     <Setting Name="PollingFolder" Type="System.String" Scope="Application">
       <Value Profile="(Default)">DEFAULT</Value>
+    </Setting>
+    <Setting Name="ActiveFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\Users\zkarpinski\Desktop\New folder</Value>
+    </Setting>
+    <Setting Name="CutinFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">C:\Users\zkarpinski\Desktop\New</Value>
     </Setting>
   </Settings>
 </SettingsFile>

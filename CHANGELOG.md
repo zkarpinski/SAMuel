@@ -1,3 +1,9 @@
+## 2014-09-19
+
+Features:
+
+  - RightFaxIt: Added Two folder watches and queued faxing.
+
 ## 2014-09-14
 
 Features:

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="RightFaxIt.About"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="About" Height="154.511" Width="283.083" ResizeMode="NoResize">
+        Title="About" Height="154.511" Width="283.083" ResizeMode="NoResize" Background="{DynamicResource {x:Static SystemColors.MenuBrushKey}}">
     <Grid>
         <Label Content="Created By: Zachary Karpinski" HorizontalAlignment="Left" Margin="3,35,0,0" VerticalAlignment="Top"/>
         <Label Content="Your Summer of 2014 Scanner." HorizontalAlignment="Left" Margin="3,48,0,0" VerticalAlignment="Top"/>
