@@ -1,3 +1,11 @@
+## 2014-09-22
+
+Code Improvements:
+
+  - General: Save folder paths are now stored as global variables with GlobalModule for consistancy between changes.
+  - Outlook: The saved attachments are now deleted at the end of the process.
+  - 
+
 ## 2014-09-19
 
 Features:

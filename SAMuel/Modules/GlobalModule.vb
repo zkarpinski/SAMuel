@@ -3,7 +3,13 @@ Imports System.IO
 Imports System.Text.RegularExpressions
 
 Module GlobalModule
-    ' Global Variables (Loaded from .ini)
+    ' Global Variables
+    Public SAVE_FOLDER As String
+    Public ATT_FOLDER As String
+    Public EMAILS_FOLDER As String
+    Public CONV_FOLDER As String
+    Public FAXED_FOLDER As String
+
 
     ''' <summary>
     ''' Logs actions and events from within SAMuel
@@ -17,7 +23,7 @@ Module GlobalModule
     ''' Optional description of the action.
     ''' </param>
     Public Sub LogAction(Optional actionCode As Integer = 0, Optional action As String = vbNullString)
-        Dim logFile As String = My.Settings.savePath + "SAMuel.log"
+        Dim logFile As String = SAVE_FOLDER + "SAMuel.log"
         Dim sw As StreamWriter
         Dim logAction As String
 
@@ -82,14 +88,20 @@ Module GlobalModule
     ''' <summary>
     ''' Creates the output folders used by SAMuel if they do not exist
     ''' </summary>
-    Sub InitOutputFolders()
-        Dim parentPath As String = My.Settings.savePath
-        Dim OutputFolders As Array = {parentPath, parentPath + "tiffs\", parentPath + "emails\", parentPath + "faxed\", parentPath + "converted\"}
-
+    Sub InitOutputFolders(ByVal parentPath As String)
+        '' Output Folder References: SAVE_FOLDER, EMAILS_FOLDER         , ATT_FOLDER                 ,FAXED_FOLDER          , CONV_FOLDER
+        Dim OutputFolders As Array = {parentPath, parentPath + "emails\", parentPath + "emails\temp\", parentPath + "faxed\", parentPath + "converted\"}
         'Create the folder if it does not exist
         For Each value In OutputFolders
             GlobalModule.CheckFolder(value)
         Next
+
+        'Update the global variables.
+        SAVE_FOLDER = OutputFolders(0)
+        EMAILS_FOLDER = OutputFolders(1)
+        ATT_FOLDER = OutputFolders(2)
+        FAXED_FOLDER = OutputFolders(3)
+        CONV_FOLDER = OutputFolders(4)
     End Sub
 
     ''' <summary>

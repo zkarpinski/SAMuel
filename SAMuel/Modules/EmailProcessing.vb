@@ -23,6 +23,10 @@ Public Module EmailProcessing
         End If
     End Function
 
+    Public Sub DeleteSavedAttachments(ByVal sDirectory As String)
+        If (Directory.Exists(sDirectory)) Then Directory.Delete(sDirectory, True)
+    End Sub
+
 
 
 End Module

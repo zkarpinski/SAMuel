@@ -35,7 +35,7 @@ Module RightFax
     End Sub
 
     Sub MoveFaxedFile(path_to_doc As String)
-        Dim destination As String = My.Settings.savePath + "faxed\" + Path.GetFileName(path_to_doc)
+        Dim destination As String = FAXED_FOLDER + Path.GetFileName(path_to_doc)
         File.Move(path_to_doc, destination)
     End Sub
 

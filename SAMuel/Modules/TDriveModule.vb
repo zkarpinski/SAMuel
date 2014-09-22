@@ -107,7 +107,6 @@ Module TDriveModule
 
     Public Sub ProcessFiles(sFiles() As String)
         Dim objWord As Word.Application
-        Dim sDestination As String = My.Settings.savePath
         Dim DPA_List As New List(Of DPA)
 
         'Initiate word application object and minimize it
@@ -115,9 +114,6 @@ Module TDriveModule
         objWord.WindowState = Word.WdWindowState.wdWindowStateMinimize
         'Set active printer to PDF
         'objWord.ActivePrinter = "PDF995"
-
-        'Verify output folder exists
-        CheckFolder(sDestination)
 
         'Setup the progress bar.
         frmMain.ProgressBar.Maximum = sFiles.Length + 1

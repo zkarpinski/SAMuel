@@ -42,15 +42,14 @@ Public Class SAM_Email
         Return strAccNum
     End Function
 
-    Public Sub DownloadAttachments()
+    Public Sub DownloadAttachments(ByVal sPath As String)
         Dim sFile As String
-        Dim sPath As String
         Dim rand As New Random
         Dim subFolder As String
 
         subFolder = SenderEmailAddress + "\"
         ' TODO Remove ALL invalid path characters from string.
-        sPath = My.Settings.savePath + "emails\" + subFolder
+        sPath = sPath + subFolder
         GlobalModule.CheckFolder(sPath)
 
         If Me.EmailObject.Attachments.Count > 0 Then

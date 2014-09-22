@@ -14,7 +14,7 @@ Module Conversion
         'Converts Word Documents to .tif using MODI
         Dim objWdDoc As Word.Document
         Dim objWord As Word.Application
-        Dim sDestination As String = My.Settings.savePath + "converted\"
+        Dim sDestination As String = CONV_FOLDER
         Dim sFileName As String
 
         'Initiate word application object and minimize it
@@ -61,7 +61,7 @@ Module Conversion
     End Sub
 
     Sub imagesToTiff(sFiles() As String)
-        Dim sDestination As String = My.Settings.savePath + "converted\"
+        Dim sDestination As String = CONV_FOLDER
         Dim sFileName As String
         Dim sOutTIFF As String
 
@@ -166,7 +166,7 @@ Module Conversion
         wordApp.WindowState = Word.WdWindowState.wdWindowStateMinimize
 
         'Print to Tiff
-        objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=outputTiff)
+        objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=outputTiff, Background:=False)
         Threading.Thread.Sleep(1000)
         'Release document and close word.
         objWdDoc.Close()

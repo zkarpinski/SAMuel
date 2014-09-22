@@ -224,7 +224,7 @@ namespace RightFaxIt
                         newFax.ToName = fax.CustomerName;
                         newFax.ToFaxNumber = Regex.Replace(fax.FaxNumber, "-", "");
                         newFax.Attachments.Add(fax.Document);
-                        newFax.UserComments = "Sent using SAMuel.";
+                        newFax.UserComments = "Sent via SAMuel.";
                         newFax.Send();
                         // TODO newFax.MoveToFolder
                     }

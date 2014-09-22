@@ -23,7 +23,7 @@ Public Class frmMain
         End If
 
         'Verify all output folders exist
-        GlobalModule.InitOutputFolders()
+        GlobalModule.InitOutputFolders(My.Settings.savePath)
         'Welcome the user.
         lblStatus.Text = String.Format("Welcome {0}!", Environment.UserName)
 
@@ -57,7 +57,7 @@ Public Class frmMain
         Dim completedEmailsCount As Integer = 0
 
         'Define the save location and check if it exists
-        sDestination = My.Settings.savePath + "tiffs\"
+        sDestination = ATT_FOLDER
         GlobalModule.CheckFolder(sDestination)
 
         'Make sure everything is at initial state.
@@ -134,7 +134,7 @@ Public Class frmMain
 
                 lblStatus.Text = "Downloading attachments..."
                 Me.Refresh()
-                sEmail.DownloadAttachments()
+                sEmail.DownloadAttachments(ATT_FOLDER)
                 'Process each attachment within the email
                 If sEmail.AttachmentCount > 0 Then
                     frmEmails.clbSelectedEmails.Items.Add("[" & sEmail.AttachmentCount.ToString & "] " & sEmail.Account & vbTab & vbTab & sEmail.Subject & vbTab & sEmail.From)
@@ -221,9 +221,6 @@ Public Class frmMain
                                 'Print images to tiff
                                 Conversion.imgToTiff(currentAttachmentFile, outTiff)
                             End If
-
-                            'Delete the saved email attachment
-                            System.IO.File.Delete(currentAttachmentFile)
                         Next
                     Else
                         'Undesired state. Log this
@@ -261,6 +258,11 @@ Public Class frmMain
             Me.Refresh()
         Next
 
+        'Delete the temp attachment folder, then recreate it.
+        DeleteSavedAttachments(ATT_FOLDER)
+        CheckFolder(ATT_FOLDER)
+
+        'Metrics
         endTime = DateTime.Now
         totalTime = endTime - startTime
 
