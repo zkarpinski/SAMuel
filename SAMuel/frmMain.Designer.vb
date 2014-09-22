@@ -23,7 +23,7 @@ Partial Class frmMain
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ListViewItem1 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
+        Dim ListViewItem2 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
         Me.dlgOpen = New System.Windows.Forms.OpenFileDialog()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
@@ -43,7 +43,6 @@ Partial Class frmMain
         Me.txtSubject = New System.Windows.Forms.TextBox()
         Me.txtAcc = New System.Windows.Forms.TextBox()
         Me.btnReject = New System.Windows.Forms.Button()
-        Me.chkAuditMode = New System.Windows.Forms.CheckBox()
         Me.btnCancel = New System.Windows.Forms.Button()
         Me.btnNext = New System.Windows.Forms.Button()
         Me.btnRun = New System.Windows.Forms.Button()
@@ -169,7 +168,6 @@ Partial Class frmMain
         Me.TabPage1.Controls.Add(Me.chkValidOnly)
         Me.TabPage1.Controls.Add(Me.groupOLAudit)
         Me.TabPage1.Controls.Add(Me.btnReject)
-        Me.TabPage1.Controls.Add(Me.chkAuditMode)
         Me.TabPage1.Controls.Add(Me.btnCancel)
         Me.TabPage1.Controls.Add(Me.btnNext)
         Me.TabPage1.Controls.Add(Me.btnRun)
@@ -185,8 +183,8 @@ Partial Class frmMain
         '
         Me.lstEmailAttachments.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.hType, Me.hName})
         Me.lstEmailAttachments.FullRowSelect = True
-        ListViewItem1.StateImageIndex = 0
-        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1})
+        ListViewItem2.StateImageIndex = 0
+        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem2})
         Me.lstEmailAttachments.Location = New System.Drawing.Point(229, 7)
         Me.lstEmailAttachments.Name = "lstEmailAttachments"
         Me.lstEmailAttachments.Size = New System.Drawing.Size(196, 254)
@@ -207,7 +205,7 @@ Partial Class frmMain
         'chkValidOnly
         '
         Me.chkValidOnly.AutoSize = True
-        Me.chkValidOnly.Location = New System.Drawing.Point(91, 270)
+        Me.chkValidOnly.Location = New System.Drawing.Point(3, 270)
         Me.chkValidOnly.Name = "chkValidOnly"
         Me.chkValidOnly.Size = New System.Drawing.Size(73, 17)
         Me.chkValidOnly.TabIndex = 17
@@ -333,16 +331,6 @@ Partial Class frmMain
         Me.btnReject.TabIndex = 8
         Me.btnReject.Text = "Reject"
         Me.btnReject.UseVisualStyleBackColor = True
-        '
-        'chkAuditMode
-        '
-        Me.chkAuditMode.AutoSize = True
-        Me.chkAuditMode.Location = New System.Drawing.Point(4, 270)
-        Me.chkAuditMode.Name = "chkAuditMode"
-        Me.chkAuditMode.Size = New System.Drawing.Size(80, 17)
-        Me.chkAuditMode.TabIndex = 14
-        Me.chkAuditMode.Text = "Audit Mode"
-        Me.chkAuditMode.UseVisualStyleBackColor = True
         '
         'btnCancel
         '
@@ -1234,7 +1222,6 @@ Partial Class frmMain
     Friend WithEvents btnKFImport As System.Windows.Forms.Button
     Friend WithEvents lblKFBatchName As System.Windows.Forms.Label
     Friend WithEvents txtKFBatchName As System.Windows.Forms.TextBox
-    Friend WithEvents chkAuditMode As System.Windows.Forms.CheckBox
     Friend WithEvents lblOutlookMessage As System.Windows.Forms.Label
     Friend WithEvents NotifyIcon1 As System.Windows.Forms.NotifyIcon
     Friend WithEvents lblKFBatchType As System.Windows.Forms.Label

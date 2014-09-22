@@ -140,42 +140,6 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("24")>  _
-        Public Property colorDepth() As Long
-            Get
-                Return CType(Me("colorDepth"),Long)
-            End Get
-            Set
-                Me("colorDepth") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("LZW")>  _
-        Public Property tiffCompression() As String
-            Get
-                Return CType(Me("tiffCompression"),String)
-            End Get
-            Set
-                Me("tiffCompression") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("Courier New")>  _
-        Public Property wmFont() As String
-            Get
-                Return CType(Me("wmFont"),String)
-            End Get
-            Set
-                Me("wmFont") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("")>  _
         Public Property SMTP_SERVER() As String
             Get
@@ -186,14 +150,14 @@ Namespace My
             End Set
         End Property
         
-        <Global.System.Configuration.UserScopedSettingAttribute(), _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-         Global.System.Configuration.DefaultSettingValueAttribute("")> _
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
         Public Property FROM_EMAIL() As String
             Get
-                Return CType(Me("FROM_EMAIL"), String)
+                Return CType(Me("FROM_EMAIL"),String)
             End Get
-            Set(value As String)
+            Set
                 Me("FROM_EMAIL") = value
             End Set
         End Property
@@ -207,6 +171,18 @@ Namespace My
             End Get
             Set
                 Me("TO_EMAIL") = value
+            End Set
+        End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(), _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.Configuration.DefaultSettingValueAttribute("False")> _
+        Public Property Audit_Each_Email() As Boolean
+            Get
+                Return CType(Me("Audit_Each_Email"), Boolean)
+            End Get
+            Set(value As Boolean)
+                Me("Audit_Each_Email") = value
             End Set
         End Property
     End Class

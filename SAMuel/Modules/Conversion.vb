@@ -10,77 +10,8 @@ Module Conversion
 
     Dim sFileToPrint As String
 
-    Sub docsToTiff(sFiles() As String)
-        'Converts Word Documents to .tif using MODI
-        Dim objWdDoc As Word.Document
-        Dim objWord As Word.Application
-        Dim sDestination As String = CONV_FOLDER
-        Dim sFileName As String
-
-        'Initiate word application object and minimize it
-        objWord = CreateObject("Word.Application")
-        objWord.WindowState = Word.WdWindowState.wdWindowStateMinimize
-
-#If CONFIG = "Release" Then
-        'Set active printer to Fax
-        Try
-            objWord.ActivePrinter = "Microsoft Office Document Image Writer"
-        Catch ex As Exception
-            MsgBox("Printer error. Is the 'Microsoft Office Document Image Writer' printer installed?", MsgBoxStyle.Critical)
-            objWord.Quit()
-            Exit Sub
-        End Try
-#End If
-
-        'Verify output folder exists
-        GlobalModule.CheckFolder(sDestination)
-
-        'Update UI
-        frmMain.ProgressBar.Maximum = sFiles.Length
-        frmMain.ProgressBar.Value = 0
-
-        For Each value In sFiles
-            frmMain.lblStatus.Text = String.Format("Converting {0} of {1}", frmMain.ProgressBar.Value + 1, sFiles.Length)
-            frmMain.Refresh()
-            'Get the file name
-            sFileName = Path.GetFileNameWithoutExtension(value)
-            'Open the document within word and don't prompt  for conversion.
-            objWdDoc = objWord.Documents.Open(FileName:=value, ConfirmConversions:=False, AddToRecentFiles:=False)
-            objWord.Visible = False
-            objWord.WindowState = Word.WdWindowState.wdWindowStateMinimize
-            'Print to Tiff
-            objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=sDestination & sFileName & ".tif")
-            Threading.Thread.Sleep(1000)
-            'Release document
-            objWdDoc.Close()
-            'Progress the progress bar
-            frmMain.ProgressBar.Value += 1
-        Next
-        Threading.Thread.Sleep(2000)
-        objWord.Quit()
-    End Sub
-
     Sub imagesToTiff(sFiles() As String)
-        Dim sDestination As String = CONV_FOLDER
-        Dim sFileName As String
-        Dim sOutTIFF As String
 
-        'Verify output folder exists
-        GlobalModule.CheckFolder(sDestination)
-
-        frmMain.ProgressBar.Maximum = sFiles.Length
-        frmMain.ProgressBar.Value = 0
-
-        For Each value In sFiles
-            frmMain.lblStatus.Text = String.Format("Converting {0} of {1}", frmMain.ProgressBar.Value + 1, sFiles.Length)
-            frmMain.Refresh()
-            sFileName = Path.GetFileNameWithoutExtension(value)
-            sOutTIFF = [String].Format("{0}{1}.tiff", sDestination, sFileName)
-
-            imgToTiff(value, sOutTIFF)
-
-            frmMain.ProgressBar.Value += 1
-        Next
     End Sub
 
     Sub imgToTiff(inputFile As String, outputTiff As String)
@@ -107,13 +38,6 @@ Module Conversion
         'Print the image
         printDocument.PrinterSettings.PrintFileName = outputTiff
         printDocument.Print()
-    End Sub
-
-    Private Sub printDocument_PrintPage(ByVal sender As Object, ByVal e As PrintPageEventArgs)
-        'Resize rotate image if needed then print within page bounds.
-        Dim mBitmap As Bitmap = Bitmap.FromFile(sFileToPrint)
-        mBitmap = ImageProcessing.ResizeImage(mBitmap)
-        e.Graphics.DrawImage(CType(mBitmap, Image), 0, 0, e.PageBounds.Width, e.PageBounds.Height)
     End Sub
 
     ''' <summary>
@@ -173,5 +97,12 @@ Module Conversion
         wordApp.Quit()
         Return True
     End Function
+
+    Private Sub printDocument_PrintPage(ByVal sender As Object, ByVal e As PrintPageEventArgs)
+        'Resize rotate image if needed then print within page bounds.
+        Dim mBitmap As Bitmap = Bitmap.FromFile(sFileToPrint)
+        mBitmap = ImageProcessing.ResizeImage(mBitmap)
+        e.Graphics.DrawImage(CType(mBitmap, Image), 0, 0, e.PageBounds.Width, e.PageBounds.Height)
+    End Sub
 
 End Module

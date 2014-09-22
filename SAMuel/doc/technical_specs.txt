@@ -1,0 +1,2 @@
+﻿Conversion:
+When converting to Tagged Image Format (TIF), ".tif" is used for image sources while ".tiff" is used for document sources. This convention is used because a specific procedure has word documents and images with the same filename, with an exception to the extension.

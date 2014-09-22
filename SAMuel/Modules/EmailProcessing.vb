@@ -1,6 +1,31 @@
 ﻿Imports System.IO
+Imports Outlook = Microsoft.Office.Interop.Outlook
 
 Public Module EmailProcessing
+
+    ''' <summary>
+    ''' Creates a data object for each email within the given outlook folder.
+    ''' </summary>
+    ''' <param name="olFolder">Outlook folder to work out of.</param>
+    ''' <returns>List of SAM_EMAIL Objects.</returns>
+    ''' <remarks></remarks>
+    Function GetEmails(ByRef olFolder As Outlook.MAPIFolder) As List(Of SAM_Email)
+        Dim sEmail As SAM_Email
+        Dim emailItem As Outlook.MailItem
+        Dim samEmails As New List(Of SAM_Email)
+        For Each emailItem In olFolder.Items
+            Try
+                sEmail = New SAM_Email(emailItem)
+                samEmails.Add(sEmail)
+            Catch ex As Exception
+                LogAction(action:="An email was skipped because " & ex.Message)
+                'Move to next email
+                Continue For
+            End Try
+        Next
+        Return samEmails
+    End Function
+
 
     Function ValidateAttachmentType(ByVal sFile As String) As String
         Dim sFileExt As String

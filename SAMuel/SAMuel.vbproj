@@ -140,7 +140,6 @@
     <Compile Include="Modules\AddContact.vb" />
     <Compile Include="Modules\Conversion.vb" />
     <Compile Include="Modules\EmailProcessing.vb" />
-    <Compile Include="Modules\GhostscriptDllLib.vb" />
     <Compile Include="Modules\GlobalModule.vb" />
     <Compile Include="Modules\ImageProcessing.vb" />
     <Compile Include="Modules\KofaxModule.vb" />
@@ -257,6 +256,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="doc\technical_specs.txt" />
     <Content Include="gsdll32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

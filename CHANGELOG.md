@@ -1,10 +1,16 @@
 ## 2014-09-22
 
+UI Improvements:
+
+  - Outlook: Moved Auditmode checkbox to Options and renamed to Audit each email.
+
 Code Improvements:
 
   - General: Save folder paths are now stored as global variables with GlobalModule for consistancy between changes.
-  - Outlook: The saved attachments are now deleted at the end of the process.
-  - 
+  - Convert Files: Drag_Drop and button use the same function now.
+  - Convert Files: Handling multiple files, now call the single file function. Eliminating duplicate code. 
+  - Outlook: Saved attachments are now deleted at the end of the process.
+  - Outlook: Moved various functions to EmailProcessing module for readability.
 
 ## 2014-09-19
 
@@ -17,7 +23,6 @@ Features:
 Features:
 
   - TDrive: Added new tab to handle the TDrive by emailing out DPAs.
-
 
 ## 2014-09-02
 

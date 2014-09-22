@@ -39,6 +39,7 @@ Public Class frmMain
     Dim bRejectPressed As Boolean
     Dim bCancelPressed As Boolean
     Dim bAuditMode As Boolean
+    Dim bThrowAudit As Boolean
     Dim bUnAttendedMode As Boolean
 
     Dim currentEmailAttachment As String
@@ -49,11 +50,10 @@ Public Class frmMain
         Dim sDestination As String
         Dim sFileExt As String
         Dim outTiff As String
-        Dim emailCount As Integer
-        Dim samEmails As New List(Of SAM_Email)
+        Dim samEmails As List(Of SAM_Email)
+
         Dim sEmail As SAM_Email
         Dim rand As New Random
-        Dim emailItem As Outlook.MailItem
         Dim completedEmailsCount As Integer = 0
 
         'Define the save location and check if it exists
@@ -74,6 +74,7 @@ Public Class frmMain
         btnRun.Enabled = False
         btnRun.Visible = False
 
+        'User chooses the folder to work from.
         Dim workingOutlookFolder As Outlook.MAPIFolder
         workingOutlookFolder = oApp.GetNamespace("MAPI").PickFolder()
         If workingOutlookFolder Is Nothing Then
@@ -85,45 +86,36 @@ Public Class frmMain
         Dim endTime As DateTime
         Dim totalTime As TimeSpan
 
-        'Create each SAM Email
+        'Grab the emails and process them into SAM_Emails
         Try
-            For Each emailItem In workingOutlookFolder.Items
-                Me.Cursor = Cursors.WaitCursor
-                Try
-                    lblStatus.Text = "Saving attachments..."
-                    Me.Refresh()
-                    sEmail = New SAM_Email(emailItem)
-                    samEmails.Add(sEmail)
-                Catch ex As Exception
-                    LogAction(action:="An email was skipped because " & ex.Message)
-                    'Move to next email
-                    Continue For
-                End Try
-            Next
+            lblStatus.Text = "Grabbing emails..."
+            Me.Cursor = Cursors.WaitCursor
+            Me.Refresh()
+            samEmails = EmailProcessing.GetEmails(workingOutlookFolder)
         Catch ex As Exception
             MsgBox("Something happened... Sorry", MsgBoxStyle.Exclamation)
             LogAction(action:=ex.Message)
             Reset_Outlook_Tab()
-            Me.Cursor = Cursors.Default
             Exit Sub
         End Try
 
         'Get the email count and update the progress bar
-        emailCount = samEmails.Count
+        Dim emailCount As Integer = samEmails.Count
         ProgressBar.Maximum = emailCount
 
         'Update audit and unattended values
-        bAuditMode = chkAuditMode.Checked
+        bAuditMode = My.Settings.Audit_Each_Email
         bUnAttendedMode = chkValidOnly.Checked
+        chkValidOnly.Visible = False
 
         'Process each email
         For Each sEmail In samEmails
             Try
                 'Force an audit if the email is found to be not valid and not in unattendedmode.
                 If (Not sEmail.IsValid) And (bUnAttendedMode = False) Then
-                    bAuditMode = True
+                    bThrowAudit = True
                     lblOutlookMessage.Text = "Invalid Email Found!"
-                ElseIf (Not sEmail.IsValid) And (bUnAttendedMode = True) Then
+                ElseIf (Not sEmail.IsValid) And (bUnAttendedMode) Then
                     'Skip the email
                     frmEmails.clbSelectedEmails.Items.Add("[SKIP] " & sEmail.Subject & vbTab & sEmail.From)
                     ProgressBar.Value += 1
@@ -139,8 +131,8 @@ Public Class frmMain
                 If sEmail.AttachmentCount > 0 Then
                     frmEmails.clbSelectedEmails.Items.Add("[" & sEmail.AttachmentCount.ToString & "] " & sEmail.Account & vbTab & vbTab & sEmail.Subject & vbTab & sEmail.From)
 
-                    'Display email info when in auditmode
-                    If (bAuditMode) Then
+                    'Display email info when in auditmode or audit thrown.
+                    If (bAuditMode Or bThrowAudit) Then
                         Me.Cursor = Cursors.Default
                         lblStatus.Text = "Waiting for user..."
                         Outlook_Setup_Audit_View()
@@ -157,30 +149,32 @@ Public Class frmMain
                             lvi.Tag = sEmail.Attachments(j).File
                             lstEmailAttachments.Items.Add(lvi)
                         Next
-                    End If
 
-                    'Wait for user validation of attachment
-                    Do Until (bNextPressed = True Or bRejectPressed = True Or bCancelPressed = True Or bAuditMode = False)
-                        Application.DoEvents()
-                    Loop
+                        'Wait for user interaction
+                        Do Until (bNextPressed Or bRejectPressed Or bCancelPressed)
+                            Application.DoEvents()
+                        Loop
+                    End If
 
                     Me.Cursor = Cursors.WaitCursor
 
                     'Update sEmail account if its in audit mode
-                    If (bAuditMode) Then
+                    If (bAuditMode Or bThrowAudit) Then
                         sEmail.Account = txtAcc.Text
                     End If
 
-                    bAuditMode = chkAuditMode.Checked
-
                     If bCancelPressed Then
-                        'When canceled, release image and reset form and end the routine
+                        'When canceled, reset form and end the routine
                         endTime = DateTime.Now
                         Reset_Outlook_Tab()
                         Reset_ProgressBar()
                         totalTime = endTime - startTime
+
+                        'Delete the temp attachment folder, then recreate it.
+                        DeleteSavedAttachments(ATT_FOLDER)
+                        CheckFolder(ATT_FOLDER)
+
                         LogAction(0, String.Format("{0}: Finished {1} emails in {2} seconds.", workingOutlookFolder.Parent, completedEmailsCount, totalTime.TotalSeconds))
-                        Me.Cursor = Cursors.Default
                         Exit Sub
                     ElseIf bRejectPressed Then
                         '------ LOG reject action? ---------
@@ -250,6 +244,7 @@ Public Class frmMain
             'Reset variables
             bNextPressed = False
             bRejectPressed = False
+            bThrowAudit = False
             lstEmailAttachments.Items.Clear()
             lblOutlookMessage.Text = ""
 
@@ -274,7 +269,6 @@ Public Class frmMain
             lblStatus.Text = "No emails were processed. See Log."
         End If
 
-        Me.Cursor = Cursors.Default
         Reset_Outlook_Tab()
     End Sub
 
@@ -300,11 +294,12 @@ Public Class frmMain
     End Sub
 
     Private Sub Reset_Outlook_Tab()
-        'Reset the Outlook tab to default
+        'Reset the Outlook tab to default view and values
         'variables
         bNextPressed = False
         bRejectPressed = False
         bCancelPressed = False
+        bThrowAudit = False
 
         'settings
         lstEmailAttachments.Items.Clear()
@@ -314,6 +309,7 @@ Public Class frmMain
         btnNext.Enabled = False
         btnRun.Enabled = True
         btnRun.Visible = True
+        chkValidOnly.Visible = True
         'Hide audit options
         rtbEmailBody.Visible = False
         btnReject.Visible = False
@@ -544,47 +540,80 @@ Public Class frmMain
 #End Region
 
 #Region "Convert Tab Region --------------------------------------------------------------------------------------"
+    ''TODO Make convert tab use a background worker.
+    Private Sub ConvertFiles(sFiles As String())
+        Dim outputImage As String
+        Dim outputExt As String
+        Dim objWord As Word.Application
+        'Define the output folder and verify it exists.
+        Dim sDestination As String = CONV_FOLDER
+        GlobalModule.CheckFolder(sDestination)
+
+        'Disable tab items.
+        Me.btnConvert.Enabled = False
+        tabWordToTiff.AllowDrop = False
+
+
+        'Setup progress bar
+        Me.ProgressBar.Maximum = sFiles.Length
+        Me.ProgressBar.Value = 0
+
+        Try
+            'Converts Word Documents or Images to .tif
+            If (Me.rbConvertDOC.Checked) Then
+                'Initiate word application object and minimize it
+                objWord = CreateObject("Word.Application")
+                objWord.WindowState = Word.WdWindowState.wdWindowStateMinimize
+                outputExt = "tiff"
+            Else
+                outputExt = "tif"
+            End If
+            'Print each file and report the progress to the form.
+            For Each value In sFiles
+                Me.lblStatus.Text = String.Format("Converting {0} of {1}", Me.ProgressBar.Value + 1, sFiles.Length)
+                Me.Refresh()
+                outputImage = [String].Format("{0}{1}.{2}", sDestination, Path.GetFileNameWithoutExtension(value), outputExt)
+
+                'Convert to tiff using the respective function.
+                If (Me.rbConvertDOC.Checked) Then
+                    docToTiff(value, outputImage, objWord)
+                Else
+                    imgToTiff(value, outputImage)
+                End If
+                Me.ProgressBar.Value += 1
+            Next
+
+            'Close word when all printing is done.
+            If (Me.rbConvertDOC.Checked) Then
+                objWord.Quit()
+            End If
+            objWord = Nothing
+
+            Me.lblStatus.Text = "Conversion Complete!"
+        Catch ex As Exception
+            MessageBox.Show(ex.Message)
+        End Try
+
+        'Re-enable tab
+        Me.btnConvert.Enabled = True
+        tabWordToTiff.AllowDrop = True
+    End Sub
 
     Private Sub btnConvert_Click(sender As Object, e As EventArgs) Handles btnConvert.Click
-        'Converts Word Documents to .tif or PDF using MODI
         Reset()
-
-        'If files are selected continue code
+        'If files are selected convert selection
         If dlgOpen.ShowDialog() = DialogResult.OK Then
-            Try
-                If (Me.rbConvertDOC.Checked) Then
-                    Conversion.docsToTiff(dlgOpen.FileNames)
-                Else
-                    Conversion.imagesToTiff(dlgOpen.FileNames)
-                End If
-            Catch ex As Exception
-                MessageBox.Show(ex.Message)
-                Me.btnConvert.Enabled = True
-                Exit Sub
-            End Try
+            ConvertFiles(dlgOpen.FileNames)
         End If
-        'Cleanup
-        Me.lblStatus.Text = "Conversion Complete!"
-        Me.btnConvert.Enabled = True
+
     End Sub
 
     Private Sub _DragDrop(ByVal sender As Object, ByVal e As DragEventArgs) Handles tabWordToTiff.DragDrop
         'http://www.codemag.com/Article/0407031
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
-
             Dim files As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
-            Try
-                If (Me.rbConvertDOC.Checked) Then
-                    Conversion.docsToTiff(files)
-                Else
-                    Conversion.imagesToTiff(files)
-                End If
-            Catch ex As Exception
-                MessageBox.Show(ex.Message)
-                Return
-            End Try
+            ConvertFiles(files)
         End If
-        Me.lblStatus.Text = "Conversion Complete!"
     End Sub
 #End Region
 

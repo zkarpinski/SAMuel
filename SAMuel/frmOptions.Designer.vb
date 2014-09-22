@@ -35,6 +35,7 @@ Partial Class frmOptions
         Me.btnEmpty = New System.Windows.Forms.Button()
         Me.tabOutlook = New System.Windows.Forms.TabPage()
         Me.chkSuggestedAccountNumber = New System.Windows.Forms.CheckBox()
+        Me.chkAuditMode = New System.Windows.Forms.CheckBox()
         Me.TabControl1.SuspendLayout()
         Me.tabGeneral.SuspendLayout()
         Me.grpOptionsSaveFolders.SuspendLayout()
@@ -141,6 +142,7 @@ Partial Class frmOptions
         '
         'tabOutlook
         '
+        Me.tabOutlook.Controls.Add(Me.chkAuditMode)
         Me.tabOutlook.Controls.Add(Me.chkSuggestedAccountNumber)
         Me.tabOutlook.Location = New System.Drawing.Point(4, 22)
         Me.tabOutlook.Name = "tabOutlook"
@@ -153,12 +155,22 @@ Partial Class frmOptions
         'chkSuggestedAccountNumber
         '
         Me.chkSuggestedAccountNumber.AutoSize = True
-        Me.chkSuggestedAccountNumber.Location = New System.Drawing.Point(18, 20)
+        Me.chkSuggestedAccountNumber.Location = New System.Drawing.Point(7, 32)
         Me.chkSuggestedAccountNumber.Name = "chkSuggestedAccountNumber"
         Me.chkSuggestedAccountNumber.Size = New System.Drawing.Size(182, 17)
         Me.chkSuggestedAccountNumber.TabIndex = 5
         Me.chkSuggestedAccountNumber.Text = "Use suggested account numbers"
         Me.chkSuggestedAccountNumber.UseVisualStyleBackColor = True
+        '
+        'chkAuditMode
+        '
+        Me.chkAuditMode.AutoSize = True
+        Me.chkAuditMode.Location = New System.Drawing.Point(7, 9)
+        Me.chkAuditMode.Name = "chkAuditMode"
+        Me.chkAuditMode.Size = New System.Drawing.Size(107, 17)
+        Me.chkAuditMode.TabIndex = 15
+        Me.chkAuditMode.Text = "Audit each email."
+        Me.chkAuditMode.UseVisualStyleBackColor = True
         '
         'frmOptions
         '
@@ -191,4 +203,5 @@ Partial Class frmOptions
     Friend WithEvents btnViewLog As System.Windows.Forms.Button
     Friend WithEvents chkSuggestedAccountNumber As System.Windows.Forms.CheckBox
     Friend WithEvents btnShow As System.Windows.Forms.Button
+    Friend WithEvents chkAuditMode As System.Windows.Forms.CheckBox
 End Class

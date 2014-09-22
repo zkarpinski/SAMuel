@@ -23,15 +23,6 @@
     <Setting Name="savePath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="colorDepth" Type="System.Int64" Scope="User">
-      <Value Profile="(Default)">24</Value>
-    </Setting>
-    <Setting Name="tiffCompression" Type="System.String" Scope="User">
-      <Value Profile="(Default)">LZW</Value>
-    </Setting>
-    <Setting Name="wmFont" Type="System.String" Scope="User">
-      <Value Profile="(Default)">Courier New</Value>
-    </Setting>
     <Setting Name="SMTP_SERVER" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
@@ -40,6 +31,9 @@
     </Setting>
     <Setting Name="TO_EMAIL" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="Audit_Each_Email" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -68,7 +68,10 @@ Module TDriveModule
                     Me.SendTo = RegexAcc(.Cell(1, 1).Range.Text, _
                                          "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
 
-                    'TODO: Add handling for address to mail out
+                    ' TODO Add handling for mailing address and fax number.
+
+                    'Skip email if no email address is found.
+                    If Me.SendTo = "X" Then Me.SKIP = True
 
                     'Cutin/Active
                     If InStr(.Cell(1, 2).Range.Text, "Active", CompareMethod.Text) Then
@@ -101,9 +104,7 @@ Module TDriveModule
                 objWdDoc.Close()
             End With
         End Sub
-
     End Structure
-
 
     Public Sub ProcessFiles(sFiles() As String)
         Dim objWord As Word.Application

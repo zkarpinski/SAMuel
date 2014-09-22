@@ -77,24 +77,24 @@ Module ImageProcessing
         myEncoderParameters = New EncoderParameters(3)
 
         ' Save the bitmap as a TIFF file with the following parameters
-        myEncoderParameters.Param(0) = New EncoderParameter(cdEncoder, CType(My.Settings.colorDepth, Int32))
+        myEncoderParameters.Param(0) = New EncoderParameter(cdEncoder, CType(2L, Int32))
         myEncoderParameters.Param(1) = New EncoderParameter(quEncoder, CType(80L, Int32))
 
         'Choose compression type from settings
-        Select Case My.Settings.tiffCompression
-            Case "None"
-                myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionNone)
-            Case "CCITT3"
-                myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionCCITT3)
-            Case "CCITT4"
-                myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionCCITT4)
-            Case "LZW"
-                myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionLZW)
-            Case "RLE"
-                myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionRle)
-            Case Else
-                myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionNone)
-        End Select
+        'Select Case My.Settings.tiffCompression
+        '    Case "None"
+        '        myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionNone)
+        '    Case "CCITT3"
+        '        myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionCCITT3)
+        '    Case "CCITT4"
+        '        myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionCCITT4)
+        '    Case "LZW"
+        '        myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionLZW)
+        '    Case "RLE"
+        '        myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionRle)
+        '    Case Else
+        '        myEncoderParameters.Param(2) = New EncoderParameter(cpEncoder, EncoderValue.CompressionNone)
+        'End Select
 
 
         Try
@@ -243,7 +243,7 @@ Module ImageProcessing
         Dim point As PointF
 
         ' Account Number Watermark Settings
-        font = New Font(My.Settings.wmFont, 9.0F)
+        font = New Font("Times New Roman", 9.0F)
         point = New PointF(5, 0) '(x,y)
         brush = New SolidBrush(Color.FromArgb(250, Color.Black))
         rBrush = New SolidBrush(Color.FromArgb(250, Color.White))

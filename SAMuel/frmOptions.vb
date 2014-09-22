@@ -17,12 +17,18 @@ Public Class frmOptions
             GlobalModule.InitOutputFolders(My.Settings.savePath)
         End If
 
-        My.Settings.Save()
+        If Not (Me.chkAuditMode.Checked = My.Settings.Audit_Each_Email) Then
+            My.Settings.Audit_Each_Email = Me.chkAuditMode.Checked
+            My.Settings.Save()
+        End If
+
         Me.Close()
     End Sub
 
     Private Sub frmOptions_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        'Load settings into corresponding fields.
         Me.txtSavePath.Text = My.Settings.savePath
+        Me.chkAuditMode.Checked = My.Settings.Audit_Each_Email
     End Sub
 
     Private Sub btnEmpty_Click(sender As Object, e As EventArgs) Handles btnEmpty.Click
