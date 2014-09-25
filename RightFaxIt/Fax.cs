@@ -66,7 +66,7 @@ namespace RightFaxIt
         {
             try
             {
-                string[] strSplit = fileName.Split('-');
+                var strSplit = fileName.Split('-');
                 this.CustomerName = strSplit[4].Replace('_', ' ');
             }
             catch (IndexOutOfRangeException)
@@ -78,8 +78,8 @@ namespace RightFaxIt
 
         private string RegexFileName(string pattern) 
         {
-            Regex rgx = new Regex(pattern, RegexOptions.IgnoreCase);
-            MatchCollection matches = rgx.Matches(this.FileName);
+            var rgx = new Regex(pattern, RegexOptions.IgnoreCase);
+            var matches = rgx.Matches(this.FileName);
             if (matches.Count > 0)
             {
                     return matches[0].Value;
@@ -91,8 +91,6 @@ namespace RightFaxIt
                 return "NOT_FOUND";
             }
         }
-
-    
     }
 
 }

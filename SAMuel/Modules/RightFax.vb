@@ -1,42 +1,45 @@
-﻿Imports System
+﻿
 Imports System.IO
 
-Module RightFax
-    Function ConnectToServer(rfServer As String, rfUser As String, _
-                             useNT As Boolean) As RFCOMAPILib.FaxServer
-        Dim objRightFax As RFCOMAPILib.FaxServer
-        objRightFax = New RFCOMAPILib.FaxServer
+Namespace Modules
 
-        objRightFax.ServerName = rfServer
-        objRightFax.Protocol = 4
-        objRightFax.AuthorizationUserID = rfUser
-        objRightFax.UseNTAuthentication = useNT
+    Module RightFax
+        Function ConnectToServer(rfServer As String, rfUser As String, _
+                                 useNT As Boolean) As RFCOMAPILib.FaxServer
+            Dim objRightFax As RFCOMAPILib.FaxServer
+            objRightFax = New RFCOMAPILib.FaxServer
 
-        Return objRightFax
-    End Function
+            objRightFax.ServerName = rfServer
+            objRightFax.Protocol = 4
+            objRightFax.AuthorizationUserID = rfUser
+            objRightFax.UseNTAuthentication = useNT
 
-    Function CreateFax(ByRef objRightFax As RFCOMAPILib.FaxServer, receipiantName As String, _
-                       receipiantFax As String, path_to_doc As String, Optional ByVal coverSheetNotes As String = vbNullString) As RFCOMAPILib.Fax
-        Dim newFax As RFCOMAPILib.Fax
+            Return objRightFax
+        End Function
 
-        newFax = objRightFax.CreateObject(RFCOMAPILib.CreateObjectType.coFax)
+        Function CreateFax(ByRef objRightFax As RFCOMAPILib.FaxServer, receipiantName As String, _
+                           receipiantFax As String, pathToDoc As String, Optional ByVal coverSheetNotes As String = vbNullString) As RFCOMAPILib.Fax
+            Dim newFax As RFCOMAPILib.Fax
 
-        newFax.ToName = receipiantName
-        newFax.ToFaxNumber = receipiantFax
-        'newFax.CoverSheetNotes(0) = coverSheetNotes
-        newFax.UserComments = "Sent via SAMuel."
-        newFax.Attachments.Add(path_to_doc, False) ' false = don't delete file after faxing
+            newFax = objRightFax.CreateObject(RFCOMAPILib.CreateObjectType.coFax)
 
-        Return newFax
-    End Function
+            newFax.ToName = receipiantName
+            newFax.ToFaxNumber = receipiantFax
+            'newFax.CoverSheetNotes(0) = coverSheetNotes
+            newFax.UserComments = "Sent via SAMuel."
+            newFax.Attachments.Add(pathToDoc, False) ' false = don't delete file after faxing
 
-    Sub SendFax(ByRef fax As RFCOMAPILib.Fax)
-        fax.Send()
-    End Sub
+            Return newFax
+        End Function
 
-    Sub MoveFaxedFile(path_to_doc As String)
-        Dim destination As String = FAXED_FOLDER + Path.GetFileName(path_to_doc)
-        File.Move(path_to_doc, destination)
-    End Sub
+        Sub SendFax(ByRef fax As RFCOMAPILib.Fax)
+            fax.Send()
+        End Sub
 
-End Module
+        Sub MoveFaxedFile(pathToDoc As String)
+            Dim destination As String = GlobalModule.FAXED_FOLDER + Path.GetFileName(pathToDoc)
+            File.Move(pathToDoc, destination)
+        End Sub
+
+    End Module
+End Namespace

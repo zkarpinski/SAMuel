@@ -25,6 +25,12 @@ A toolset designed to automate critical tasks performed daily with my work at Na
 * RightFax 8.7+
 * [Ghostscript(included)](http://www.ghostscript.com/)
 
+##Build Requirements
+* Visual Studio 2013
+* [.Net Framwework v4.0](http://www.microsoft.com/en-us/download/details.aspx?id=17851)
+* RightFax RFCOMAPI.dll
+* [Office 2003 Update: Redistributable Primary Interop](http://support.microsoft.com/kb/897646)
+
 ##Programming Techniques
 
 * Hashtables/Dictionaries

@@ -18,10 +18,10 @@
       <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
     <Setting Name="ActiveFolder" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\Users\zkarpinski\Desktop\New folder</Value>
+      <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
     <Setting Name="CutinFolder" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\Users\zkarpinski\Desktop\New</Value>
+      <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
   </Settings>
 </SettingsFile>

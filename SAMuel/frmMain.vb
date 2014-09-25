@@ -1,16 +1,19 @@
-﻿Imports Outlook = Microsoft.Office.Interop.Outlook
-Imports Word = Microsoft.Office.Interop.Word
-Imports System.IO
-Imports System.Drawing.Imaging
-Imports System.Drawing.Printing
+﻿Imports System.IO
 Imports System.ComponentModel
 Imports System.Net.Mail
+Imports RFCOMAPILib
+Imports SAMuel.Classes
+Imports Microsoft.Office.Interop.Outlook
+Imports SAMuel.Modules
+Imports Microsoft.Office.Interop.Word
+Imports System.Threading
+Imports MailMessage = System.Net.Mail.MailMessage
 
-Public Class frmMain
-
+Public Class FrmMain
     Private Sub frmMain_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
-        Application.Exit()
+        System.Windows.Forms.Application.Exit()
     End Sub
+
     Private Sub frmMain_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         'Resets the form state to default
         Reset_All_Forms()
@@ -23,7 +26,7 @@ Public Class frmMain
         End If
 
         'Verify all output folders exist
-        GlobalModule.InitOutputFolders(My.Settings.savePath)
+        InitOutputFolders(My.Settings.savePath)
         'Welcome the user.
         lblStatus.Text = String.Format("Welcome {0}!", Environment.UserName)
 
@@ -32,33 +35,26 @@ Public Class frmMain
     End Sub
 
 
-
 #Region "Outlook Tab Region --------------------------------------------------------------------------------------"
     'Outlook Tab wide varibles
-    Dim bNextPressed As Boolean
-    Dim bRejectPressed As Boolean
-    Dim bCancelPressed As Boolean
-    Dim bAuditMode As Boolean
-    Dim bThrowAudit As Boolean
-    Dim bUnAttendedMode As Boolean
-
-    Dim currentEmailAttachment As String
+    Dim _bNextPressed As Boolean
+    Dim _bRejectPressed As Boolean
+    Dim _bCancelPressed As Boolean
+    Dim _bAuditMode As Boolean
+    Dim _bThrowAudit As Boolean
+    Dim _bUnAttendedMode As Boolean
 
     Private Sub btnRun_Click(sender As Object, e As EventArgs) Handles btnRun.Click
-        Dim oApp As Outlook.Application = New Outlook.Application
-        Dim wApp As Word.Application = Nothing
-        Dim sDestination As String
+        Dim oApp As Microsoft.Office.Interop.Outlook.Application = New Microsoft.Office.Interop.Outlook.Application
+        Dim wApp As Microsoft.Office.Interop.Word.Application = Nothing
+        Dim sTiffDestination As String
         Dim sFileExt As String
         Dim outTiff As String
-        Dim samEmails As List(Of SAM_Email)
+        Dim samEmails As List(Of SamEmail)
 
-        Dim sEmail As SAM_Email
+        Dim sEmail As SamEmail
         Dim rand As New Random
         Dim completedEmailsCount As Integer = 0
-
-        'Define the save location and check if it exists
-        sDestination = ATT_FOLDER
-        GlobalModule.CheckFolder(sDestination)
 
         'Make sure everything is at initial state.
         Reset_Outlook_Tab()
@@ -75,7 +71,7 @@ Public Class frmMain
         btnRun.Visible = False
 
         'User chooses the folder to work from.
-        Dim workingOutlookFolder As Outlook.MAPIFolder
+        Dim workingOutlookFolder As MAPIFolder
         workingOutlookFolder = oApp.GetNamespace("MAPI").PickFolder()
         If workingOutlookFolder Is Nothing Then
             Reset_Outlook_Tab()
@@ -91,10 +87,10 @@ Public Class frmMain
             lblStatus.Text = "Grabbing emails..."
             Me.Cursor = Cursors.WaitCursor
             Me.Refresh()
-            samEmails = EmailProcessing.GetEmails(workingOutlookFolder)
-        Catch ex As Exception
+            samEmails = GetEmails(workingOutlookFolder)
+        Catch ex As System.Exception
             MsgBox("Something happened... Sorry", MsgBoxStyle.Exclamation)
-            LogAction(action:=ex.Message)
+            LogAction(action := ex.Message)
             Reset_Outlook_Tab()
             Exit Sub
         End Try
@@ -104,18 +100,22 @@ Public Class frmMain
         ProgressBar.Maximum = emailCount
 
         'Update audit and unattended values
-        bAuditMode = My.Settings.Audit_Each_Email
-        bUnAttendedMode = chkValidOnly.Checked
+        _bAuditMode = My.Settings.Audit_Each_Email
+        _bUnAttendedMode = chkValidOnly.Checked
         chkValidOnly.Visible = False
+
+        'Define the save location and check if it exists
+        sTiffDestination = EMAILS_FOLDER
+        CheckFolder(sTiffDestination)
 
         'Process each email
         For Each sEmail In samEmails
             Try
                 'Force an audit if the email is found to be not valid and not in unattendedmode.
-                If (Not sEmail.IsValid) And (bUnAttendedMode = False) Then
-                    bThrowAudit = True
+                If (Not sEmail.IsValid) And (_bUnAttendedMode = False) Then
+                    _bThrowAudit = True
                     lblOutlookMessage.Text = "Invalid Email Found!"
-                ElseIf (Not sEmail.IsValid) And (bUnAttendedMode) Then
+                ElseIf (Not sEmail.IsValid) And (_bUnAttendedMode) Then
                     'Skip the email
                     frmEmails.clbSelectedEmails.Items.Add("[SKIP] " & sEmail.Subject & vbTab & sEmail.From)
                     ProgressBar.Value += 1
@@ -129,10 +129,12 @@ Public Class frmMain
                 sEmail.DownloadAttachments(ATT_FOLDER)
                 'Process each attachment within the email
                 If sEmail.AttachmentCount > 0 Then
-                    frmEmails.clbSelectedEmails.Items.Add("[" & sEmail.AttachmentCount.ToString & "] " & sEmail.Account & vbTab & vbTab & sEmail.Subject & vbTab & sEmail.From)
+                    frmEmails.clbSelectedEmails.Items.Add(
+                        "[" & sEmail.AttachmentCount.ToString & "] " & sEmail.Account & vbTab & vbTab & sEmail.Subject &
+                        vbTab & sEmail.From)
 
                     'Display email info when in auditmode or audit thrown.
-                    If (bAuditMode Or bThrowAudit) Then
+                    If (_bAuditMode Or _bThrowAudit) Then
                         Me.Cursor = Cursors.Default
                         lblStatus.Text = "Waiting for user..."
                         Outlook_Setup_Audit_View()
@@ -151,19 +153,19 @@ Public Class frmMain
                         Next
 
                         'Wait for user interaction
-                        Do Until (bNextPressed Or bRejectPressed Or bCancelPressed)
-                            Application.DoEvents()
+                        Do Until (_bNextPressed Or _bRejectPressed Or _bCancelPressed)
+                            System.Windows.Forms.Application.DoEvents()
                         Loop
                     End If
 
                     Me.Cursor = Cursors.WaitCursor
 
                     'Update sEmail account if its in audit mode
-                    If (bAuditMode Or bThrowAudit) Then
+                    If (_bAuditMode Or _bThrowAudit) Then
                         sEmail.Account = txtAcc.Text
                     End If
 
-                    If bCancelPressed Then
+                    If _bCancelPressed Then
                         'When canceled, reset form and end the routine
                         endTime = DateTime.Now
                         Reset_Outlook_Tab()
@@ -174,11 +176,13 @@ Public Class frmMain
                         DeleteSavedAttachments(ATT_FOLDER)
                         CheckFolder(ATT_FOLDER)
 
-                        LogAction(0, String.Format("{0}: Finished {1} emails in {2} seconds.", workingOutlookFolder.Parent, completedEmailsCount, totalTime.TotalSeconds))
+                        LogAction(0,
+                                  String.Format("{0}: Finished {1} emails in {2} seconds.", workingOutlookFolder.Parent,
+                                                completedEmailsCount, totalTime.TotalSeconds))
                         Exit Sub
-                    ElseIf bRejectPressed Then
+                    ElseIf _bRejectPressed Then
                         '------ LOG reject action? ---------
-                    ElseIf (bNextPressed Or bAuditMode = False) And bRejectPressed = False Then
+                    ElseIf (_bNextPressed Or _bAuditMode = False) And _bRejectPressed = False Then
                         'Save the edited attachment as tiff and add to list
                         lblStatus.Text = "Converting  Tiff..."
                         Me.Refresh()
@@ -187,42 +191,43 @@ Public Class frmMain
 
                             Dim currentAttachmentFile As String = sEmail.Attachments(j).File
                             'Verify a valid attachment file type.
-                            sFileExt = EmailProcessing.ValidateAttachmentType(currentAttachmentFile)
+                            sFileExt = ValidateAttachmentType(currentAttachmentFile)
                             If (sFileExt Is vbNullString) Then
                                 'Delete the file and move to next attachment
-                                System.IO.File.Delete(sEmail.Attachments(j).File)
+                                File.Delete(sEmail.Attachments(j).File)
                                 Continue For
                             End If
 
-                            currentEmailAttachment = sEmail.Attachments(j).File
-
                             'Name the tiff files to be created.
-                            outTiff = [String].Format("{0}{1}_{2}.tiff", sDestination, sEmail.Account, rand.Next(10000).ToString)
+                            outTiff = [String].Format("{0}{1}_{2}.tiff", sTiffDestination, sEmail.Account,
+                                                      rand.Next(10000).ToString)
 
                             'Handle how each file type is printed
                             If sFileExt = ".doc" Or sFileExt = ".docx" Then
                                 'Convert Word documents to tiff
                                 If (wApp Is Nothing) Then
-                                    wApp = New Word.Application
+                                    wApp = New Microsoft.Office.Interop.Word.Application
                                     wApp = CreateObject("Word.Application")
-                                    wApp.WindowState = Word.WdWindowState.wdWindowStateMinimize
+                                    wApp.WindowState = WdWindowState.wdWindowStateMinimize
                                 End If
-                                Conversion.docToTiff(currentAttachmentFile, outTiff, wApp)
+                                docToTiff(currentAttachmentFile, outTiff, wApp)
                             ElseIf sFileExt = ".pdf" Then
                                 'Convert PDFs to tiff
-                                Conversion.pdfToTiff(currentAttachmentFile, outTiff)
+                                pdfToTiff(currentAttachmentFile, outTiff)
                             Else
                                 'Print images to tiff
-                                Conversion.imgToTiff(currentAttachmentFile, outTiff)
+                                imgToTiff(currentAttachmentFile, outTiff)
                             End If
                         Next
                     Else
                         'Undesired state. Log this
-                        LogAction(99, "Outlook buttonState: " & bCancelPressed.ToString & "," & bRejectPressed.ToString & "," & bNextPressed.ToString & "," & bAuditMode.ToString)
+                        LogAction(99,
+                                  "Outlook buttonState: " & _bCancelPressed.ToString & "," & _bRejectPressed.ToString &
+                                  "," & _bNextPressed.ToString & "," & _bAuditMode.ToString)
                     End If
 
                     'Flag email in outlook as complete.
-                    sEmail.EmailObject.FlagStatus = Microsoft.Office.Interop.Outlook.OlFlagStatus.olFlagComplete
+                    sEmail.EmailObject.FlagStatus = OlFlagStatus.olFlagComplete
                     sEmail.EmailObject.Save()
 
                     sEmail.Dispose()
@@ -233,18 +238,19 @@ Public Class frmMain
                 Else
                     'No attachments
                     'TODO Add print option to no attachments case
-                    frmEmails.clbSelectedEmails.Items.Add("[0] " & sEmail.Account & vbTab & vbTab & sEmail.Subject & vbTab & sEmail.From)
+                    frmEmails.clbSelectedEmails.Items.Add(
+                        "[0] " & sEmail.Account & vbTab & vbTab & sEmail.Subject & vbTab & sEmail.From)
                 End If
 
-            Catch ex As Exception
+            Catch ex As System.Exception
                 'Unknown error with email.
                 LogAction(98, String.Format("{0} - {1} : {2}", sEmail.Subject, sEmail.From, ex.ToString))
             End Try
 
             'Reset variables
-            bNextPressed = False
-            bRejectPressed = False
-            bThrowAudit = False
+            _bNextPressed = False
+            _bRejectPressed = False
+            _bThrowAudit = False
             lstEmailAttachments.Items.Clear()
             lblOutlookMessage.Text = ""
 
@@ -261,7 +267,9 @@ Public Class frmMain
         endTime = DateTime.Now
         totalTime = endTime - startTime
 
-        LogAction(0, String.Format("{0}: Finished {1} emails in {2} seconds.", workingOutlookFolder.FolderPath, completedEmailsCount, totalTime.TotalSeconds))
+        LogAction(0,
+                  String.Format("{0}: Finished {1} emails in {2} seconds.", workingOutlookFolder.FolderPath,
+                                completedEmailsCount, totalTime.TotalSeconds))
 
         If completedEmailsCount > 0 Then
             lblStatus.Text = "Finished processing emails."
@@ -273,7 +281,7 @@ Public Class frmMain
     End Sub
 
     Private Sub btnReject_Click(sender As Object, e As EventArgs) Handles btnReject.Click
-        bRejectPressed = True
+        _bRejectPressed = True
     End Sub
 
     Private Sub Outlook_Setup_Audit_View()
@@ -285,21 +293,21 @@ Public Class frmMain
     End Sub
 
     Private Sub btnCancel_Click(sender As Object, e As EventArgs) Handles btnCancel.Click
-        bCancelPressed = True
+        _bCancelPressed = True
     End Sub
 
     Private Sub btnNext_Click_1(sender As Object, e As EventArgs) Handles btnNext.Click
         ' TODO add validation of account number.
-        bNextPressed = True
+        _bNextPressed = True
     End Sub
 
     Private Sub Reset_Outlook_Tab()
         'Reset the Outlook tab to default view and values
         'variables
-        bNextPressed = False
-        bRejectPressed = False
-        bCancelPressed = False
-        bThrowAudit = False
+        _bNextPressed = False
+        _bRejectPressed = False
+        _bCancelPressed = False
+        _bThrowAudit = False
 
         'settings
         lstEmailAttachments.Items.Clear()
@@ -327,9 +335,11 @@ Public Class frmMain
 
         Me.Cursor = Cursors.Default
     End Sub
+
 #End Region
 
 #Region "Kofax It Tab Region -------------------------------------------------------------------------------------"
+
     Private Sub btnKFImport_Click(sender As Object, e As EventArgs) Handles btnKFImport.Click
         Dim batchName As String
         Dim batchType As String
@@ -355,7 +365,7 @@ Public Class frmMain
         'Open the file dialog with tiffs only selectable.
         dlgOpen.Filter = "TIFF Images|*.tif;*.tiff"
         If dlgOpen.ShowDialog() = DialogResult.OK Then
-            KofaxModule.CreateXML((dlgOpen.FileNames).ToList, batchName, batchType, batchSource, comments)
+            CreateXML((dlgOpen.FileNames).ToList, batchName, batchType, batchSource, comments)
         End If
 
         'Update UI
@@ -370,9 +380,11 @@ Public Class frmMain
         txtKFComments.Text = ""
         cbKFBatchType.SelectedIndex = 2
     End Sub
+
 #End Region
 
 #Region "RightFax It Tab Region ----------------------------------------------------------------------------------"
+
     Private Sub btnRFax_Click(sender As Object, e As EventArgs) Handles btnRFax.Click
         Dim strServerName As String, strUsername As String, strPassword As String 'RightFax Server Strings
         Dim strRecName As String, strRecFax As String 'Fax Recipient Strings
@@ -380,8 +392,7 @@ Public Class frmMain
         Dim sFile As String
         Dim i As Integer = 0, faxesCount As Integer
 
-        Dim objRightFax As RFCOMAPILib.FaxServer
-        Dim objFax As RFCOMAPILib.Fax
+        Dim objRightFax As FaxServer
 
         Reset_ProgressBar()
 
@@ -422,7 +433,7 @@ Public Class frmMain
 
         'Fax the selected files
         If dlgOpen.ShowDialog() = DialogResult.OK Then
-            objRightFax = RightFax.ConnectToServer(strServerName, strUsername, bUseNTAuth)
+            objRightFax = ConnectToServer(strServerName, strUsername, bUseNTAuth)
             objRightFax.OpenServer()
             faxesCount = dlgOpen.FileNames.Count
             ProgressBar.Maximum = faxesCount
@@ -431,11 +442,10 @@ Public Class frmMain
                 i += 1
                 lblStatus.Text = String.Format("Faxing {0} of {1}.", i, faxesCount)
                 Me.Refresh()
-                objFax = RightFax.CreateFax(objRightFax, strRecName, strRecFax, sFile)
-                RightFax.SendFax(objFax)
-                RightFax.MoveFaxedFile(sFile)
+                Dim objFax As Fax = CreateFax(objRightFax, strRecName, strRecFax, sFile)
+                SendFax(objFax)
+                MoveFaxedFile(sFile)
                 ProgressBar.Value += 1
-                objFax = Nothing
             Next
             lblStatus.Text = "DONE!"
             objRightFax.CloseServer()
@@ -453,6 +463,7 @@ Public Class frmMain
         chkRFSaveRec.Checked = False
         chkRFCoverSheet.Checked = True
     End Sub
+
 #End Region
 
 #Region "Contacts Tab Region -------------------------------------------------------------------------------------"
@@ -472,7 +483,7 @@ Public Class frmMain
 
         'Call the script
         Try
-            AddContact.RunScript(strAccountNumber, strContact)
+            RunScript(strAccountNumber, strContact)
         Catch ex As FileNotFoundException
             MsgBox("addContact.exe not found.", MsgBoxStyle.Exclamation)
             Me.btnCAddContact.Enabled = True
@@ -492,7 +503,7 @@ Public Class frmMain
             Me.btnCAddContact.Enabled = False
             btnStopAddContacts.Enabled = True
             For Each sFile As String In files
-                Dim strAcc As String = GlobalModule.RegexAcc(Path.GetFileNameWithoutExtension(sFile), "\d{5}-\d{5}")
+                Dim strAcc As String = RegexAcc(Path.GetFileNameWithoutExtension(sFile), "\d{5}-\d{5}")
 
                 'Skip files without and account number.
                 If strAcc = "X" Then
@@ -513,7 +524,7 @@ Public Class frmMain
                 'Call the script
                 Try
                     Dim bgContactWorker As BackgroundWorker = New BackgroundWorker
-                    AddContact.RunScript(strAcc, strContact)
+                    RunScript(strAcc, strContact)
                 Catch ex As FileNotFoundException
                     MsgBox("addContact.exe not found.", MsgBoxStyle.Exclamation)
                     Me.btnCAddContact.Enabled = True
@@ -537,6 +548,7 @@ Public Class frmMain
         lbxContactAlerts.Visible = False
         lbxContactAlerts.Items.Clear()
     End Sub
+
 #End Region
 
 #Region "Convert Tab Region --------------------------------------------------------------------------------------"
@@ -544,10 +556,10 @@ Public Class frmMain
     Private Sub ConvertFiles(sFiles As String())
         Dim outputImage As String
         Dim outputExt As String
-        Dim objWord As Word.Application
+        Dim objWord As Microsoft.Office.Interop.Word.Application
         'Define the output folder and verify it exists.
         Dim sDestination As String = CONV_FOLDER
-        GlobalModule.CheckFolder(sDestination)
+        CheckFolder(sDestination)
 
         'Disable tab items.
         Me.btnConvert.Enabled = False
@@ -563,16 +575,18 @@ Public Class frmMain
             If (Me.rbConvertDOC.Checked) Then
                 'Initiate word application object and minimize it
                 objWord = CreateObject("Word.Application")
-                objWord.WindowState = Word.WdWindowState.wdWindowStateMinimize
+                objWord.WindowState = WdWindowState.wdWindowStateMinimize
                 outputExt = "tiff"
             Else
                 outputExt = "tif"
             End If
+
             'Print each file and report the progress to the form.
             For Each value In sFiles
                 Me.lblStatus.Text = String.Format("Converting {0} of {1}", Me.ProgressBar.Value + 1, sFiles.Length)
                 Me.Refresh()
-                outputImage = [String].Format("{0}{1}.{2}", sDestination, Path.GetFileNameWithoutExtension(value), outputExt)
+                outputImage = [String].Format("{0}{1}.{2}", sDestination, Path.GetFileNameWithoutExtension(value),
+                                              outputExt)
 
                 'Convert to tiff using the respective function.
                 If (Me.rbConvertDOC.Checked) Then
@@ -590,7 +604,7 @@ Public Class frmMain
             objWord = Nothing
 
             Me.lblStatus.Text = "Conversion Complete!"
-        Catch ex As Exception
+        Catch ex As System.Exception
             MessageBox.Show(ex.Message)
         End Try
 
@@ -605,7 +619,6 @@ Public Class frmMain
         If dlgOpen.ShowDialog() = DialogResult.OK Then
             ConvertFiles(dlgOpen.FileNames)
         End If
-
     End Sub
 
     Private Sub _DragDrop(ByVal sender As Object, ByVal e As DragEventArgs) Handles tabWordToTiff.DragDrop
@@ -615,9 +628,11 @@ Public Class frmMain
             ConvertFiles(files)
         End If
     End Sub
+
 #End Region
 
 #Region "DPA Tab Region ------------------------------------------------------------------------------------------"
+
     Private Sub chkMinPayment_CheckedChanged(sender As Object, e As EventArgs) Handles chkMinPayment.CheckedChanged
         'Enters the minimum payment info when checked.
         If chkMinPayment.Checked Then
@@ -635,7 +650,7 @@ Public Class frmMain
         Dim accNumber As String
         accNumber = mtxtDPAAcc.Text
         Call OpenCSSAcc(accNumber)
-        Threading.Thread.Sleep(400)
+        Thread.Sleep(400)
         Call EnrollBB()
     End Sub
 
@@ -654,9 +669,11 @@ Public Class frmMain
         txtDPAmonthly.Text = ""
         chkMinPayment.Checked = False
     End Sub
+
 #End Region
 
 #Region "Form UI Region ------------------------------------------------------------------------------------------"
+
     Private Sub Reset_All_Forms()
         'Resets the form state to default
         Reset_Outlook_Tab()
@@ -674,7 +691,8 @@ Public Class frmMain
         lblStatus.Text = ""
     End Sub
 
-    Private Sub _DragEnter(ByVal sender As Object, ByVal e As DragEventArgs) Handles tabWordToTiff.DragEnter, tabAddContact.DragEnter, tabTDrive.DragEnter
+    Private Sub _DragEnter(ByVal sender As Object, ByVal e As DragEventArgs) _
+        Handles tabWordToTiff.DragEnter, tabAddContact.DragEnter, tabTDrive.DragEnter
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
             e.Effect = DragDropEffects.Copy
         Else
@@ -682,84 +700,87 @@ Public Class frmMain
         End If
     End Sub
 
-    Private Sub ListViewItemActivate_Open(sender As Object, e As EventArgs) Handles lvTDriveFiles.ItemActivate, lstEmailAttachments.ItemActivate
-        System.Diagnostics.Process.Start(sender.SelectedItems(0).Tag)
+    Private Sub ListViewItemActivate_Open(sender As Object, e As EventArgs) _
+        Handles lvTDriveFiles.ItemActivate, lstEmailAttachments.ItemActivate
+        Process.Start(sender.SelectedItems(0).Tag)
     End Sub
+
     Private Sub TabControl1_Changed(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
         'Resets the form state to default
         Reset_All_Forms()
     End Sub
+
     Private Sub ExitToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles ExitToolStripMenuItem.Click
         End
     End Sub
+
     Private Sub AboutToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles AboutToolStripMenuItem.Click
         frmAbout.Show()
     End Sub
+
     Private Sub OptionsToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles OptionsToolStripMenuItem.Click
         frmOptions.Show()
     End Sub
+
 #End Region
 
 #Region "T: Drive Tab Region -------------------------------------------------------------------------------------"
+
     Private Sub DragDropTDrive(sender As Object, e As DragEventArgs) Handles tabTDrive.DragDrop
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
 
             Dim files As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
             Try
-                TDriveModule.ProcessFiles(files)
-            Catch ex As Exception
+                ProcessFiles(files)
+            Catch ex As System.Exception
                 MessageBox.Show(ex.Message)
                 Return
             End Try
         End If
     End Sub
+
     Private Sub btnTDCreateEmail_Click(sender As Object, e As EventArgs) Handles btnTDCreateEmail.Click
         For Each entry As ListViewItem In Me.lvTDriveFiles.Items
             Try
 
-                Dim e_mail As New MailMessage()
-                Dim currentADUser As System.DirectoryServices.AccountManagement.UserPrincipal
-                Dim mailClient As New System.Net.Mail.SmtpClient(My.Settings.SMTP_SERVER)
+                Dim eMail As New MailMessage()
+                Dim mailClient As New SmtpClient(My.Settings.SMTP_SERVER)
 
-                currentADUser = System.DirectoryServices.AccountManagement.UserPrincipal.Current
                 mailClient.UseDefaultCredentials = True
                 mailClient.DeliveryMethod = SmtpDeliveryMethod.Network
 
                 'Create the email
-                e_mail = New MailMessage(My.Settings.FROM_EMAIL, My.Settings.TO_EMAIL)
-                e_mail.Subject = entry.Text & " Deferred Payment Agreement" & entry.SubItems(2).Text
-                e_mail.IsBodyHtml = False
-                e_mail.Body = entry.SubItems(2).Text & " " + entry.SubItems(3).Text
+                eMail = New MailMessage(My.Settings.FROM_EMAIL, My.Settings.TO_EMAIL)
+                eMail.Subject = entry.Text & " Deferred Payment Agreement" & entry.SubItems(2).Text
+                eMail.IsBodyHtml = False
+                eMail.Body = entry.SubItems(2).Text & " " + entry.SubItems(3).Text
                 ' 'Add Attachment
-                Dim e_attachment As New System.Net.Mail.Attachment(entry.Tag)
-                e_mail.Attachments.Add(e_attachment)
-                mailClient.Send(e_mail)
+                Dim eAttachment As New System.Net.Mail.Attachment(entry.Tag)
+                eMail.Attachments.Add(eAttachment)
+                mailClient.Send(eMail)
                 MsgBox("Mail Sent")
-            Catch ex As Exception
-                LogAction(action:=ex.Message.ToString)
+            Catch ex As System.Exception
+                LogAction(action := ex.Message.ToString)
 
                 'Send using outlook on error **TEST PURPOSE**
-                Dim olApp As Outlook.Application = New Outlook.Application
-                Dim olEmail As Outlook.MailItem
-
-                Dim objNS As Outlook._NameSpace = olApp.Session
-                Dim objFolder As Outlook.MAPIFolder
-                objFolder = objNS.GetDefaultFolder(Outlook.OlDefaultFolders.olFolderDrafts)
-
-                olEmail = olApp.CreateItem(Outlook.OlItemType.olMailItem)
-                Dim Recipents As Outlook.Recipients = olEmail.Recipients
-                Recipents.Add(My.Settings.TO_EMAIL)
+                Dim olApp As Microsoft.Office.Interop.Outlook.Application =
+                        New Microsoft.Office.Interop.Outlook.Application
+                Dim olEmail As MailItem
+                olEmail = olApp.CreateItem(OlItemType.olMailItem)
+                Dim recipents As Recipients = olEmail.Recipients
+                recipents.Add(My.Settings.TO_EMAIL)
                 olEmail.Subject = entry.SubItems(2).Text & " Deferred Payment Agreement"
                 olEmail.Body = entry.SubItems(1).Text & " " & entry.SubItems(3).Text
-                olEmail.BodyFormat = Outlook.OlBodyFormat.olFormatRichText
+                olEmail.BodyFormat = OlBodyFormat.olFormatRichText
                 olEmail.Attachments.Add(entry.Tag)
                 olEmail.Send()
             End Try
         Next
     End Sub
+
     Private Sub btnTDClear_Click(sender As Object, e As EventArgs) Handles btnTDClear.Click
         Me.lvTDriveFiles.Items.Clear()
     End Sub
-#End Region
 
+#End Region
 End Class

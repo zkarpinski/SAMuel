@@ -1,6 +1,7 @@
 ﻿Imports System.IO
+Imports SAMuel.Modules
 
-Public Class frmOptions
+Public Class FrmOptions
 
     Private Sub btnSelectSaveFolder_Click(sender As Object, e As EventArgs) Handles btnSelectSaveFolder.Click
         If FolderBrowserDialog1.ShowDialog() = DialogResult.OK Then
@@ -46,7 +47,7 @@ Public Class frmOptions
 
     Private Sub btnViewLog_Click(sender As Object, e As EventArgs) Handles btnViewLog.Click
         If (File.Exists(My.Settings.savePath + "SAMuel.log")) Then
-            System.Diagnostics.Process.Start(My.Settings.savePath + "SAMuel.log")
+            Process.Start(My.Settings.savePath + "SAMuel.log")
 
 
         Else

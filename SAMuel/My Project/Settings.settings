@@ -3,34 +3,34 @@
   <Profiles />
   <Settings>
     <Setting Name="rfUser" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
     <Setting Name="rfPW" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
     <Setting Name="rfServer" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
     <Setting Name="rfUseNT" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="rfRecFax" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
     <Setting Name="rfRecName" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
     <Setting Name="savePath" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
     <Setting Name="SMTP_SERVER" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
     <Setting Name="FROM_EMAIL" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
     <Setting Name="TO_EMAIL" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
     <Setting Name="Audit_Each_Email" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
