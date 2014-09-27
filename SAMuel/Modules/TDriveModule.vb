@@ -78,8 +78,8 @@ Namespace Modules
                         'Cutin/Active
                         If InStr(.Cell(1, 2).Range.Text, "Active", CompareMethod.Text) Then
                             Me.Type = DPAType.ACTIVE
-                        ElseIf InStr(.Cell(1, 2).Range.Text, "Cutin", CompareMethod.Text) Then
-                            Me.Type = DPAType.CUTIN
+                        ElseIf InStr(.Cell(1, 2).Range.Text, "Cut-In", CompareMethod.Text) Then
+                            Me.Type = DPAType.Cutin
                         Else
                             'Error
                             Me.Type = DPAType.ERR

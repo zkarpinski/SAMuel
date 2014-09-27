@@ -1,13 +1,11 @@
 ﻿Imports System.IO
 Imports System.ComponentModel
-Imports System.Net.Mail
 Imports RFCOMAPILib
 Imports SAMuel.Classes
 Imports Microsoft.Office.Interop.Outlook
 Imports SAMuel.Modules
 Imports Microsoft.Office.Interop.Word
 Imports System.Threading
-Imports MailMessage = System.Net.Mail.MailMessage
 
 Public Class FrmMain
     Private Sub frmMain_FormClosed(sender As Object, e As FormClosedEventArgs) Handles Me.FormClosed
@@ -523,7 +521,6 @@ Public Class FrmMain
 
                 'Call the script
                 Try
-                    Dim bgContactWorker As BackgroundWorker = New BackgroundWorker
                     RunScript(strAcc, strContact)
                 Catch ex As FileNotFoundException
                     MsgBox("addContact.exe not found.", MsgBoxStyle.Exclamation)
@@ -742,26 +739,6 @@ Public Class FrmMain
     Private Sub btnTDCreateEmail_Click(sender As Object, e As EventArgs) Handles btnTDCreateEmail.Click
         For Each entry As ListViewItem In Me.lvTDriveFiles.Items
             Try
-
-                Dim eMail As New MailMessage()
-                Dim mailClient As New SmtpClient(My.Settings.SMTP_SERVER)
-
-                mailClient.UseDefaultCredentials = True
-                mailClient.DeliveryMethod = SmtpDeliveryMethod.Network
-
-                'Create the email
-                eMail = New MailMessage(My.Settings.FROM_EMAIL, My.Settings.TO_EMAIL)
-                eMail.Subject = entry.Text & " Deferred Payment Agreement" & entry.SubItems(2).Text
-                eMail.IsBodyHtml = False
-                eMail.Body = entry.SubItems(2).Text & " " + entry.SubItems(3).Text
-                ' 'Add Attachment
-                Dim eAttachment As New System.Net.Mail.Attachment(entry.Tag)
-                eMail.Attachments.Add(eAttachment)
-                mailClient.Send(eMail)
-                MsgBox("Mail Sent")
-            Catch ex As System.Exception
-                LogAction(action := ex.Message.ToString)
-
                 'Send using outlook on error **TEST PURPOSE**
                 Dim olApp As Microsoft.Office.Interop.Outlook.Application =
                         New Microsoft.Office.Interop.Outlook.Application
@@ -774,6 +751,8 @@ Public Class FrmMain
                 olEmail.BodyFormat = OlBodyFormat.olFormatRichText
                 olEmail.Attachments.Add(entry.Tag)
                 olEmail.Send()
+            Catch
+                MsgBox("Emailing error!")
             End Try
         Next
     End Sub

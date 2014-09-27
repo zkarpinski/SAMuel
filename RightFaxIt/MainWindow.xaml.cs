@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Interop;
 using Microsoft.Win32;
 using RFCOMAPILib;
 using RightFaxIt.Properties;
@@ -20,48 +20,52 @@ namespace RightFaxIt
     /// </summary>
     public partial class MainWindow : Window
     {
+        private static readonly HttpListener ClientServer = new HttpListener();
         public List<Fax> Faxes;
 
-        #region Background Worker
-
-        private void bworker_DoWork(object sender, DoWorkEventArgs e)
+        public MainWindow()
         {
-            var files = ((Tuple<string[], string>) e.Argument).Item1;
-            var userId = ((Tuple<string[], string>) e.Argument).Item2;
-            var invalidFiles = new List<string>();
-
-            //Create each fax object from the list of files.
-            Faxes = CreateFaxes(ref files, FaxInfoType.Parsed);
-
-            //Removes fax from list if invalid
-            for (var i = 0; i < Faxes.Count; i++)
+            InitializeComponent();
+            //Setups the the log location on first run unless the user changed it.
+            if (Settings.Default.LogLocation == "DEFAULT")
             {
-                if (!Faxes[i].IsValid)
-                {
-                    // TODO Invalid fax fixing
-                    invalidFiles.Add(Faxes[i].Document);
-                    Faxes.RemoveAt(i);
-                    i -= 1;
-                }
+                Settings.Default.LogLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+                Settings.Default.Save();
             }
 
-            //Exit if there are no valid faxes to send out.
-            if (Faxes.Count <= 0)
+            ClientServer.Prefixes.Add("http://localhost:9075/");
+            ClientServer.Start();
+            ClientServer.BeginGetContext(ClientServerGetContext, ClientServer);
+        }
+
+
+        private static void ClientServerGetContext(IAsyncResult result)
+        {
+            // Note: The GetContext method blocks while waiting for a request. 
+            HttpListenerContext context = ClientServer.GetContext();
+            HttpListenerRequest request = context.Request;
+            // Obtain a response object.
+            HttpListenerResponse response = context.Response;
+            // Construct a response. 
+            string responseString = "<HTML><BODY>Test </BODY></HTML>";
+            byte[] buffer = Encoding.UTF8.GetBytes(responseString);
+            // Get a response stream and write the response to it.
+            response.ContentLength64 = buffer.Length;
+            Stream output = response.OutputStream;
+            output.Write(buffer, 0, buffer.Length);
+            output.Close();
+
+            // Start accepting a new connection.
+            ClientServer.BeginGetContext(ClientServerGetContext, ClientServer);
+        }
+
+        private void ProcessFax(Tuple<Fax, String> work)
+        {
+            if (SendFax(work.Item1, work.Item2))
             {
-                e.Result = invalidFiles;
-                return;
-            }
-
-
-            //Send all faxes out and move them if all were successful.
-            if (SendFaxes(ref Faxes, userId))
-            {
-                //Log all the faxed files.
-                LogFaxes(ref Faxes, userId);
-
                 //Determine where to move the files.
                 String moveFolder;
-                switch (userId)
+                switch (work.Item2)
                 {
                     case "active":
                         moveFolder = Settings.Default.ActiveMoveLocation;
@@ -73,60 +77,16 @@ namespace RightFaxIt
                         moveFolder = Settings.Default.ActiveMoveLocation;
                         break;
                 }
-
-                //Move files when faxed successfully
-                foreach (var fax in Faxes)
+                try
                 {
-                    try
-                    {
-                        MoveCompletedFax(fax.Document, moveFolder);
-                    }
-                    catch (Exception ex)
-                    {
-                        //TODO Add log action
-                    }
-
+                    MoveCompletedFax(work.Item1.Document, moveFolder);
                 }
-            }
+                catch (Exception ex)
+                {
+                    LogError(ex.Message);
+                }
 
-            //Return the skipped file list
-            e.Result = invalidFiles;
-        }
-
-        private void bworker_Completed(object sender, RunWorkerCompletedEventArgs e)
-        {
-            
-            //TODO Added completed actions.
-            //Retrieve the list of skipped files.
-            var skippedFiles = (List<string>) e.Result;
-
-            //Display message of skipped files.
-            if (!skippedFiles.Any()) return;
-
-            var msg = skippedFiles.Count + " document(s) skipped.";
-            for (var i = 0; i < skippedFiles.Count(); i++)
-            {
-                msg = msg + Environment.NewLine + skippedFiles[i];
-            }
-            Console.WriteLine(msg);
-
-        }
-
-        private void bworker_CompletedProgressChanged(object sender, ProgressChangedEventArgs e)
-        {
-            FaxProgress.Value = e.ProgressPercentage;
-        }
-
-        #endregion
-
-        public MainWindow()
-        {
-            InitializeComponent();
-            //Setups the the log location on first run unless the user changed it.
-            if (Settings.Default.LogLocation == "DEFAULT")
-            {
-                Settings.Default.LogLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                Settings.Default.Save();
+                LogFax(work.Item1, work.Item2);
             }
         }
 
@@ -157,159 +117,6 @@ namespace RightFaxIt
             return fax;
         }
 
-        /// <summary>
-        ///     Creates an array of faxes from a string of files.
-        /// </summary>
-        /// <param name="files">Array of files to be faxed.</param>
-        /// <param name="faxInfoType"></param>
-        /// <param name="recipient"></param>
-        /// <param name="faxNumber"></param>
-        /// <returns>Array of faxes</returns>
-        private List<Fax> CreateFaxes(ref string[] files, FaxInfoType faxInfoType = FaxInfoType.Manual,
-            string recipient = "DEFAULT", string faxNumber = "DEFAULT")
-        {
-            var faxes = new List<Fax>();
-            var i = 0;
-            foreach (var file in files)
-            {
-                if (faxInfoType == FaxInfoType.Parsed)
-                {
-                    var fax = new Fax(file);
-                    faxes.Add(fax);
-                }
-                else if (faxInfoType == FaxInfoType.Manual)
-                {
-                    var fax = new Fax(file, recipient, faxNumber);
-                    faxes.Add(fax);
-                }
-                else
-                {
-                    var fax = new Fax();
-                    faxes.Add(fax);
-                }
-
-                i += 1;
-            }
-            return faxes;
-        }
-
-        private Boolean SendFaxes(ref List<Fax> faxes, String userId)
-        {
-            try
-            {
-                //Setup Rightfax Server Connection
-                var faxsvr = new FaxServer
-                {
-                    ServerName = Settings.Default.FaxServerName,
-                    AuthorizationUserID = userId,
-                    Protocol = CommunicationProtocolType.cpTCPIP,
-                    UseNTAuthentication = BoolType.False
-                };
-                faxsvr.OpenServer();
-
-                //Create each fax and send.
-                foreach (var fax in faxes)
-                {
-                    if (fax.IsValid)
-                    {
-                        var newFax = (RFCOMAPILib.Fax) faxsvr.get_CreateObject(CreateObjectType.coFax);
-                        newFax.ToName = fax.CustomerName;
-                        newFax.ToFaxNumber = Regex.Replace(fax.FaxNumber, "-", "");
-                        newFax.Attachments.Add(fax.Document);
-                        newFax.UserComments = "Sent via SAMuel.";
-                        newFax.Send();
-                        // TODO newFax.MoveToFolder
-                    }
-                }
-                faxsvr.CloseServer();
-                return true;
-            }
-
-            catch (Exception e)
-            {
-                MessageBox.Show(Environment.NewLine + e, "RightFax Error");
-                return false;
-            }
-        }
-
-
-        private void MoveCompletedFax(string pathToDocument, string folderDestination)
-        {
-            var fileName = Path.GetFileName(pathToDocument);
-            if (fileName == null) return;
-            var saveTo = Path.Combine(folderDestination, fileName);
-
-            //Delete the file in the destination if it exists already.
-            // since File.Move does not overwrite.
-            if (File.Exists(saveTo))
-            {
-                File.Delete(saveTo);
-            }
-            File.Move(pathToDocument, saveTo);
-        }
-
-        private static void LogFaxes(ref List<Fax> faxes, string userId)
-        {
-            var logFile = Settings.Default.LogLocation + "\\RightFax_It-log.txt";
-            var logTime = DateTime.Now;
-
-            if (!File.Exists(logFile))
-            {
-                var fs = File.Create(logFile);
-                fs.Close();
-            }
-
-            File.AppendAllText(logFile, Environment.NewLine + logTime + "\t" + userId + Environment.NewLine);
-
-            foreach (var fax in faxes)
-            {
-                var logAction = fax.Account + "\t" + fax.CustomerName + "\t\t\t" + fax.FaxNumber + Environment.NewLine;
-                File.AppendAllText(logFile, logAction);
-            }
-        }
-
-        /* Folder watching region of code --------------------------------------------------------*/
-
-        private void ProcessFax(Tuple<Fax, String> work)
-        {
-            if (SendFax(work.Item1, work.Item2))
-            {
-                //Determine where to move the files.
-                String moveFolder;
-                switch (work.Item2)
-                {
-                    case "active":
-                        moveFolder = Settings.Default.ActiveMoveLocation;
-                        break;
-                    case "cutin":
-                        moveFolder = Settings.Default.CutInMoveLocation;
-                        break;
-                    default:
-                        moveFolder = Settings.Default.ActiveMoveLocation;
-                        break;
-                }
-                MoveCompletedFax(work.Item1.Document, moveFolder);
-                LogFax(work.Item1, work.Item2);
-            }
-        }
-
-        private void LogFax(Fax fax, string userId)
-        {
-            var logFile = Settings.Default.LogLocation + "\\RightFax_It-log.txt";
-            var logTime = DateTime.Now;
-
-            if (!File.Exists(logFile))
-            {
-                var fs = File.Create(logFile);
-                fs.Close();
-            }
-
-            var logAction = logTime + " \t AUTOFAX: " + userId + "\t" + fax.Account + "\t" + fax.FaxNumber + "\t" +
-                               fax.CustomerName + Environment.NewLine;
-
-            File.AppendAllText(logFile, logAction);
-        }
-
         private bool SendFax(Fax fax, String userId)
         {
             try
@@ -327,13 +134,20 @@ namespace RightFaxIt
                 //Create the fax and send.
                 if (fax.IsValid)
                 {
-                    var newFax = (RFCOMAPILib.Fax) faxsvr.get_CreateObject(CreateObjectType.coFax);
-                    newFax.ToName = fax.CustomerName;
-                    newFax.ToFaxNumber = Regex.Replace(fax.FaxNumber, "-", "");
-                    newFax.Attachments.Add(fax.Document);
-                    newFax.UserComments = "Sent via SAMuel.";
-                    newFax.Send();
-                    // TODO newFax.MoveToFolder
+                    try
+                    {
+                        var newFax = (RFCOMAPILib.Fax) faxsvr.get_CreateObject(CreateObjectType.coFax);
+                        newFax.ToName = fax.CustomerName;
+                        newFax.ToFaxNumber = Regex.Replace(fax.FaxNumber, "-", "");
+                        newFax.Attachments.Add(fax.Document);
+                        newFax.UserComments = "Sent via SAMuel.";
+                        newFax.Send();
+                        // TODO newFax.MoveToFolder 
+                    }
+                    catch (Exception ex)
+                    {
+                        LogError(ex.Message);
+                    }
                 }
                 else
                 {
@@ -350,7 +164,135 @@ namespace RightFaxIt
             }
         }
 
+        private void MoveCompletedFax(string pathToDocument, string folderDestination)
+        {
+            string fileName = Path.GetFileName(pathToDocument);
+            if (fileName == null) return;
+            string saveTo = Path.Combine(folderDestination, fileName);
+
+            //Delete the file in the destination if it exists already.
+            // since File.Move does not overwrite.
+            if (File.Exists(saveTo))
+            {
+                File.Delete(saveTo);
+            }
+            File.Move(pathToDocument, saveTo);
+        }
+
+        private void LogFax(Fax fax, string userId)
+        {
+            string logFile = Settings.Default.LogLocation + "\\RightFax_It-log.txt";
+            DateTime logTime = DateTime.Now;
+
+            if (!File.Exists(logFile))
+            {
+                FileStream fs = File.Create(logFile);
+                fs.Close();
+            }
+            string logAction = String.Format("{0} \t{1}: \t{2}\t{3}\t{4} {5}",
+                logTime.ToString(CultureInfo.InvariantCulture), userId, fax.Account, fax.FaxNumber,
+                fax.CustomerName, Environment.NewLine);
+            File.AppendAllText(logFile, logAction);
+        }
+
+
+        /// <summary>
+        ///     Logs an error message.
+        /// </summary>
+        /// <param name="message">Error to be logged.</param>
+        private void LogError(string message)
+        {
+            string logFile = Settings.Default.LogLocation + "\\RightFax_It-log.txt";
+            DateTime logTime = DateTime.Now;
+
+            if (!File.Exists(logFile))
+            {
+                FileStream fs = File.Create(logFile);
+                fs.Close();
+            }
+            string logAction = String.Format("{0} \t ERROR: {1} {2}", logTime.ToString(CultureInfo.InvariantCulture),
+                message, Environment.NewLine);
+            File.AppendAllText(logFile, logAction);
+        }
+
+        private void ManualAddition(IEnumerable<string> files, String rightFaxUser)
+        {
+            foreach (string file in files)
+            {
+                Fax fax = CreateFax(file, FaxInfoType.Parsed);
+                //Add fax to queue if valid.
+                if (fax.IsValid)
+                {
+                    var work = new Tuple<Fax, string>(fax, rightFaxUser);
+                    AddFaxToQueue(work);
+                }
+                else
+                {
+                    Debug.WriteLine(fax.Account + " was skipped.");
+                    fax = null;
+                }
+            }
+        }
+
+        private void QueueDirectory()
+        {
+            // Define the folders from settings.
+            String activeDirectory = Settings.Default.ActiveFolder;
+            String cutinDirectory = Settings.Default.CutinFolder;
+
+            // If the active folder exists, take all files and check if they are valid faxes
+            if (!Directory.Exists(activeDirectory)) return;
+            string[] activeFiles = Directory.GetFiles(activeDirectory);
+            if (activeFiles.Any())
+            {
+                ManualAddition(activeFiles, "active");
+            }
+            // If the cutin folder exists, take all files and check if they are valid faxes
+            if (!Directory.Exists(cutinDirectory)) return;
+            string[] cutinFiles = Directory.GetFiles(cutinDirectory);
+            if (cutinFiles.Any())
+            {
+                ManualAddition(cutinFiles, "active");
+            }
+        }
+
         #region UI Interaction
+
+        private Boolean _isPolling;
+
+        /// <summary>
+        ///     Polls the desired folder.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnPoll_Click(object sender, RoutedEventArgs e)
+        {
+            // Stops the watcher if it's currently polling.
+            if (_isPolling)
+            {
+                Debug.WriteLine("Poll haulted.");
+                btnPoll.IsEnabled = false;
+                btnPoll.Content = "Start Faxing";
+                StopQWorker();
+                _isPolling = false;
+                btnPoll.IsEnabled = true;
+            }
+            else //Start the watcher if it isn't polling.
+            {
+                Debug.WriteLine("Poll requested.");
+                btnPoll.IsEnabled = false;
+
+                QueueDirectory();
+
+                StartQWorker();
+
+                WatchFolder(Settings.Default.ActiveFolder, "active");
+                WatchFolder(Settings.Default.CutinFolder, "cutin");
+                btnPoll.Content = "Stop Faxing";
+                _isPolling = true;
+                btnPoll.IsEnabled = true;
+            }
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -369,10 +311,10 @@ namespace RightFaxIt
             if (dlg.FileNames.Length <= 0)
             {
                 Debug.Print("No files selected to be faxed.");
-                return;
             }
-            var files = dlg.FileNames;
-            InitFaxWorker(files);
+            string[] files = dlg.FileNames;
+            string selectedUser = GetSelectedRightFaxUser();
+            ManualAddition(files, selectedUser);
         }
 
         private void FileDrop(object sender, DragEventArgs e)
@@ -380,16 +322,14 @@ namespace RightFaxIt
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
             {
                 var files = (string[]) e.Data.GetData(DataFormats.FileDrop);
-                InitFaxWorker(files);
+                string selectedUser = GetSelectedRightFaxUser();
+                ManualAddition(files, selectedUser);
             }
         }
 
-        private void InitFaxWorker(string[] files)
+        private string GetSelectedRightFaxUser()
         {
-            String selectedUser;
-            //this.AllowDrop = false;
-            //this.btnFax.IsEnabled = false;
-
+            string selectedUser;
             if ((bool) ActiveUserRatio.IsChecked)
             {
                 selectedUser = "active";
@@ -402,12 +342,7 @@ namespace RightFaxIt
             {
                 selectedUser = "active";
             }
-
-            var arguments = Tuple.Create(files, selectedUser);
-            var backgroundWorker = new BackgroundWorker {WorkerReportsProgress = true};
-            backgroundWorker.DoWork += bworker_DoWork;
-            backgroundWorker.RunWorkerCompleted += bworker_Completed;
-            backgroundWorker.RunWorkerAsync(arguments);
+            return selectedUser;
         }
 
         private void FileDrag(object sender, DragEventArgs e)
@@ -445,73 +380,57 @@ namespace RightFaxIt
         #region Folder Watching
 
         /// <summary>
-        ///     Polls the desired folder.
+        ///     Create a new watcher for every folder we want to monitor.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void btnPoll_Click(object sender, RoutedEventArgs e)
-        {
-            StartQWorker();
-            btnPoll.IsEnabled = false;
-            //FileSystemWatcher fsw = new FileSystemWatcher(Properties.Settings.Default.PollingFolder);
-            //fsw.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.FileName;
-            //fsw.Created += new FileSystemEventHandler(FaxPolledFile);
-
-            //fsw.EnableRaisingEvents = true;
-
-            WatchFolder(Settings.Default.ActiveFolder, "active");
-            WatchFolder(Settings.Default.CutinFolder, "cutin");
-        }
-
-        //private void FaxPolledFile(object source, FileSystemEventArgs e)
-        //{
-        //    String[] file = {e.FullPath};
-        //    String sUser = "active";
-
-        //    Tuple<string[], string> arguments = Tuple.Create(file, sUser);
-        //    var _backgroundWorker = new BackgroundWorker();
-        //    _backgroundWorker.WorkerReportsProgress = true;
-        //    _backgroundWorker.DoWork += bworker_DoWork;
-        //    _backgroundWorker.RunWorkerCompleted += bworker_Completed;
-        //    _backgroundWorker.RunWorkerAsync(arguments);
-        //}
-
+        /// <param name="sPath">Folder to monitor.</param>
+        /// <param name="rightFaxUser">RightFax user to send faxes out as.</param>
         private void WatchFolder(string sPath, string rightFaxUser)
         {
-            // Create a new watcher for every folder we want to monitor.
             try
             {
+                //Check if the directory exists.
+                if (!Directory.Exists(sPath))
+                {
+                    LogError(sPath + " does not exist!");
+                    return;
+                }
+
+                // Watch the directory for new files.
                 var fsw = new FileSystemWatcher(sPath, "*.doc")
                 {
                     NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.FileName
                 };
-                fsw.Created += (sender, e) => _NewFileCreated(sender, e, rightFaxUser);
+                fsw.Created += (sender, e) => NewFileCreated(sender, e, rightFaxUser);
                 fsw.EnableRaisingEvents = true;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
         }
 
-        private void _NewFileCreated(object sender, FileSystemEventArgs e, String rightFaxUser)
+        private void NewFileCreated(object sender, FileSystemEventArgs e, String rightFaxUser)
         {
-            Console.WriteLine("New File detected!");
-            var file = e.FullPath;
+            Debug.WriteLine("New File detected!");
+            string file = e.FullPath;
 
             //Wait 2 seconds incase the file is being created still.
             Thread.Sleep(2000);
 
             //Create each fax object from the file.
-            var fax = CreateFax(file, FaxInfoType.Parsed);
+            Fax fax = CreateFax(file, FaxInfoType.Parsed);
 
-            //Skips the file if the fax is invalid.
-            if (!fax.IsValid)
+            //Add fax to queue if valid.
+            if (fax.IsValid)
             {
+                var work = new Tuple<Fax, string>(fax, rightFaxUser);
+                AddFaxToQueue(work);
+            }
+            else
+            {
+                Debug.WriteLine(fax.Account + " was skipped.");
                 fax = null;
             }
-            var work = new Tuple<Fax, string>(fax, rightFaxUser);
-            AddFaxToQueue(work);
         }
 
         #endregion
@@ -553,12 +472,12 @@ namespace RightFaxIt
 
         private void QThread()
         {
-            Console.WriteLine("Thread Started.");
+            Debug.WriteLine("Thread Started.");
             do
             {
-                Console.WriteLine("Thread Waiting.");
+                Debug.WriteLine("Thread Waiting.");
                 _doQWork.WaitOne(-1, false);
-                Console.WriteLine("Checking for work.");
+                Debug.WriteLine("Checking for work.");
                 if (_quitWork)
                 {
                     break;
@@ -567,7 +486,7 @@ namespace RightFaxIt
                 do
                 {
                     dequeuedWork = null;
-                    Console.WriteLine("Dequeueing");
+                    Debug.WriteLine("Dequeueing");
                     lock (_zLock)
                     {
                         if (_faxQueue.Count > 0)
@@ -578,10 +497,9 @@ namespace RightFaxIt
 
                     if (dequeuedWork != null)
                     {
-                        Console.WriteLine("Working");
-
+                        Debug.WriteLine("Working");
                         ProcessFax(dequeuedWork);
-                        Console.WriteLine("Work Completed!");
+                        Debug.WriteLine("Work Completed!");
                     }
                 } while (dequeuedWork != null);
 
@@ -593,7 +511,8 @@ namespace RightFaxIt
                     }
                 }
             } while (true);
-            Console.WriteLine("THREAD ENDED");
+            Debug.WriteLine("THREAD ENDED");
+            _quitWork = false;
         }
 
         #endregion
