@@ -66,24 +66,27 @@ Namespace Modules
 
                     'Extract data from the DPA header table
                     With objWdDoc.Tables(1)
+                        'Store the table cell to a temp string as lowercase.
+                        Dim tempSendToCell As String = .Cell(1, 1).Range.Text
+                        tempSendToCell = tempSendToCell.ToLower
                         'Email Address
-                        Me.SendTo = RegexAcc(.Cell(1, 1).Range.Text, _
+                        Me.SendTo = RegexAcc(tempSendToCell, _
                                              "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
 
                         ' TODO Add handling for mailing address and fax number.
 
                         'Skip email if no email address is found.
-                        If Me.SendTo = "X" Then Me.SKIP = True
+                        If Me.SendTo = "X" Then Me.Skip = True
 
                         'Cutin/Active
                         If InStr(.Cell(1, 2).Range.Text, "Active", CompareMethod.Text) Then
-                            Me.Type = DPAType.ACTIVE
+                            Me.Type = DPAType.Active
                         ElseIf InStr(.Cell(1, 2).Range.Text, "Cut-In", CompareMethod.Text) Then
                             Me.Type = DPAType.Cutin
                         Else
                             'Error
-                            Me.Type = DPAType.ERR
-                            Me.SKIP = True
+                            Me.Type = DPAType.Err
+                            Me.Skip = True
                         End If
 
                         'Customer Name with string cleanse and formating
@@ -100,6 +103,7 @@ Namespace Modules
                     End With
 
                     'TODO: Print to PDF or Printer depending on type
+                    'wordApplication.ActivePrinter="PDF995"
                     ' objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=sDestination & sFileName & ".pdf")
 
                     'Release document

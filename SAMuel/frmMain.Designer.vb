@@ -23,8 +23,8 @@ Partial Class FrmMain
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ListViewItem2 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmMain))
+        Dim ListViewItem1 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FrmMain))
         Me.dlgOpen = New System.Windows.Forms.OpenFileDialog()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
         Me.TabPage1 = New System.Windows.Forms.TabPage()
@@ -183,8 +183,8 @@ Partial Class FrmMain
         '
         Me.lstEmailAttachments.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.hType, Me.hName})
         Me.lstEmailAttachments.FullRowSelect = True
-        ListViewItem2.StateImageIndex = 0
-        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem2})
+        ListViewItem1.StateImageIndex = 0
+        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1})
         Me.lstEmailAttachments.Location = New System.Drawing.Point(229, 7)
         Me.lstEmailAttachments.Name = "lstEmailAttachments"
         Me.lstEmailAttachments.Size = New System.Drawing.Size(196, 254)
@@ -440,7 +440,6 @@ Partial Class FrmMain
         'rbConvertPDF
         '
         Me.rbConvertPDF.AutoSize = True
-        Me.rbConvertPDF.Enabled = False
         Me.rbConvertPDF.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.rbConvertPDF.Location = New System.Drawing.Point(6, 42)
         Me.rbConvertPDF.Name = "rbConvertPDF"
@@ -1116,7 +1115,7 @@ Partial Class FrmMain
         '
         Me.timerConvert.Interval = 1000
         '
-        'frmMain
+        'FrmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -1131,7 +1130,7 @@ Partial Class FrmMain
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
         Me.MaximizeBox = False
-        Me.Name = "frmMain"
+        Me.Name = "FrmMain"
         Me.Text = "SAMuel"
         Me.TabControl1.ResumeLayout(False)
         Me.TabPage1.ResumeLayout(False)

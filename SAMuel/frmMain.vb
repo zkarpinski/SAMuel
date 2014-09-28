@@ -574,6 +574,9 @@ Public Class FrmMain
                 objWord = CreateObject("Word.Application")
                 objWord.WindowState = WdWindowState.wdWindowStateMinimize
                 outputExt = "tiff"
+            ElseIf (Me.rbConvertPDF.Checked) Then
+                outputExt = "pdf"
+                File.Copy(pdf995ini, SAVE_FOLDER + "original_pdf995.ini", True)
             Else
                 outputExt = "tif"
             End If
@@ -582,14 +585,18 @@ Public Class FrmMain
             For Each value In sFiles
                 Me.lblStatus.Text = String.Format("Converting {0} of {1}", Me.ProgressBar.Value + 1, sFiles.Length)
                 Me.Refresh()
-                outputImage = [String].Format("{0}{1}.{2}", sDestination, Path.GetFileNameWithoutExtension(value),
+                Dim fileName As String = Path.GetFileNameWithoutExtension(value)
+                outputImage = [String].Format("{0}{1}.{2}", sDestination, fileName,
                                               outputExt)
 
                 'Convert to tiff using the respective function.
-                If (Me.rbConvertDOC.Checked) Then
-                    docToTiff(value, outputImage, objWord)
-                Else
-                    imgToTiff(value, outputImage)
+                If (Me.rbConvertDOC.Checked) And (Me.rbConvertTiff.Checked) Then
+                    DocToTiff(value, outputImage, objWord)
+                ElseIf (Me.rbConvertIMAGE.Checked) And (Me.rbConvertTiff.Checked) Then
+                    ImgToTiff(value, outputImage)
+                ElseIf (Me.rbConvertIMAGE.Checked) And (Me.rbConvertPDF.Checked) Then
+                    CreatePdf995Ini(CONV_FOLDER, fileName)
+                    ImgToPdf(value, outputImage)
                 End If
                 Me.ProgressBar.Value += 1
             Next
@@ -762,4 +769,8 @@ Public Class FrmMain
     End Sub
 
 #End Region
+
+    Private Sub tabTDrive_Click(sender As Object, e As EventArgs) Handles tabTDrive.Click
+
+    End Sub
 End Class
