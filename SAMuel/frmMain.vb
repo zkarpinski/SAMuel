@@ -1,5 +1,4 @@
 ﻿Imports System.IO
-Imports System.ComponentModel
 Imports RFCOMAPILib
 Imports SAMuel.Classes
 Imports Microsoft.Office.Interop.Outlook
@@ -575,8 +574,10 @@ Public Class FrmMain
                 objWord.WindowState = WdWindowState.wdWindowStateMinimize
                 outputExt = "tiff"
             ElseIf (Me.rbConvertPDF.Checked) Then
+                'Backup the PDF995 config files and create the pre-configed one.
                 outputExt = "pdf"
-                File.Copy(pdf995ini, SAVE_FOLDER + "original_pdf995.ini", True)
+                Pdf995.BackupOriginalPdf995Ini()
+                Pdf995.CreatePdf995Ini(CONV_FOLDER)
             Else
                 outputExt = "tif"
             End If
@@ -595,7 +596,7 @@ Public Class FrmMain
                 ElseIf (Me.rbConvertIMAGE.Checked) And (Me.rbConvertTiff.Checked) Then
                     ImgToTiff(value, outputImage)
                 ElseIf (Me.rbConvertIMAGE.Checked) And (Me.rbConvertPDF.Checked) Then
-                    CreatePdf995Ini(CONV_FOLDER, fileName)
+                    CreatePdf995Ini(CONV_FOLDER)
                     ImgToPdf(value, outputImage)
                 End If
                 Me.ProgressBar.Value += 1
@@ -706,7 +707,7 @@ Public Class FrmMain
 
     Private Sub ListViewItemActivate_Open(sender As Object, e As EventArgs) _
         Handles lvTDriveFiles.ItemActivate, lstEmailAttachments.ItemActivate
-        Process.Start(sender.SelectedItems(0).Tag)
+        Process.Start(sender.SelectedItems(0).Tag.SourceFile)
     End Sub
 
     Private Sub TabControl1_Changed(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
@@ -731,8 +732,8 @@ Public Class FrmMain
 #Region "T: Drive Tab Region -------------------------------------------------------------------------------------"
 
     Private Sub DragDropTDrive(sender As Object, e As DragEventArgs) Handles tabTDrive.DragDrop
+        Reset_ProgressBar()
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
-
             Dim files As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
             Try
                 ProcessFiles(files)
@@ -769,8 +770,4 @@ Public Class FrmMain
     End Sub
 
 #End Region
-
-    Private Sub tabTDrive_Click(sender As Object, e As EventArgs) Handles tabTDrive.Click
-
-    End Sub
 End Class

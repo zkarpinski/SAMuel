@@ -36,7 +36,7 @@
                 <RadioButton x:Name="CutinUserRatio" Content="CutIn" FontWeight="Normal" />
             </StackPanel>
         </GroupBox>
-        <Label Content="Created By: Zachary Karpinski" HorizontalAlignment="Left" Margin="201,23,0,0" VerticalAlignment="Top" FontSize="10" Height="23" Width="140" Grid.ColumnSpan="2"/>
+        <Label Content="Created By: Zachary Karpinski" HorizontalAlignment="Left" Margin="195,23,0,0" VerticalAlignment="Top" FontSize="10" Height="23" Width="140" Grid.ColumnSpan="2"/>
         <Button x:Name="btnPoll" Content="Start Faxing" HorizontalAlignment="Left" Margin="146,262,0,0" VerticalAlignment="Top" Width="90" Click="btnPoll_Click" Grid.Column="1" Height="22"/>
         <Label Grid.ColumnSpan="2" Content="Drap and Drop items to have them faxed." HorizontalAlignment="Left" Margin="55,157,0,0" VerticalAlignment="Top" Width="268" FontWeight="Bold"/>
     </Grid>

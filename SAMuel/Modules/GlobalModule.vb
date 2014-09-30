@@ -6,11 +6,13 @@ Namespace Modules
 
     Module GlobalModule
         ' Global Variables
+        Public Pdf995Ini As String = My.Settings.Pdf995ini_File
         Public SAVE_FOLDER As String
         Public ATT_FOLDER As String
         Public EMAILS_FOLDER As String
         Public CONV_FOLDER As String
         Public FAXED_FOLDER As String
+        Public TDrive_FOLDER As String
 
 
         ''' <summary>
@@ -91,8 +93,8 @@ Namespace Modules
         ''' Creates the output folders used by SAMuel if they do not exist
         ''' </summary>
         Sub InitOutputFolders(ByVal parentPath As String)
-            '' Output Folder References: SAVE_FOLDER, EMAILS_FOLDER         , ATT_FOLDER                 ,FAXED_FOLDER          , CONV_FOLDER
-            Dim outputFolders As String() = {parentPath, parentPath + "emails\", parentPath + "emails\temp\", parentPath + "faxed\", parentPath + "converted\"}
+            '' Output Folder References: SAVE_FOLDER, EMAILS_FOLDER         , ATT_FOLDER                 ,FAXED_FOLDER          , CONV_FOLDER               , TDRIVE_FOLDER
+            Dim outputFolders As String() = {parentPath, parentPath + "emails\", parentPath + "emails\temp\", parentPath + "faxed\", parentPath + "converted\", parentPath & "tDriveFiles\"}
             'Create the folder if it does not exist
             For Each value In outputFolders
                 CheckFolder(value)
@@ -104,6 +106,7 @@ Namespace Modules
             ATT_FOLDER = outputFolders(2)
             FAXED_FOLDER = outputFolders(3)
             CONV_FOLDER = outputFolders(4)
+            TDrive_FOLDER = outputFolders(5)
         End Sub
 
         ''' <summary>

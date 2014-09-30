@@ -4,8 +4,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
@@ -20,7 +18,6 @@ namespace RightFaxIt
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static readonly HttpListener ClientServer = new HttpListener();
         public List<Fax> Faxes;
 
         public MainWindow()
@@ -32,32 +29,8 @@ namespace RightFaxIt
                 Settings.Default.LogLocation = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
                 Settings.Default.Save();
             }
-
-            ClientServer.Prefixes.Add("http://localhost:9075/");
-            ClientServer.Start();
-            ClientServer.BeginGetContext(ClientServerGetContext, ClientServer);
         }
 
-
-        private static void ClientServerGetContext(IAsyncResult result)
-        {
-            // Note: The GetContext method blocks while waiting for a request. 
-            HttpListenerContext context = ClientServer.GetContext();
-            HttpListenerRequest request = context.Request;
-            // Obtain a response object.
-            HttpListenerResponse response = context.Response;
-            // Construct a response. 
-            string responseString = "<HTML><BODY>Test </BODY></HTML>";
-            byte[] buffer = Encoding.UTF8.GetBytes(responseString);
-            // Get a response stream and write the response to it.
-            response.ContentLength64 = buffer.Length;
-            Stream output = response.OutputStream;
-            output.Write(buffer, 0, buffer.Length);
-            output.Close();
-
-            // Start accepting a new connection.
-            ClientServer.BeginGetContext(ClientServerGetContext, ClientServer);
-        }
 
         private void ProcessFax(Tuple<Fax, String> work)
         {
@@ -215,6 +188,13 @@ namespace RightFaxIt
             File.AppendAllText(logFile, logAction);
         }
 
+        #region Queue Additions
+
+        /// <summary>
+        ///     Adds files to the queue manually.
+        /// </summary>
+        /// <param name="files">Files to be added to queue.</param>
+        /// <param name="rightFaxUser">User to be faxed out from.</param>
         private void ManualAddition(IEnumerable<string> files, String rightFaxUser)
         {
             foreach (string file in files)
@@ -234,6 +214,9 @@ namespace RightFaxIt
             }
         }
 
+        /// <summary>
+        ///     Adds all files to the queue from within the settings directories.
+        /// </summary>
         private void QueueDirectory()
         {
             // Define the folders from settings.
@@ -255,6 +238,8 @@ namespace RightFaxIt
                 ManualAddition(cutinFiles, "active");
             }
         }
+
+        #endregion
 
         #region UI Interaction
 
@@ -435,15 +420,17 @@ namespace RightFaxIt
 
         #endregion
 
-        #region FaxingQueue
-
-        private readonly EventWaitHandle _doQWork = new EventWaitHandle(false, EventResetMode.ManualReset);
-        private readonly Queue<Tuple<Fax, String>> _faxQueue = new Queue<Tuple<Fax, String>>(50);
-        private readonly Object _zLock = new object();
+        #region FaxingQueue Backend
 
         /// <summary>
         ///     http://social.msdn.microsoft.com/forums/vstudio/en-US/500cb664-e2ca-4d76-88b9-0faab7e7c443/queuing-backgroundworker-tasks
         /// </summary>
+        private readonly EventWaitHandle _doQWork = new EventWaitHandle(false, EventResetMode.ManualReset);
+
+        private readonly Queue<Tuple<Fax, String>> _faxQueue = new Queue<Tuple<Fax, String>>(50);
+        private readonly Object _zLock = new object();
+
+
         private Thread _queueWorker;
 
         private Boolean _quitWork;

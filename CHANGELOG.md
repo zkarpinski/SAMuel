@@ -1,3 +1,13 @@
+## 2014-09-29
+
+Features:
+
+  - Conversion: Conversion to PDF added.
+
+  Code Improvements:
+
+  - TDrive: Lowercase string is pass to regex for email. The regex function doesn't work with uppercase.
+
 ## 2014-09-22
 
 UI Improvements:

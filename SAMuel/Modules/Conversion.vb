@@ -1,45 +1,24 @@
 ﻿Imports System.Drawing.Printing
 Imports System.IO
 Imports Ghostscript.NET
+Imports Microsoft.Office.Interop.Word
 
 Namespace Modules
     Module Conversion
         'Module Wide Varibles
         Private _sFileToPrint As String
-        Public Const pdf995ini As String = "C:\Program Files\pdf995\res\pdf995.ini"
 
-        Sub SetupWordPdfConv(ByRef wordApplication As Object)
-            wordApplication.ActivePrinter = "PDF995"
-            'Copy old PDF995 INF
-            File.Copy(pdf995ini, SAVE_FOLDER + "original_pdf995.ini", True)
-            'Replace with new PDF995 inf
-            Return
+        Friend Enum ConvertToType As Byte
+            Tiff = 0
+            Pdf = 1
+        End Enum
+
+        Sub ConvertImages(ByVal inputImage As String, ByVal outputFile As String, ByVal outType As ConvertToType)
+            ''TODO Combine Combine ImgToPdf and ImgToTiff
         End Sub
 
-        Sub CreatePdf995Ini(ByVal outputFolder As String, ByVal documentName As String)
-            'Removes the ending /
-            outputFolder = outputFolder.Remove(outputFolder.Length - 1)
-
-            'Creates or Overwrites the XML file
-            Dim fs1 As FileStream = New FileStream(pdf995ini, FileMode.Create, FileAccess.Write)
-            Dim s1 As StreamWriter = New StreamWriter(fs1)
-
-            'Create ini file
-            s1.Write("[Parameters]" & vbCrLf)
-            s1.Write("Display Readme=0" & vbCrLf)
-            s1.Write("AutoLaunch=0" & vbCrLf) 'Disable PDF from opening after print.
-            s1.Write("Quiet=1" & vbCrLf) 'Disables UI?
-            s1.WriteLine("Use GPL Ghostscript=1") '?
-            s1.Write("Document Name=" & documentName & vbCrLf) 'Source file
-            s1.Write("Initial Dir=" & outputFolder & vbCrLf) 'Output folder?
-            s1.Write("Output File=SAMEASDOCUMENT" & vbCrLf) 'Output file name
-            s1.WriteLine("Output Folder=" & outputFolder) 'Output Folder
-
-            s1.Write("[OmniFormat]" & vbCrLf)
-            s1.Write("Accept EULA=1" & vbCrLf)
-
-            s1.Close()
-            fs1.Close()
+        Sub ConvertDocuments(ByVal inputDoc As String, ByVal outputFile As String, ByVal outType As ConvertToType)
+            ''TODO Combine Combine DocToPdf and DocToTiff
         End Sub
 
         Sub ImgToPdf(ByVal inputImg As String, ByVal outputPdf As String)
@@ -54,17 +33,17 @@ Namespace Modules
             'Set printer settings
 #If CONFIG = "Release" Then
             printDocument.PrinterSettings.PrinterName = "PDF995"
-#End If
+
             If Not printDocument.PrinterSettings.IsValid Then
                 MsgBox("Printer error. Is the 'PDF995' printer installed?", MsgBoxStyle.Critical)
                 Return
             End If
+#End If
 
             _sFileToPrint = inputImg
 
             'Print the image
-            'printDocument.PrinterSettings.PrintFileName = outputPdf
-            printDocument.DocumentName = outputPdf
+            printDocument.DocumentName = Path.GetFileName(inputImg)
             printDocument.Print()
 
         End Sub
@@ -82,11 +61,12 @@ Namespace Modules
             printDocument.PrinterSettings.PrintToFile = True
 #If CONFIG = "Release" Then
             printDocument.PrinterSettings.PrinterName = "Microsoft Office Document Image Writer"
-#End If
+
             If Not printDocument.PrinterSettings.IsValid Then
                 MsgBox("Printer error. Is the 'Microsoft Office Document Image Writer' printer installed?", MsgBoxStyle.Critical)
                 Return
             End If
+#End If
 
             _sFileToPrint = inputFile
 
@@ -108,7 +88,7 @@ Namespace Modules
             Dim args() As String = {"-q", "-dNOPAUSE", "-dBATCH", "-dSAFER", "-sDEVICE=tiffg4", "-sPAPERSIZE=letter", _
                                     "-dNumRenderingThreads=" & Environment.ProcessorCount.ToString(), _
                                     "-sOutputFile=" & outputTiff, "-f" & inputPdf}
-            Dim gvi As GhostscriptVersionInfo = New GhostscriptVersionInfo(New Version(0, 0, 0), Directory.GetCurrentDirectory() + "\gsdll32.dll", String.Empty, GhostscriptLicense.GPL)
+            Dim gvi As GhostscriptVersionInfo = New GhostscriptVersionInfo(New System.Version(0, 0, 0), Directory.GetCurrentDirectory() + "\gsdll32.dll", String.Empty, GhostscriptLicense.GPL)
             Dim processor As Processor.GhostscriptProcessor = New Processor.GhostscriptProcessor(gvi, True)
 
             processor.StartProcessing(args, Nothing)
@@ -129,7 +109,7 @@ Namespace Modules
             wordApp.WindowState = Microsoft.Office.Interop.Word.WdWindowState.wdWindowStateMinimize
 
 #If CONFIG = "Release" Then
-            'Set active printer to Fax
+            'Set active printer to MODI
             Try
                 wordApp.ActivePrinter = "Microsoft Office Document Image Writer"
             Catch ex As Exception
@@ -146,6 +126,45 @@ Namespace Modules
 
             'Print to Tiff
             objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=outputTiff, Background:=False)
+            Threading.Thread.Sleep(1000)
+            'Release document and close word.
+            objWdDoc.Close()
+            wordApp.Quit()
+            Return True
+        End Function
+
+        ''' <summary>
+        ''' Prints a word document to pdf using PDF995.
+        ''' </summary>
+        ''' <param name="inputDoc">Word document to be converted.</param>
+        ''' <param name="outputPdf">Full path of the resulting pdf file.</param>
+        ''' <param name="wordApp">Reference to an active word application.</param>
+        ''' <remarks></remarks>
+        Public Function DocToPdf(ByVal inputDoc As String, ByVal outputPdf As String, ByRef wordApp As Microsoft.Office.Interop.Word.Application) As Boolean
+            Dim objWdDoc As Microsoft.Office.Interop.Word.Document
+
+            'Initiate word application object and minimize it
+            wordApp = CreateObject("Word.Application")
+            wordApp.WindowState = Microsoft.Office.Interop.Word.WdWindowState.wdWindowStateMinimize
+
+#If CONFIG = "Release" Then
+            'Set active printer to PDF995
+            Try
+                wordApp.ActivePrinter = "PDF995"
+            Catch ex As Exception
+                MsgBox("Printer error. Is the 'PDF995' printer installed?", MsgBoxStyle.Critical)
+                wordApp.Quit(False)
+                Return False
+            End Try
+
+#End If
+
+            objWdDoc = wordApp.Documents.Open(FileName:=inputDoc, ConfirmConversions:=False, AddToRecentFiles:=False)
+            wordApp.Visible = False
+            wordApp.WindowState = Microsoft.Office.Interop.Word.WdWindowState.wdWindowStateMinimize
+
+            'Print to Pdf
+            objWdDoc.PrintOut(Background:=False)
             Threading.Thread.Sleep(1000)
             'Release document and close word.
             objWdDoc.Close()

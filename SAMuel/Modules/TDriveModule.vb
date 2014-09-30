@@ -114,7 +114,7 @@ Namespace Modules
 
         Public Sub ProcessFiles(sFiles() As String)
             Dim objWord As Word.Application
-            Dim DPA_List As New List(Of DPA)
+            Dim dpaList As New List(Of DPA)
 
             'Initiate word application object and minimize it
             objWord = CreateObject("Word.Application")
@@ -123,31 +123,31 @@ Namespace Modules
             'objWord.ActivePrinter = "PDF995"
 
             'Setup the progress bar.
-            frmMain.ProgressBar.Maximum = sFiles.Length + 1
-            frmMain.ProgressBar.Value = 0
-            frmMain.lblStatus.Text = "Parsing DPA files..."
+            FrmMain.ProgressBar.Maximum = sFiles.Length + 1
+            FrmMain.ProgressBar.Value = 0
+            FrmMain.lblStatus.Text = "Parsing DPA files..."
 
             'Create list of DPAs using LINQ
             For Each newDPA As DPA In From sFile As String In sFiles Select New DPA(sFile)
                 newDPA.ExtractDetailsFromDoc(objWord)
-                DPA_List.Add(newDPA)
+                dpaList.Add(newDPA)
                 FrmMain.ProgressBar.Value += 1
                 FrmMain.Refresh()
             Next
 
 
             'UI Update
-            frmMain.lblStatus.Text = "Updating UI..."
-            frmMain.Refresh()
+            FrmMain.lblStatus.Text = "Updating UI..."
+            FrmMain.Refresh()
 
-            For Each letter As DPA In DPA_List
+            For Each letter As DPA In dpaList
                 'Add each DPA to the list view for visual verification.
                 Dim lvi As ListViewItem = New ListViewItem(StrConv(letter.Type.ToString, VbStrConv.ProperCase))
                 lvi.SubItems.Add(letter.SendTo)
                 lvi.SubItems.Add(letter.AccountNumber)
                 lvi.SubItems.Add(letter.CustomerName)
-                lvi.Tag = letter.SourceFile 'Allows the file to be opened when clicked.
-                frmMain.lvTDriveFiles.Items.Add(lvi)
+                lvi.Tag = letter
+                FrmMain.lvTDriveFiles.Items.Add(lvi)
             Next
 
             'UI Update
