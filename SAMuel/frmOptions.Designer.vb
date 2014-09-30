@@ -34,12 +34,15 @@ Partial Class FrmOptions
         Me.btnShow = New System.Windows.Forms.Button()
         Me.btnEmpty = New System.Windows.Forms.Button()
         Me.tabOutlook = New System.Windows.Forms.TabPage()
-        Me.chkSuggestedAccountNumber = New System.Windows.Forms.CheckBox()
         Me.chkAuditMode = New System.Windows.Forms.CheckBox()
+        Me.chkSuggestedAccountNumber = New System.Windows.Forms.CheckBox()
+        Me.tabConversion = New System.Windows.Forms.TabPage()
+        Me.btnDefaultPdfIni = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.tabGeneral.SuspendLayout()
         Me.grpOptionsSaveFolders.SuspendLayout()
         Me.tabOutlook.SuspendLayout()
+        Me.tabConversion.SuspendLayout()
         Me.SuspendLayout()
         '
         'txtSavePath
@@ -81,6 +84,7 @@ Partial Class FrmOptions
         '
         Me.TabControl1.Controls.Add(Me.tabGeneral)
         Me.TabControl1.Controls.Add(Me.tabOutlook)
+        Me.TabControl1.Controls.Add(Me.tabConversion)
         Me.TabControl1.Location = New System.Drawing.Point(1, 1)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
@@ -152,16 +156,6 @@ Partial Class FrmOptions
         Me.tabOutlook.Text = "Outlook"
         Me.tabOutlook.UseVisualStyleBackColor = True
         '
-        'chkSuggestedAccountNumber
-        '
-        Me.chkSuggestedAccountNumber.AutoSize = True
-        Me.chkSuggestedAccountNumber.Location = New System.Drawing.Point(7, 32)
-        Me.chkSuggestedAccountNumber.Name = "chkSuggestedAccountNumber"
-        Me.chkSuggestedAccountNumber.Size = New System.Drawing.Size(182, 17)
-        Me.chkSuggestedAccountNumber.TabIndex = 5
-        Me.chkSuggestedAccountNumber.Text = "Use suggested account numbers"
-        Me.chkSuggestedAccountNumber.UseVisualStyleBackColor = True
-        '
         'chkAuditMode
         '
         Me.chkAuditMode.AutoSize = True
@@ -172,14 +166,44 @@ Partial Class FrmOptions
         Me.chkAuditMode.Text = "Audit each email."
         Me.chkAuditMode.UseVisualStyleBackColor = True
         '
-        'frmOptions
+        'chkSuggestedAccountNumber
+        '
+        Me.chkSuggestedAccountNumber.AutoSize = True
+        Me.chkSuggestedAccountNumber.Location = New System.Drawing.Point(7, 32)
+        Me.chkSuggestedAccountNumber.Name = "chkSuggestedAccountNumber"
+        Me.chkSuggestedAccountNumber.Size = New System.Drawing.Size(182, 17)
+        Me.chkSuggestedAccountNumber.TabIndex = 5
+        Me.chkSuggestedAccountNumber.Text = "Use suggested account numbers"
+        Me.chkSuggestedAccountNumber.UseVisualStyleBackColor = True
+        '
+        'tabConversion
+        '
+        Me.tabConversion.Controls.Add(Me.btnDefaultPdfIni)
+        Me.tabConversion.Location = New System.Drawing.Point(4, 22)
+        Me.tabConversion.Name = "tabConversion"
+        Me.tabConversion.Padding = New System.Windows.Forms.Padding(3)
+        Me.tabConversion.Size = New System.Drawing.Size(498, 166)
+        Me.tabConversion.TabIndex = 2
+        Me.tabConversion.Text = "Conversion"
+        Me.tabConversion.UseVisualStyleBackColor = True
+        '
+        'btnDefaultPdfIni
+        '
+        Me.btnDefaultPdfIni.Location = New System.Drawing.Point(7, 137)
+        Me.btnDefaultPdfIni.Name = "btnDefaultPdfIni"
+        Me.btnDefaultPdfIni.Size = New System.Drawing.Size(103, 23)
+        Me.btnDefaultPdfIni.TabIndex = 1
+        Me.btnDefaultPdfIni.Text = "Default PDF995"
+        Me.btnDefaultPdfIni.UseVisualStyleBackColor = True
+        '
+        'FrmOptions
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(506, 227)
         Me.Controls.Add(Me.TabControl1)
         Me.Controls.Add(Me.btnSaveOptions)
-        Me.Name = "frmOptions"
+        Me.Name = "FrmOptions"
         Me.Text = "Options"
         Me.TabControl1.ResumeLayout(False)
         Me.tabGeneral.ResumeLayout(False)
@@ -187,6 +211,7 @@ Partial Class FrmOptions
         Me.grpOptionsSaveFolders.ResumeLayout(False)
         Me.tabOutlook.ResumeLayout(False)
         Me.tabOutlook.PerformLayout()
+        Me.tabConversion.ResumeLayout(False)
         Me.ResumeLayout(False)
 
     End Sub
@@ -204,4 +229,6 @@ Partial Class FrmOptions
     Friend WithEvents chkSuggestedAccountNumber As System.Windows.Forms.CheckBox
     Friend WithEvents btnShow As System.Windows.Forms.Button
     Friend WithEvents chkAuditMode As System.Windows.Forms.CheckBox
+    Friend WithEvents tabConversion As System.Windows.Forms.TabPage
+    Friend WithEvents btnDefaultPdfIni As System.Windows.Forms.Button
 End Class

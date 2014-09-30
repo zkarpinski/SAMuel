@@ -613,6 +613,10 @@ Public Class FrmMain
             MessageBox.Show(ex.Message)
         End Try
 
+        'Restore PDF995INI
+        If (Me.rbConvertPDF.Checked) Then
+            Pdf995.RestorePdf995Ini()
+        End If
         'Re-enable tab
         Me.btnConvert.Enabled = True
         tabWordToTiff.AllowDrop = True

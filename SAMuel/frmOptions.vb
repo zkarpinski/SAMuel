@@ -49,7 +49,6 @@ Public Class FrmOptions
         If (File.Exists(My.Settings.savePath + "SAMuel.log")) Then
             Process.Start(My.Settings.savePath + "SAMuel.log")
 
-
         Else
             MsgBox("Logfile not found!", MsgBoxStyle.Exclamation)
         End If
@@ -59,5 +58,9 @@ Public Class FrmOptions
     Private Sub btnShow_Click(sender As Object, e As EventArgs) Handles btnShow.Click
         'Open the saved path folder with windows explorer.
         Process.Start("explorer.exe", My.Settings.savePath)
+    End Sub
+
+    Private Sub btnDefaultPdfIni_Click(sender As Object, e As EventArgs) Handles btnDefaultPdfIni.Click
+        Pdf995.DefaultPdf995Ini()
     End Sub
 End Class
