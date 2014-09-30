@@ -87,6 +87,9 @@
     <Reference Include="Ghostscript.NET">
       <HintPath>..\packages\Ghostscript.NET.1.1.9\lib\net40\Ghostscript.NET.dll</HintPath>
     </Reference>
+    <Reference Include="Magick.NET-x86">
+      <HintPath>..\packages\Magick.NET-Q16-x86.7.0.0.0004\lib\net40-client\Magick.NET-x86.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />

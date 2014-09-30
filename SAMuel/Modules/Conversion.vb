@@ -1,6 +1,7 @@
 ﻿Imports System.Drawing.Printing
 Imports System.IO
 Imports Ghostscript.NET
+Imports ImageMagick
 Imports Microsoft.Office.Interop.Word
 
 Namespace Modules
@@ -22,30 +23,11 @@ Namespace Modules
         End Sub
 
         Sub ImgToPdf(ByVal inputImg As String, ByVal outputPdf As String)
-
-            Dim printDocument As New PrintDocument()
-            AddHandler printDocument.PrintPage, AddressOf printDocument_PrintPage
-
-            'Controller hides the "printing page x of y dialog (http://stackoverflow.com/questions/5511138/can-i-disable-the-printing-page-x-of-y-dialog)
-            Dim printController As PrintController = New StandardPrintController
-            printDocument.PrintController = printController
-
-            'Set printer settings
-#If CONFIG = "Release" Then
-            printDocument.PrinterSettings.PrinterName = "PDF995"
-
-            If Not printDocument.PrinterSettings.IsValid Then
-                MsgBox("Printer error. Is the 'PDF995' printer installed?", MsgBoxStyle.Critical)
-                Return
-            End If
-#End If
-
-            _sFileToPrint = inputImg
-
-            'Print the image
-            printDocument.DocumentName = Path.GetFileName(inputImg)
-            printDocument.Print()
-
+            ' Read image from file
+            Using image As New MagickImage(inputImg)
+                ' Create pdf file with a single page
+                image.Write(outputPdf)
+            End Using
         End Sub
 
         Sub ImgToTiff(inputFile As String, outputTiff As String)
