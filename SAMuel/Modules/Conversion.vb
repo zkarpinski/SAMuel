@@ -25,36 +25,16 @@ Namespace Modules
         Sub ImgToPdf(ByVal inputImg As String, ByVal outputPdf As String)
             ' Read image from file
             Using image As New MagickImage(inputImg)
-                ' Create pdf file with a single page
                 image.Write(outputPdf)
             End Using
         End Sub
 
         Sub ImgToTiff(inputFile As String, outputTiff As String)
-
-            Dim printDocument As New PrintDocument()
-            AddHandler printDocument.PrintPage, AddressOf printDocument_PrintPage
-
-            'Controller hides the "printing page x of y dialog (http://stackoverflow.com/questions/5511138/can-i-disable-the-printing-page-x-of-y-dialog)
-            Dim printController As PrintController = New StandardPrintController
-            printDocument.PrintController = printController
-
-            'Set printer settings
-            printDocument.PrinterSettings.PrintToFile = True
-#If CONFIG = "Release" Then
-            printDocument.PrinterSettings.PrinterName = "Microsoft Office Document Image Writer"
-
-            If Not printDocument.PrinterSettings.IsValid Then
-                MsgBox("Printer error. Is the 'Microsoft Office Document Image Writer' printer installed?", MsgBoxStyle.Critical)
-                Return
-            End If
-#End If
-
-            _sFileToPrint = inputFile
-
-            'Print the image
-            printDocument.PrinterSettings.PrintFileName = outputTiff
-            printDocument.Print()
+            ' Read image from file
+            Using image As New MagickImage(inputFile)
+                image.CompressionMethod = CompressionMethod.Group4
+                image.Write(outputTiff)
+            End Using
         End Sub
 
         ''' <summary>
@@ -74,6 +54,7 @@ Namespace Modules
             Dim processor As Processor.GhostscriptProcessor = New Processor.GhostscriptProcessor(gvi, True)
 
             processor.StartProcessing(args, Nothing)
+
         End Sub
 
         ''' <summary>
