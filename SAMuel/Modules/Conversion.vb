@@ -156,7 +156,6 @@ Namespace Modules
                 wordApp.Quit(False)
                 Return False
             End Try
-
 #End If
 
             objWdDoc = wordApp.Documents.Open(FileName:=inputDoc, ConfirmConversions:=False, AddToRecentFiles:=False)

@@ -14,7 +14,6 @@ Namespace Modules
         Public FAXED_FOLDER As String
         Public TDrive_FOLDER As String
 
-
         ''' <summary>
         ''' Logs actions and events from within SAMuel
         ''' </summary>

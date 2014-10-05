@@ -30,7 +30,7 @@
       <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
     <Setting Name="TO_EMAIL" Type="System.String" Scope="User">
-      <Value Profile="(Default)">DEFAULT</Value>
+      <Value Profile="(Default)">zachary.karpinski@outlook.com</Value>
     </Setting>
     <Setting Name="Audit_Each_Email" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>

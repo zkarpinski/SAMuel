@@ -164,7 +164,7 @@ Namespace My
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("DEFAULT")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("zachary.karpinski@outlook.com")>  _
         Public Property TO_EMAIL() As String
             Get
                 Return CType(Me("TO_EMAIL"),String)

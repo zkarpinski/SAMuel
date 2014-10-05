@@ -751,17 +751,20 @@ Public Class FrmMain
     Private Sub btnTDCreateEmail_Click(sender As Object, e As EventArgs) Handles btnTDCreateEmail.Click
         For Each entry As ListViewItem In Me.lvTDriveFiles.Items
             Try
-                'Send using outlook on error **TEST PURPOSE**
+                'Send email using outlook.
                 Dim olApp As Microsoft.Office.Interop.Outlook.Application =
                         New Microsoft.Office.Interop.Outlook.Application
-                Dim olEmail As MailItem
-                olEmail = olApp.CreateItem(OlItemType.olMailItem)
+                'Dim olEmail As MailItem = olApp.CreateItemFromTemplate()
+
+                Dim olEmail As MailItem = olApp.CreateItem(OlItemType.olMailItem)
+                'olEmail = olApp.CreateItem(OlItemType.olMailItem)
                 Dim recipents As Recipients = olEmail.Recipients
                 recipents.Add(My.Settings.TO_EMAIL)
+                olEmail.SentOnBehalfOfName = My.Settings.FROM_EMAIL
                 olEmail.Subject = entry.SubItems(2).Text & " Deferred Payment Agreement"
                 olEmail.Body = entry.SubItems(1).Text & " " & entry.SubItems(3).Text
                 olEmail.BodyFormat = OlBodyFormat.olFormatRichText
-                olEmail.Attachments.Add(entry.Tag)
+                olEmail.Attachments.Add(entry.Tag.FileToSend)
                 olEmail.Send()
             Catch
                 MsgBox("Emailing error!")

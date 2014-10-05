@@ -102,9 +102,19 @@ Namespace Modules
                         ''
                     End With
 
-                    'TODO: Print to PDF or Printer depending on type
-                    'wordApplication.ActivePrinter="PDF995"
-                    ' objWdDoc.PrintOut(PrintToFile:=True, OutputFileName:=sDestination & sFileName & ".pdf")
+                    'Print to PDF or Printer depending on type
+#If CONFIG = "Release" Then
+            'Set active printer to PDF995
+            Try
+                wordApplication.ActivePrinter = "PDF995"
+            Catch ex As Exception
+                        MsgBox("Printer error. Is the 'PDF995' printer installed?", MsgBoxStyle.Critical)
+                        Return
+            End Try
+#End If
+                    objWdDoc.PrintOut()
+                    Threading.Thread.Sleep(1000)
+                    Me.FileToSend = TDrive_FOLDER & Path.GetFileNameWithoutExtension(Me.SourceFile) & ".pdf"
 
                     'Release document
                     objWdDoc.Close()
@@ -130,7 +140,10 @@ Namespace Modules
             'Create list of DPAs using LINQ
             For Each newDPA As DPA In From sFile As String In sFiles Select New DPA(sFile)
                 newDPA.ExtractDetailsFromDoc(objWord)
-                dpaList.Add(newDPA)
+                If Not newDPA.Skip Then
+                    dpaList.Add(newDPA)
+                End If
+
                 FrmMain.ProgressBar.Value += 1
                 FrmMain.Refresh()
             Next
