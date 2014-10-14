@@ -33,7 +33,7 @@ Namespace Modules
             'Metrics Data
             Public CreationTime As Date
             Public CompletionTime As Date
-            Public TimeToSend As Date
+            Public TimeToSend As TimeSpan
 
             'Internal Data
             Public Skip As Boolean
@@ -75,8 +75,12 @@ Namespace Modules
 
                         ' TODO Add handling for mailing address and fax number.
 
-                        'Skip email if no email address is found.
-                        If Me.SendTo = "X" Then Me.Skip = True
+                        'Determine Delivery Method
+                        If Me.SendTo.Contains("@") Then
+                            Me.DeliveryMethod = DeliveryType.Email
+                        Else
+                            Me.Skip = True
+                        End If
 
                         'Cutin/Active
                         If InStr(.Cell(1, 2).Range.Text, "Active", CompareMethod.Text) Then
@@ -109,16 +113,30 @@ Namespace Modules
                 wordApplication.ActivePrinter = "PDF995"
             Catch ex As Exception
                         MsgBox("Printer error. Is the 'PDF995' printer installed?", MsgBoxStyle.Critical)
+                        Me.Skip = True
+                        objWdDoc.Close()
                         Return
             End Try
 #End If
                     objWdDoc.PrintOut()
                     Threading.Thread.Sleep(1000)
                     Me.FileToSend = TDrive_FOLDER & Path.GetFileNameWithoutExtension(Me.SourceFile) & ".pdf"
-
+                    If Not File.Exists(Me.FileToSend) Then
+                        MsgBox("Expected PDF was not created. Check the settings folder for SAMuel and PDF995.")
+                        Me.Skip = True
+                    End If
                     'Release document
                     objWdDoc.Close()
                 End With
+            End Sub
+
+            ''' <summary>
+            ''' Marks the DPA as sent out and calls cleanup routines.
+            ''' </summary>
+            ''' <remarks></remarks>
+            Sub Complete()
+                Me.CompletionTime = Now()
+                Me.TimeToSend = Me.CompletionTime - Me.CreationTime
             End Sub
         End Structure
 
@@ -161,6 +179,9 @@ Namespace Modules
                 lvi.SubItems.Add(letter.CustomerName)
                 lvi.Tag = letter
                 FrmMain.lvTDriveFiles.Items.Add(lvi)
+
+                'Record completion time.
+                letter.Complete()
             Next
 
             'UI Update

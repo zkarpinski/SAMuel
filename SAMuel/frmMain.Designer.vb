@@ -23,7 +23,7 @@ Partial Class FrmMain
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ListViewItem1 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
+        Dim ListViewItem2 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FrmMain))
         Me.dlgOpen = New System.Windows.Forms.OpenFileDialog()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
@@ -154,10 +154,11 @@ Partial Class FrmMain
         Me.TabControl1.Controls.Add(Me.tabAddContact)
         Me.TabControl1.Controls.Add(Me.tabDPA)
         Me.TabControl1.Controls.Add(Me.tabTDrive)
-        Me.TabControl1.Location = New System.Drawing.Point(-1, 27)
+        Me.TabControl1.Location = New System.Drawing.Point(-1, 33)
+        Me.TabControl1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
-        Me.TabControl1.Size = New System.Drawing.Size(439, 316)
+        Me.TabControl1.Size = New System.Drawing.Size(585, 389)
         Me.TabControl1.TabIndex = 3
         '
         'TabPage1
@@ -171,10 +172,11 @@ Partial Class FrmMain
         Me.TabPage1.Controls.Add(Me.btnCancel)
         Me.TabPage1.Controls.Add(Me.btnNext)
         Me.TabPage1.Controls.Add(Me.btnRun)
-        Me.TabPage1.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage1.Location = New System.Drawing.Point(4, 25)
+        Me.TabPage1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage1.Size = New System.Drawing.Size(431, 290)
+        Me.TabPage1.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.TabPage1.Size = New System.Drawing.Size(577, 360)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Outlook"
         Me.TabPage1.UseVisualStyleBackColor = True
@@ -183,11 +185,12 @@ Partial Class FrmMain
         '
         Me.lstEmailAttachments.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.hType, Me.hName})
         Me.lstEmailAttachments.FullRowSelect = True
-        ListViewItem1.StateImageIndex = 0
-        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1})
-        Me.lstEmailAttachments.Location = New System.Drawing.Point(229, 7)
+        ListViewItem2.StateImageIndex = 0
+        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem2})
+        Me.lstEmailAttachments.Location = New System.Drawing.Point(305, 9)
+        Me.lstEmailAttachments.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.lstEmailAttachments.Name = "lstEmailAttachments"
-        Me.lstEmailAttachments.Size = New System.Drawing.Size(196, 254)
+        Me.lstEmailAttachments.Size = New System.Drawing.Size(260, 312)
         Me.lstEmailAttachments.TabIndex = 18
         Me.lstEmailAttachments.UseCompatibleStateImageBehavior = False
         Me.lstEmailAttachments.View = System.Windows.Forms.View.Details
@@ -205,9 +208,10 @@ Partial Class FrmMain
         'chkValidOnly
         '
         Me.chkValidOnly.AutoSize = True
-        Me.chkValidOnly.Location = New System.Drawing.Point(3, 270)
+        Me.chkValidOnly.Location = New System.Drawing.Point(4, 332)
+        Me.chkValidOnly.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chkValidOnly.Name = "chkValidOnly"
-        Me.chkValidOnly.Size = New System.Drawing.Size(73, 17)
+        Me.chkValidOnly.Size = New System.Drawing.Size(94, 21)
         Me.chkValidOnly.TabIndex = 17
         Me.chkValidOnly.Text = "Valid Only"
         Me.chkValidOnly.UseVisualStyleBackColor = True
@@ -224,9 +228,11 @@ Partial Class FrmMain
         Me.groupOLAudit.Controls.Add(Me.lblAcc)
         Me.groupOLAudit.Controls.Add(Me.txtSubject)
         Me.groupOLAudit.Controls.Add(Me.txtAcc)
-        Me.groupOLAudit.Location = New System.Drawing.Point(4, 1)
+        Me.groupOLAudit.Location = New System.Drawing.Point(5, 1)
+        Me.groupOLAudit.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.groupOLAudit.Name = "groupOLAudit"
-        Me.groupOLAudit.Size = New System.Drawing.Size(219, 260)
+        Me.groupOLAudit.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.groupOLAudit.Size = New System.Drawing.Size(292, 320)
         Me.groupOLAudit.TabIndex = 16
         Me.groupOLAudit.TabStop = False
         Me.groupOLAudit.Text = "Email"
@@ -235,10 +241,11 @@ Partial Class FrmMain
         '
         Me.rtbEmailBody.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.rtbEmailBody.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rtbEmailBody.Location = New System.Drawing.Point(-1, 106)
+        Me.rtbEmailBody.Location = New System.Drawing.Point(-1, 130)
+        Me.rtbEmailBody.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.rtbEmailBody.Name = "rtbEmailBody"
         Me.rtbEmailBody.ReadOnly = True
-        Me.rtbEmailBody.Size = New System.Drawing.Size(219, 154)
+        Me.rtbEmailBody.Size = New System.Drawing.Size(291, 189)
         Me.rtbEmailBody.TabIndex = 16
         Me.rtbEmailBody.Text = "This is a sample email body. With multiple lines and jibberish..." & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & "Ctrl+Scroll " & _
     "changes font size!" & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & Global.Microsoft.VisualBasic.ChrW(10) & "Scroll down to see this!."
@@ -248,18 +255,20 @@ Partial Class FrmMain
         Me.Label5.AutoSize = True
         Me.Label5.BackColor = System.Drawing.Color.Transparent
         Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.Location = New System.Drawing.Point(2, 94)
+        Me.Label5.Location = New System.Drawing.Point(3, 114)
+        Me.Label5.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(34, 13)
+        Me.Label5.Size = New System.Drawing.Size(44, 17)
         Me.Label5.TabIndex = 17
         Me.Label5.Text = "Body:"
         '
         'txtFrom
         '
-        Me.txtFrom.Location = New System.Drawing.Point(55, 34)
+        Me.txtFrom.Location = New System.Drawing.Point(73, 42)
+        Me.txtFrom.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtFrom.Name = "txtFrom"
         Me.txtFrom.ReadOnly = True
-        Me.txtFrom.Size = New System.Drawing.Size(158, 20)
+        Me.txtFrom.Size = New System.Drawing.Size(209, 22)
         Me.txtFrom.TabIndex = 6
         '
         'lblSubject
@@ -267,9 +276,10 @@ Partial Class FrmMain
         Me.lblSubject.AutoSize = True
         Me.lblSubject.BackColor = System.Drawing.Color.Transparent
         Me.lblSubject.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblSubject.Location = New System.Drawing.Point(2, 14)
+        Me.lblSubject.Location = New System.Drawing.Point(3, 17)
+        Me.lblSubject.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblSubject.Name = "lblSubject"
-        Me.lblSubject.Size = New System.Drawing.Size(46, 13)
+        Me.lblSubject.Size = New System.Drawing.Size(59, 17)
         Me.lblSubject.TabIndex = 2
         Me.lblSubject.Text = "Subject:"
         '
@@ -278,9 +288,10 @@ Partial Class FrmMain
         Me.lblFrom.AutoSize = True
         Me.lblFrom.BackColor = System.Drawing.Color.Transparent
         Me.lblFrom.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblFrom.Location = New System.Drawing.Point(2, 37)
+        Me.lblFrom.Location = New System.Drawing.Point(3, 46)
+        Me.lblFrom.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblFrom.Name = "lblFrom"
-        Me.lblFrom.Size = New System.Drawing.Size(44, 13)
+        Me.lblFrom.Size = New System.Drawing.Size(58, 17)
         Me.lblFrom.TabIndex = 3
         Me.lblFrom.Text = "Sender:"
         '
@@ -290,9 +301,10 @@ Partial Class FrmMain
         Me.lblOutlookMessage.BackColor = System.Drawing.Color.White
         Me.lblOutlookMessage.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, CType((System.Drawing.FontStyle.Bold Or System.Drawing.FontStyle.Underline), System.Drawing.FontStyle), System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblOutlookMessage.ForeColor = System.Drawing.Color.Red
-        Me.lblOutlookMessage.Location = New System.Drawing.Point(50, 84)
+        Me.lblOutlookMessage.Location = New System.Drawing.Point(67, 103)
+        Me.lblOutlookMessage.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblOutlookMessage.Name = "lblOutlookMessage"
-        Me.lblOutlookMessage.Size = New System.Drawing.Size(125, 13)
+        Me.lblOutlookMessage.Size = New System.Drawing.Size(158, 17)
         Me.lblOutlookMessage.TabIndex = 15
         Me.lblOutlookMessage.Text = "Email Error/Warning!"
         '
@@ -301,33 +313,37 @@ Partial Class FrmMain
         Me.lblAcc.AutoSize = True
         Me.lblAcc.BackColor = System.Drawing.Color.Transparent
         Me.lblAcc.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblAcc.Location = New System.Drawing.Point(2, 59)
+        Me.lblAcc.Location = New System.Drawing.Point(3, 73)
+        Me.lblAcc.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblAcc.Name = "lblAcc"
-        Me.lblAcc.Size = New System.Drawing.Size(53, 13)
+        Me.lblAcc.Size = New System.Drawing.Size(67, 17)
         Me.lblAcc.TabIndex = 4
         Me.lblAcc.Text = "Account: "
         '
         'txtSubject
         '
-        Me.txtSubject.Location = New System.Drawing.Point(55, 11)
+        Me.txtSubject.Location = New System.Drawing.Point(73, 14)
+        Me.txtSubject.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtSubject.Name = "txtSubject"
         Me.txtSubject.ReadOnly = True
-        Me.txtSubject.Size = New System.Drawing.Size(158, 20)
+        Me.txtSubject.Size = New System.Drawing.Size(209, 22)
         Me.txtSubject.TabIndex = 5
         '
         'txtAcc
         '
-        Me.txtAcc.Location = New System.Drawing.Point(55, 56)
+        Me.txtAcc.Location = New System.Drawing.Point(73, 69)
+        Me.txtAcc.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtAcc.Name = "txtAcc"
-        Me.txtAcc.Size = New System.Drawing.Size(158, 20)
+        Me.txtAcc.Size = New System.Drawing.Size(209, 22)
         Me.txtAcc.TabIndex = 7
         '
         'btnReject
         '
         Me.btnReject.Enabled = False
-        Me.btnReject.Location = New System.Drawing.Point(265, 267)
+        Me.btnReject.Location = New System.Drawing.Point(353, 329)
+        Me.btnReject.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnReject.Name = "btnReject"
-        Me.btnReject.Size = New System.Drawing.Size(75, 23)
+        Me.btnReject.Size = New System.Drawing.Size(100, 28)
         Me.btnReject.TabIndex = 8
         Me.btnReject.Text = "Reject"
         Me.btnReject.UseVisualStyleBackColor = True
@@ -335,18 +351,20 @@ Partial Class FrmMain
         'btnCancel
         '
         Me.btnCancel.Enabled = False
-        Me.btnCancel.Location = New System.Drawing.Point(353, 267)
+        Me.btnCancel.Location = New System.Drawing.Point(471, 329)
+        Me.btnCancel.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnCancel.Name = "btnCancel"
-        Me.btnCancel.Size = New System.Drawing.Size(75, 23)
+        Me.btnCancel.Size = New System.Drawing.Size(100, 28)
         Me.btnCancel.TabIndex = 11
         Me.btnCancel.Text = "Cancel"
         Me.btnCancel.UseVisualStyleBackColor = True
         '
         'btnNext
         '
-        Me.btnNext.Location = New System.Drawing.Point(177, 267)
+        Me.btnNext.Location = New System.Drawing.Point(236, 329)
+        Me.btnNext.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnNext.Name = "btnNext"
-        Me.btnNext.Size = New System.Drawing.Size(75, 23)
+        Me.btnNext.Size = New System.Drawing.Size(100, 28)
         Me.btnNext.TabIndex = 10
         Me.btnNext.Text = "&Next"
         Me.btnNext.UseVisualStyleBackColor = True
@@ -354,9 +372,10 @@ Partial Class FrmMain
         '
         'btnRun
         '
-        Me.btnRun.Location = New System.Drawing.Point(177, 267)
+        Me.btnRun.Location = New System.Drawing.Point(236, 329)
+        Me.btnRun.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnRun.Name = "btnRun"
-        Me.btnRun.Size = New System.Drawing.Size(75, 23)
+        Me.btnRun.Size = New System.Drawing.Size(100, 28)
         Me.btnRun.TabIndex = 0
         Me.btnRun.Text = "Run"
         Me.btnRun.UseVisualStyleBackColor = True
@@ -368,10 +387,11 @@ Partial Class FrmMain
         Me.tabWordToTiff.Controls.Add(Me.GroupBox3)
         Me.tabWordToTiff.Controls.Add(Me.lblDragAndDropWord)
         Me.tabWordToTiff.Controls.Add(Me.btnConvert)
-        Me.tabWordToTiff.Location = New System.Drawing.Point(4, 22)
+        Me.tabWordToTiff.Location = New System.Drawing.Point(4, 25)
+        Me.tabWordToTiff.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.tabWordToTiff.Name = "tabWordToTiff"
-        Me.tabWordToTiff.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabWordToTiff.Size = New System.Drawing.Size(431, 290)
+        Me.tabWordToTiff.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.tabWordToTiff.Size = New System.Drawing.Size(577, 360)
         Me.tabWordToTiff.TabIndex = 1
         Me.tabWordToTiff.Text = "Convert Files"
         Me.tabWordToTiff.UseVisualStyleBackColor = True
@@ -381,9 +401,11 @@ Partial Class FrmMain
         Me.GroupBox4.Controls.Add(Me.rbConvertDOC)
         Me.GroupBox4.Controls.Add(Me.rbConvertIMAGE)
         Me.GroupBox4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox4.Location = New System.Drawing.Point(6, 223)
+        Me.GroupBox4.Location = New System.Drawing.Point(8, 274)
+        Me.GroupBox4.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(81, 66)
+        Me.GroupBox4.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.GroupBox4.Size = New System.Drawing.Size(108, 81)
         Me.GroupBox4.TabIndex = 7
         Me.GroupBox4.TabStop = False
         Me.GroupBox4.Text = "Input"
@@ -393,9 +415,10 @@ Partial Class FrmMain
         Me.rbConvertDOC.AutoSize = True
         Me.rbConvertDOC.Checked = True
         Me.rbConvertDOC.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rbConvertDOC.Location = New System.Drawing.Point(6, 19)
+        Me.rbConvertDOC.Location = New System.Drawing.Point(8, 23)
+        Me.rbConvertDOC.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.rbConvertDOC.Name = "rbConvertDOC"
-        Me.rbConvertDOC.Size = New System.Drawing.Size(74, 17)
+        Me.rbConvertDOC.Size = New System.Drawing.Size(92, 21)
         Me.rbConvertDOC.TabIndex = 5
         Me.rbConvertDOC.TabStop = True
         Me.rbConvertDOC.Text = "Word Doc"
@@ -405,9 +428,10 @@ Partial Class FrmMain
         '
         Me.rbConvertIMAGE.AutoSize = True
         Me.rbConvertIMAGE.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rbConvertIMAGE.Location = New System.Drawing.Point(6, 42)
+        Me.rbConvertIMAGE.Location = New System.Drawing.Point(8, 52)
+        Me.rbConvertIMAGE.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.rbConvertIMAGE.Name = "rbConvertIMAGE"
-        Me.rbConvertIMAGE.Size = New System.Drawing.Size(54, 17)
+        Me.rbConvertIMAGE.Size = New System.Drawing.Size(67, 21)
         Me.rbConvertIMAGE.TabIndex = 4
         Me.rbConvertIMAGE.Text = "Image"
         Me.rbConvertIMAGE.UseVisualStyleBackColor = True
@@ -417,9 +441,11 @@ Partial Class FrmMain
         Me.GroupBox3.Controls.Add(Me.rbConvertTiff)
         Me.GroupBox3.Controls.Add(Me.rbConvertPDF)
         Me.GroupBox3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox3.Location = New System.Drawing.Point(87, 223)
+        Me.GroupBox3.Location = New System.Drawing.Point(116, 274)
+        Me.GroupBox3.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Size = New System.Drawing.Size(75, 66)
+        Me.GroupBox3.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.GroupBox3.Size = New System.Drawing.Size(100, 81)
         Me.GroupBox3.TabIndex = 6
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "Output"
@@ -429,9 +455,10 @@ Partial Class FrmMain
         Me.rbConvertTiff.AutoSize = True
         Me.rbConvertTiff.Checked = True
         Me.rbConvertTiff.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rbConvertTiff.Location = New System.Drawing.Point(6, 19)
+        Me.rbConvertTiff.Location = New System.Drawing.Point(8, 23)
+        Me.rbConvertTiff.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.rbConvertTiff.Name = "rbConvertTiff"
-        Me.rbConvertTiff.Size = New System.Drawing.Size(40, 17)
+        Me.rbConvertTiff.Size = New System.Drawing.Size(49, 21)
         Me.rbConvertTiff.TabIndex = 5
         Me.rbConvertTiff.TabStop = True
         Me.rbConvertTiff.Text = "Tiff"
@@ -441,9 +468,10 @@ Partial Class FrmMain
         '
         Me.rbConvertPDF.AutoSize = True
         Me.rbConvertPDF.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.rbConvertPDF.Location = New System.Drawing.Point(6, 42)
+        Me.rbConvertPDF.Location = New System.Drawing.Point(8, 52)
+        Me.rbConvertPDF.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.rbConvertPDF.Name = "rbConvertPDF"
-        Me.rbConvertPDF.Size = New System.Drawing.Size(46, 17)
+        Me.rbConvertPDF.Size = New System.Drawing.Size(56, 21)
         Me.rbConvertPDF.TabIndex = 4
         Me.rbConvertPDF.Text = "PDF"
         Me.rbConvertPDF.UseVisualStyleBackColor = True
@@ -452,17 +480,19 @@ Partial Class FrmMain
         '
         Me.lblDragAndDropWord.AutoSize = True
         Me.lblDragAndDropWord.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblDragAndDropWord.Location = New System.Drawing.Point(9, 129)
+        Me.lblDragAndDropWord.Location = New System.Drawing.Point(12, 159)
+        Me.lblDragAndDropWord.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblDragAndDropWord.Name = "lblDragAndDropWord"
-        Me.lblDragAndDropWord.Size = New System.Drawing.Size(416, 13)
+        Me.lblDragAndDropWord.Size = New System.Drawing.Size(530, 17)
         Me.lblDragAndDropWord.TabIndex = 3
         Me.lblDragAndDropWord.Text = "Click Convert or Drag and Drop files to convert into the selected format."
         '
         'btnConvert
         '
-        Me.btnConvert.Location = New System.Drawing.Point(177, 265)
+        Me.btnConvert.Location = New System.Drawing.Point(236, 326)
+        Me.btnConvert.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnConvert.Name = "btnConvert"
-        Me.btnConvert.Size = New System.Drawing.Size(75, 23)
+        Me.btnConvert.Size = New System.Drawing.Size(100, 28)
         Me.btnConvert.TabIndex = 2
         Me.btnConvert.Text = "Convert"
         Me.btnConvert.UseVisualStyleBackColor = True
@@ -473,9 +503,10 @@ Partial Class FrmMain
         Me.tabRFax.Controls.Add(Me.GroupBox2)
         Me.tabRFax.Controls.Add(Me.grpRFServer)
         Me.tabRFax.Controls.Add(Me.btnRFax)
-        Me.tabRFax.Location = New System.Drawing.Point(4, 22)
+        Me.tabRFax.Location = New System.Drawing.Point(4, 25)
+        Me.tabRFax.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.tabRFax.Name = "tabRFax"
-        Me.tabRFax.Size = New System.Drawing.Size(431, 290)
+        Me.tabRFax.Size = New System.Drawing.Size(577, 360)
         Me.tabRFax.TabIndex = 4
         Me.tabRFax.Text = "RightFax"
         Me.tabRFax.UseVisualStyleBackColor = True
@@ -483,9 +514,10 @@ Partial Class FrmMain
         'chkRFSaveRec
         '
         Me.chkRFSaveRec.AutoSize = True
-        Me.chkRFSaveRec.Location = New System.Drawing.Point(7, 267)
+        Me.chkRFSaveRec.Location = New System.Drawing.Point(9, 329)
+        Me.chkRFSaveRec.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chkRFSaveRec.Name = "chkRFSaveRec"
-        Me.chkRFSaveRec.Size = New System.Drawing.Size(152, 17)
+        Me.chkRFSaveRec.Size = New System.Drawing.Size(200, 21)
         Me.chkRFSaveRec.TabIndex = 13
         Me.chkRFSaveRec.Text = "Save recipient info for later"
         Me.chkRFSaveRec.UseVisualStyleBackColor = True
@@ -497,9 +529,11 @@ Partial Class FrmMain
         Me.GroupBox2.Controls.Add(Me.lblRFRecFax)
         Me.GroupBox2.Controls.Add(Me.txtRFRecName)
         Me.GroupBox2.Controls.Add(Me.lblRFRecName)
-        Me.GroupBox2.Location = New System.Drawing.Point(19, 104)
+        Me.GroupBox2.Location = New System.Drawing.Point(25, 128)
+        Me.GroupBox2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(381, 95)
+        Me.GroupBox2.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.GroupBox2.Size = New System.Drawing.Size(508, 117)
         Me.GroupBox2.TabIndex = 12
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "Fax Info"
@@ -509,9 +543,10 @@ Partial Class FrmMain
         Me.chkRFCoverSheet.AutoSize = True
         Me.chkRFCoverSheet.Checked = True
         Me.chkRFCoverSheet.CheckState = System.Windows.Forms.CheckState.Checked
-        Me.chkRFCoverSheet.Location = New System.Drawing.Point(17, 78)
+        Me.chkRFCoverSheet.Location = New System.Drawing.Point(23, 96)
+        Me.chkRFCoverSheet.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chkRFCoverSheet.Name = "chkRFCoverSheet"
-        Me.chkRFCoverSheet.Size = New System.Drawing.Size(123, 17)
+        Me.chkRFCoverSheet.Size = New System.Drawing.Size(157, 21)
         Me.chkRFCoverSheet.TabIndex = 11
         Me.chkRFCoverSheet.Text = "Include Cover Sheet"
         Me.chkRFCoverSheet.UseVisualStyleBackColor = True
@@ -519,33 +554,37 @@ Partial Class FrmMain
         '
         'txtRFRecFax
         '
-        Me.txtRFRecFax.Location = New System.Drawing.Point(98, 48)
+        Me.txtRFRecFax.Location = New System.Drawing.Point(131, 59)
+        Me.txtRFRecFax.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtRFRecFax.Name = "txtRFRecFax"
-        Me.txtRFRecFax.Size = New System.Drawing.Size(100, 20)
+        Me.txtRFRecFax.Size = New System.Drawing.Size(132, 22)
         Me.txtRFRecFax.TabIndex = 6
         '
         'lblRFRecFax
         '
         Me.lblRFRecFax.AutoSize = True
-        Me.lblRFRecFax.Location = New System.Drawing.Point(6, 50)
+        Me.lblRFRecFax.Location = New System.Drawing.Point(8, 62)
+        Me.lblRFRecFax.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblRFRecFax.Name = "lblRFRecFax"
-        Me.lblRFRecFax.Size = New System.Drawing.Size(75, 13)
+        Me.lblRFRecFax.Size = New System.Drawing.Size(97, 17)
         Me.lblRFRecFax.TabIndex = 7
         Me.lblRFRecFax.Text = "Recipient Fax:"
         '
         'txtRFRecName
         '
-        Me.txtRFRecName.Location = New System.Drawing.Point(98, 22)
+        Me.txtRFRecName.Location = New System.Drawing.Point(131, 27)
+        Me.txtRFRecName.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtRFRecName.Name = "txtRFRecName"
-        Me.txtRFRecName.Size = New System.Drawing.Size(100, 20)
+        Me.txtRFRecName.Size = New System.Drawing.Size(132, 22)
         Me.txtRFRecName.TabIndex = 4
         '
         'lblRFRecName
         '
         Me.lblRFRecName.AutoSize = True
-        Me.lblRFRecName.Location = New System.Drawing.Point(6, 25)
+        Me.lblRFRecName.Location = New System.Drawing.Point(8, 31)
+        Me.lblRFRecName.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblRFRecName.Name = "lblRFRecName"
-        Me.lblRFRecName.Size = New System.Drawing.Size(86, 13)
+        Me.lblRFRecName.Size = New System.Drawing.Size(112, 17)
         Me.lblRFRecName.TabIndex = 5
         Me.lblRFRecName.Text = "Recipient Name:"
         '
@@ -558,9 +597,11 @@ Partial Class FrmMain
         Me.grpRFServer.Controls.Add(Me.lblRFserver)
         Me.grpRFServer.Controls.Add(Me.txtRFuser)
         Me.grpRFServer.Controls.Add(Me.lblRFuser)
-        Me.grpRFServer.Location = New System.Drawing.Point(19, 3)
+        Me.grpRFServer.Location = New System.Drawing.Point(25, 4)
+        Me.grpRFServer.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.grpRFServer.Name = "grpRFServer"
-        Me.grpRFServer.Size = New System.Drawing.Size(381, 95)
+        Me.grpRFServer.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.grpRFServer.Size = New System.Drawing.Size(508, 117)
         Me.grpRFServer.TabIndex = 11
         Me.grpRFServer.TabStop = False
         Me.grpRFServer.Text = "Server Info"
@@ -568,9 +609,10 @@ Partial Class FrmMain
         'chkRFNTauth
         '
         Me.chkRFNTauth.AutoSize = True
-        Me.chkRFNTauth.Location = New System.Drawing.Point(22, 65)
+        Me.chkRFNTauth.Location = New System.Drawing.Point(29, 80)
+        Me.chkRFNTauth.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chkRFNTauth.Name = "chkRFNTauth"
-        Me.chkRFNTauth.Size = New System.Drawing.Size(134, 17)
+        Me.chkRFNTauth.Size = New System.Drawing.Size(172, 21)
         Me.chkRFNTauth.TabIndex = 8
         Me.chkRFNTauth.Text = "Use NT Authentication"
         Me.chkRFNTauth.UseVisualStyleBackColor = True
@@ -579,56 +621,63 @@ Partial Class FrmMain
         'lblRFpassword
         '
         Me.lblRFpassword.AutoSize = True
-        Me.lblRFpassword.Location = New System.Drawing.Point(193, 51)
+        Me.lblRFpassword.Location = New System.Drawing.Point(257, 63)
+        Me.lblRFpassword.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblRFpassword.Name = "lblRFpassword"
-        Me.lblRFpassword.Size = New System.Drawing.Size(56, 13)
+        Me.lblRFpassword.Size = New System.Drawing.Size(73, 17)
         Me.lblRFpassword.TabIndex = 10
         Me.lblRFpassword.Text = "Password:"
         '
         'txtRFsvr
         '
-        Me.txtRFsvr.Location = New System.Drawing.Point(64, 22)
+        Me.txtRFsvr.Location = New System.Drawing.Point(85, 27)
+        Me.txtRFsvr.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtRFsvr.Name = "txtRFsvr"
-        Me.txtRFsvr.Size = New System.Drawing.Size(100, 20)
+        Me.txtRFsvr.Size = New System.Drawing.Size(132, 22)
         Me.txtRFsvr.TabIndex = 4
         '
         'txtRFpw
         '
-        Me.txtRFpw.Location = New System.Drawing.Point(255, 48)
+        Me.txtRFpw.Location = New System.Drawing.Point(340, 59)
+        Me.txtRFpw.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtRFpw.Name = "txtRFpw"
-        Me.txtRFpw.Size = New System.Drawing.Size(100, 20)
+        Me.txtRFpw.Size = New System.Drawing.Size(132, 22)
         Me.txtRFpw.TabIndex = 9
         '
         'lblRFserver
         '
         Me.lblRFserver.AutoSize = True
-        Me.lblRFserver.Location = New System.Drawing.Point(19, 25)
+        Me.lblRFserver.Location = New System.Drawing.Point(25, 31)
+        Me.lblRFserver.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblRFserver.Name = "lblRFserver"
-        Me.lblRFserver.Size = New System.Drawing.Size(41, 13)
+        Me.lblRFserver.Size = New System.Drawing.Size(54, 17)
         Me.lblRFserver.TabIndex = 5
         Me.lblRFserver.Text = "Server:"
         '
         'txtRFuser
         '
-        Me.txtRFuser.Location = New System.Drawing.Point(255, 22)
+        Me.txtRFuser.Location = New System.Drawing.Point(340, 27)
+        Me.txtRFuser.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtRFuser.Name = "txtRFuser"
-        Me.txtRFuser.Size = New System.Drawing.Size(100, 20)
+        Me.txtRFuser.Size = New System.Drawing.Size(132, 22)
         Me.txtRFuser.TabIndex = 6
         '
         'lblRFuser
         '
         Me.lblRFuser.AutoSize = True
-        Me.lblRFuser.Location = New System.Drawing.Point(191, 25)
+        Me.lblRFuser.Location = New System.Drawing.Point(255, 31)
+        Me.lblRFuser.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblRFuser.Name = "lblRFuser"
-        Me.lblRFuser.Size = New System.Drawing.Size(58, 13)
+        Me.lblRFuser.Size = New System.Drawing.Size(77, 17)
         Me.lblRFuser.TabIndex = 7
         Me.lblRFuser.Text = "Username:"
         '
         'btnRFax
         '
-        Me.btnRFax.Location = New System.Drawing.Point(177, 265)
+        Me.btnRFax.Location = New System.Drawing.Point(236, 326)
+        Me.btnRFax.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnRFax.Name = "btnRFax"
-        Me.btnRFax.Size = New System.Drawing.Size(75, 23)
+        Me.btnRFax.Size = New System.Drawing.Size(100, 28)
         Me.btnRFax.TabIndex = 3
         Me.btnRFax.Text = "Fax"
         Me.btnRFax.UseVisualStyleBackColor = True
@@ -643,10 +692,11 @@ Partial Class FrmMain
         Me.tabKofax.Controls.Add(Me.btnKFImport)
         Me.tabKofax.Controls.Add(Me.lblKFBatchName)
         Me.tabKofax.Controls.Add(Me.txtKFBatchName)
-        Me.tabKofax.Location = New System.Drawing.Point(4, 22)
+        Me.tabKofax.Location = New System.Drawing.Point(4, 25)
+        Me.tabKofax.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.tabKofax.Name = "tabKofax"
-        Me.tabKofax.Padding = New System.Windows.Forms.Padding(3)
-        Me.tabKofax.Size = New System.Drawing.Size(431, 290)
+        Me.tabKofax.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.tabKofax.Size = New System.Drawing.Size(577, 360)
         Me.tabKofax.TabIndex = 5
         Me.tabKofax.Text = "Kofax It"
         Me.tabKofax.UseVisualStyleBackColor = True
@@ -655,26 +705,30 @@ Partial Class FrmMain
         '
         Me.lblKFComments.AutoSize = True
         Me.lblKFComments.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblKFComments.Location = New System.Drawing.Point(12, 94)
+        Me.lblKFComments.Location = New System.Drawing.Point(16, 116)
+        Me.lblKFComments.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblKFComments.Name = "lblKFComments"
-        Me.lblKFComments.Size = New System.Drawing.Size(59, 13)
+        Me.lblKFComments.Size = New System.Drawing.Size(78, 17)
         Me.lblKFComments.TabIndex = 19
         Me.lblKFComments.Text = "Comments:"
         '
         'txtKFComments
         '
-        Me.txtKFComments.Location = New System.Drawing.Point(87, 89)
+        Me.txtKFComments.Location = New System.Drawing.Point(116, 110)
+        Me.txtKFComments.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtKFComments.Name = "txtKFComments"
-        Me.txtKFComments.Size = New System.Drawing.Size(165, 20)
+        Me.txtKFComments.Size = New System.Drawing.Size(219, 22)
         Me.txtKFComments.TabIndex = 18
         '
         'gbKFSource
         '
         Me.gbKFSource.Controls.Add(Me.rbKFUSMail)
         Me.gbKFSource.Controls.Add(Me.rbKFEmail)
-        Me.gbKFSource.Location = New System.Drawing.Point(273, 25)
+        Me.gbKFSource.Location = New System.Drawing.Point(364, 31)
+        Me.gbKFSource.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.gbKFSource.Name = "gbKFSource"
-        Me.gbKFSource.Size = New System.Drawing.Size(106, 58)
+        Me.gbKFSource.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.gbKFSource.Size = New System.Drawing.Size(141, 71)
         Me.gbKFSource.TabIndex = 17
         Me.gbKFSource.TabStop = False
         Me.gbKFSource.Text = "Source"
@@ -682,9 +736,10 @@ Partial Class FrmMain
         'rbKFUSMail
         '
         Me.rbKFUSMail.AutoSize = True
-        Me.rbKFUSMail.Location = New System.Drawing.Point(7, 38)
+        Me.rbKFUSMail.Location = New System.Drawing.Point(9, 47)
+        Me.rbKFUSMail.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.rbKFUSMail.Name = "rbKFUSMail"
-        Me.rbKFUSMail.Size = New System.Drawing.Size(62, 17)
+        Me.rbKFUSMail.Size = New System.Drawing.Size(77, 21)
         Me.rbKFUSMail.TabIndex = 1
         Me.rbKFUSMail.Text = "US Mail"
         Me.rbKFUSMail.UseVisualStyleBackColor = True
@@ -693,9 +748,10 @@ Partial Class FrmMain
         '
         Me.rbKFEmail.AutoSize = True
         Me.rbKFEmail.Checked = True
-        Me.rbKFEmail.Location = New System.Drawing.Point(7, 20)
+        Me.rbKFEmail.Location = New System.Drawing.Point(9, 25)
+        Me.rbKFEmail.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.rbKFEmail.Name = "rbKFEmail"
-        Me.rbKFEmail.Size = New System.Drawing.Size(50, 17)
+        Me.rbKFEmail.Size = New System.Drawing.Size(63, 21)
         Me.rbKFEmail.TabIndex = 0
         Me.rbKFEmail.TabStop = True
         Me.rbKFEmail.Text = "Email"
@@ -705,9 +761,10 @@ Partial Class FrmMain
         '
         Me.lblKFBatchType.AutoSize = True
         Me.lblKFBatchType.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblKFBatchType.Location = New System.Drawing.Point(12, 51)
+        Me.lblKFBatchType.Location = New System.Drawing.Point(16, 63)
+        Me.lblKFBatchType.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblKFBatchType.Name = "lblKFBatchType"
-        Me.lblKFBatchType.Size = New System.Drawing.Size(34, 13)
+        Me.lblKFBatchType.Size = New System.Drawing.Size(44, 17)
         Me.lblKFBatchType.TabIndex = 16
         Me.lblKFBatchType.Text = "Type:"
         '
@@ -717,16 +774,18 @@ Partial Class FrmMain
         Me.cbKFBatchType.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cbKFBatchType.FormattingEnabled = True
         Me.cbKFBatchType.Items.AddRange(New Object() {"0003 - BILLING DISPUTE", "0014 - DENIAL OF SERVICE", "0084 - DPA-SYRACUSE PROCESSING", "0026 - LIFE SUPPORT", "0049 - MEDICAL-INFO ONLY", "0046 - NO ACTION-INFO ONLY", "0033 - SAMS"})
-        Me.cbKFBatchType.Location = New System.Drawing.Point(87, 48)
+        Me.cbKFBatchType.Location = New System.Drawing.Point(116, 59)
+        Me.cbKFBatchType.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.cbKFBatchType.Name = "cbKFBatchType"
-        Me.cbKFBatchType.Size = New System.Drawing.Size(165, 20)
+        Me.cbKFBatchType.Size = New System.Drawing.Size(219, 23)
         Me.cbKFBatchType.TabIndex = 15
         '
         'btnKFImport
         '
-        Me.btnKFImport.Location = New System.Drawing.Point(177, 265)
+        Me.btnKFImport.Location = New System.Drawing.Point(236, 326)
+        Me.btnKFImport.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnKFImport.Name = "btnKFImport"
-        Me.btnKFImport.Size = New System.Drawing.Size(75, 23)
+        Me.btnKFImport.Size = New System.Drawing.Size(100, 28)
         Me.btnKFImport.TabIndex = 14
         Me.btnKFImport.Text = "Import"
         Me.btnKFImport.UseVisualStyleBackColor = True
@@ -735,17 +794,19 @@ Partial Class FrmMain
         '
         Me.lblKFBatchName.AutoSize = True
         Me.lblKFBatchName.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblKFBatchName.Location = New System.Drawing.Point(12, 25)
+        Me.lblKFBatchName.Location = New System.Drawing.Point(16, 31)
+        Me.lblKFBatchName.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblKFBatchName.Name = "lblKFBatchName"
-        Me.lblKFBatchName.Size = New System.Drawing.Size(69, 13)
+        Me.lblKFBatchName.Size = New System.Drawing.Size(89, 17)
         Me.lblKFBatchName.TabIndex = 13
         Me.lblKFBatchName.Text = "Batch Name:"
         '
         'txtKFBatchName
         '
-        Me.txtKFBatchName.Location = New System.Drawing.Point(87, 22)
+        Me.txtKFBatchName.Location = New System.Drawing.Point(116, 27)
+        Me.txtKFBatchName.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtKFBatchName.Name = "txtKFBatchName"
-        Me.txtKFBatchName.Size = New System.Drawing.Size(165, 20)
+        Me.txtKFBatchName.Size = New System.Drawing.Size(219, 22)
         Me.txtKFBatchName.TabIndex = 12
         '
         'tabAddContact
@@ -758,18 +819,20 @@ Partial Class FrmMain
         Me.tabAddContact.Controls.Add(Me.mtxtCAccount)
         Me.tabAddContact.Controls.Add(Me.lblCAccount)
         Me.tabAddContact.Controls.Add(Me.btnCAddContact)
-        Me.tabAddContact.Location = New System.Drawing.Point(4, 22)
+        Me.tabAddContact.Location = New System.Drawing.Point(4, 25)
+        Me.tabAddContact.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.tabAddContact.Name = "tabAddContact"
-        Me.tabAddContact.Size = New System.Drawing.Size(431, 290)
+        Me.tabAddContact.Size = New System.Drawing.Size(577, 360)
         Me.tabAddContact.TabIndex = 6
         Me.tabAddContact.Text = "Add Contact"
         Me.tabAddContact.UseVisualStyleBackColor = True
         '
         'btnStopAddContacts
         '
-        Me.btnStopAddContacts.Location = New System.Drawing.Point(301, 264)
+        Me.btnStopAddContacts.Location = New System.Drawing.Point(401, 325)
+        Me.btnStopAddContacts.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnStopAddContacts.Name = "btnStopAddContacts"
-        Me.btnStopAddContacts.Size = New System.Drawing.Size(75, 23)
+        Me.btnStopAddContacts.Size = New System.Drawing.Size(100, 28)
         Me.btnStopAddContacts.TabIndex = 11
         Me.btnStopAddContacts.Text = "Stop"
         Me.btnStopAddContacts.UseVisualStyleBackColor = True
@@ -777,38 +840,43 @@ Partial Class FrmMain
         'lbxContactAlerts
         '
         Me.lbxContactAlerts.FormattingEnabled = True
-        Me.lbxContactAlerts.Location = New System.Drawing.Point(35, 72)
+        Me.lbxContactAlerts.ItemHeight = 16
+        Me.lbxContactAlerts.Location = New System.Drawing.Point(47, 89)
+        Me.lbxContactAlerts.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.lbxContactAlerts.Name = "lbxContactAlerts"
-        Me.lbxContactAlerts.Size = New System.Drawing.Size(349, 95)
+        Me.lbxContactAlerts.Size = New System.Drawing.Size(464, 116)
         Me.lbxContactAlerts.TabIndex = 10
         '
         'Label4
         '
         Me.Label4.AutoSize = True
         Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(188, 196)
+        Me.Label4.Location = New System.Drawing.Point(251, 241)
+        Me.Label4.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(55, 13)
+        Me.Label4.Size = New System.Drawing.Size(68, 17)
         Me.Label4.TabIndex = 9
         Me.Label4.Text = "Contact:"
         '
         'rtbCContact
         '
-        Me.rtbCContact.Location = New System.Drawing.Point(35, 212)
+        Me.rtbCContact.Location = New System.Drawing.Point(47, 261)
+        Me.rtbCContact.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.rtbCContact.Name = "rtbCContact"
         Me.rtbCContact.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical
-        Me.rtbCContact.Size = New System.Drawing.Size(349, 47)
+        Me.rtbCContact.Size = New System.Drawing.Size(464, 57)
         Me.rtbCContact.TabIndex = 8
         Me.rtbCContact.Text = ""
         '
         'mtxtCAccount
         '
         Me.mtxtCAccount.BackColor = System.Drawing.Color.Yellow
-        Me.mtxtCAccount.Location = New System.Drawing.Point(77, 31)
+        Me.mtxtCAccount.Location = New System.Drawing.Point(103, 38)
+        Me.mtxtCAccount.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.mtxtCAccount.Mask = "00000-99999"
         Me.mtxtCAccount.Name = "mtxtCAccount"
         Me.mtxtCAccount.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
-        Me.mtxtCAccount.Size = New System.Drawing.Size(100, 20)
+        Me.mtxtCAccount.Size = New System.Drawing.Size(132, 22)
         Me.mtxtCAccount.TabIndex = 6
         Me.mtxtCAccount.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         Me.mtxtCAccount.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
@@ -817,17 +885,19 @@ Partial Class FrmMain
         '
         Me.lblCAccount.AutoSize = True
         Me.lblCAccount.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblCAccount.Location = New System.Drawing.Point(14, 34)
+        Me.lblCAccount.Location = New System.Drawing.Point(19, 42)
+        Me.lblCAccount.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblCAccount.Name = "lblCAccount"
-        Me.lblCAccount.Size = New System.Drawing.Size(63, 13)
+        Me.lblCAccount.Size = New System.Drawing.Size(79, 17)
         Me.lblCAccount.TabIndex = 7
         Me.lblCAccount.Text = "Account #: "
         '
         'btnCAddContact
         '
-        Me.btnCAddContact.Location = New System.Drawing.Point(177, 265)
+        Me.btnCAddContact.Location = New System.Drawing.Point(236, 326)
+        Me.btnCAddContact.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnCAddContact.Name = "btnCAddContact"
-        Me.btnCAddContact.Size = New System.Drawing.Size(75, 23)
+        Me.btnCAddContact.Size = New System.Drawing.Size(100, 28)
         Me.btnCAddContact.TabIndex = 0
         Me.btnCAddContact.Text = "Add Contact"
         Me.btnCAddContact.UseVisualStyleBackColor = True
@@ -845,9 +915,10 @@ Partial Class FrmMain
         Me.tabDPA.Controls.Add(Me.btnDPAprocess)
         Me.tabDPA.Controls.Add(Me.chkMinPayment)
         Me.tabDPA.Controls.Add(Me.Label1)
-        Me.tabDPA.Location = New System.Drawing.Point(4, 22)
+        Me.tabDPA.Location = New System.Drawing.Point(4, 25)
+        Me.tabDPA.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.tabDPA.Name = "tabDPA"
-        Me.tabDPA.Size = New System.Drawing.Size(431, 290)
+        Me.tabDPA.Size = New System.Drawing.Size(577, 360)
         Me.tabDPA.TabIndex = 3
         Me.tabDPA.Text = "DPA"
         Me.tabDPA.UseVisualStyleBackColor = True
@@ -855,18 +926,20 @@ Partial Class FrmMain
         'CheckBox1
         '
         Me.CheckBox1.AutoSize = True
-        Me.CheckBox1.Location = New System.Drawing.Point(6, 87)
+        Me.CheckBox1.Location = New System.Drawing.Point(8, 107)
+        Me.CheckBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.CheckBox1.Name = "CheckBox1"
-        Me.CheckBox1.Size = New System.Drawing.Size(90, 17)
+        Me.CheckBox1.Size = New System.Drawing.Size(116, 21)
         Me.CheckBox1.TabIndex = 14
         Me.CheckBox1.Text = "Budget Billing"
         Me.CheckBox1.UseVisualStyleBackColor = True
         '
         'btnBudgetBill
         '
-        Me.btnBudgetBill.Location = New System.Drawing.Point(273, 265)
+        Me.btnBudgetBill.Location = New System.Drawing.Point(364, 326)
+        Me.btnBudgetBill.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnBudgetBill.Name = "btnBudgetBill"
-        Me.btnBudgetBill.Size = New System.Drawing.Size(75, 23)
+        Me.btnBudgetBill.Size = New System.Drawing.Size(100, 28)
         Me.btnBudgetBill.TabIndex = 13
         Me.btnBudgetBill.Text = "Budget Bill"
         Me.btnBudgetBill.UseVisualStyleBackColor = True
@@ -875,20 +948,23 @@ Partial Class FrmMain
         'mtxtDPAAcc
         '
         Me.mtxtDPAAcc.BackColor = System.Drawing.Color.Yellow
-        Me.mtxtDPAAcc.Location = New System.Drawing.Point(66, 15)
+        Me.mtxtDPAAcc.Location = New System.Drawing.Point(88, 18)
+        Me.mtxtDPAAcc.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.mtxtDPAAcc.Mask = "00000-99999"
         Me.mtxtDPAAcc.Name = "mtxtDPAAcc"
         Me.mtxtDPAAcc.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
-        Me.mtxtDPAAcc.Size = New System.Drawing.Size(100, 20)
+        Me.mtxtDPAAcc.Size = New System.Drawing.Size(132, 22)
         Me.mtxtDPAAcc.TabIndex = 1
         Me.mtxtDPAAcc.TextAlign = System.Windows.Forms.HorizontalAlignment.Center
         Me.mtxtDPAAcc.TextMaskFormat = System.Windows.Forms.MaskFormat.ExcludePromptAndLiterals
         '
         'GroupBox1
         '
-        Me.GroupBox1.Location = New System.Drawing.Point(9, 116)
+        Me.GroupBox1.Location = New System.Drawing.Point(12, 143)
+        Me.GroupBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(419, 148)
+        Me.GroupBox1.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.GroupBox1.Size = New System.Drawing.Size(559, 182)
         Me.GroupBox1.TabIndex = 12
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Account Info:"
@@ -897,41 +973,46 @@ Partial Class FrmMain
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(192, 44)
+        Me.Label3.Location = New System.Drawing.Point(256, 54)
+        Me.Label3.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(47, 13)
+        Me.Label3.Size = New System.Drawing.Size(61, 17)
         Me.Label3.TabIndex = 11
         Me.Label3.Text = "Monthly:"
         '
         'txtDPAmonthly
         '
-        Me.txtDPAmonthly.Location = New System.Drawing.Point(239, 41)
+        Me.txtDPAmonthly.Location = New System.Drawing.Point(319, 50)
+        Me.txtDPAmonthly.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtDPAmonthly.Name = "txtDPAmonthly"
-        Me.txtDPAmonthly.Size = New System.Drawing.Size(100, 20)
+        Me.txtDPAmonthly.Size = New System.Drawing.Size(132, 22)
         Me.txtDPAmonthly.TabIndex = 3
         '
         'Label2
         '
         Me.Label2.AutoSize = True
         Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(24, 44)
+        Me.Label2.Location = New System.Drawing.Point(32, 54)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(38, 13)
+        Me.Label2.Size = New System.Drawing.Size(47, 17)
         Me.Label2.TabIndex = 9
         Me.Label2.Text = "Down:"
         '
         'txtDPAdown
         '
-        Me.txtDPAdown.Location = New System.Drawing.Point(66, 41)
+        Me.txtDPAdown.Location = New System.Drawing.Point(88, 50)
+        Me.txtDPAdown.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.txtDPAdown.Name = "txtDPAdown"
-        Me.txtDPAdown.Size = New System.Drawing.Size(100, 20)
+        Me.txtDPAdown.Size = New System.Drawing.Size(132, 22)
         Me.txtDPAdown.TabIndex = 2
         '
         'btnDPAprocess
         '
-        Me.btnDPAprocess.Location = New System.Drawing.Point(177, 265)
+        Me.btnDPAprocess.Location = New System.Drawing.Point(236, 326)
+        Me.btnDPAprocess.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnDPAprocess.Name = "btnDPAprocess"
-        Me.btnDPAprocess.Size = New System.Drawing.Size(75, 23)
+        Me.btnDPAprocess.Size = New System.Drawing.Size(100, 28)
         Me.btnDPAprocess.TabIndex = 10
         Me.btnDPAprocess.Text = "Process DPA"
         Me.btnDPAprocess.UseVisualStyleBackColor = True
@@ -939,9 +1020,10 @@ Partial Class FrmMain
         'chkMinPayment
         '
         Me.chkMinPayment.AutoSize = True
-        Me.chkMinPayment.Location = New System.Drawing.Point(6, 67)
+        Me.chkMinPayment.Location = New System.Drawing.Point(8, 82)
+        Me.chkMinPayment.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.chkMinPayment.Name = "chkMinPayment"
-        Me.chkMinPayment.Size = New System.Drawing.Size(117, 17)
+        Me.chkMinPayment.Size = New System.Drawing.Size(152, 21)
         Me.chkMinPayment.TabIndex = 4
         Me.chkMinPayment.Text = "Minimum Payment?"
         Me.chkMinPayment.UseVisualStyleBackColor = True
@@ -950,9 +1032,10 @@ Partial Class FrmMain
         '
         Me.Label1.AutoSize = True
         Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(3, 18)
+        Me.Label1.Location = New System.Drawing.Point(4, 22)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(63, 13)
+        Me.Label1.Size = New System.Drawing.Size(79, 17)
         Me.Label1.TabIndex = 5
         Me.Label1.Text = "Account #: "
         '
@@ -962,27 +1045,30 @@ Partial Class FrmMain
         Me.tabTDrive.Controls.Add(Me.btnTDClear)
         Me.tabTDrive.Controls.Add(Me.btnTDCreateEmail)
         Me.tabTDrive.Controls.Add(Me.lvTDriveFiles)
-        Me.tabTDrive.Location = New System.Drawing.Point(4, 22)
+        Me.tabTDrive.Location = New System.Drawing.Point(4, 25)
+        Me.tabTDrive.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.tabTDrive.Name = "tabTDrive"
-        Me.tabTDrive.Size = New System.Drawing.Size(431, 290)
+        Me.tabTDrive.Size = New System.Drawing.Size(577, 360)
         Me.tabTDrive.TabIndex = 7
         Me.tabTDrive.Text = "T: Drive"
         Me.tabTDrive.UseVisualStyleBackColor = True
         '
         'btnTDClear
         '
-        Me.btnTDClear.Location = New System.Drawing.Point(356, 128)
+        Me.btnTDClear.Location = New System.Drawing.Point(475, 158)
+        Me.btnTDClear.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnTDClear.Name = "btnTDClear"
-        Me.btnTDClear.Size = New System.Drawing.Size(64, 22)
+        Me.btnTDClear.Size = New System.Drawing.Size(85, 27)
         Me.btnTDClear.TabIndex = 2
         Me.btnTDClear.Text = "Clear"
         Me.btnTDClear.UseVisualStyleBackColor = True
         '
         'btnTDCreateEmail
         '
-        Me.btnTDCreateEmail.Location = New System.Drawing.Point(162, 264)
+        Me.btnTDCreateEmail.Location = New System.Drawing.Point(216, 325)
+        Me.btnTDCreateEmail.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.btnTDCreateEmail.Name = "btnTDCreateEmail"
-        Me.btnTDCreateEmail.Size = New System.Drawing.Size(89, 23)
+        Me.btnTDCreateEmail.Size = New System.Drawing.Size(119, 28)
         Me.btnTDCreateEmail.TabIndex = 1
         Me.btnTDCreateEmail.Text = "Create Emails"
         Me.btnTDCreateEmail.UseVisualStyleBackColor = True
@@ -991,9 +1077,10 @@ Partial Class FrmMain
         '
         Me.lvTDriveFiles.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.colType, Me.colSendTo, Me.colAcc, Me.colName})
         Me.lvTDriveFiles.FullRowSelect = True
-        Me.lvTDriveFiles.Location = New System.Drawing.Point(4, 14)
+        Me.lvTDriveFiles.Location = New System.Drawing.Point(5, 17)
+        Me.lvTDriveFiles.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.lvTDriveFiles.Name = "lvTDriveFiles"
-        Me.lvTDriveFiles.Size = New System.Drawing.Size(424, 108)
+        Me.lvTDriveFiles.Size = New System.Drawing.Size(564, 132)
         Me.lvTDriveFiles.TabIndex = 0
         Me.lvTDriveFiles.UseCompatibleStateImageBehavior = False
         Me.lvTDriveFiles.View = System.Windows.Forms.View.Details
@@ -1023,9 +1110,10 @@ Partial Class FrmMain
         '
         'ProgressBar
         '
-        Me.ProgressBar.Location = New System.Drawing.Point(-1, 342)
+        Me.ProgressBar.Location = New System.Drawing.Point(-1, 421)
+        Me.ProgressBar.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.ProgressBar.Name = "ProgressBar"
-        Me.ProgressBar.Size = New System.Drawing.Size(439, 23)
+        Me.ProgressBar.Size = New System.Drawing.Size(585, 28)
         Me.ProgressBar.TabIndex = 4
         Me.ProgressBar.Value = 88
         '
@@ -1034,9 +1122,10 @@ Partial Class FrmMain
         Me.lblStatus.AutoSize = True
         Me.lblStatus.BackColor = System.Drawing.Color.Transparent
         Me.lblStatus.ForeColor = System.Drawing.Color.Black
-        Me.lblStatus.Location = New System.Drawing.Point(191, 346)
+        Me.lblStatus.Location = New System.Drawing.Point(255, 426)
+        Me.lblStatus.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblStatus.Name = "lblStatus"
-        Me.lblStatus.Size = New System.Drawing.Size(38, 13)
+        Me.lblStatus.Size = New System.Drawing.Size(48, 17)
         Me.lblStatus.TabIndex = 3
         Me.lblStatus.Text = "DONE"
         Me.lblStatus.TextAlign = System.Drawing.ContentAlignment.TopCenter
@@ -1046,7 +1135,8 @@ Partial Class FrmMain
         Me.MenuStrip1.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.FileToolStripMenuItem, Me.ToolsToolStripMenuItem, Me.HelpToolStripMenuItem})
         Me.MenuStrip1.Location = New System.Drawing.Point(0, 0)
         Me.MenuStrip1.Name = "MenuStrip1"
-        Me.MenuStrip1.Size = New System.Drawing.Size(435, 24)
+        Me.MenuStrip1.Padding = New System.Windows.Forms.Padding(8, 2, 0, 2)
+        Me.MenuStrip1.Size = New System.Drawing.Size(580, 28)
         Me.MenuStrip1.TabIndex = 5
         Me.MenuStrip1.Text = "MenuStrip1"
         '
@@ -1054,39 +1144,39 @@ Partial Class FrmMain
         '
         Me.FileToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ExitToolStripMenuItem})
         Me.FileToolStripMenuItem.Name = "FileToolStripMenuItem"
-        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(37, 20)
+        Me.FileToolStripMenuItem.Size = New System.Drawing.Size(44, 24)
         Me.FileToolStripMenuItem.Text = "&File"
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(92, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(102, 24)
         Me.ExitToolStripMenuItem.Text = "&Exit"
         '
         'ToolsToolStripMenuItem
         '
         Me.ToolsToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.OptionsToolStripMenuItem})
         Me.ToolsToolStripMenuItem.Name = "ToolsToolStripMenuItem"
-        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(48, 20)
+        Me.ToolsToolStripMenuItem.Size = New System.Drawing.Size(57, 24)
         Me.ToolsToolStripMenuItem.Text = "&Tools"
         '
         'OptionsToolStripMenuItem
         '
         Me.OptionsToolStripMenuItem.Name = "OptionsToolStripMenuItem"
-        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(116, 22)
+        Me.OptionsToolStripMenuItem.Size = New System.Drawing.Size(130, 24)
         Me.OptionsToolStripMenuItem.Text = "&Options"
         '
         'HelpToolStripMenuItem
         '
         Me.HelpToolStripMenuItem.DropDownItems.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AboutToolStripMenuItem})
         Me.HelpToolStripMenuItem.Name = "HelpToolStripMenuItem"
-        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(44, 20)
+        Me.HelpToolStripMenuItem.Size = New System.Drawing.Size(53, 24)
         Me.HelpToolStripMenuItem.Text = "&Help"
         '
         'AboutToolStripMenuItem
         '
         Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(119, 24)
         Me.AboutToolStripMenuItem.Text = "&About"
         '
         'NotifyIcon1
@@ -1105,9 +1195,10 @@ Partial Class FrmMain
         Me.lblBranding.AutoSize = True
         Me.lblBranding.BackColor = System.Drawing.Color.Transparent
         Me.lblBranding.Font = New System.Drawing.Font("Microsoft Sans Serif", 6.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblBranding.Location = New System.Drawing.Point(330, 356)
+        Me.lblBranding.Location = New System.Drawing.Point(436, 436)
+        Me.lblBranding.Margin = New System.Windows.Forms.Padding(4, 0, 4, 0)
         Me.lblBranding.Name = "lblBranding"
-        Me.lblBranding.Size = New System.Drawing.Size(108, 9)
+        Me.lblBranding.Size = New System.Drawing.Size(146, 13)
         Me.lblBranding.TabIndex = 6
         Me.lblBranding.Text = "Created by: Zachary Karpinski"
         '
@@ -1117,9 +1208,9 @@ Partial Class FrmMain
         '
         'FrmMain
         '
-        Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
+        Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(435, 363)
+        Me.ClientSize = New System.Drawing.Size(580, 447)
         Me.Controls.Add(Me.lblBranding)
         Me.Controls.Add(Me.lblStatus)
         Me.Controls.Add(Me.ProgressBar)
@@ -1129,6 +1220,7 @@ Partial Class FrmMain
         Me.HelpButton = True
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
+        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
         Me.MaximizeBox = False
         Me.Name = "FrmMain"
         Me.Text = "SAMuel"

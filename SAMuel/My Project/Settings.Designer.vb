@@ -150,28 +150,13 @@ Namespace My
             End Set
         End Property
         
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("DEFAULT")>  _
-        Public Property FROM_EMAIL() As String
+        Public ReadOnly Property ACTIVE_EMAIL() As String
             Get
-                Return CType(Me("FROM_EMAIL"),String)
+                Return CType(Me("ACTIVE_EMAIL"),String)
             End Get
-            Set
-                Me("FROM_EMAIL") = value
-            End Set
-        End Property
-        
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("zachary.karpinski@outlook.com")>  _
-        Public Property TO_EMAIL() As String
-            Get
-                Return CType(Me("TO_EMAIL"),String)
-            End Get
-            Set
-                Me("TO_EMAIL") = value
-            End Set
         End Property
         
         <Global.System.Configuration.UserScopedSettingAttribute(),  _
@@ -192,6 +177,24 @@ Namespace My
         Public ReadOnly Property Pdf995ini_File() As String
             Get
                 Return CType(Me("Pdf995ini_File"),String)
+            End Get
+        End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("DEFAULT")>  _
+        Public ReadOnly Property CUTIN_EMAIL() As String
+            Get
+                Return CType(Me("CUTIN_EMAIL"),String)
+            End Get
+        End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+        Public ReadOnly Property Email_Body() As String
+            Get
+                Return CType(Me("Email_Body"),String)
             End Get
         End Property
     End Class

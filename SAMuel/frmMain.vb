@@ -368,7 +368,6 @@ Public Class FrmMain
         'Update UI
         Me.lblStatus.Text = "Conversion Complete."
         Me.ProgressBar.Value = 1
-        Reset_Kofax_Tab()
     End Sub
 
     Private Sub Reset_Kofax_Tab()
@@ -755,19 +754,28 @@ Public Class FrmMain
                 Dim olApp As Microsoft.Office.Interop.Outlook.Application =
                         New Microsoft.Office.Interop.Outlook.Application
                 'Dim olEmail As MailItem = olApp.CreateItemFromTemplate()
-
+                Dim outDPA As DPA = entry.Tag
                 Dim olEmail As MailItem = olApp.CreateItem(OlItemType.olMailItem)
-                'olEmail = olApp.CreateItem(OlItemType.olMailItem)
                 Dim recipents As Recipients = olEmail.Recipients
-                recipents.Add(My.Settings.TO_EMAIL)
-                olEmail.SentOnBehalfOfName = My.Settings.FROM_EMAIL
-                olEmail.Subject = entry.SubItems(2).Text & " Deferred Payment Agreement"
-                olEmail.Body = entry.SubItems(1).Text & " " & entry.SubItems(3).Text
+                recipents.Add(outDPA.SendTo)
+
+                'Determine the sending address.
+                If outDPA.Type = DPAType.Active Then
+                    olEmail.SentOnBehalfOfName = My.Settings.ACTIVE_EMAIL
+                ElseIf outDPA.Type = DPAType.Cutin Then
+                    olEmail.SentOnBehalfOfName = My.Settings.CUTIN_EMAIL
+                Else
+                    LogAction(action:=outDPA.AccountNumber + " DPA type was not standard. Email NOT sent.")
+                    Continue For
+                End If
+
+                olEmail.Subject = outDPA.AccountNumber & " Deferred Payment Agreement"
+                olEmail.Body = My.Settings.Email_Body
                 olEmail.BodyFormat = OlBodyFormat.olFormatRichText
-                olEmail.Attachments.Add(entry.Tag.FileToSend)
-                olEmail.Send()
-            Catch
-                MsgBox("Emailing error!")
+                olEmail.Attachments.Add(outDPA.FileToSend)
+                olEmail.Save()
+            Catch ex As System.Exception
+                MsgBox(ex.Message)
             End Try
         Next
     End Sub

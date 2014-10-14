@@ -1,3 +1,13 @@
+## 2014-10-14
+
+Features:
+
+  - TDrive: Emailing should now work.
+
+  Code Improvements:
+
+  - KofaxIt: Fixed some minor annoyances.
+
 ## 2014-09-29
 
 Features:

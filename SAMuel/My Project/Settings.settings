@@ -26,17 +26,20 @@
     <Setting Name="SMTP_SERVER" Type="System.String" Scope="User">
       <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
-    <Setting Name="FROM_EMAIL" Type="System.String" Scope="User">
+    <Setting Name="ACTIVE_EMAIL" Type="System.String" Scope="Application">
       <Value Profile="(Default)">DEFAULT</Value>
-    </Setting>
-    <Setting Name="TO_EMAIL" Type="System.String" Scope="User">
-      <Value Profile="(Default)">zachary.karpinski@outlook.com</Value>
     </Setting>
     <Setting Name="Audit_Each_Email" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="Pdf995ini_File" Type="System.String" Scope="Application">
       <Value Profile="(Default)">DEFAULT</Value>
+    </Setting>
+    <Setting Name="CUTIN_EMAIL" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DEFAULT</Value>
+    </Setting>
+    <Setting Name="Email_Body" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
     </Setting>
   </Settings>
 </SettingsFile>
