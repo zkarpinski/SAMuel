@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Linq
 Imports Microsoft.Office.Interop
+Imports Microsoft.Office.Interop.Outlook
 
 Namespace Modules
 
@@ -37,12 +38,14 @@ Namespace Modules
 
             'Internal Data
             Public Skip As Boolean
+            Public Sent As Boolean
 
             Public Sub New(ByVal sFile As String)
                 Me.SourceFile = sFile
                 Me.CreationTime = File.GetCreationTime(sFile)
                 Me.AccountNumber = RegexAcc(Path.GetFileName(SourceFile), "\d{5}-\d{5}")
-                Me.SKIP = False
+                Me.Skip = False
+                Me.Sent = False
             End Sub
 
             ''' <summary>
@@ -111,7 +114,7 @@ Namespace Modules
             'Set active printer to PDF995
             Try
                 wordApplication.ActivePrinter = "PDF995"
-            Catch ex As Exception
+                    Catch
                         MsgBox("Printer error. Is the 'PDF995' printer installed?", MsgBoxStyle.Critical)
                         Me.Skip = True
                         objWdDoc.Close()
@@ -119,12 +122,12 @@ Namespace Modules
             End Try
 #End If
                     objWdDoc.PrintOut()
-                    Threading.Thread.Sleep(1000)
+                    Threading.Thread.Sleep(3000)
                     Me.FileToSend = TDrive_FOLDER & Path.GetFileNameWithoutExtension(Me.SourceFile) & ".pdf"
-                    If Not File.Exists(Me.FileToSend) Then
-                        MsgBox("Expected PDF was not created. Check the settings folder for SAMuel and PDF995.")
-                        Me.Skip = True
-                    End If
+                    'If Not File.Exists(Me.FileToSend) Then
+                    '    MsgBox("Expected PDF was not created. Check the settings folder for SAMuel and PDF995.")
+                    '    Me.Skip = True
+                    'End If
                     'Release document
                     objWdDoc.Close()
                 End With
@@ -142,6 +145,8 @@ Namespace Modules
 
         Public Sub ProcessFiles(sFiles() As String)
             Dim objWord As Word.Application
+            Dim olApp As Microsoft.Office.Interop.Outlook.Application =
+New Microsoft.Office.Interop.Outlook.Application
             Dim dpaList As New List(Of DPA)
 
             'Initiate word application object and minimize it
@@ -153,35 +158,46 @@ Namespace Modules
             'Setup the progress bar.
             FrmMain.ProgressBar.Maximum = sFiles.Length + 1
             FrmMain.ProgressBar.Value = 0
-            FrmMain.lblStatus.Text = "Parsing DPA files..."
 
-            'Create list of DPAs using LINQ
+            'For each DPA created from each file within the list of files...
             For Each newDPA As DPA In From sFile As String In sFiles Select New DPA(sFile)
+                FrmMain.lblStatus.Text = "Parsing " + Path.GetFileName(newDPA.SourceFile)
+                FrmMain.Refresh()
+
                 newDPA.ExtractDetailsFromDoc(objWord)
-                If Not newDPA.Skip Then
-                    dpaList.Add(newDPA)
-                End If
 
                 FrmMain.ProgressBar.Value += 1
+
+                'Move to next file if it's marked as skip
+                If newDPA.Skip Then Continue For
+
+                'Add each DPA to the list view for visual verification.
+                Dim lvi As ListViewItem = New ListViewItem(StrConv(newDPA.Type.ToString, VbStrConv.ProperCase))
+                lvi.SubItems.Add(newDPA.SendTo)
+                lvi.SubItems.Add(newDPA.AccountNumber)
+                lvi.SubItems.Add(newDPA.CustomerName)
+                lvi.Tag = newDPA
+                FrmMain.lvTDriveFiles.Items.Add(lvi)
+                dpaList.Add(newDPA)
+
+
+                'Email the DPA and move if sucessful.
+                FrmMain.lblStatus.Text = "Emailing the DPA..."
                 FrmMain.Refresh()
+                If SendEmail(newDPA, olApp) Then
+                    newDPA.Sent = True
+                Else
+                    ''TODO Log failed send email
+                End If
+                'Record completion time.
+                newDPA.Complete()
             Next
 
-
-            'UI Update
-            FrmMain.lblStatus.Text = "Updating UI..."
-            FrmMain.Refresh()
-
-            For Each letter As DPA In dpaList
-                'Add each DPA to the list view for visual verification.
-                Dim lvi As ListViewItem = New ListViewItem(StrConv(letter.Type.ToString, VbStrConv.ProperCase))
-                lvi.SubItems.Add(letter.SendTo)
-                lvi.SubItems.Add(letter.AccountNumber)
-                lvi.SubItems.Add(letter.CustomerName)
-                lvi.Tag = letter
-                FrmMain.lvTDriveFiles.Items.Add(lvi)
-
-                'Record completion time.
-                letter.Complete()
+            ''Move the DPA file if it was sent.
+            For Each dpa As DPA In dpaList
+                If dpa.Sent Then
+                    MoveEmailedFile(dpa.SourceFile, My.Settings.EmailedMoveFolder)
+                End If
             Next
 
             'UI Update
@@ -190,6 +206,50 @@ Namespace Modules
             'Cleanup
             objWord.Quit()
             objWord = Nothing
+            dpaList.Clear()
         End Sub
+
+        Private Function SendEmail(ByRef outDPA As DPA, ByRef olApp As Outlook.Application) As Boolean
+            Dim olEmail As MailItem = olApp.CreateItem(OlItemType.olMailItem)
+            Dim recipents As Recipients = olEmail.Recipients
+            recipents.Add(outDPA.SendTo)
+
+            'Determine the sending address.
+            If outDPA.Type = DPAType.Active Then
+                olEmail.SentOnBehalfOfName = My.Settings.ACTIVE_EMAIL
+            ElseIf outDPA.Type = DPAType.Cutin Then
+                olEmail.SentOnBehalfOfName = My.Settings.CUTIN_EMAIL
+            Else
+                Return False
+            End If
+
+            olEmail.Subject = outDPA.AccountNumber & " Deferred Payment Agreement"
+            olEmail.Body = My.Settings.Email_Body
+            olEmail.Body += vbCrLf + vbCrLf + vbCrLf
+            olEmail.BodyFormat = OlBodyFormat.olFormatRichText
+            olEmail.Attachments.Add(outDPA.FileToSend)
+            olEmail.Send()
+            System.Threading.Thread.Sleep(2000)
+            If olEmail.Sent Then
+                Return True
+            Else
+                Return False
+            End If
+        End Function
+
+        Private Sub MoveEmailedFile(SourceFile As String, moveToFolder As String)
+            Try
+
+                Dim destination As String = moveToFolder + Path.GetFileName(SourceFile)
+                ''If File.Exists(destination) Then
+                ''File.Delete(destination)
+                ''End If
+                File.Copy(SourceFile, destination, True)
+
+            Catch
+
+            End Try
+        End Sub
+
     End Module
 End Namespace

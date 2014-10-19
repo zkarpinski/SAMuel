@@ -39,7 +39,10 @@
       <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
     <Setting Name="Email_Body" Type="System.String" Scope="Application">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">DEFAULT</Value>
+    </Setting>
+    <Setting Name="EmailedMoveFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">EmailedMoveFolder</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -191,10 +191,19 @@ Namespace My
         
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("DEFAULT")>  _
         Public ReadOnly Property Email_Body() As String
             Get
                 Return CType(Me("Email_Body"),String)
+            End Get
+        End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("EmailedMoveFolder")>  _
+        Public ReadOnly Property EmailedMoveFolder() As String
+            Get
+                Return CType(Me("EmailedMoveFolder"),String)
             End Get
         End Property
     End Class

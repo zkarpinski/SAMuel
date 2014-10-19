@@ -426,7 +426,6 @@ Public Class FrmMain
         End If
         My.Settings.Save()
 
-
         'Fax the selected files
         If dlgOpen.ShowDialog() = DialogResult.OK Then
             objRightFax = ConnectToServer(strServerName, strUsername, bUseNTAuth)
@@ -736,6 +735,7 @@ Public Class FrmMain
 
     Private Sub DragDropTDrive(sender As Object, e As DragEventArgs) Handles tabTDrive.DragDrop
         Reset_ProgressBar()
+        Me.lvTDriveFiles.Items.Clear()
         If e.Data.GetDataPresent(DataFormats.FileDrop) Then
             Dim files As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
             Try
@@ -771,6 +771,7 @@ Public Class FrmMain
 
                 olEmail.Subject = outDPA.AccountNumber & " Deferred Payment Agreement"
                 olEmail.Body = My.Settings.Email_Body
+                olEmail.Body += vbCrLf + vbCrLf + vbCrLf
                 olEmail.BodyFormat = OlBodyFormat.olFormatRichText
                 olEmail.Attachments.Add(outDPA.FileToSend)
                 olEmail.Save()

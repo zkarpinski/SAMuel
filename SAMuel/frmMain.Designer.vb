@@ -23,7 +23,7 @@ Partial Class FrmMain
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ListViewItem2 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
+        Dim ListViewItem1 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FrmMain))
         Me.dlgOpen = New System.Windows.Forms.OpenFileDialog()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
@@ -155,7 +155,7 @@ Partial Class FrmMain
         Me.TabControl1.Controls.Add(Me.tabDPA)
         Me.TabControl1.Controls.Add(Me.tabTDrive)
         Me.TabControl1.Location = New System.Drawing.Point(-1, 33)
-        Me.TabControl1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.TabControl1.Margin = New System.Windows.Forms.Padding(4)
         Me.TabControl1.Name = "TabControl1"
         Me.TabControl1.SelectedIndex = 0
         Me.TabControl1.Size = New System.Drawing.Size(585, 389)
@@ -173,9 +173,9 @@ Partial Class FrmMain
         Me.TabPage1.Controls.Add(Me.btnNext)
         Me.TabPage1.Controls.Add(Me.btnRun)
         Me.TabPage1.Location = New System.Drawing.Point(4, 25)
-        Me.TabPage1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.TabPage1.Margin = New System.Windows.Forms.Padding(4)
         Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.TabPage1.Padding = New System.Windows.Forms.Padding(4)
         Me.TabPage1.Size = New System.Drawing.Size(577, 360)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Outlook"
@@ -185,10 +185,10 @@ Partial Class FrmMain
         '
         Me.lstEmailAttachments.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.hType, Me.hName})
         Me.lstEmailAttachments.FullRowSelect = True
-        ListViewItem2.StateImageIndex = 0
-        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem2})
+        ListViewItem1.StateImageIndex = 0
+        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1})
         Me.lstEmailAttachments.Location = New System.Drawing.Point(305, 9)
-        Me.lstEmailAttachments.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.lstEmailAttachments.Margin = New System.Windows.Forms.Padding(4)
         Me.lstEmailAttachments.Name = "lstEmailAttachments"
         Me.lstEmailAttachments.Size = New System.Drawing.Size(260, 312)
         Me.lstEmailAttachments.TabIndex = 18
@@ -209,7 +209,7 @@ Partial Class FrmMain
         '
         Me.chkValidOnly.AutoSize = True
         Me.chkValidOnly.Location = New System.Drawing.Point(4, 332)
-        Me.chkValidOnly.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.chkValidOnly.Margin = New System.Windows.Forms.Padding(4)
         Me.chkValidOnly.Name = "chkValidOnly"
         Me.chkValidOnly.Size = New System.Drawing.Size(94, 21)
         Me.chkValidOnly.TabIndex = 17
@@ -229,9 +229,9 @@ Partial Class FrmMain
         Me.groupOLAudit.Controls.Add(Me.txtSubject)
         Me.groupOLAudit.Controls.Add(Me.txtAcc)
         Me.groupOLAudit.Location = New System.Drawing.Point(5, 1)
-        Me.groupOLAudit.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.groupOLAudit.Margin = New System.Windows.Forms.Padding(4)
         Me.groupOLAudit.Name = "groupOLAudit"
-        Me.groupOLAudit.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.groupOLAudit.Padding = New System.Windows.Forms.Padding(4)
         Me.groupOLAudit.Size = New System.Drawing.Size(292, 320)
         Me.groupOLAudit.TabIndex = 16
         Me.groupOLAudit.TabStop = False
@@ -242,7 +242,7 @@ Partial Class FrmMain
         Me.rtbEmailBody.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.rtbEmailBody.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.rtbEmailBody.Location = New System.Drawing.Point(-1, 130)
-        Me.rtbEmailBody.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.rtbEmailBody.Margin = New System.Windows.Forms.Padding(4)
         Me.rtbEmailBody.Name = "rtbEmailBody"
         Me.rtbEmailBody.ReadOnly = True
         Me.rtbEmailBody.Size = New System.Drawing.Size(291, 189)
@@ -265,7 +265,7 @@ Partial Class FrmMain
         'txtFrom
         '
         Me.txtFrom.Location = New System.Drawing.Point(73, 42)
-        Me.txtFrom.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtFrom.Margin = New System.Windows.Forms.Padding(4)
         Me.txtFrom.Name = "txtFrom"
         Me.txtFrom.ReadOnly = True
         Me.txtFrom.Size = New System.Drawing.Size(209, 22)
@@ -323,7 +323,7 @@ Partial Class FrmMain
         'txtSubject
         '
         Me.txtSubject.Location = New System.Drawing.Point(73, 14)
-        Me.txtSubject.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtSubject.Margin = New System.Windows.Forms.Padding(4)
         Me.txtSubject.Name = "txtSubject"
         Me.txtSubject.ReadOnly = True
         Me.txtSubject.Size = New System.Drawing.Size(209, 22)
@@ -332,7 +332,7 @@ Partial Class FrmMain
         'txtAcc
         '
         Me.txtAcc.Location = New System.Drawing.Point(73, 69)
-        Me.txtAcc.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtAcc.Margin = New System.Windows.Forms.Padding(4)
         Me.txtAcc.Name = "txtAcc"
         Me.txtAcc.Size = New System.Drawing.Size(209, 22)
         Me.txtAcc.TabIndex = 7
@@ -341,7 +341,7 @@ Partial Class FrmMain
         '
         Me.btnReject.Enabled = False
         Me.btnReject.Location = New System.Drawing.Point(353, 329)
-        Me.btnReject.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnReject.Margin = New System.Windows.Forms.Padding(4)
         Me.btnReject.Name = "btnReject"
         Me.btnReject.Size = New System.Drawing.Size(100, 28)
         Me.btnReject.TabIndex = 8
@@ -352,7 +352,7 @@ Partial Class FrmMain
         '
         Me.btnCancel.Enabled = False
         Me.btnCancel.Location = New System.Drawing.Point(471, 329)
-        Me.btnCancel.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnCancel.Margin = New System.Windows.Forms.Padding(4)
         Me.btnCancel.Name = "btnCancel"
         Me.btnCancel.Size = New System.Drawing.Size(100, 28)
         Me.btnCancel.TabIndex = 11
@@ -362,7 +362,7 @@ Partial Class FrmMain
         'btnNext
         '
         Me.btnNext.Location = New System.Drawing.Point(236, 329)
-        Me.btnNext.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnNext.Margin = New System.Windows.Forms.Padding(4)
         Me.btnNext.Name = "btnNext"
         Me.btnNext.Size = New System.Drawing.Size(100, 28)
         Me.btnNext.TabIndex = 10
@@ -373,7 +373,7 @@ Partial Class FrmMain
         'btnRun
         '
         Me.btnRun.Location = New System.Drawing.Point(236, 329)
-        Me.btnRun.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnRun.Margin = New System.Windows.Forms.Padding(4)
         Me.btnRun.Name = "btnRun"
         Me.btnRun.Size = New System.Drawing.Size(100, 28)
         Me.btnRun.TabIndex = 0
@@ -388,9 +388,9 @@ Partial Class FrmMain
         Me.tabWordToTiff.Controls.Add(Me.lblDragAndDropWord)
         Me.tabWordToTiff.Controls.Add(Me.btnConvert)
         Me.tabWordToTiff.Location = New System.Drawing.Point(4, 25)
-        Me.tabWordToTiff.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.tabWordToTiff.Margin = New System.Windows.Forms.Padding(4)
         Me.tabWordToTiff.Name = "tabWordToTiff"
-        Me.tabWordToTiff.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.tabWordToTiff.Padding = New System.Windows.Forms.Padding(4)
         Me.tabWordToTiff.Size = New System.Drawing.Size(577, 360)
         Me.tabWordToTiff.TabIndex = 1
         Me.tabWordToTiff.Text = "Convert Files"
@@ -402,9 +402,9 @@ Partial Class FrmMain
         Me.GroupBox4.Controls.Add(Me.rbConvertIMAGE)
         Me.GroupBox4.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox4.Location = New System.Drawing.Point(8, 274)
-        Me.GroupBox4.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.GroupBox4.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.GroupBox4.Padding = New System.Windows.Forms.Padding(4)
         Me.GroupBox4.Size = New System.Drawing.Size(108, 81)
         Me.GroupBox4.TabIndex = 7
         Me.GroupBox4.TabStop = False
@@ -416,7 +416,7 @@ Partial Class FrmMain
         Me.rbConvertDOC.Checked = True
         Me.rbConvertDOC.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.rbConvertDOC.Location = New System.Drawing.Point(8, 23)
-        Me.rbConvertDOC.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.rbConvertDOC.Margin = New System.Windows.Forms.Padding(4)
         Me.rbConvertDOC.Name = "rbConvertDOC"
         Me.rbConvertDOC.Size = New System.Drawing.Size(92, 21)
         Me.rbConvertDOC.TabIndex = 5
@@ -429,7 +429,7 @@ Partial Class FrmMain
         Me.rbConvertIMAGE.AutoSize = True
         Me.rbConvertIMAGE.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.rbConvertIMAGE.Location = New System.Drawing.Point(8, 52)
-        Me.rbConvertIMAGE.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.rbConvertIMAGE.Margin = New System.Windows.Forms.Padding(4)
         Me.rbConvertIMAGE.Name = "rbConvertIMAGE"
         Me.rbConvertIMAGE.Size = New System.Drawing.Size(67, 21)
         Me.rbConvertIMAGE.TabIndex = 4
@@ -442,9 +442,9 @@ Partial Class FrmMain
         Me.GroupBox3.Controls.Add(Me.rbConvertPDF)
         Me.GroupBox3.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.GroupBox3.Location = New System.Drawing.Point(116, 274)
-        Me.GroupBox3.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.GroupBox3.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox3.Name = "GroupBox3"
-        Me.GroupBox3.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.GroupBox3.Padding = New System.Windows.Forms.Padding(4)
         Me.GroupBox3.Size = New System.Drawing.Size(100, 81)
         Me.GroupBox3.TabIndex = 6
         Me.GroupBox3.TabStop = False
@@ -456,7 +456,7 @@ Partial Class FrmMain
         Me.rbConvertTiff.Checked = True
         Me.rbConvertTiff.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.rbConvertTiff.Location = New System.Drawing.Point(8, 23)
-        Me.rbConvertTiff.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.rbConvertTiff.Margin = New System.Windows.Forms.Padding(4)
         Me.rbConvertTiff.Name = "rbConvertTiff"
         Me.rbConvertTiff.Size = New System.Drawing.Size(49, 21)
         Me.rbConvertTiff.TabIndex = 5
@@ -469,7 +469,7 @@ Partial Class FrmMain
         Me.rbConvertPDF.AutoSize = True
         Me.rbConvertPDF.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.rbConvertPDF.Location = New System.Drawing.Point(8, 52)
-        Me.rbConvertPDF.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.rbConvertPDF.Margin = New System.Windows.Forms.Padding(4)
         Me.rbConvertPDF.Name = "rbConvertPDF"
         Me.rbConvertPDF.Size = New System.Drawing.Size(56, 21)
         Me.rbConvertPDF.TabIndex = 4
@@ -490,7 +490,7 @@ Partial Class FrmMain
         'btnConvert
         '
         Me.btnConvert.Location = New System.Drawing.Point(236, 326)
-        Me.btnConvert.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnConvert.Margin = New System.Windows.Forms.Padding(4)
         Me.btnConvert.Name = "btnConvert"
         Me.btnConvert.Size = New System.Drawing.Size(100, 28)
         Me.btnConvert.TabIndex = 2
@@ -504,7 +504,7 @@ Partial Class FrmMain
         Me.tabRFax.Controls.Add(Me.grpRFServer)
         Me.tabRFax.Controls.Add(Me.btnRFax)
         Me.tabRFax.Location = New System.Drawing.Point(4, 25)
-        Me.tabRFax.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.tabRFax.Margin = New System.Windows.Forms.Padding(4)
         Me.tabRFax.Name = "tabRFax"
         Me.tabRFax.Size = New System.Drawing.Size(577, 360)
         Me.tabRFax.TabIndex = 4
@@ -515,7 +515,7 @@ Partial Class FrmMain
         '
         Me.chkRFSaveRec.AutoSize = True
         Me.chkRFSaveRec.Location = New System.Drawing.Point(9, 329)
-        Me.chkRFSaveRec.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.chkRFSaveRec.Margin = New System.Windows.Forms.Padding(4)
         Me.chkRFSaveRec.Name = "chkRFSaveRec"
         Me.chkRFSaveRec.Size = New System.Drawing.Size(200, 21)
         Me.chkRFSaveRec.TabIndex = 13
@@ -530,9 +530,9 @@ Partial Class FrmMain
         Me.GroupBox2.Controls.Add(Me.txtRFRecName)
         Me.GroupBox2.Controls.Add(Me.lblRFRecName)
         Me.GroupBox2.Location = New System.Drawing.Point(25, 128)
-        Me.GroupBox2.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.GroupBox2.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.GroupBox2.Padding = New System.Windows.Forms.Padding(4)
         Me.GroupBox2.Size = New System.Drawing.Size(508, 117)
         Me.GroupBox2.TabIndex = 12
         Me.GroupBox2.TabStop = False
@@ -544,7 +544,7 @@ Partial Class FrmMain
         Me.chkRFCoverSheet.Checked = True
         Me.chkRFCoverSheet.CheckState = System.Windows.Forms.CheckState.Checked
         Me.chkRFCoverSheet.Location = New System.Drawing.Point(23, 96)
-        Me.chkRFCoverSheet.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.chkRFCoverSheet.Margin = New System.Windows.Forms.Padding(4)
         Me.chkRFCoverSheet.Name = "chkRFCoverSheet"
         Me.chkRFCoverSheet.Size = New System.Drawing.Size(157, 21)
         Me.chkRFCoverSheet.TabIndex = 11
@@ -555,7 +555,7 @@ Partial Class FrmMain
         'txtRFRecFax
         '
         Me.txtRFRecFax.Location = New System.Drawing.Point(131, 59)
-        Me.txtRFRecFax.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtRFRecFax.Margin = New System.Windows.Forms.Padding(4)
         Me.txtRFRecFax.Name = "txtRFRecFax"
         Me.txtRFRecFax.Size = New System.Drawing.Size(132, 22)
         Me.txtRFRecFax.TabIndex = 6
@@ -573,7 +573,7 @@ Partial Class FrmMain
         'txtRFRecName
         '
         Me.txtRFRecName.Location = New System.Drawing.Point(131, 27)
-        Me.txtRFRecName.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtRFRecName.Margin = New System.Windows.Forms.Padding(4)
         Me.txtRFRecName.Name = "txtRFRecName"
         Me.txtRFRecName.Size = New System.Drawing.Size(132, 22)
         Me.txtRFRecName.TabIndex = 4
@@ -598,9 +598,9 @@ Partial Class FrmMain
         Me.grpRFServer.Controls.Add(Me.txtRFuser)
         Me.grpRFServer.Controls.Add(Me.lblRFuser)
         Me.grpRFServer.Location = New System.Drawing.Point(25, 4)
-        Me.grpRFServer.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.grpRFServer.Margin = New System.Windows.Forms.Padding(4)
         Me.grpRFServer.Name = "grpRFServer"
-        Me.grpRFServer.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.grpRFServer.Padding = New System.Windows.Forms.Padding(4)
         Me.grpRFServer.Size = New System.Drawing.Size(508, 117)
         Me.grpRFServer.TabIndex = 11
         Me.grpRFServer.TabStop = False
@@ -610,7 +610,7 @@ Partial Class FrmMain
         '
         Me.chkRFNTauth.AutoSize = True
         Me.chkRFNTauth.Location = New System.Drawing.Point(29, 80)
-        Me.chkRFNTauth.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.chkRFNTauth.Margin = New System.Windows.Forms.Padding(4)
         Me.chkRFNTauth.Name = "chkRFNTauth"
         Me.chkRFNTauth.Size = New System.Drawing.Size(172, 21)
         Me.chkRFNTauth.TabIndex = 8
@@ -631,7 +631,7 @@ Partial Class FrmMain
         'txtRFsvr
         '
         Me.txtRFsvr.Location = New System.Drawing.Point(85, 27)
-        Me.txtRFsvr.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtRFsvr.Margin = New System.Windows.Forms.Padding(4)
         Me.txtRFsvr.Name = "txtRFsvr"
         Me.txtRFsvr.Size = New System.Drawing.Size(132, 22)
         Me.txtRFsvr.TabIndex = 4
@@ -639,7 +639,7 @@ Partial Class FrmMain
         'txtRFpw
         '
         Me.txtRFpw.Location = New System.Drawing.Point(340, 59)
-        Me.txtRFpw.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtRFpw.Margin = New System.Windows.Forms.Padding(4)
         Me.txtRFpw.Name = "txtRFpw"
         Me.txtRFpw.Size = New System.Drawing.Size(132, 22)
         Me.txtRFpw.TabIndex = 9
@@ -657,7 +657,7 @@ Partial Class FrmMain
         'txtRFuser
         '
         Me.txtRFuser.Location = New System.Drawing.Point(340, 27)
-        Me.txtRFuser.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtRFuser.Margin = New System.Windows.Forms.Padding(4)
         Me.txtRFuser.Name = "txtRFuser"
         Me.txtRFuser.Size = New System.Drawing.Size(132, 22)
         Me.txtRFuser.TabIndex = 6
@@ -675,7 +675,7 @@ Partial Class FrmMain
         'btnRFax
         '
         Me.btnRFax.Location = New System.Drawing.Point(236, 326)
-        Me.btnRFax.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnRFax.Margin = New System.Windows.Forms.Padding(4)
         Me.btnRFax.Name = "btnRFax"
         Me.btnRFax.Size = New System.Drawing.Size(100, 28)
         Me.btnRFax.TabIndex = 3
@@ -693,9 +693,9 @@ Partial Class FrmMain
         Me.tabKofax.Controls.Add(Me.lblKFBatchName)
         Me.tabKofax.Controls.Add(Me.txtKFBatchName)
         Me.tabKofax.Location = New System.Drawing.Point(4, 25)
-        Me.tabKofax.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.tabKofax.Margin = New System.Windows.Forms.Padding(4)
         Me.tabKofax.Name = "tabKofax"
-        Me.tabKofax.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.tabKofax.Padding = New System.Windows.Forms.Padding(4)
         Me.tabKofax.Size = New System.Drawing.Size(577, 360)
         Me.tabKofax.TabIndex = 5
         Me.tabKofax.Text = "Kofax It"
@@ -715,7 +715,7 @@ Partial Class FrmMain
         'txtKFComments
         '
         Me.txtKFComments.Location = New System.Drawing.Point(116, 110)
-        Me.txtKFComments.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtKFComments.Margin = New System.Windows.Forms.Padding(4)
         Me.txtKFComments.Name = "txtKFComments"
         Me.txtKFComments.Size = New System.Drawing.Size(219, 22)
         Me.txtKFComments.TabIndex = 18
@@ -725,9 +725,9 @@ Partial Class FrmMain
         Me.gbKFSource.Controls.Add(Me.rbKFUSMail)
         Me.gbKFSource.Controls.Add(Me.rbKFEmail)
         Me.gbKFSource.Location = New System.Drawing.Point(364, 31)
-        Me.gbKFSource.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.gbKFSource.Margin = New System.Windows.Forms.Padding(4)
         Me.gbKFSource.Name = "gbKFSource"
-        Me.gbKFSource.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.gbKFSource.Padding = New System.Windows.Forms.Padding(4)
         Me.gbKFSource.Size = New System.Drawing.Size(141, 71)
         Me.gbKFSource.TabIndex = 17
         Me.gbKFSource.TabStop = False
@@ -737,7 +737,7 @@ Partial Class FrmMain
         '
         Me.rbKFUSMail.AutoSize = True
         Me.rbKFUSMail.Location = New System.Drawing.Point(9, 47)
-        Me.rbKFUSMail.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.rbKFUSMail.Margin = New System.Windows.Forms.Padding(4)
         Me.rbKFUSMail.Name = "rbKFUSMail"
         Me.rbKFUSMail.Size = New System.Drawing.Size(77, 21)
         Me.rbKFUSMail.TabIndex = 1
@@ -749,7 +749,7 @@ Partial Class FrmMain
         Me.rbKFEmail.AutoSize = True
         Me.rbKFEmail.Checked = True
         Me.rbKFEmail.Location = New System.Drawing.Point(9, 25)
-        Me.rbKFEmail.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.rbKFEmail.Margin = New System.Windows.Forms.Padding(4)
         Me.rbKFEmail.Name = "rbKFEmail"
         Me.rbKFEmail.Size = New System.Drawing.Size(63, 21)
         Me.rbKFEmail.TabIndex = 0
@@ -775,7 +775,7 @@ Partial Class FrmMain
         Me.cbKFBatchType.FormattingEnabled = True
         Me.cbKFBatchType.Items.AddRange(New Object() {"0003 - BILLING DISPUTE", "0014 - DENIAL OF SERVICE", "0084 - DPA-SYRACUSE PROCESSING", "0026 - LIFE SUPPORT", "0049 - MEDICAL-INFO ONLY", "0046 - NO ACTION-INFO ONLY", "0033 - SAMS"})
         Me.cbKFBatchType.Location = New System.Drawing.Point(116, 59)
-        Me.cbKFBatchType.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.cbKFBatchType.Margin = New System.Windows.Forms.Padding(4)
         Me.cbKFBatchType.Name = "cbKFBatchType"
         Me.cbKFBatchType.Size = New System.Drawing.Size(219, 23)
         Me.cbKFBatchType.TabIndex = 15
@@ -783,7 +783,7 @@ Partial Class FrmMain
         'btnKFImport
         '
         Me.btnKFImport.Location = New System.Drawing.Point(236, 326)
-        Me.btnKFImport.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnKFImport.Margin = New System.Windows.Forms.Padding(4)
         Me.btnKFImport.Name = "btnKFImport"
         Me.btnKFImport.Size = New System.Drawing.Size(100, 28)
         Me.btnKFImport.TabIndex = 14
@@ -804,7 +804,7 @@ Partial Class FrmMain
         'txtKFBatchName
         '
         Me.txtKFBatchName.Location = New System.Drawing.Point(116, 27)
-        Me.txtKFBatchName.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtKFBatchName.Margin = New System.Windows.Forms.Padding(4)
         Me.txtKFBatchName.Name = "txtKFBatchName"
         Me.txtKFBatchName.Size = New System.Drawing.Size(219, 22)
         Me.txtKFBatchName.TabIndex = 12
@@ -820,7 +820,7 @@ Partial Class FrmMain
         Me.tabAddContact.Controls.Add(Me.lblCAccount)
         Me.tabAddContact.Controls.Add(Me.btnCAddContact)
         Me.tabAddContact.Location = New System.Drawing.Point(4, 25)
-        Me.tabAddContact.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.tabAddContact.Margin = New System.Windows.Forms.Padding(4)
         Me.tabAddContact.Name = "tabAddContact"
         Me.tabAddContact.Size = New System.Drawing.Size(577, 360)
         Me.tabAddContact.TabIndex = 6
@@ -830,7 +830,7 @@ Partial Class FrmMain
         'btnStopAddContacts
         '
         Me.btnStopAddContacts.Location = New System.Drawing.Point(401, 325)
-        Me.btnStopAddContacts.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnStopAddContacts.Margin = New System.Windows.Forms.Padding(4)
         Me.btnStopAddContacts.Name = "btnStopAddContacts"
         Me.btnStopAddContacts.Size = New System.Drawing.Size(100, 28)
         Me.btnStopAddContacts.TabIndex = 11
@@ -842,7 +842,7 @@ Partial Class FrmMain
         Me.lbxContactAlerts.FormattingEnabled = True
         Me.lbxContactAlerts.ItemHeight = 16
         Me.lbxContactAlerts.Location = New System.Drawing.Point(47, 89)
-        Me.lbxContactAlerts.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.lbxContactAlerts.Margin = New System.Windows.Forms.Padding(4)
         Me.lbxContactAlerts.Name = "lbxContactAlerts"
         Me.lbxContactAlerts.Size = New System.Drawing.Size(464, 116)
         Me.lbxContactAlerts.TabIndex = 10
@@ -861,7 +861,7 @@ Partial Class FrmMain
         'rtbCContact
         '
         Me.rtbCContact.Location = New System.Drawing.Point(47, 261)
-        Me.rtbCContact.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.rtbCContact.Margin = New System.Windows.Forms.Padding(4)
         Me.rtbCContact.Name = "rtbCContact"
         Me.rtbCContact.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedVertical
         Me.rtbCContact.Size = New System.Drawing.Size(464, 57)
@@ -872,7 +872,7 @@ Partial Class FrmMain
         '
         Me.mtxtCAccount.BackColor = System.Drawing.Color.Yellow
         Me.mtxtCAccount.Location = New System.Drawing.Point(103, 38)
-        Me.mtxtCAccount.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.mtxtCAccount.Margin = New System.Windows.Forms.Padding(4)
         Me.mtxtCAccount.Mask = "00000-99999"
         Me.mtxtCAccount.Name = "mtxtCAccount"
         Me.mtxtCAccount.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
@@ -895,7 +895,7 @@ Partial Class FrmMain
         'btnCAddContact
         '
         Me.btnCAddContact.Location = New System.Drawing.Point(236, 326)
-        Me.btnCAddContact.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnCAddContact.Margin = New System.Windows.Forms.Padding(4)
         Me.btnCAddContact.Name = "btnCAddContact"
         Me.btnCAddContact.Size = New System.Drawing.Size(100, 28)
         Me.btnCAddContact.TabIndex = 0
@@ -916,7 +916,7 @@ Partial Class FrmMain
         Me.tabDPA.Controls.Add(Me.chkMinPayment)
         Me.tabDPA.Controls.Add(Me.Label1)
         Me.tabDPA.Location = New System.Drawing.Point(4, 25)
-        Me.tabDPA.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.tabDPA.Margin = New System.Windows.Forms.Padding(4)
         Me.tabDPA.Name = "tabDPA"
         Me.tabDPA.Size = New System.Drawing.Size(577, 360)
         Me.tabDPA.TabIndex = 3
@@ -927,7 +927,7 @@ Partial Class FrmMain
         '
         Me.CheckBox1.AutoSize = True
         Me.CheckBox1.Location = New System.Drawing.Point(8, 107)
-        Me.CheckBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.CheckBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.CheckBox1.Name = "CheckBox1"
         Me.CheckBox1.Size = New System.Drawing.Size(116, 21)
         Me.CheckBox1.TabIndex = 14
@@ -937,7 +937,7 @@ Partial Class FrmMain
         'btnBudgetBill
         '
         Me.btnBudgetBill.Location = New System.Drawing.Point(364, 326)
-        Me.btnBudgetBill.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnBudgetBill.Margin = New System.Windows.Forms.Padding(4)
         Me.btnBudgetBill.Name = "btnBudgetBill"
         Me.btnBudgetBill.Size = New System.Drawing.Size(100, 28)
         Me.btnBudgetBill.TabIndex = 13
@@ -949,7 +949,7 @@ Partial Class FrmMain
         '
         Me.mtxtDPAAcc.BackColor = System.Drawing.Color.Yellow
         Me.mtxtDPAAcc.Location = New System.Drawing.Point(88, 18)
-        Me.mtxtDPAAcc.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.mtxtDPAAcc.Margin = New System.Windows.Forms.Padding(4)
         Me.mtxtDPAAcc.Mask = "00000-99999"
         Me.mtxtDPAAcc.Name = "mtxtDPAAcc"
         Me.mtxtDPAAcc.PromptChar = Global.Microsoft.VisualBasic.ChrW(32)
@@ -961,9 +961,9 @@ Partial Class FrmMain
         'GroupBox1
         '
         Me.GroupBox1.Location = New System.Drawing.Point(12, 143)
-        Me.GroupBox1.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.GroupBox1.Margin = New System.Windows.Forms.Padding(4)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Padding = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.GroupBox1.Padding = New System.Windows.Forms.Padding(4)
         Me.GroupBox1.Size = New System.Drawing.Size(559, 182)
         Me.GroupBox1.TabIndex = 12
         Me.GroupBox1.TabStop = False
@@ -983,7 +983,7 @@ Partial Class FrmMain
         'txtDPAmonthly
         '
         Me.txtDPAmonthly.Location = New System.Drawing.Point(319, 50)
-        Me.txtDPAmonthly.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtDPAmonthly.Margin = New System.Windows.Forms.Padding(4)
         Me.txtDPAmonthly.Name = "txtDPAmonthly"
         Me.txtDPAmonthly.Size = New System.Drawing.Size(132, 22)
         Me.txtDPAmonthly.TabIndex = 3
@@ -1002,7 +1002,7 @@ Partial Class FrmMain
         'txtDPAdown
         '
         Me.txtDPAdown.Location = New System.Drawing.Point(88, 50)
-        Me.txtDPAdown.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.txtDPAdown.Margin = New System.Windows.Forms.Padding(4)
         Me.txtDPAdown.Name = "txtDPAdown"
         Me.txtDPAdown.Size = New System.Drawing.Size(132, 22)
         Me.txtDPAdown.TabIndex = 2
@@ -1010,7 +1010,7 @@ Partial Class FrmMain
         'btnDPAprocess
         '
         Me.btnDPAprocess.Location = New System.Drawing.Point(236, 326)
-        Me.btnDPAprocess.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnDPAprocess.Margin = New System.Windows.Forms.Padding(4)
         Me.btnDPAprocess.Name = "btnDPAprocess"
         Me.btnDPAprocess.Size = New System.Drawing.Size(100, 28)
         Me.btnDPAprocess.TabIndex = 10
@@ -1021,7 +1021,7 @@ Partial Class FrmMain
         '
         Me.chkMinPayment.AutoSize = True
         Me.chkMinPayment.Location = New System.Drawing.Point(8, 82)
-        Me.chkMinPayment.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.chkMinPayment.Margin = New System.Windows.Forms.Padding(4)
         Me.chkMinPayment.Name = "chkMinPayment"
         Me.chkMinPayment.Size = New System.Drawing.Size(152, 21)
         Me.chkMinPayment.TabIndex = 4
@@ -1046,7 +1046,7 @@ Partial Class FrmMain
         Me.tabTDrive.Controls.Add(Me.btnTDCreateEmail)
         Me.tabTDrive.Controls.Add(Me.lvTDriveFiles)
         Me.tabTDrive.Location = New System.Drawing.Point(4, 25)
-        Me.tabTDrive.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.tabTDrive.Margin = New System.Windows.Forms.Padding(4)
         Me.tabTDrive.Name = "tabTDrive"
         Me.tabTDrive.Size = New System.Drawing.Size(577, 360)
         Me.tabTDrive.TabIndex = 7
@@ -1056,7 +1056,7 @@ Partial Class FrmMain
         'btnTDClear
         '
         Me.btnTDClear.Location = New System.Drawing.Point(475, 158)
-        Me.btnTDClear.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnTDClear.Margin = New System.Windows.Forms.Padding(4)
         Me.btnTDClear.Name = "btnTDClear"
         Me.btnTDClear.Size = New System.Drawing.Size(85, 27)
         Me.btnTDClear.TabIndex = 2
@@ -1066,7 +1066,7 @@ Partial Class FrmMain
         'btnTDCreateEmail
         '
         Me.btnTDCreateEmail.Location = New System.Drawing.Point(216, 325)
-        Me.btnTDCreateEmail.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.btnTDCreateEmail.Margin = New System.Windows.Forms.Padding(4)
         Me.btnTDCreateEmail.Name = "btnTDCreateEmail"
         Me.btnTDCreateEmail.Size = New System.Drawing.Size(119, 28)
         Me.btnTDCreateEmail.TabIndex = 1
@@ -1078,7 +1078,7 @@ Partial Class FrmMain
         Me.lvTDriveFiles.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.colType, Me.colSendTo, Me.colAcc, Me.colName})
         Me.lvTDriveFiles.FullRowSelect = True
         Me.lvTDriveFiles.Location = New System.Drawing.Point(5, 17)
-        Me.lvTDriveFiles.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.lvTDriveFiles.Margin = New System.Windows.Forms.Padding(4)
         Me.lvTDriveFiles.Name = "lvTDriveFiles"
         Me.lvTDriveFiles.Size = New System.Drawing.Size(564, 132)
         Me.lvTDriveFiles.TabIndex = 0
@@ -1111,7 +1111,7 @@ Partial Class FrmMain
         'ProgressBar
         '
         Me.ProgressBar.Location = New System.Drawing.Point(-1, 421)
-        Me.ProgressBar.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.ProgressBar.Margin = New System.Windows.Forms.Padding(4)
         Me.ProgressBar.Name = "ProgressBar"
         Me.ProgressBar.Size = New System.Drawing.Size(585, 28)
         Me.ProgressBar.TabIndex = 4
@@ -1220,7 +1220,7 @@ Partial Class FrmMain
         Me.HelpButton = True
         Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MainMenuStrip = Me.MenuStrip1
-        Me.Margin = New System.Windows.Forms.Padding(4, 4, 4, 4)
+        Me.Margin = New System.Windows.Forms.Padding(4)
         Me.MaximizeBox = False
         Me.Name = "FrmMain"
         Me.Text = "SAMuel"
