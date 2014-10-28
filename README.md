@@ -8,16 +8,18 @@ __Service Application Manager Unified Expediting Library (work in progress)__
 A toolset designed to automate critical tasks performed daily with my work at National Grid, during my free time at home.
 
 ##Features
-* Convert documents and images to tiffs or pdfs.
-* Process Emails
-    * Resize if larger then a page.
-	* Compress and save the attachment as .tiff
-    * Add each email, with it's corresponding account number, as a document containing each attachment as a page to an XML file.
-* Auto-generation of XML files to be imported into Kofax with the account number and batch type pre-filled.    
-* Integration with RightFax
-* Save user settings
+ * Convert documents and images to tiffs or pdfs with click of a button (or drag 'n drop).
+ * Process Emails
+  * Resize attachments if larger than a letter page.
+  * Compress and save the attachment as .tiff
+  * Add each email, with it's corresponding account number, to an XML file to be imported.
+ * Auto-generation of XML files to be imported into Kofax with the account number and batch type pre-filled.    
+ * Integration with RightFax to send faxes.
+ * Email documents to customers using Outlook.
+ * Save user settings.
 
 ##Requirements
+
 * .NET Framework v4.0+
 * Microsoft Office 2003+
 * Windows XP, Vista, 7, 8 or 8.1
@@ -27,16 +29,16 @@ A toolset designed to automate critical tasks performed daily with my work at Na
 
 ##Build Requirements
 * Visual Studio 2013
-* [.Net Framwework v4.0](http://www.microsoft.com/en-us/download/details.aspx?id=17851)
+* [.Net Framework v4.0](http://www.microsoft.com/en-us/download/details.aspx?id=17851)
 * RightFax RFCOMAPI.dll
 * [Office 2003 Update: Redistributable Primary Interop](http://support.microsoft.com/kb/897646)
 
-##Programming Techniques
-
-* Hashtables/Dictionaries
-* Custom Classes
-* Overloaded Functions
-
+##Coming Soon.
+ * Create database of customer emails associated with their account/customer number.
+ * Email documents to customers without user interaction. (Currently creates drafts).
+ * Process predefined Outlook mailboxes without user selection.
+ * Auto-generate XML files without user selecting batch type or name.
+ * Overhauling.
 
 ##FEEDBACK
 

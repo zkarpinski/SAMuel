@@ -1,12 +1,10 @@
 ﻿Imports System.IO
-Imports System.Linq
-Imports Microsoft.Office.Interop
+Imports Microsoft.Office.Interop.Word
+Imports System.Threading
 Imports Microsoft.Office.Interop.Outlook
 
 Namespace Modules
-
     Module TDriveModule
-
         Public Enum DeliveryType As Byte
             Err = 0
             Email = 1
@@ -48,22 +46,25 @@ Namespace Modules
                 Me.Sent = False
             End Sub
 
+            
             ''' <summary>
-            ''' Parses the word document for the Send To info.
+            '''     Parses the word document for the Send To info.
             ''' </summary>
             ''' <param name="wordApplication">Reference to an open word application object.</param>
             ''' <remarks></remarks>
-            Public Sub ExtractDetailsFromDoc(ByRef wordApplication As Word.Application)
+            Public Sub ExtractDetailsFromDoc(ByRef wordApplication As Microsoft.Office.Interop.Word.Application)
                 'Open the word document associated with the DPA Struct.
                 wordApplication.Visible = False
-                Dim objWdDoc As New Word.Document
-                objWdDoc = wordApplication.Documents.Open(FileName:=Me.SourceFile, ConfirmConversions:=False)
+                Dim objWdDoc As New Document
+                objWdDoc = wordApplication.Documents.Open(FileName := Me.SourceFile, ConfirmConversions := False)
                 With objWdDoc
                     'Skip the document if it doesn't fit the design constraints of a standard dpa form.
                     If objWdDoc.Tables.Count <> 1 Then
-                        objWdDoc.Close()
                         Me.SKIP = True
-                        LogAction(0, Me.SourceFile & " was skipped. Invalid table count:" & objWdDoc.Tables.Count.ToString())
+                        LogAction(0,
+                                  Me.SourceFile & " was skipped. Invalid table count:" &
+                                  objWdDoc.Tables.Count.ToString())
+                        objWdDoc.Close()
                         Exit Sub
                     End If
 
@@ -73,7 +74,7 @@ Namespace Modules
                         Dim tempSendToCell As String = .Cell(1, 1).Range.Text
                         tempSendToCell = tempSendToCell.ToLower
                         'Email Address
-                        Me.SendTo = RegexAcc(tempSendToCell, _
+                        Me.SendTo = RegexAcc(tempSendToCell,
                                              "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
 
                         ' TODO Add handling for mailing address and fax number.
@@ -97,7 +98,8 @@ Namespace Modules
                         End If
 
                         'Customer Name with string cleanse and formating
-                        Dim tempStr = GlobalModule.CleanInput(.Cell(2, 1).Range.Text) 'Extract customer name from the table and cleanse the string.
+                        Dim tempStr = CleanInput(.Cell(2, 1).Range.Text) _
+                        'Extract customer name from the table and cleanse the string.
                         tempStr = Replace(tempStr, "Customer Name", "") 'Remove 'Customer Name' wording
                         Me.CustomerName = StrConv(tempStr, VbStrConv.ProperCase)  'Capitalize the first letters
 
@@ -122,7 +124,7 @@ Namespace Modules
             End Try
 #End If
                     objWdDoc.PrintOut()
-                    Threading.Thread.Sleep(3000)
+                    Thread.Sleep(3000)
                     Me.FileToSend = TDrive_FOLDER & Path.GetFileNameWithoutExtension(Me.SourceFile) & ".pdf"
                     'If Not File.Exists(Me.FileToSend) Then
                     '    MsgBox("Expected PDF was not created. Check the settings folder for SAMuel and PDF995.")
@@ -133,8 +135,9 @@ Namespace Modules
                 End With
             End Sub
 
+            
             ''' <summary>
-            ''' Marks the DPA as sent out and calls cleanup routines.
+            '''     Marks the DPA as sent out and calls cleanup routines.
             ''' </summary>
             ''' <remarks></remarks>
             Sub Complete()
@@ -144,14 +147,14 @@ Namespace Modules
         End Structure
 
         Public Sub ProcessFiles(sFiles() As String)
-            Dim objWord As Word.Application
+            Dim objWord As Microsoft.Office.Interop.Word.Application
             Dim olApp As Microsoft.Office.Interop.Outlook.Application =
-New Microsoft.Office.Interop.Outlook.Application
+                    New Microsoft.Office.Interop.Outlook.Application
             Dim dpaList As New List(Of DPA)
 
             'Initiate word application object and minimize it
             objWord = CreateObject("Word.Application")
-            objWord.WindowState = Word.WdWindowState.wdWindowStateMinimize
+            objWord.WindowState = WdWindowState.wdWindowStateMinimize
             'Set active printer to PDF
             'objWord.ActivePrinter = "PDF995"
 
@@ -209,7 +212,8 @@ New Microsoft.Office.Interop.Outlook.Application
             dpaList.Clear()
         End Sub
 
-        Private Function SendEmail(ByRef outDPA As DPA, ByRef olApp As Outlook.Application) As Boolean
+        Private Function SendEmail(ByRef outDPA As DPA, ByRef olApp As Microsoft.Office.Interop.Outlook.Application) _
+            As Boolean
             Dim olEmail As MailItem = olApp.CreateItem(OlItemType.olMailItem)
             Dim recipents As Recipients = olEmail.Recipients
             recipents.Add(outDPA.SendTo)
@@ -223,33 +227,34 @@ New Microsoft.Office.Interop.Outlook.Application
                 Return False
             End If
 
+            'Create the email and save as draft
             olEmail.Subject = outDPA.AccountNumber & " Deferred Payment Agreement"
             olEmail.Body = My.Settings.Email_Body
             olEmail.Body += vbCrLf + vbCrLf + vbCrLf
             olEmail.BodyFormat = OlBodyFormat.olFormatRichText
             olEmail.Attachments.Add(outDPA.FileToSend)
-            olEmail.Send()
-            System.Threading.Thread.Sleep(2000)
-            If olEmail.Sent Then
-                Return True
-            Else
-                Return False
-            End If
+            olEmail.Save()
+            ''TODO Change to .Send once security issue is addressed.
+            Thread.Sleep(2000)
+            ''If olEmail.Sent Then
+            Return True
+            ''Else
+            ''Return False
+            ''End If
         End Function
 
-        Private Sub MoveEmailedFile(SourceFile As String, moveToFolder As String)
+        Private Sub MoveEmailedFile(sourceFile As String, moveToFolder As String)
             Try
 
-                Dim destination As String = moveToFolder + Path.GetFileName(SourceFile)
+                Dim destination As String = moveToFolder + Path.GetFileName(sourceFile)
                 ''If File.Exists(destination) Then
                 ''File.Delete(destination)
                 ''End If
-                File.Copy(SourceFile, destination, True)
+                File.Copy(sourceFile, destination, True)
 
             Catch
 
             End Try
         End Sub
-
     End Module
 End Namespace

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "SAMuel", "SAMuel\SAMuel.vbproj", "{DF5AC783-AF4F-412E-B13E-1CA24999F0C3}"
 EndProject
@@ -11,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 		TODO.md = TODO.md
 	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RightFax_It", "RightFaxIt\RightFax_It.csproj", "{639BF440-08B3-4982-8273-002E1E13A2F1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scripts", "Scripts", "{1BA243FB-4CD6-4652-BACF-56D39F518685}"
 	ProjectSection(SolutionItems) = preProject
@@ -36,11 +34,6 @@ Global
 		{DF5AC783-AF4F-412E-B13E-1CA24999F0C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF5AC783-AF4F-412E-B13E-1CA24999F0C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF5AC783-AF4F-412E-B13E-1CA24999F0C3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{639BF440-08B3-4982-8273-002E1E13A2F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{639BF440-08B3-4982-8273-002E1E13A2F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{639BF440-08B3-4982-8273-002E1E13A2F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{639BF440-08B3-4982-8273-002E1E13A2F1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{639BF440-08B3-4982-8273-002E1E13A2F1}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
