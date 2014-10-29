@@ -747,39 +747,6 @@ Public Class FrmMain
         End If
     End Sub
 
-    Private Sub btnTDCreateEmail_Click(sender As Object, e As EventArgs) Handles btnTDCreateEmail.Click
-        For Each entry As ListViewItem In Me.lvTDriveFiles.Items
-            Try
-                'Send email using outlook.
-                Dim olApp As Microsoft.Office.Interop.Outlook.Application =
-                        New Microsoft.Office.Interop.Outlook.Application
-                'Dim olEmail As MailItem = olApp.CreateItemFromTemplate()
-                Dim outDPA As DPA = entry.Tag
-                Dim olEmail As MailItem = olApp.CreateItem(OlItemType.olMailItem)
-                Dim recipents As Recipients = olEmail.Recipients
-                recipents.Add(outDPA.SendTo)
-
-                'Determine the sending address.
-                If outDPA.Type = DPAType.Active Then
-                    olEmail.SentOnBehalfOfName = My.Settings.ACTIVE_EMAIL
-                ElseIf outDPA.Type = DPAType.Cutin Then
-                    olEmail.SentOnBehalfOfName = My.Settings.CUTIN_EMAIL
-                Else
-                    LogAction(action:=outDPA.AccountNumber + " DPA type was not standard. Email NOT sent.")
-                    Continue For
-                End If
-
-                olEmail.Subject = outDPA.AccountNumber & " Deferred Payment Agreement"
-                olEmail.Body = My.Settings.Email_Body
-                olEmail.Body += vbCrLf + vbCrLf + vbCrLf
-                olEmail.BodyFormat = OlBodyFormat.olFormatRichText
-                olEmail.Attachments.Add(outDPA.FileToSend)
-                olEmail.Save()
-            Catch ex As System.Exception
-                MsgBox(ex.Message)
-            End Try
-        Next
-    End Sub
 
     Private Sub btnTDClear_Click(sender As Object, e As EventArgs) Handles btnTDClear.Click
         Me.lvTDriveFiles.Items.Clear()

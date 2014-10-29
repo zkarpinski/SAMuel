@@ -150,7 +150,7 @@ Partial Class FrmAbout
     "/" & Global.Microsoft.VisualBasic.ChrW(10) & "NYS Coverage: https://www.nationalgridus.com/" & Global.Microsoft.VisualBasic.ChrW(10) & "Gas Tank:  http://en.wikipedia.o" & _
     "rg/wiki/Rainbow_Swash" & Global.Microsoft.VisualBasic.ChrW(10)
         '
-        'frmAbout
+        'FrmAbout
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
@@ -160,7 +160,7 @@ Partial Class FrmAbout
         Me.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog
         Me.MaximizeBox = False
         Me.MinimizeBox = False
-        Me.Name = "frmAbout"
+        Me.Name = "FrmAbout"
         Me.Padding = New System.Windows.Forms.Padding(9)
         Me.ShowInTaskbar = False
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent

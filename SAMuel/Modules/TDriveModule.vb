@@ -180,20 +180,28 @@ Namespace Modules
                 lvi.SubItems.Add(newDPA.AccountNumber)
                 lvi.SubItems.Add(newDPA.CustomerName)
                 lvi.Tag = newDPA
-                FrmMain.lvTDriveFiles.Items.Add(lvi)
-                dpaList.Add(newDPA)
-
 
                 'Email the DPA and move if sucessful.
                 FrmMain.lblStatus.Text = "Emailing the DPA..."
                 FrmMain.Refresh()
+
                 If SendEmail(newDPA, olApp) Then
                     newDPA.Sent = True
+                    lvi.ForeColor = Color.Black
+                    newDPA.Complete()
                 Else
                     ''TODO Log failed send email
+                    newDPA.Sent = False
+                    lvi.ForeColor = Color.Red
+                    LogAction(0, newDPA.SourceFile + " | " + newDPA.FileToSend)
                 End If
-                'Record completion time.
-                newDPA.Complete()
+
+                lvi.Tag = newDPA
+                dpaList.Add(newDPA)
+                FrmMain.lvTDriveFiles.Items.Add(lvi)
+                FrmMain.Refresh()
+
+
             Next
 
             ''Move the DPA file if it was sent.
@@ -214,43 +222,49 @@ Namespace Modules
 
         Private Function SendEmail(ByRef outDPA As DPA, ByRef olApp As Microsoft.Office.Interop.Outlook.Application) _
             As Boolean
-            Dim olEmail As MailItem = olApp.CreateItem(OlItemType.olMailItem)
-            Dim recipents As Recipients = olEmail.Recipients
-            recipents.Add(outDPA.SendTo)
+            Try
+                Dim olEmail As MailItem = olApp.CreateItem(OlItemType.olMailItem)
+                Dim recipents As Recipients = olEmail.Recipients
+                recipents.Add(outDPA.SendTo)
 
-            'Determine the sending address.
-            If outDPA.Type = DPAType.Active Then
-                olEmail.SentOnBehalfOfName = My.Settings.ACTIVE_EMAIL
-            ElseIf outDPA.Type = DPAType.Cutin Then
-                olEmail.SentOnBehalfOfName = My.Settings.CUTIN_EMAIL
-            Else
+                'Determine the sending address.
+                If outDPA.Type = DPAType.Active Then
+                    olEmail.SentOnBehalfOfName = My.Settings.ACTIVE_EMAIL
+                ElseIf outDPA.Type = DPAType.Cutin Then
+                    olEmail.SentOnBehalfOfName = My.Settings.CUTIN_EMAIL
+                Else
+                    Return False
+                End If
+
+                'Create the email and save as draft
+                olEmail.Subject = outDPA.AccountNumber & " Deferred Payment Agreement"
+                olEmail.Body = My.Settings.Email_Body
+                olEmail.Body += vbCrLf + vbCrLf + vbCrLf
+                olEmail.BodyFormat = OlBodyFormat.olFormatRichText
+                olEmail.Attachments.Add(outDPA.FileToSend)
+                olEmail.Save()
+                ''TODO Change to .Send once security issue is addressed.
+                Thread.Sleep(1000)
+                ''If olEmail.Sent Then
+                Return True
+                ''Else
+                ''Return False
+                ''End If
+
+            Catch ex As System.Exception
+                LogAction(0, ex.Message)
                 Return False
-            End If
-
-            'Create the email and save as draft
-            olEmail.Subject = outDPA.AccountNumber & " Deferred Payment Agreement"
-            olEmail.Body = My.Settings.Email_Body
-            olEmail.Body += vbCrLf + vbCrLf + vbCrLf
-            olEmail.BodyFormat = OlBodyFormat.olFormatRichText
-            olEmail.Attachments.Add(outDPA.FileToSend)
-            olEmail.Save()
-            ''TODO Change to .Send once security issue is addressed.
-            Thread.Sleep(2000)
-            ''If olEmail.Sent Then
-            Return True
-            ''Else
-            ''Return False
-            ''End If
+            End Try
         End Function
 
         Private Sub MoveEmailedFile(sourceFile As String, moveToFolder As String)
             Try
 
                 Dim destination As String = moveToFolder + Path.GetFileName(sourceFile)
-                ''If File.Exists(destination) Then
-                ''File.Delete(destination)
-                ''End If
-                File.Copy(sourceFile, destination, True)
+                If File.Exists(destination) Then
+                    File.Delete(destination)
+                End If
+                File.Move(sourceFile, destination)
 
             Catch
 
