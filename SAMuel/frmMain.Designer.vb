@@ -23,7 +23,7 @@ Partial Class FrmMain
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ListViewItem1 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
+        Dim ListViewItem6 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FrmMain))
         Me.dlgOpen = New System.Windows.Forms.OpenFileDialog()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
@@ -123,6 +123,7 @@ Partial Class FrmMain
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.lblBranding = New System.Windows.Forms.Label()
         Me.timerConvert = New System.Windows.Forms.Timer(Me.components)
+        Me.btnTEmails = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.groupOLAudit.SuspendLayout()
@@ -172,7 +173,7 @@ Partial Class FrmMain
         Me.TabPage1.Controls.Add(Me.btnRun)
         Me.TabPage1.Location = New System.Drawing.Point(4, 22)
         Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.TabPage1.Padding = New System.Windows.Forms.Padding(3)
         Me.TabPage1.Size = New System.Drawing.Size(431, 290)
         Me.TabPage1.TabIndex = 0
         Me.TabPage1.Text = "Outlook"
@@ -182,8 +183,8 @@ Partial Class FrmMain
         '
         Me.lstEmailAttachments.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.hType, Me.hName})
         Me.lstEmailAttachments.FullRowSelect = True
-        ListViewItem1.StateImageIndex = 0
-        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1})
+        ListViewItem6.StateImageIndex = 0
+        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem6})
         Me.lstEmailAttachments.Location = New System.Drawing.Point(229, 7)
         Me.lstEmailAttachments.Name = "lstEmailAttachments"
         Me.lstEmailAttachments.Size = New System.Drawing.Size(196, 254)
@@ -369,7 +370,7 @@ Partial Class FrmMain
         Me.tabWordToTiff.Controls.Add(Me.btnConvert)
         Me.tabWordToTiff.Location = New System.Drawing.Point(4, 22)
         Me.tabWordToTiff.Name = "tabWordToTiff"
-        Me.tabWordToTiff.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.tabWordToTiff.Padding = New System.Windows.Forms.Padding(3)
         Me.tabWordToTiff.Size = New System.Drawing.Size(431, 290)
         Me.tabWordToTiff.TabIndex = 1
         Me.tabWordToTiff.Text = "Convert Files"
@@ -644,7 +645,7 @@ Partial Class FrmMain
         Me.tabKofax.Controls.Add(Me.txtKFBatchName)
         Me.tabKofax.Location = New System.Drawing.Point(4, 22)
         Me.tabKofax.Name = "tabKofax"
-        Me.tabKofax.Padding = New System.Windows.Forms.Padding(3, 3, 3, 3)
+        Me.tabKofax.Padding = New System.Windows.Forms.Padding(3)
         Me.tabKofax.Size = New System.Drawing.Size(431, 290)
         Me.tabKofax.TabIndex = 5
         Me.tabKofax.Text = "Kofax It"
@@ -958,6 +959,7 @@ Partial Class FrmMain
         'tabTDrive
         '
         Me.tabTDrive.AllowDrop = True
+        Me.tabTDrive.Controls.Add(Me.btnTEmails)
         Me.tabTDrive.Controls.Add(Me.btnTDClear)
         Me.tabTDrive.Controls.Add(Me.lvTDriveFiles)
         Me.tabTDrive.Location = New System.Drawing.Point(4, 22)
@@ -969,9 +971,9 @@ Partial Class FrmMain
         '
         'btnTDClear
         '
-        Me.btnTDClear.Location = New System.Drawing.Point(356, 128)
+        Me.btnTDClear.Location = New System.Drawing.Point(374, 128)
         Me.btnTDClear.Name = "btnTDClear"
-        Me.btnTDClear.Size = New System.Drawing.Size(64, 22)
+        Me.btnTDClear.Size = New System.Drawing.Size(46, 22)
         Me.btnTDClear.TabIndex = 2
         Me.btnTDClear.Text = "Clear"
         Me.btnTDClear.UseVisualStyleBackColor = True
@@ -1103,6 +1105,15 @@ Partial Class FrmMain
         'timerConvert
         '
         Me.timerConvert.Interval = 1000
+        '
+        'btnTEmails
+        '
+        Me.btnTEmails.Location = New System.Drawing.Point(167, 249)
+        Me.btnTEmails.Name = "btnTEmails"
+        Me.btnTEmails.Size = New System.Drawing.Size(87, 21)
+        Me.btnTEmails.TabIndex = 3
+        Me.btnTEmails.Text = "Run"
+        Me.btnTEmails.UseVisualStyleBackColor = True
         '
         'FrmMain
         '
@@ -1251,5 +1262,6 @@ Partial Class FrmMain
     Friend WithEvents colName As System.Windows.Forms.ColumnHeader
     Friend WithEvents btnTDClear As System.Windows.Forms.Button
     Friend WithEvents timerConvert As System.Windows.Forms.Timer
+    Friend WithEvents btnTEmails As System.Windows.Forms.Button
 
 End Class

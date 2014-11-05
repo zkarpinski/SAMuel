@@ -138,18 +138,6 @@ Namespace My
             End Set
         End Property
         
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("DEFAULT")>  _
-        Public Property SMTP_SERVER() As String
-            Get
-                Return CType(Me("SMTP_SERVER"),String)
-            End Get
-            Set
-                Me("SMTP_SERVER") = value
-            End Set
-        End Property
-        
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("DEFAULT")>  _
@@ -198,12 +186,66 @@ Namespace My
             End Get
         End Property
         
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("EmailedMoveFolder")>  _
-        Public ReadOnly Property EmailedMoveFolder() As String
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(), _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.Configuration.DefaultSettingValueAttribute("DEFAULT")> _
+        Public ReadOnly Property EmailedActiveMoveFolder() As String
             Get
-                Return CType(Me("EmailedMoveFolder"),String)
+                Return CType(Me("EmailedActiveMoveFolder"), String)
+            End Get
+        End Property
+
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(), _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.Configuration.DefaultSettingValueAttribute("DEFAULT")> _
+        Public ReadOnly Property ACCINIT_EMAIL() As String
+            Get
+                Return CType(Me("ACCINIT_EMAIL"), String)
+            End Get
+        End Property
+
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(), _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.Configuration.DefaultSettingValueAttribute("DEFAULT")> _
+        Public ReadOnly Property EmailedCutinMoveFolder() As String
+            Get
+                Return CType(Me("EmailedCutinMoveFolder"), String)
+            End Get
+        End Property
+
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(), _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.Configuration.DefaultSettingValueAttribute("DEFAULT")> _
+        Public ReadOnly Property EmailedAccInitMoveFolder() As String
+            Get
+                Return CType(Me("EmailedAccInitMoveFolder"), String)
+            End Get
+        End Property
+
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(), _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.Configuration.DefaultSettingValueAttribute("DEFAULT")> _
+        Public ReadOnly Property ActiveFolder() As String
+            Get
+                Return CType(Me("ActiveFolder"), String)
+            End Get
+        End Property
+
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(), _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.Configuration.DefaultSettingValueAttribute("DEFAULT")> _
+        Public ReadOnly Property CutinFolder() As String
+            Get
+                Return CType(Me("CutinFolder"), String)
+            End Get
+        End Property
+
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(), _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+         Global.System.Configuration.DefaultSettingValueAttribute("DEFAULT")> _
+        Public ReadOnly Property AccInitFolder() As String
+            Get
+                Return CType(Me("AccInitFolder"), String)
             End Get
         End Property
     End Class

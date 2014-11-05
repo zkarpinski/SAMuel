@@ -46,7 +46,7 @@ Namespace Modules
                 Me.Sent = False
             End Sub
 
-            
+
             ''' <summary>
             '''     Parses the word document for the Send To info.
             ''' </summary>
@@ -56,7 +56,7 @@ Namespace Modules
                 'Open the word document associated with the DPA Struct.
                 wordApplication.Visible = False
                 Dim objWdDoc As New Document
-                objWdDoc = wordApplication.Documents.Open(FileName := Me.SourceFile, ConfirmConversions := False)
+                objWdDoc = wordApplication.Documents.Open(FileName:=Me.SourceFile, ConfirmConversions:=False)
                 With objWdDoc
                     'Skip the document if it doesn't fit the design constraints of a standard dpa form.
                     If objWdDoc.Tables.Count <> 1 Then
@@ -87,10 +87,13 @@ Namespace Modules
                         End If
 
                         'Cutin/Active
-                        If InStr(.Cell(1, 2).Range.Text, "Active", CompareMethod.Text) Then
+                        Dim sType As String = .Cell(1, 2).Range.Text
+                        If InStr(sType, "Active", CompareMethod.Text) Then
                             Me.Type = DPAType.Active
-                        ElseIf InStr(.Cell(1, 2).Range.Text, "Cut-In", CompareMethod.Text) Then
+                        ElseIf InStr(sType, "Cut-In", CompareMethod.Text) Then
                             Me.Type = DPAType.Cutin
+                        ElseIf InStr(sType, "Account Initiation", CompareMethod.Text) Then
+                            Me.Type = DPAType.Accinit
                         Else
                             'Error
                             Me.Type = DPAType.Err
@@ -135,7 +138,7 @@ Namespace Modules
                 End With
             End Sub
 
-            
+
             ''' <summary>
             '''     Marks the DPA as sent out and calls cleanup routines.
             ''' </summary>
@@ -205,9 +208,17 @@ Namespace Modules
             Next
 
             ''Move the DPA file if it was sent.
-            For Each dpa As DPA In dpaList
-                If dpa.Sent Then
-                    MoveEmailedFile(dpa.SourceFile, My.Settings.EmailedMoveFolder)
+            For Each sentDPA As DPA In dpaList
+                If sentDPA.Sent Then
+                    If sentDPA.Type = DPAType.Active Then
+                        MoveEmailedFile(sentDPA.SourceFile, My.Settings.EmailedActiveMoveFolder)
+                    ElseIf sentDPA.Type = DPAType.Cutin Then
+                        MoveEmailedFile(sentDPA.SourceFile, My.Settings.EmailedCutinMoveFolder)
+                    ElseIf sentDPA.Type = DPAType.Cutin Then
+                        MoveEmailedFile(sentDPA.SourceFile, My.Settings.EmailedAccInitMoveFolder)
+                    Else
+                        MoveEmailedFile(sentDPA.SourceFile, My.Settings.EmailedActiveMoveFolder)
+                    End If
                 End If
             Next
 
@@ -232,6 +243,8 @@ Namespace Modules
                     olEmail.SentOnBehalfOfName = My.Settings.ACTIVE_EMAIL
                 ElseIf outDPA.Type = DPAType.Cutin Then
                     olEmail.SentOnBehalfOfName = My.Settings.CUTIN_EMAIL
+                ElseIf outDPA.Type = DPAType.Accinit Then
+                    olEmail.SentOnBehalfOfName = My.Settings.ACCINIT_EMAIL
                 Else
                     Return False
                 End If

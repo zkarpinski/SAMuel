@@ -23,9 +23,6 @@
     <Setting Name="savePath" Type="System.String" Scope="User">
       <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
-    <Setting Name="SMTP_SERVER" Type="System.String" Scope="User">
-      <Value Profile="(Default)">DEFAULT</Value>
-    </Setting>
     <Setting Name="ACTIVE_EMAIL" Type="System.String" Scope="Application">
       <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
@@ -41,8 +38,26 @@
     <Setting Name="Email_Body" Type="System.String" Scope="Application">
       <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
-    <Setting Name="EmailedMoveFolder" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">EmailedMoveFolder</Value>
+    <Setting Name="EmailedActiveMoveFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DEFAULT</Value>
+    </Setting>
+    <Setting Name="ACCINIT_EMAIL" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DEFAULT</Value>
+    </Setting>
+    <Setting Name="EmailedCutinMoveFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DEFAULT</Value>
+    </Setting>
+    <Setting Name="EmailedAccInitMoveFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DEFAULT</Value>
+    </Setting>
+    <Setting Name="ActiveFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DEFAULT</Value>
+    </Setting>
+    <Setting Name="CutinFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DEFAULT</Value>
+    </Setting>
+    <Setting Name="AccInitFolder" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
   </Settings>
 </SettingsFile>

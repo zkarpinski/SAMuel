@@ -733,6 +733,17 @@ Public Class FrmMain
 
 #Region "T: Drive Tab Region -------------------------------------------------------------------------------------"
 
+    Private Sub btnTEmails_Click(sender As Object, e As EventArgs) Handles btnTEmails.Click
+        Reset_ProgressBar()
+        Me.lvTDriveFiles.Items.Clear()
+        Dim emailFolders() As String = {My.Settings.ActiveFolder, My.Settings.CutinFolder, My.Settings.AccInitFolder}
+        For Each sFolder As String In emailFolders
+            Dim files() As String = Directory.GetFiles(sFolder)
+            ProcessFiles(files)
+        Next
+
+    End Sub
+
     Private Sub DragDropTDrive(sender As Object, e As DragEventArgs) Handles tabTDrive.DragDrop
         Reset_ProgressBar()
         Me.lvTDriveFiles.Items.Clear()
@@ -753,4 +764,6 @@ Public Class FrmMain
     End Sub
 
 #End Region
+
+
 End Class
