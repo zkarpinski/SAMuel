@@ -1,6 +1,6 @@
 SAMuel
 ===================
-__Service Application Manager Unified Expediting Library (work in progress)__
+__Samuel Automates Many Unambiguous Essential Labors (still a work in progress)__
 
 ![Outlook](https://raw.github.com/zKarp/SAMuel/master/images/Outlook-preview2.JPG "Outlook tab preview with email opened.")
 

@@ -690,6 +690,7 @@ Public Class FrmMain
         frmEmails.clbSelectedEmails.Items.Clear()
         Reset_Kofax_Tab()
         ResetContacts_Tab()
+        Reset_TDriver_Tab()
     End Sub
 
     Private Sub Reset_ProgressBar()
@@ -734,14 +735,19 @@ Public Class FrmMain
 #Region "T: Drive Tab Region -------------------------------------------------------------------------------------"
 
     Private Sub btnTEmails_Click(sender As Object, e As EventArgs) Handles btnTEmails.Click
+        Reset_TDriver_Tab()
+        btnTEmails.Enabled = False
         Reset_ProgressBar()
-        Me.lvTDriveFiles.Items.Clear()
         Dim emailFolders() As String = {My.Settings.ActiveFolder, My.Settings.CutinFolder, My.Settings.AccInitFolder}
         For Each sFolder As String In emailFolders
-            Dim files() As String = Directory.GetFiles(sFolder)
-            ProcessFiles(files)
+            Try
+                Dim files() As String = Directory.GetFiles(sFolder)
+                ProcessFiles(files)
+            Catch
+                ''TODO Add invalid path handle.
+            End Try
         Next
-
+        btnTEmails.Enabled = True
     End Sub
 
     Private Sub DragDropTDrive(sender As Object, e As DragEventArgs) Handles tabTDrive.DragDrop
@@ -760,6 +766,11 @@ Public Class FrmMain
 
 
     Private Sub btnTDClear_Click(sender As Object, e As EventArgs) Handles btnTDClear.Click
+        Me.lvTDriveFiles.Items.Clear()
+    End Sub
+
+    Private Sub Reset_TDriver_Tab()
+        Me.btnTEmails.Enabled = True
         Me.lvTDriveFiles.Items.Clear()
     End Sub
 

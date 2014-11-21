@@ -23,7 +23,7 @@ Partial Class FrmMain
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ListViewItem6 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
+        Dim ListViewItem1 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FrmMain))
         Me.dlgOpen = New System.Windows.Forms.OpenFileDialog()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
@@ -104,6 +104,7 @@ Partial Class FrmMain
         Me.chkMinPayment = New System.Windows.Forms.CheckBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.tabTDrive = New System.Windows.Forms.TabPage()
+        Me.btnTEmails = New System.Windows.Forms.Button()
         Me.btnTDClear = New System.Windows.Forms.Button()
         Me.lvTDriveFiles = New System.Windows.Forms.ListView()
         Me.colType = CType(New System.Windows.Forms.ColumnHeader(), System.Windows.Forms.ColumnHeader)
@@ -123,7 +124,6 @@ Partial Class FrmMain
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.lblBranding = New System.Windows.Forms.Label()
         Me.timerConvert = New System.Windows.Forms.Timer(Me.components)
-        Me.btnTEmails = New System.Windows.Forms.Button()
         Me.TabControl1.SuspendLayout()
         Me.TabPage1.SuspendLayout()
         Me.groupOLAudit.SuspendLayout()
@@ -183,8 +183,8 @@ Partial Class FrmMain
         '
         Me.lstEmailAttachments.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.hType, Me.hName})
         Me.lstEmailAttachments.FullRowSelect = True
-        ListViewItem6.StateImageIndex = 0
-        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem6})
+        ListViewItem1.StateImageIndex = 0
+        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1})
         Me.lstEmailAttachments.Location = New System.Drawing.Point(229, 7)
         Me.lstEmailAttachments.Name = "lstEmailAttachments"
         Me.lstEmailAttachments.Size = New System.Drawing.Size(196, 254)
@@ -969,6 +969,15 @@ Partial Class FrmMain
         Me.tabTDrive.Text = "T: Drive"
         Me.tabTDrive.UseVisualStyleBackColor = True
         '
+        'btnTEmails
+        '
+        Me.btnTEmails.Location = New System.Drawing.Point(167, 249)
+        Me.btnTEmails.Name = "btnTEmails"
+        Me.btnTEmails.Size = New System.Drawing.Size(87, 21)
+        Me.btnTEmails.TabIndex = 3
+        Me.btnTEmails.Text = "Run"
+        Me.btnTEmails.UseVisualStyleBackColor = True
+        '
         'btnTDClear
         '
         Me.btnTDClear.Location = New System.Drawing.Point(374, 128)
@@ -1105,15 +1114,6 @@ Partial Class FrmMain
         'timerConvert
         '
         Me.timerConvert.Interval = 1000
-        '
-        'btnTEmails
-        '
-        Me.btnTEmails.Location = New System.Drawing.Point(167, 249)
-        Me.btnTEmails.Name = "btnTEmails"
-        Me.btnTEmails.Size = New System.Drawing.Size(87, 21)
-        Me.btnTEmails.TabIndex = 3
-        Me.btnTEmails.Text = "Run"
-        Me.btnTEmails.UseVisualStyleBackColor = True
         '
         'FrmMain
         '

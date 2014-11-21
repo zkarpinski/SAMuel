@@ -167,59 +167,62 @@ Namespace Modules
 
             'For each DPA created from each file within the list of files...
             For Each newDPA As DPA In From sFile As String In sFiles Select New DPA(sFile)
-                FrmMain.lblStatus.Text = "Parsing " + Path.GetFileName(newDPA.SourceFile)
-                FrmMain.Refresh()
-
-                newDPA.ExtractDetailsFromDoc(objWord)
-
-                FrmMain.ProgressBar.Value += 1
-
-                'Move to next file if it's marked as skip
-                If newDPA.Skip Then Continue For
-
-                'Add each DPA to the list view for visual verification.
-                Dim lvi As ListViewItem = New ListViewItem(StrConv(newDPA.Type.ToString, VbStrConv.ProperCase))
-                lvi.SubItems.Add(newDPA.SendTo)
-                lvi.SubItems.Add(newDPA.AccountNumber)
-                lvi.SubItems.Add(newDPA.CustomerName)
-                lvi.Tag = newDPA
-
-                'Email the DPA and move if sucessful.
-                FrmMain.lblStatus.Text = "Emailing the DPA..."
-                FrmMain.Refresh()
-
-                If SendEmail(newDPA, olApp) Then
-                    newDPA.Sent = True
-                    lvi.ForeColor = Color.Black
-                    newDPA.Complete()
-                Else
-                    ''TODO Log failed send email
-                    newDPA.Sent = False
-                    lvi.ForeColor = Color.Red
-                    LogAction(0, newDPA.SourceFile + " | " + newDPA.FileToSend)
-                End If
-
-                lvi.Tag = newDPA
-                dpaList.Add(newDPA)
-                FrmMain.lvTDriveFiles.Items.Add(lvi)
-                FrmMain.Refresh()
+                Try
 
 
-            Next
+                    FrmMain.lblStatus.Text = "Parsing " + Path.GetFileName(newDPA.SourceFile)
+                    FrmMain.Refresh()
 
-            ''Move the DPA file if it was sent.
-            For Each sentDPA As DPA In dpaList
-                If sentDPA.Sent Then
-                    If sentDPA.Type = DPAType.Active Then
-                        MoveEmailedFile(sentDPA.SourceFile, My.Settings.EmailedActiveMoveFolder)
-                    ElseIf sentDPA.Type = DPAType.Cutin Then
-                        MoveEmailedFile(sentDPA.SourceFile, My.Settings.EmailedCutinMoveFolder)
-                    ElseIf sentDPA.Type = DPAType.Cutin Then
-                        MoveEmailedFile(sentDPA.SourceFile, My.Settings.EmailedAccInitMoveFolder)
+                    newDPA.ExtractDetailsFromDoc(objWord)
+
+                    FrmMain.ProgressBar.Value += 1
+
+                    'Move to next file if it's marked as skip
+                    If newDPA.Skip Then Continue For
+
+                    'Add each DPA to the list view for visual verification.
+                    Dim lvi As ListViewItem = New ListViewItem(StrConv(newDPA.Type.ToString, VbStrConv.ProperCase))
+                    lvi.SubItems.Add(newDPA.SendTo)
+                    lvi.SubItems.Add(newDPA.AccountNumber)
+                    lvi.SubItems.Add(newDPA.CustomerName)
+                    lvi.Tag = newDPA
+
+                    'Email the DPA and move if sucessful.
+                    FrmMain.lblStatus.Text = "Emailing the DPA..."
+                    FrmMain.Refresh()
+
+                    If SendEmail(newDPA, olApp) Then
+                        newDPA.Sent = True
+                        lvi.ForeColor = Color.Black
+                        newDPA.Complete()
                     Else
-                        MoveEmailedFile(sentDPA.SourceFile, My.Settings.EmailedActiveMoveFolder)
+                        ''TODO Log failed send email
+                        newDPA.Sent = False
+                        lvi.ForeColor = Color.Red
+                        LogAction(0, newDPA.SourceFile + " | " + newDPA.FileToSend)
                     End If
-                End If
+
+                    lvi.Tag = newDPA
+                    dpaList.Add(newDPA)
+                    FrmMain.lvTDriveFiles.Items.Add(lvi)
+                    FrmMain.Refresh()
+
+                    ''Move the Source DPA file if it was sent.
+                    If newDPA.Sent Then
+                        If newDPA.Type = DPAType.Active Then
+                            MoveEmailedFile(newDPA.SourceFile, My.Settings.EmailedActiveMoveFolder)
+                        ElseIf newDPA.Type = DPAType.Cutin Then
+                            MoveEmailedFile(newDPA.SourceFile, My.Settings.EmailedCutinMoveFolder)
+                        ElseIf newDPA.Type = DPAType.Accinit Then
+                            MoveEmailedFile(newDPA.SourceFile, My.Settings.EmailedAccInitMoveFolder)
+                        Else
+                            MoveEmailedFile(newDPA.SourceFile, My.Settings.EmailedActiveMoveFolder)
+                        End If
+                    End If
+
+                Catch ex As System.Exception
+                    Continue For
+                End Try
             Next
 
             'UI Update
