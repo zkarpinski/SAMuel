@@ -1,3 +1,14 @@
+## 2014-12-14
+
+Features:
+
+  - KofaxIt: Added more correspondence types
+
+Code Improvements:
+
+  - TDrive: Skip hidden files
+  - AddContact: Script improved.
+
 ## 2014-10-14
 
 Features:

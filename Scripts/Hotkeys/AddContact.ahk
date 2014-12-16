@@ -1,5 +1,6 @@
-; // Hotkey for Add Customer Contact
+; // Hotkey for Add Customer Contact(With Parameters)
 ; // Created by: Zachary Karpinski
+; // Last Modified: 12/16/14
 
 ; // usage: Autohotkey http://www.autohotkey.com/
 ; //	Enter account number, run script then make the CSS window active
@@ -20,15 +21,19 @@ Loop, %0% {
 WinWait, Customer Service System Retrieval
 WinActivate, Customer Service System Retrieval
 
+; // Clear retriveval
 Send, {ALT down}
 Sleep, 50
 Send, d
 Sleep, 100
 Send {ALT up}
 
+; // Add account number
 Send {TAB 4}
 Sleep, 250
 Send, %AccNum%
+
+; // Find account number
 Sleep, 250
 Send, {ENTER}
 Sleep, 600
@@ -38,13 +43,20 @@ IfWinExist, Premise For
 Sleep, 5000
 }
 
+; // Skip Critcal Contact message.
 Send, o
 Sleep, 250
 Send, o
-Sleep, 500
 
 ; // Wait for Account
-; //WinWait, Account, 120
+WinWait, Account %AccNum% for,, 120
+if ErrorLevel
+{
+	MsgBox, Waiting for contact window timed out.
+	return
+}
+else{}
+Sleep, 50
 
 
 ; // Open Contact Window
@@ -58,14 +70,14 @@ Send, c
 Sleep, 100
 Send, a
 
-; // Wait for add account contact window (2 minutes)
-;//WinWait, Add Account Contact for, 120
+; // Wait for add account contact window (1 minute)
+WinWait, Add Account Contact for,, 60
 if ErrorLevel
 {
 	MsgBox, Waiting for contact window timed out.
 	return
 }
-Sleep, 500
+Sleep, 100
 
 ; // Select Contact Type
 Send, {TAB 8}
@@ -77,7 +89,7 @@ Sleep, 200
 Send, {TAB}
 Sleep, 100
 Send, %Contact%
-Sleep, 400
+Sleep, 200
 
 ; //Process
 Send, {ALT}
@@ -85,9 +97,16 @@ Sleep, 100
 Send, c
 Sleep, 100
 Send, p
-Sleep, 350
+; // Wait for confirmation window (10 seconds)
+WinWait, Customer Service System (PRODUCTION),, 10
+if ErrorLevel
+{
+	MsgBox, timed out.
+	return
+}
+Sleep, 50
 Send, o
-Sleep, 150
+Sleep, 200
 
 ; // Exit Account
 Send, {ALT}

@@ -168,7 +168,11 @@ Namespace Modules
             'For each DPA created from each file within the list of files...
             For Each newDPA As DPA In From sFile As String In sFiles Select New DPA(sFile)
                 Try
-
+                    'Skip Hidden Files.
+                    If ((File.GetAttributes(newDPA.SourceFile) & FileAttributes.Hidden) = FileAttributes.Hidden) Then
+                        newDPA.Skip = True
+                        Continue For
+                    End If
 
                     FrmMain.lblStatus.Text = "Parsing " + Path.GetFileName(newDPA.SourceFile)
                     FrmMain.Refresh()

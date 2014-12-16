@@ -23,7 +23,7 @@ Partial Class FrmMain
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ListViewItem1 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
+        Dim ListViewItem2 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FrmMain))
         Me.dlgOpen = New System.Windows.Forms.OpenFileDialog()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
@@ -183,8 +183,8 @@ Partial Class FrmMain
         '
         Me.lstEmailAttachments.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.hType, Me.hName})
         Me.lstEmailAttachments.FullRowSelect = True
-        ListViewItem1.StateImageIndex = 0
-        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1})
+        ListViewItem2.StateImageIndex = 0
+        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem2})
         Me.lstEmailAttachments.Location = New System.Drawing.Point(229, 7)
         Me.lstEmailAttachments.Name = "lstEmailAttachments"
         Me.lstEmailAttachments.Size = New System.Drawing.Size(196, 254)
@@ -716,7 +716,7 @@ Partial Class FrmMain
         Me.cbKFBatchType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cbKFBatchType.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cbKFBatchType.FormattingEnabled = True
-        Me.cbKFBatchType.Items.AddRange(New Object() {"0003 - BILLING DISPUTE", "0014 - DENIAL OF SERVICE", "0084 - DPA-SYRACUSE PROCESSING", "0026 - LIFE SUPPORT", "0049 - MEDICAL-INFO ONLY", "0046 - NO ACTION-INFO ONLY", "0033 - SAMS"})
+        Me.cbKFBatchType.Items.AddRange(New Object() {"0076 - ASSUMES ALL", "0003 - BILLING DISPUTE", "0047 - C&I-OTHER DOCUMENTS", "0045 - CORRESPONDENCE", "0014 - DENIAL OF SERVICE", "0084 - DPA-SYRACUSE PROCESSING", "0023 - LEAVE ON FOR LANDLORD", "0026 - LIFE SUPPORT", "0049 - MEDICAL-INFO ONLY", "0046 - NO ACTION-INFO ONLY", "0063 - PAL CONTRACT", "0033 - SAMS", "0065 - SHARED METERING", "0038 - TAX EXEMPT"})
         Me.cbKFBatchType.Location = New System.Drawing.Point(87, 48)
         Me.cbKFBatchType.Name = "cbKFBatchType"
         Me.cbKFBatchType.Size = New System.Drawing.Size(165, 20)

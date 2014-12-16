@@ -777,4 +777,7 @@ Public Class FrmMain
 #End Region
 
 
+    Private Sub cbKFBatchType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbKFBatchType.SelectedIndexChanged
+
+    End Sub
 End Class
