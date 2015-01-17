@@ -5,6 +5,10 @@
 ; // usage: Autohotkey http://www.autohotkey.com/
 ; //	Enter account number, run script then make the CSS window active
 
+; // Exit Codes:
+; // 0 Manually Exited
+; // 100 Full Success
+
 ; // Read Parameters http://www.autohotkey.com/board/topic/6953-processing-command-line-parameters/
 Loop, %0% {
     If (%A_Index% = "/account")	{ 
@@ -53,7 +57,7 @@ WinWait, Account %AccNum% for,, 120
 if ErrorLevel
 {
 	MsgBox, Waiting for contact window timed out.
-	return
+	Exit 1
 }
 else{}
 Sleep, 50
@@ -75,7 +79,7 @@ WinWait, Add Account Contact for,, 60
 if ErrorLevel
 {
 	MsgBox, Waiting for contact window timed out.
-	return
+	Exit 2
 }
 Sleep, 100
 
@@ -102,7 +106,7 @@ WinWait, Customer Service System (PRODUCTION),, 10
 if ErrorLevel
 {
 	MsgBox, timed out.
-	return
+	Exit 3
 }
 Sleep, 50
 Send, o
@@ -115,4 +119,6 @@ Send, c
 Sleep, 100
 Send, e
 Sleep 300
+
+Exit 100
 

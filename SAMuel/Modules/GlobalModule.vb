@@ -144,8 +144,20 @@ Namespace Modules
         ''' <remarks>http://msdn.microsoft.com/en-us/library/844skk0h</remarks>
         Function CleanInput(strIn As String) As String
             ' Replace invalid characters with empty strings.
+
+            strIn = strIn.Replace("\r", String.Empty).Replace("\n", String.Empty)
             ' Allows all punctuation, letters, numbers, @ symbol, hyphen and space.
-            Return Regex.Replace(strIn, "[^\w\s\.@-]", "")
+            Return Regex.Replace(strIn, "[^\w\s\.@-]", String.Empty)
+        End Function
+
+
+        '''<summary>
+        '''     Removes milliseconds from DateTime to match Access 2003 Date/Time field.
+        ''' </summary>
+        ''' <remarks>http://stackoverflow.com/questions/1004698/how-to-truncate-milliseconds-off-of-a-net-datetime/1004708#1004708</remarks>
+        Function RemoveMilliseconds(dDate As DateTime) As DateTime
+            dDate = New DateTime(dDate.Year, dDate.Month, dDate.Day, dDate.Hour, dDate.Minute, dDate.Second)
+            Return dDate
         End Function
 
     End Module

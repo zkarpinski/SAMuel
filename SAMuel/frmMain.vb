@@ -466,67 +466,27 @@ Public Class FrmMain
     Dim _bStopContacts As Boolean = False
 
     Private Sub btnCAddContact_Click(sender As Object, e As EventArgs) Handles btnCAddContact.Click
-        Dim strAccountNumber As String
-        Dim strContact As String
+        btnCAddContact.Enabled = False
+        AddContactsToDatasetAccounts()
 
+    End Sub
+
+
+    Private Sub btnCGetAccounts_Click(sender As Object, e As EventArgs) Handles btnCGetAccounts.Click
         ResetContacts_Tab()
-        Me.btnCAddContact.Enabled = False
-
-        'Set variable values from the form.
-        strAccountNumber = Me.mtxtCAccount.Text
-        strContact = Me.rtbCContact.Text
+        btnCGetAccounts.Enabled = True
 
         'Call the script
         Try
-            RunScript(strAccountNumber, strContact)
+            GetAccountsNeedingContacts(My.Settings.DatabaseFile)
+            'RunScript(strAccountNumber, strContact)
         Catch ex As FileNotFoundException
             MsgBox("addContact.exe not found.", MsgBoxStyle.Exclamation)
             Me.btnCAddContact.Enabled = True
             Exit Sub
         End Try
-
-        Me.btnCAddContact.Enabled = True
-    End Sub
-
-    Private Sub _DragDropContact(sender As Object, e As DragEventArgs) Handles tabAddContact.DragDrop
-        If e.Data.GetDataPresent(DataFormats.FileDrop) Then
-            ResetContacts_Tab()
-
-            Dim files As String() = CType(e.Data.GetData(DataFormats.FileDrop), String())
-            Dim strContact As String = Me.rtbCContact.Text
-
-            Me.btnCAddContact.Enabled = False
-            btnStopAddContacts.Enabled = True
-            For Each sFile As String In files
-                Dim strAcc As String = RegexAcc(Path.GetFileNameWithoutExtension(sFile), "\d{5}-\d{5}")
-
-                'Skip files without and account number.
-                If strAcc = "X" Then
-                    lbxContactAlerts.Visible = True
-                    lbxContactAlerts.Items.Add(String.Format("{0} was skipped.", Path.GetFileName(sFile)))
-                    Me.Refresh()
-                    Continue For
-                End If
-
-                'Check if user interupted process.
-                If (_bStopContacts) Then
-                    Me.btnCAddContact.Enabled = True
-                    Exit Sub
-                End If
-
-                'TODO Make this a Background worker.
-
-                'Call the script
-                Try
-                    RunScript(strAcc, strContact)
-                Catch ex As FileNotFoundException
-                    MsgBox("addContact.exe not found.", MsgBoxStyle.Exclamation)
-                    Me.btnCAddContact.Enabled = True
-                    Exit Sub
-                End Try
-            Next
-
-        End If
+        btnCGetAccounts.Enabled = True
+        btnCAddContact.Enabled = True
     End Sub
 
     Private Sub btnStopAddContacts_Click(sender As Object, e As EventArgs) Handles btnStopAddContacts.Click
@@ -534,13 +494,12 @@ Public Class FrmMain
     End Sub
 
     Private Sub ResetContacts_Tab()
+        btnCAddContact.Enabled = False
+        btnCGetAccounts.Enabled = True
         btnStopAddContacts.Enabled = False
         _bStopContacts = False
         btnCAddContact.Enabled = True
-        rtbCContact.Text = ""
-        mtxtCAccount.Text = ""
-        lbxContactAlerts.Visible = False
-        lbxContactAlerts.Items.Clear()
+        DataGridView.Rows.Clear()
     End Sub
 
 #End Region
@@ -738,6 +697,13 @@ Public Class FrmMain
         Reset_TDriver_Tab()
         btnTEmails.Enabled = False
         Reset_ProgressBar()
+        If My.Settings.Physical_PrinterName = "DEFAULT" Then ChoosePhysicalPrinter()
+        'Check if dialog was canceled
+        If My.Settings.Physical_PrinterName = "DEFAULT" Then
+            btnTEmails.Enabled = True
+            Exit Sub
+        End If
+
         Dim emailFolders() As String = {My.Settings.ActiveFolder, My.Settings.CutinFolder, My.Settings.AccInitFolder}
         For Each sFolder As String In emailFolders
             Try
@@ -774,10 +740,20 @@ Public Class FrmMain
         Me.lvTDriveFiles.Items.Clear()
     End Sub
 
+    Private Sub ChoosePhysicalPrinter()
+        Dim printDialog As New PrintDialog
+        If printDialog.ShowDialog = System.Windows.Forms.DialogResult.OK Then
+            Dim strPrinterName As String = printDialog.PrinterSettings.PrinterName
+            My.Settings.Physical_PrinterName = strPrinterName
+            My.Settings.Save()
+        End If
+    End Sub
+
 #End Region
 
 
     Private Sub cbKFBatchType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbKFBatchType.SelectedIndexChanged
 
     End Sub
+
 End Class

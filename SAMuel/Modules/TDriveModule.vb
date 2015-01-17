@@ -1,10 +1,13 @@
-﻿Imports System.IO
+﻿Imports System.Data.OleDb
+Imports System.IO
 Imports Microsoft.Office.Interop.Word
 Imports System.Threading
 Imports Microsoft.Office.Interop.Outlook
+Imports System.Text.RegularExpressions
 
 Namespace Modules
     Module TDriveModule
+        Private _con As OleDbConnection = New OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + My.Settings.DatabaseFile)
         Public Enum DeliveryType As Byte
             Err = 0
             Email = 1
@@ -40,7 +43,7 @@ Namespace Modules
 
             Public Sub New(ByVal sFile As String)
                 Me.SourceFile = sFile
-                Me.CreationTime = File.GetCreationTime(sFile)
+                Me.CreationTime = RemoveMilliseconds(File.GetCreationTime(sFile))
                 Me.AccountNumber = RegexAcc(Path.GetFileName(SourceFile), "\d{5}-\d{5}")
                 Me.Skip = False
                 Me.Sent = False
@@ -60,7 +63,7 @@ Namespace Modules
                 With objWdDoc
                     'Skip the document if it doesn't fit the design constraints of a standard dpa form.
                     If objWdDoc.Tables.Count <> 1 Then
-                        Me.SKIP = True
+                        Me.Skip = True
                         LogAction(0,
                                   Me.SourceFile & " was skipped. Invalid table count:" &
                                   objWdDoc.Tables.Count.ToString())
@@ -70,20 +73,16 @@ Namespace Modules
 
                     'Extract data from the DPA header table
                     With objWdDoc.Tables(1)
-                        'Store the table cell to a temp string as lowercase.
+                        'Store the sendTo table cell to a temp string
                         Dim tempSendToCell As String = .Cell(1, 1).Range.Text
-                        tempSendToCell = tempSendToCell.ToLower
-                        'Email Address
-                        Me.SendTo = RegexAcc(tempSendToCell,
-                                             "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
 
-                        ' TODO Add handling for mailing address and fax number.
-
-                        'Determine Delivery Method
-                        If Me.SendTo.Contains("@") Then
-                            Me.DeliveryMethod = DeliveryType.Email
-                        Else
+                        'Determine the delivery method
+                        Dim deliveryTuple As Tuple(Of DeliveryType, String) = DetermineDeliveryMethod(tempSendToCell)
+                        If IsNothing(deliveryTuple) Then
                             Me.Skip = True
+                        Else
+                            Me.DeliveryMethod = deliveryTuple.Item1
+                            Me.SendTo = DataScrubber(deliveryTuple.Item2)
                         End If
 
                         'Cutin/Active
@@ -103,8 +102,8 @@ Namespace Modules
                         'Customer Name with string cleanse and formating
                         Dim tempStr = CleanInput(.Cell(2, 1).Range.Text) _
                         'Extract customer name from the table and cleanse the string.
-                        tempStr = Replace(tempStr, "Customer Name", "") 'Remove 'Customer Name' wording
-                        Me.CustomerName = StrConv(tempStr, VbStrConv.ProperCase)  'Capitalize the first letters
+                        tempStr = Replace(tempStr, "Customer Name", String.Empty) 'Remove 'Customer Name' wording
+                        Me.CustomerName = DataScrubber(StrConv(tempStr, VbStrConv.Uppercase))
 
                         Me.AccountNumber = RegexAcc(.Cell(2, 2).Range.Text, "\d{5}-\d{5}")  'Account Number
 
@@ -115,20 +114,34 @@ Namespace Modules
                     End With
 
                     'Print to PDF or Printer depending on type
-#If CONFIG = "Release" Then
-            'Set active printer to PDF995
-            Try
-                wordApplication.ActivePrinter = "PDF995"
-                    Catch
-                        MsgBox("Printer error. Is the 'PDF995' printer installed?", MsgBoxStyle.Critical)
+
+                    'Get the desired printer and set it as active printer in Word.
+                    Dim desiredPrinter As String
+                    If Me.DeliveryMethod = DeliveryType.Email Then
+                        desiredPrinter = My.Settings.PDF_PrinterName
+                        Me.FileToSend = TDrive_FOLDER & Path.GetFileNameWithoutExtension(Me.SourceFile) & ".pdf"
+                    ElseIf Me.DeliveryMethod = DeliveryType.Mail Then
+                        desiredPrinter = My.Settings.Physical_PrinterName
+                    Else
+                        desiredPrinter = My.Settings.PDF_PrinterName
                         Me.Skip = True
-                        objWdDoc.Close()
-                        Return
-            End Try
-#End If
-                    objWdDoc.PrintOut()
-                    Thread.Sleep(3000)
-                    Me.FileToSend = TDrive_FOLDER & Path.GetFileNameWithoutExtension(Me.SourceFile) & ".pdf"
+                    End If
+
+                    If (Me.Skip = False) Then
+                        Try
+                            wordApplication.ActivePrinter = desiredPrinter
+                        Catch
+                            MsgBox("Printer error. Is the " + desiredPrinter + " printer installed?", MsgBoxStyle.Critical)
+                            Me.Skip = True
+                            objWdDoc.Close()
+                            Return
+                        End Try
+
+
+                        objWdDoc.PrintOut()
+                        Thread.Sleep(3000)
+                    End If
+
                     'If Not File.Exists(Me.FileToSend) Then
                     '    MsgBox("Expected PDF was not created. Check the settings folder for SAMuel and PDF995.")
                     '    Me.Skip = True
@@ -144,7 +157,7 @@ Namespace Modules
             ''' </summary>
             ''' <remarks></remarks>
             Sub Complete()
-                Me.CompletionTime = Now()
+                Me.CompletionTime = RemoveMilliseconds(Now())
                 Me.TimeToSend = Me.CompletionTime - Me.CreationTime
             End Sub
         End Structure
@@ -181,8 +194,6 @@ Namespace Modules
 
                     FrmMain.ProgressBar.Value += 1
 
-                    'Move to next file if it's marked as skip
-                    If newDPA.Skip Then Continue For
 
                     'Add each DPA to the list view for visual verification.
                     Dim lvi As ListViewItem = New ListViewItem(StrConv(newDPA.Type.ToString, VbStrConv.ProperCase))
@@ -191,19 +202,36 @@ Namespace Modules
                     lvi.SubItems.Add(newDPA.CustomerName)
                     lvi.Tag = newDPA
 
-                    'Email the DPA and move if sucessful.
-                    FrmMain.lblStatus.Text = "Emailing the DPA..."
-                    FrmMain.Refresh()
-
-                    If SendEmail(newDPA, olApp) Then
-                        newDPA.Sent = True
-                        lvi.ForeColor = Color.Black
-                        newDPA.Complete()
-                    Else
-                        ''TODO Log failed send email
+                    'If it's marked as skip, Add to list as Red and Move to next file i
+                    If newDPA.Skip Then
                         newDPA.Sent = False
                         lvi.ForeColor = Color.Red
-                        LogAction(0, newDPA.SourceFile + " | " + newDPA.FileToSend)
+                        FrmMain.lvTDriveFiles.Items.Add(lvi)
+                        FrmMain.Refresh()
+                        Continue For
+                    End If
+
+                    If newDPA.DeliveryMethod = DeliveryType.Mail Then
+                        newDPA.Sent = True
+                        lvi.ForeColor = Color.Blue
+                        newDPA.Complete()
+                    Else
+                        'Email the DPA and mark as complete if successful
+                        FrmMain.lblStatus.Text = "Emailing the DPA..."
+                        FrmMain.Refresh()
+
+                        If SendEmail(newDPA, olApp) Then
+                            newDPA.Sent = True
+                            lvi.ForeColor = Color.Black
+                            newDPA.Complete()
+                        Else
+                            ''TODO Log failed send email
+                            newDPA.Sent = False
+                            lvi.ForeColor = Color.Red
+                            LogAction(0, newDPA.SourceFile + " | " + newDPA.FileToSend)
+                        End If
+
+
                     End If
 
                     lvi.Tag = newDPA
@@ -213,6 +241,7 @@ Namespace Modules
 
                     ''Move the Source DPA file if it was sent.
                     If newDPA.Sent Then
+                        AddRecordToDatabase(newDPA)
                         If newDPA.Type = DPAType.Active Then
                             MoveEmailedFile(newDPA.SourceFile, My.Settings.EmailedActiveMoveFolder)
                         ElseIf newDPA.Type = DPAType.Cutin Then
@@ -230,12 +259,34 @@ Namespace Modules
             Next
 
             'UI Update
-            frmMain.lblStatus.Text = "DONE!"
-            frmMain.ProgressBar.Value += 1
+            FrmMain.lblStatus.Text = "DONE!"
+            FrmMain.ProgressBar.Value += 1
             'Cleanup
             objWord.Quit()
             objWord = Nothing
             dpaList.Clear()
+        End Sub
+
+        Private Sub AddRecordToDatabase(ByVal dpaDoc As DPA)
+            Const strDPACommand As String =
+            "INSERT INTO DeferredPaymentAgreements (DPAType,DeliveryMethod,AccountNumber,SentTo,CustomerName,SentTime,FileCreated,File) " +
+            "VALUES (@dPAType,@delivery,@account,@sendTo,@customerName,@timeSent,@fileCreationTime,@document)"
+            _con.Open()
+            Dim cmdInsert As OleDbCommand = New OleDbCommand(strDPACommand, _con)
+
+            cmdInsert.Parameters.AddWithValue("@dPAType", dpaDoc.Type.ToString())
+            cmdInsert.Parameters.AddWithValue("@delivery", dpaDoc.DeliveryMethod.ToString())
+            cmdInsert.Parameters.AddWithValue("@account", dpaDoc.AccountNumber)
+            cmdInsert.Parameters.AddWithValue("@sendTo", dpaDoc.SendTo)
+            cmdInsert.Parameters.AddWithValue("@customerName", dpaDoc.CustomerName)
+            'TODO Add file creation time and time sent.
+            cmdInsert.Parameters.AddWithValue("@timeSent", dpaDoc.CompletionTime)
+            cmdInsert.Parameters.AddWithValue("@fileCreationTime", dpaDoc.CreationTime)
+            cmdInsert.Parameters.AddWithValue("@document", dpaDoc.SourceFile)
+            cmdInsert.ExecuteNonQuery()
+
+            _con.Close()
+
         End Sub
 
         Private Function SendEmail(ByRef outDPA As DPA, ByRef olApp As Microsoft.Office.Interop.Outlook.Application) _
@@ -290,5 +341,32 @@ Namespace Modules
 
             End Try
         End Sub
+
+        Private Function DetermineDeliveryMethod(sendToField As String) As Tuple(Of DeliveryType, String)
+            'Check for email address.
+            Const rgxEmailPattern As String =
+                "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"
+            Dim rgx As Regex = New Regex(rgxEmailPattern, RegexOptions.IgnoreCase)
+            Dim emailMatch As Match = rgx.Match(sendToField)
+            If (emailMatch.Success) Then
+                Return Tuple.Create(DeliveryType.Email, emailMatch.Value.ToLower()) 'Return email address lowercase
+            End If
+
+            'Check for a mailing address.
+            'Look for space, two letters, space then 5 digits
+            'ex. ' NY 13219'
+            Const rgxAddressPattern As String = "\s[a-z]{2}\s\d{5}"
+            rgx = New Regex(rgxAddressPattern, RegexOptions.IgnoreCase)
+            Dim mailMatch As Match = rgx.Match(sendToField)
+            If (mailMatch.Success) Then
+                Return Tuple.Create(DeliveryType.Mail, sendToField.Replace("mail to:", String.Empty))
+            End If
+            Return Tuple.Create(DeliveryType.Err, sendToField.ToUpper)
+        End Function
+
+        Private Function DataScrubber(strData As String) As String
+            Return strData.Replace("\r", String.Empty).Replace("\n", String.Empty).Trim()
+        End Function
+
     End Module
 End Namespace
