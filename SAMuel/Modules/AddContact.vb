@@ -1,5 +1,6 @@
 ﻿Imports System.Data
 Imports System.Data.OleDb
+Imports System.IO
 Imports System.Text
 Imports System.Threading.Tasks
 
@@ -17,8 +18,8 @@ Namespace Modules
 
         Public UserCanceledContactAdding As Boolean
 
-        Public Function RunScript(strBillAccount As String, strContact As String) As Boolean
-            Dim arguments As String = String.Format(" /account {0} /contact ""{1}", strBillAccount, strContact)
+        Public Function RunScript(strBillAccount As String, strContact As String, strContactType As String) As Boolean
+            Dim arguments As String = String.Format(" /account {0} /contact ""{1}"" /type ""{2}""", strBillAccount, strContact, strContactType)
 
             'Call the script and wait.
             Dim p As New Process
@@ -34,11 +35,19 @@ Namespace Modules
             End If
         End Function
 
-        Public Sub GetAccountsNeedingContacts(databaseFile As String)
+        Public Function GetAccountsNeedingContacts(databaseFile As String) As Boolean
+            'Check if the connection/database exists
+            If (Not File.Exists(databaseFile)) Then
+                MsgBox(String.Format("Database file, {0}, was not found. Please check your connection and/or path and try again.", databaseFile), MsgBoxStyle.Critical, "Database not found!")
+                _con = Nothing
+                Return False
+            End If
+
             If (IsNothing(_con)) Then
                 _con = New OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + databaseFile)
             End If
             Const strCmd As String = "SELECT DeferredPaymentAgreements.AccountNumber, DeferredPaymentAgreements.DPAType, DeferredPaymentAgreements.SentTo, DeferredPaymentAgreements.DeliveryMethod, DeferredPaymentAgreements.ContactAdded, DeferredPaymentAgreements.Key  FROM DeferredPaymentAgreements WHERE (((DeferredPaymentAgreements.ContactAdded)=False));"
+
 
 
             'Connect to database, run query and store the dataset
@@ -55,31 +64,35 @@ Namespace Modules
             For Each row In _ds.Tables("ContactsNeeded").Rows
                 FrmMain.DataGridView.Rows.Add(row.ItemArray)
             Next
-        End Sub
+
+            Return True
+        End Function
 
         Public Sub AddContactsToDatasetAccounts()
+            Const contactType = "Miscellaneous Collections" 'Always this type (For now)
             Dim bFirstSuccess As Boolean = True
             If (IsNothing(_ds)) Then
                 Return
             End If
             If (_ds.Tables.Count = 1) Then
+                'Start the 
                 Dim updateString As StringBuilder = New StringBuilder
                 updateString.Append("UPDATE DeferredPaymentAgreements SET DeferredPaymentAgreements.ContactAdded = True WHERE")
 
                 'Add the contact for each account in the dataset.
                 For Each row As DataRow In _ds.Tables("ContactsNeeded").Rows
                     'Collect Account Number, DPA Type, Method of delivery and where it was sent.
-                    ' Then generate the contact string.
                     Dim rsKey As Integer = row("Key")
                     Dim accountNumber As String = row("AccountNumber")
                     Dim contactInfo As ContactStruct = New ContactStruct()
                     contactInfo.DeliveryMethod = row("DeliveryMethod")
                     contactInfo.DPAType = row("DPAType")
                     contactInfo.SentTo = row("SentTo")
+                    'Generate the contact string.
                     Dim contactString As String = GenerateContactString(contactInfo)
 
                     'Run the script to add the contact
-                    If (RunScript(accountNumber, contactString)) Then
+                    If (RunScript(accountNumber, contactString, contactType)) Then
                         If (bFirstSuccess) Then
                             updateString.Append(" [DeferredPaymentAgreements].[Key]=" & rsKey.ToString)
                             bFirstSuccess = False 'No longer the first success
@@ -111,8 +124,6 @@ Namespace Modules
             Dim cmd As OleDbCommand = New OleDbCommand(updateString, _con)
             cmd.ExecuteNonQuery()
             _con.Close()
-
-
         End Sub
 
         Private Function GenerateContactString(contactInfo As ContactStruct) As String
@@ -121,8 +132,8 @@ Namespace Modules
             'Create the contact string.
             ''Example: Emailed Active DPA to test@test.com
             contactString = String.Format("{0}ed {1} DPA to {2}", contactInfo.DeliveryMethod, contactInfo.DPAType, contactInfo.SentTo)
-
             Return contactString
         End Function
+
     End Module
 End Namespace

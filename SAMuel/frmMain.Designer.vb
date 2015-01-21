@@ -106,7 +106,6 @@ Partial Class FrmMain
         Me.Label1 = New System.Windows.Forms.Label()
         Me.tabTDrive = New System.Windows.Forms.TabPage()
         Me.btnTEmails = New System.Windows.Forms.Button()
-        Me.btnTDClear = New System.Windows.Forms.Button()
         Me.lvTDriveFiles = New System.Windows.Forms.ListView()
         Me.colType = CType(New System.Windows.Forms.ColumnHeader(),System.Windows.Forms.ColumnHeader)
         Me.colSendTo = CType(New System.Windows.Forms.ColumnHeader(),System.Windows.Forms.ColumnHeader)
@@ -766,7 +765,7 @@ Partial Class FrmMain
         '
         'btnCGetAccounts
         '
-        Me.btnCGetAccounts.Location = New System.Drawing.Point(159, 138)
+        Me.btnCGetAccounts.Location = New System.Drawing.Point(167, 192)
         Me.btnCGetAccounts.Name = "btnCGetAccounts"
         Me.btnCGetAccounts.Size = New System.Drawing.Size(99, 23)
         Me.btnCGetAccounts.TabIndex = 13
@@ -784,7 +783,7 @@ Partial Class FrmMain
         Me.DataGridView.Name = "DataGridView"
         Me.DataGridView.ReadOnly = true
         Me.DataGridView.RowHeadersVisible = false
-        Me.DataGridView.Size = New System.Drawing.Size(425, 129)
+        Me.DataGridView.Size = New System.Drawing.Size(425, 183)
         Me.DataGridView.TabIndex = 12
         '
         'contactColumnAccount
@@ -806,7 +805,7 @@ Partial Class FrmMain
         Me.contactColumnSentTo.HeaderText = "Sent To"
         Me.contactColumnSentTo.Name = "contactColumnSentTo"
         Me.contactColumnSentTo.ReadOnly = true
-        Me.contactColumnSentTo.Width = 200
+        Me.contactColumnSentTo.Width = 210
         '
         'contactColumnDeliveryMethod
         '
@@ -826,7 +825,7 @@ Partial Class FrmMain
         '
         'btnCAddContact
         '
-        Me.btnCAddContact.Location = New System.Drawing.Point(169, 265)
+        Me.btnCAddContact.Location = New System.Drawing.Point(177, 265)
         Me.btnCAddContact.Name = "btnCAddContact"
         Me.btnCAddContact.Size = New System.Drawing.Size(83, 23)
         Me.btnCAddContact.TabIndex = 0
@@ -961,7 +960,6 @@ Partial Class FrmMain
         '
         Me.tabTDrive.AllowDrop = true
         Me.tabTDrive.Controls.Add(Me.btnTEmails)
-        Me.tabTDrive.Controls.Add(Me.btnTDClear)
         Me.tabTDrive.Controls.Add(Me.lvTDriveFiles)
         Me.tabTDrive.Location = New System.Drawing.Point(4, 22)
         Me.tabTDrive.Name = "tabTDrive"
@@ -972,29 +970,20 @@ Partial Class FrmMain
         '
         'btnTEmails
         '
-        Me.btnTEmails.Location = New System.Drawing.Point(167, 249)
+        Me.btnTEmails.Location = New System.Drawing.Point(177, 265)
         Me.btnTEmails.Name = "btnTEmails"
-        Me.btnTEmails.Size = New System.Drawing.Size(87, 21)
+        Me.btnTEmails.Size = New System.Drawing.Size(75, 23)
         Me.btnTEmails.TabIndex = 3
         Me.btnTEmails.Text = "Run"
         Me.btnTEmails.UseVisualStyleBackColor = true
-        '
-        'btnTDClear
-        '
-        Me.btnTDClear.Location = New System.Drawing.Point(374, 128)
-        Me.btnTDClear.Name = "btnTDClear"
-        Me.btnTDClear.Size = New System.Drawing.Size(46, 22)
-        Me.btnTDClear.TabIndex = 2
-        Me.btnTDClear.Text = "Clear"
-        Me.btnTDClear.UseVisualStyleBackColor = true
         '
         'lvTDriveFiles
         '
         Me.lvTDriveFiles.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.colType, Me.colSendTo, Me.colAcc, Me.colName})
         Me.lvTDriveFiles.FullRowSelect = true
-        Me.lvTDriveFiles.Location = New System.Drawing.Point(4, 14)
+        Me.lvTDriveFiles.Location = New System.Drawing.Point(4, 4)
         Me.lvTDriveFiles.Name = "lvTDriveFiles"
-        Me.lvTDriveFiles.Size = New System.Drawing.Size(424, 108)
+        Me.lvTDriveFiles.Size = New System.Drawing.Size(424, 242)
         Me.lvTDriveFiles.TabIndex = 0
         Me.lvTDriveFiles.UseCompatibleStateImageBehavior = false
         Me.lvTDriveFiles.View = System.Windows.Forms.View.Details
@@ -1256,13 +1245,12 @@ End Sub
     Friend WithEvents colSendTo As System.Windows.Forms.ColumnHeader
     Friend WithEvents colAcc As System.Windows.Forms.ColumnHeader
     Friend WithEvents colName As System.Windows.Forms.ColumnHeader
-    Friend WithEvents btnTDClear As System.Windows.Forms.Button
     Friend WithEvents timerConvert As System.Windows.Forms.Timer
     Friend WithEvents btnTEmails As System.Windows.Forms.Button
     Friend WithEvents DataGridView As DataGridView
     Friend WithEvents btnCGetAccounts As System.Windows.Forms.Button
-    Friend WithEvents contactColumnAccount As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents contactColumnDPAType As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents contactColumnSentTo As System.Windows.Forms.DataGridViewTextBoxColumn
-    Friend WithEvents contactColumnDeliveryMethod As System.Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents contactColumnAccount As DataGridViewTextBoxColumn
+    Friend WithEvents contactColumnDPAType As DataGridViewTextBoxColumn
+    Friend WithEvents contactColumnSentTo As DataGridViewTextBoxColumn
+    Friend WithEvents contactColumnDeliveryMethod As DataGridViewTextBoxColumn
 End Class

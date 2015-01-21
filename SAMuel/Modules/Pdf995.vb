@@ -3,7 +3,7 @@
 Namespace Modules
     Module Pdf995
 
-        Private _originalIniBackup As String
+        Private ModifiedIni As String = Directory.GetCurrentDirectory() + "\pdf995.ini"
 
         ''' <summary>
         ''' Creates the pdf995ini file configured to work as desired.
@@ -22,7 +22,7 @@ Namespace Modules
             s1.Write("[Parameters]" & vbCrLf)
             s1.Write("Display Readme=0" & vbCrLf)
             s1.Write("AutoLaunch=0" & vbCrLf) 'Disable PDF from opening after print.
-            s1.Write("Quiet=1" & vbCrLf) 'Disables UI?
+            s1.Write("Quiet=1" & vbCrLf) 'Disables UI
             s1.WriteLine("Use GPL Ghostscript=1") '?
             's1.Write("Document Name=" & documentName & vbCrLf) 'Source file
             s1.Write("Initial Dir=" & outputFolder & vbCrLf) 'Output folder?
@@ -43,16 +43,16 @@ Namespace Modules
         ''' </summary>
         ''' <remarks></remarks>
         Sub RestorePdf995Ini()
-            If (File.Exists(_originalIniBackup)) Then
-                File.Copy(_originalIniBackup, Pdf995Ini, True)
-                File.Delete(_originalIniBackup)
+            If (File.Exists(ModifiedIni)) Then
+                File.Copy(ModifiedIni, Pdf995Ini, True)
+                File.Delete(ModifiedIni)
             End If
         End Sub
 
         ''' <summary>
         ''' Deletes the existing PDF995ini file.
         ''' </summary>
-        ''' <remarks>PDF995 creates a default config if there is no existing.</remarks>
+        ''' <remarks>PDF995 creates a default configuration file if there is no existing.</remarks>
         Sub DefaultPdf995Ini()
             If (File.Exists(Pdf995Ini)) Then
                 File.Delete(Pdf995Ini)
@@ -60,15 +60,26 @@ Namespace Modules
         End Sub
 
         ''' <summary>
-        ''' Backup a the copy of the original PDF995ini file.
+        ''' Backup the copy of the original PDF995ini file.
         ''' </summary>
         ''' <remarks></remarks>
         Sub BackupOriginalPdf995Ini()
-            _originalIniBackup = SAVE_FOLDER + "original_pdf995.ini"
+            ModifiedIni = SAVE_FOLDER + "original_pdf995.ini"
             If (File.Exists(Pdf995Ini)) Then
-                File.Copy(Pdf995Ini, _originalIniBackup, True)
+                File.Copy(Pdf995Ini, ModifiedIni, True)
             End If
         End Sub
 
+        Public Sub SetupPdf995Ini()
+            'Delete the ini then copy over the modified one.
+            If (File.Exists(ModifiedIni)) Then
+                If (File.Exists(Pdf995Ini)) Then
+                    File.Delete(Pdf995Ini)
+                End If
+                File.Copy(ModifiedIni, My.Settings.Pdf995ini_File)
+            Else
+                MsgBox("Modified PDF995.ini is missing. Please contact Zachary Karpinski.",, "Missing PDF995.ini!")
+            End If
+        End Sub
     End Module
 End Namespace

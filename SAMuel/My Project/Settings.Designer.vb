@@ -161,7 +161,7 @@ Namespace My
         
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("DEFAULT")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("DEFAULT\pdf995.ini")>  _
         Public ReadOnly Property Pdf995ini_File() As String
             Get
                 Return CType(Me("Pdf995ini_File"),String)

@@ -47,7 +47,7 @@ Namespace Modules
             bm.Dispose()
             bm = Nothing
 
-            'Return the bitstream
+            'Return the bit stream
             Return myBitmap
         End Function
 

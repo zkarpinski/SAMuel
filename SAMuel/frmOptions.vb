@@ -63,4 +63,8 @@ Public Class FrmOptions
     Private Sub btnDefaultPdfIni_Click(sender As Object, e As EventArgs) Handles btnDefaultPdfIni.Click
         Pdf995.DefaultPdf995Ini()
     End Sub
+
+    Private Sub btnSetupPdfIni_Click(sender As Object, e As EventArgs) Handles btnSetupPdfIni.Click
+        Pdf995.SetupPdf995Ini()
+    End Sub
 End Class

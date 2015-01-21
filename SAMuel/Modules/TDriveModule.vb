@@ -19,7 +19,7 @@ Namespace Modules
             Err = 0
             Active = 1
             Cutin = 2
-            Accinit = 3
+            AcctInit = 3
         End Enum
 
         Public Structure DPA
@@ -59,7 +59,7 @@ Namespace Modules
                 'Open the word document associated with the DPA Struct.
                 wordApplication.Visible = False
                 Dim objWdDoc As New Document
-                objWdDoc = wordApplication.Documents.Open(FileName:=Me.SourceFile, ConfirmConversions:=False)
+                objWdDoc = wordApplication.Documents.Open(FileName:=Me.SourceFile, ConfirmConversions:=False, ReadOnly:=True)
                 With objWdDoc
                     'Skip the document if it doesn't fit the design constraints of a standard dpa form.
                     If objWdDoc.Tables.Count <> 1 Then
@@ -85,14 +85,18 @@ Namespace Modules
                             Me.SendTo = DataScrubber(deliveryTuple.Item2)
                         End If
 
-                        'Cutin/Active
+                        For Each c As Char In Me.SendTo
+                            Debug.Print(c + " " + Asc(c).ToString)
+                        Next
+
+                        'Cutin/Active/AcctInit
                         Dim sType As String = .Cell(1, 2).Range.Text
                         If InStr(sType, "Active", CompareMethod.Text) Then
                             Me.Type = DPAType.Active
                         ElseIf InStr(sType, "Cut-In", CompareMethod.Text) Then
                             Me.Type = DPAType.Cutin
                         ElseIf InStr(sType, "Account Initiation", CompareMethod.Text) Then
-                            Me.Type = DPAType.Accinit
+                            Me.Type = DPAType.AcctInit
                         Else
                             'Error
                             Me.Type = DPAType.Err
@@ -130,8 +134,8 @@ Namespace Modules
                     If (Me.Skip = False) Then
                         Try
                             wordApplication.ActivePrinter = desiredPrinter
-                        Catch
-                            MsgBox("Printer error. Is the " + desiredPrinter + " printer installed?", MsgBoxStyle.Critical)
+                        Catch ex As System.Exception
+                            MsgBox("Printer error. Is the " + desiredPrinter + " printer installed?", MsgBoxStyle.Critical, "Printer error!")
                             Me.Skip = True
                             objWdDoc.Close()
                             Return
@@ -200,11 +204,11 @@ Namespace Modules
                     lvi.SubItems.Add(newDPA.SendTo)
                     lvi.SubItems.Add(newDPA.AccountNumber)
                     lvi.SubItems.Add(newDPA.CustomerName)
-                    lvi.Tag = newDPA
 
                     'If it's marked as skip, Add to list as Red and Move to next file i
                     If newDPA.Skip Then
                         newDPA.Sent = False
+                        lvi.Tag = newDPA
                         lvi.ForeColor = Color.Red
                         FrmMain.lvTDriveFiles.Items.Add(lvi)
                         FrmMain.Refresh()
@@ -234,6 +238,7 @@ Namespace Modules
 
                     End If
 
+                    'Add item to listview
                     lvi.Tag = newDPA
                     dpaList.Add(newDPA)
                     FrmMain.lvTDriveFiles.Items.Add(lvi)
@@ -246,7 +251,7 @@ Namespace Modules
                             MoveEmailedFile(newDPA.SourceFile, My.Settings.EmailedActiveMoveFolder)
                         ElseIf newDPA.Type = DPAType.Cutin Then
                             MoveEmailedFile(newDPA.SourceFile, My.Settings.EmailedCutinMoveFolder)
-                        ElseIf newDPA.Type = DPAType.Accinit Then
+                        ElseIf newDPA.Type = DPAType.AcctInit Then
                             MoveEmailedFile(newDPA.SourceFile, My.Settings.EmailedAccInitMoveFolder)
                         Else
                             MoveEmailedFile(newDPA.SourceFile, My.Settings.EmailedActiveMoveFolder)
@@ -279,7 +284,6 @@ Namespace Modules
             cmdInsert.Parameters.AddWithValue("@account", dpaDoc.AccountNumber)
             cmdInsert.Parameters.AddWithValue("@sendTo", dpaDoc.SendTo)
             cmdInsert.Parameters.AddWithValue("@customerName", dpaDoc.CustomerName)
-            'TODO Add file creation time and time sent.
             cmdInsert.Parameters.AddWithValue("@timeSent", dpaDoc.CompletionTime)
             cmdInsert.Parameters.AddWithValue("@fileCreationTime", dpaDoc.CreationTime)
             cmdInsert.Parameters.AddWithValue("@document", dpaDoc.SourceFile)
@@ -301,7 +305,7 @@ Namespace Modules
                     olEmail.SentOnBehalfOfName = My.Settings.ACTIVE_EMAIL
                 ElseIf outDPA.Type = DPAType.Cutin Then
                     olEmail.SentOnBehalfOfName = My.Settings.CUTIN_EMAIL
-                ElseIf outDPA.Type = DPAType.Accinit Then
+                ElseIf outDPA.Type = DPAType.AcctInit Then
                     olEmail.SentOnBehalfOfName = My.Settings.ACCINIT_EMAIL
                 Else
                     Return False
@@ -359,13 +363,25 @@ Namespace Modules
             rgx = New Regex(rgxAddressPattern, RegexOptions.IgnoreCase)
             Dim mailMatch As Match = rgx.Match(sendToField)
             If (mailMatch.Success) Then
-                Return Tuple.Create(DeliveryType.Mail, sendToField.Replace("mail to:", String.Empty))
+                Return Tuple.Create(DeliveryType.Mail, RemoveSendToText(sendToField).ToUpper)
             End If
-            Return Tuple.Create(DeliveryType.Err, sendToField.ToUpper)
+            Return Tuple.Create(DeliveryType.Err, RemoveSendToText(sendToField).ToUpper)
         End Function
 
+        'Cleans the field of excel/table characters
         Private Function DataScrubber(strData As String) As String
-            Return strData.Replace("\r", String.Empty).Replace("\n", String.Empty).Trim()
+            'Removes carriage return, Line Feed and Bell.
+            Return strData.Replace(vbLf, String.Empty).Replace(vbCr, String.Empty).Replace(Chr(7), String.Empty).Trim()
+        End Function
+
+        'Removes each possible option when mailing.
+        'Can't trust user selection.
+        Private Function RemoveSendToText(strField As String) As String
+            Dim junkToRemove As String() = {"Email to:", "Mail to:", "Fax to:"}
+            For Each s As String In junkToRemove
+                strField = strField.Replace(s, String.Empty)
+            Next
+            Return (strField.Trim())
         End Function
 
     End Module

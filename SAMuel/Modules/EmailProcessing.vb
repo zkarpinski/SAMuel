@@ -1,4 +1,6 @@
-﻿Imports System.IO
+﻿Imports System.CodeDom
+Imports System.IO
+Imports Microsoft.Office.Interop.Outlook
 Imports SAMuel.Classes
 
 Namespace Modules
@@ -13,14 +15,21 @@ Namespace Modules
         ''' <remarks></remarks>
         Function GetEmails(ByRef olFolder As Microsoft.Office.Interop.Outlook.MAPIFolder) As List(Of SamEmail)
             Dim sEmail As SamEmail
+            Dim obj As Object
             Dim emailItem As Microsoft.Office.Interop.Outlook.MailItem
             Dim samEmails As New List(Of SamEmail)
-            For Each emailItem In olFolder.Items
+            For Each obj In olFolder.Items
                 Try
-                    sEmail = New SamEmail(emailItem)
-                    samEmails.Add(sEmail)
-                Catch ex As Exception
-                    LogAction(action:="An email was skipped because " & ex.Message)
+                    'Check object type.
+                    'http://mztools.com/articles/2006/MZ2006013.aspx
+                    If Microsoft.VisualBasic.Information.TypeName(obj) = "MailItem" Then
+                        emailItem = CType(obj, Microsoft.Office.Interop.Outlook.MailItem)
+                        sEmail = New SamEmail(emailItem)
+                        samEmails.Add(sEmail)
+                    End If
+
+                Catch ex As System.Exception
+                    LogAction(action:=" An email was skipped because " & ex.Message)
                     'Move to next email
                     Continue For
                 End Try
@@ -53,8 +62,6 @@ Namespace Modules
         Public Sub DeleteSavedAttachments(ByVal sDirectory As String)
             If (Directory.Exists(sDirectory)) Then Directory.Delete(sDirectory, True)
         End Sub
-
-
 
     End Module
 End Namespace

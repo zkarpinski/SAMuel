@@ -33,7 +33,7 @@ Public Class FrmMain
 
 
 #Region "Outlook Tab Region --------------------------------------------------------------------------------------"
-    'Outlook Tab wide varibles
+    'Outlook Tab wide variables
     Dim _bNextPressed As Boolean
     Dim _bRejectPressed As Boolean
     Dim _bCancelPressed As Boolean
@@ -87,7 +87,7 @@ Public Class FrmMain
             samEmails = GetEmails(workingOutlookFolder)
         Catch ex As System.Exception
             MsgBox("Something happened... Sorry", MsgBoxStyle.Exclamation)
-            LogAction(action := ex.Message)
+            LogAction(action:=ex.Message)
             Reset_Outlook_Tab()
             Exit Sub
         End Try
@@ -108,7 +108,7 @@ Public Class FrmMain
         'Process each email
         For Each sEmail In samEmails
             Try
-                'Force an audit if the email is found to be not valid and not in unattendedmode.
+                'Force an audit if the email is found to be not valid and not in unattended mode.
                 If (Not sEmail.IsValid) And (_bUnAttendedMode = False) Then
                     _bThrowAudit = True
                     lblOutlookMessage.Text = "Invalid Email Found!"
@@ -298,6 +298,11 @@ Public Class FrmMain
         _bNextPressed = True
     End Sub
 
+    Private Shared Sub ListViewItemActivate_Open(sender As Object, e As EventArgs) _
+        Handles lstEmailAttachments.ItemActivate
+        Process.Start(sender.SelectedItems(0).Tag)
+    End Sub
+
     Private Sub Reset_Outlook_Tab()
         'Reset the Outlook tab to default view and values
         'variables
@@ -471,22 +476,22 @@ Public Class FrmMain
 
     End Sub
 
-
     Private Sub btnCGetAccounts_Click(sender As Object, e As EventArgs) Handles btnCGetAccounts.Click
         ResetContacts_Tab()
-        btnCGetAccounts.Enabled = True
+        btnCGetAccounts.Enabled = False
 
         'Call the script
         Try
-            GetAccountsNeedingContacts(My.Settings.DatabaseFile)
+            If (GetAccountsNeedingContacts(My.Settings.DatabaseFile)) Then
+                btnCGetAccounts.Enabled = True
+                btnCAddContact.Enabled = True
+            End If
             'RunScript(strAccountNumber, strContact)
         Catch ex As FileNotFoundException
             MsgBox("addContact.exe not found.", MsgBoxStyle.Exclamation)
             Me.btnCAddContact.Enabled = True
             Exit Sub
         End Try
-        btnCGetAccounts.Enabled = True
-        btnCAddContact.Enabled = True
     End Sub
 
     Private Sub btnStopAddContacts_Click(sender As Object, e As EventArgs) Handles btnStopAddContacts.Click
@@ -498,7 +503,6 @@ Public Class FrmMain
         btnCGetAccounts.Enabled = True
         btnStopAddContacts.Enabled = False
         _bStopContacts = False
-        btnCAddContact.Enabled = True
         DataGridView.Rows.Clear()
     End Sub
 
@@ -533,8 +537,10 @@ Public Class FrmMain
             ElseIf (Me.rbConvertPDF.Checked) Then
                 'Backup the PDF995 config files and create the pre-configed one.
                 outputExt = "pdf"
-                Pdf995.BackupOriginalPdf995Ini()
-                Pdf995.CreatePdf995Ini(CONV_FOLDER)
+                'Pdf995.BackupOriginalPdf995Ini()
+                'Pdf995.CreatePdf995Ini(CONV_FOLDER)
+                Throw New NotImplementedException()
+                Exit Sub
             Else
                 outputExt = "tif"
             End If
@@ -667,11 +673,6 @@ Public Class FrmMain
         End If
     End Sub
 
-    Private Sub ListViewItemActivate_Open(sender As Object, e As EventArgs) _
-        Handles lvTDriveFiles.ItemActivate, lstEmailAttachments.ItemActivate
-        Process.Start(sender.SelectedItems(0).Tag.SourceFile)
-    End Sub
-
     Private Sub TabControl1_Changed(sender As Object, e As EventArgs) Handles TabControl1.SelectedIndexChanged
         'Resets the form state to default
         Reset_All_Forms()
@@ -695,7 +696,8 @@ Public Class FrmMain
 
     Private Sub btnTEmails_Click(sender As Object, e As EventArgs) Handles btnTEmails.Click
         Reset_TDriver_Tab()
-        btnTEmails.Enabled = False
+        CType(sender, Button).Enabled = False
+        'btnTEmails.Enabled = False
         Reset_ProgressBar()
         If My.Settings.Physical_PrinterName = "DEFAULT" Then ChoosePhysicalPrinter()
         'Check if dialog was canceled
@@ -713,7 +715,7 @@ Public Class FrmMain
                 ''TODO Add invalid path handle.
             End Try
         Next
-        btnTEmails.Enabled = True
+        CType(sender, Button).Enabled = True
     End Sub
 
     Private Sub DragDropTDrive(sender As Object, e As DragEventArgs) Handles tabTDrive.DragDrop
@@ -731,8 +733,28 @@ Public Class FrmMain
     End Sub
 
 
-    Private Sub btnTDClear_Click(sender As Object, e As EventArgs) Handles btnTDClear.Click
+    Private Sub btnTDClear_Click(sender As Object, e As EventArgs)
         Me.lvTDriveFiles.Items.Clear()
+    End Sub
+
+    ''' <summary>
+    ''' Open the file of the selected DPA.
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    Private Sub TDriveListViewItemActivate_Open(sender As Object, e As EventArgs) _
+        Handles lvTDriveFiles.ItemActivate
+        'Cast the list view item tag as DPA
+        Dim selectedDPA As DPA = CType(sender.SelectedItems(0).Tag, DPA)
+
+        'Open the PDF if it was sent or the word file if it was not!
+        If (selectedDPA.Sent) Then
+            If (selectedDPA.DeliveryMethod <> DeliveryType.Mail) Then
+                Process.Start(selectedDPA.FileToSend)
+            End If
+        Else
+                Process.Start(selectedDPA.SourceFile)
+        End If
     End Sub
 
     Private Sub Reset_TDriver_Tab()
@@ -751,9 +773,7 @@ Public Class FrmMain
 
 #End Region
 
-
     Private Sub cbKFBatchType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbKFBatchType.SelectedIndexChanged
 
     End Sub
-
 End Class
