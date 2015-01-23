@@ -576,8 +576,8 @@ Public Class FrmMain
             ElseIf (Me.rbConvertPDF.Checked) Then
                 'Backup the PDF995 config files and create the pre-configed one.
                 outputExt = "pdf"
-                Pdf995.BackupOriginalPdf995Ini()
-                Pdf995.CreatePdf995Ini(CONV_FOLDER)
+                'Pdf995.BackupOriginalPdf995Ini()
+                'Pdf995.CreatePdf995Ini(CONV_FOLDER)
             Else
                 outputExt = "tif"
             End If
@@ -596,7 +596,7 @@ Public Class FrmMain
                 ElseIf (Me.rbConvertIMAGE.Checked) And (Me.rbConvertTiff.Checked) Then
                     ImgToTiff(value, outputImage)
                 ElseIf (Me.rbConvertIMAGE.Checked) And (Me.rbConvertPDF.Checked) Then
-                    CreatePdf995Ini(CONV_FOLDER)
+                    'CreatePdf995Ini(CONV_FOLDER)
                     ImgToPdf(value, outputImage)
                 End If
                 Me.ProgressBar.Value += 1

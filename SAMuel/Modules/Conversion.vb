@@ -15,7 +15,18 @@ Namespace Modules
         End Enum
 
         Sub ConvertImages(ByVal inputImage As String, ByVal outputFile As String, ByVal outType As ConvertToType)
-            ''TODO Combine Combine ImgToPdf and ImgToTiff
+            ' Read image from file
+
+            Using image As New MagickImage(inputImage)
+                Select Case (outType)
+                    Case ConvertToType.Tiff
+                        image.CompressionMethod = CompressionMethod.Group4
+                        image.Write(outputFile)
+
+                    Case ConvertToType.Pdf
+                        image.Write(outputFile)
+                End Select
+            End Using
         End Sub
 
         Sub ConvertDocuments(ByVal inputDoc As String, ByVal outputFile As String, ByVal outType As ConvertToType)
