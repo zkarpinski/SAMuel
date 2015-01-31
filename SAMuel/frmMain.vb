@@ -57,7 +57,7 @@ Public Class FrmMain
         Reset_Outlook_Tab()
         frmEmails.clbSelectedEmails.Items.Clear()
         Reset_ProgressBar()
-        frmEmails.Show()
+        'frmEmails.Show()
 
         'enable buttons
         btnCancel.Enabled = True
@@ -114,7 +114,7 @@ Public Class FrmMain
                     lblOutlookMessage.Text = "Invalid Email Found!"
                 ElseIf (Not sEmail.IsValid) And (_bUnAttendedMode) Then
                     'Skip the email
-                    frmEmails.clbSelectedEmails.Items.Add("[SKIP] " & sEmail.Subject & vbTab & sEmail.From)
+                    'frmEmails.clbSelectedEmails.Items.Add("[SKIP] " & sEmail.Subject & vbTab & sEmail.From)
                     ProgressBar.Value += 1
                     Continue For
                 Else
@@ -126,9 +126,9 @@ Public Class FrmMain
                 sEmail.DownloadAttachments(ATT_FOLDER)
                 'Process each attachment within the email
                 If sEmail.AttachmentCount > 0 Then
-                    frmEmails.clbSelectedEmails.Items.Add(
-                        "[" & sEmail.AttachmentCount.ToString & "] " & sEmail.Account & vbTab & vbTab & sEmail.Subject &
-                        vbTab & sEmail.From)
+                    'frmEmails.clbSelectedEmails.Items.Add(
+                    '"[" & sEmail.AttachmentCount.ToString & "] " & sEmail.Account & vbTab & vbTab & sEmail.Subject &
+                    'vbTab & sEmail.From)
 
                     'Display email info when in auditmode or audit thrown.
                     If (_bAuditMode Or _bThrowAudit) Then
@@ -230,13 +230,13 @@ Public Class FrmMain
                     sEmail.Dispose()
 
                     'Checks the email in the check list box
-                    frmEmails.clbSelectedEmails.SetItemChecked(ProgressBar.Value, True)
+                    'frmEmails.clbSelectedEmails.SetItemChecked(ProgressBar.Value, True)
                     completedEmailsCount += 1
                 Else
                     'No attachments
                     'TODO Add print option to no attachments case
-                    frmEmails.clbSelectedEmails.Items.Add(
-                        "[0] " & sEmail.Account & vbTab & vbTab & sEmail.Subject & vbTab & sEmail.From)
+                    'frmEmails.clbSelectedEmails.Items.Add(
+                    ' "[0] " & sEmail.Account & vbTab & vbTab & sEmail.Subject & vbTab & sEmail.From)
                 End If
 
             Catch ex As System.Exception
@@ -480,18 +480,11 @@ Public Class FrmMain
         ResetContacts_Tab()
         btnCGetAccounts.Enabled = False
 
-        'Call the script
-        Try
-            If (GetAccountsNeedingContacts(My.Settings.DatabaseFile)) Then
-                btnCGetAccounts.Enabled = True
-                btnCAddContact.Enabled = True
-            End If
-            'RunScript(strAccountNumber, strContact)
-        Catch ex As FileNotFoundException
-            MsgBox("addContact.exe not found.", MsgBoxStyle.Exclamation)
-            Me.btnCAddContact.Enabled = True
-            Exit Sub
-        End Try
+        'Get the list of accounts
+        If (GetAccountsNeedingContacts(My.Settings.DatabaseFile)) Then
+            btnCAddContact.Enabled = True
+        End If
+        btnCGetAccounts.Enabled = True
     End Sub
 
     Private Sub btnStopAddContacts_Click(sender As Object, e As EventArgs) Handles btnStopAddContacts.Click
@@ -773,7 +766,4 @@ Public Class FrmMain
 
 #End Region
 
-    Private Sub cbKFBatchType_SelectedIndexChanged(sender As Object, e As EventArgs) Handles cbKFBatchType.SelectedIndexChanged
-
-    End Sub
 End Class
