@@ -44,6 +44,7 @@ Public Class FrmMain
     Private Sub btnRun_Click(sender As Object, e As EventArgs) Handles btnRun.Click
         Dim oApp As Microsoft.Office.Interop.Outlook.Application = New Microsoft.Office.Interop.Outlook.Application
         Dim wApp As Microsoft.Office.Interop.Word.Application = Nothing
+        Dim eProcessor As EmailProcessor
         Dim sTiffDestination As String
         Dim sFileExt As String
         Dim outTiff As String
@@ -67,24 +68,22 @@ Public Class FrmMain
         btnRun.Enabled = False
         btnRun.Visible = False
 
+        'Define the save location and check if it exists
+        CheckFolder(EMAILS_FOLDER)
+        eProcessor = New EmailProcessor(EMAILS_FOLDER)
+
         'User chooses the folder to work from.
-        Dim workingOutlookFolder As MAPIFolder
-        workingOutlookFolder = oApp.GetNamespace("MAPI").PickFolder()
-        If workingOutlookFolder Is Nothing Then
+        If (Not eProcessor.ChooseOutlookFolder()) Then
             Reset_Outlook_Tab()
             Exit Sub
         End If
-
-        Dim startTime As DateTime = DateTime.Now
-        Dim endTime As DateTime
-        Dim totalTime As TimeSpan
 
         'Grab the emails and process them into SAM_Emails
         Try
             lblStatus.Text = "Grabbing emails..."
             Me.Cursor = Cursors.WaitCursor
             Me.Refresh()
-            samEmails = GetEmails(workingOutlookFolder)
+            eProcessor.GetEmails()
         Catch ex As System.Exception
             MsgBox("Something happened... Sorry", MsgBoxStyle.Exclamation)
             LogAction(action:=ex.Message)
@@ -93,17 +92,14 @@ Public Class FrmMain
         End Try
 
         'Get the email count and update the progress bar
-        Dim emailCount As Integer = samEmails.Count
-        ProgressBar.Maximum = emailCount
+        ProgressBar.Maximum = eProcessor.EmailCount
 
         'Update audit and unattended values
         _bAuditMode = My.Settings.Audit_Each_Email
         _bUnAttendedMode = chkValidOnly.Checked
         chkValidOnly.Visible = False
 
-        'Define the save location and check if it exists
-        sTiffDestination = EMAILS_FOLDER
-        CheckFolder(sTiffDestination)
+
 
         'Process each email
         For Each sEmail In samEmails
