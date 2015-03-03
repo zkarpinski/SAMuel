@@ -14,16 +14,17 @@ Namespace Modules
 
     Module AddContact
         Private _con As OleDbConnection
-        Private _ds As DataSet
+        Friend contactDataSet As DataSet
 
         Public UserCanceledContactAdding As Boolean
 
         Public Function RunScript(strBillAccount As String, strContact As String, strContactType As String) As Boolean
             Dim arguments As String = String.Format(" /account {0} /contact ""{1}"" /type ""{2}""", strBillAccount, strContact, strContactType)
+            Dim strProgram As String = Application.StartupPath + "\addContact.exe"
 
             'Call the script and wait.
             Dim p As New Process
-            Dim psi As New ProcessStartInfo(Application.StartupPath + "\addContact.exe", arguments)
+            Dim psi As New ProcessStartInfo(strProgram, arguments)
             p.StartInfo = psi
             p.Start()
             p.WaitForExit()
@@ -38,7 +39,7 @@ Namespace Modules
         Public Function GetAccountsNeedingContacts(databaseFile As String) As Boolean
             'Check if the connection/database exists
             If (Not File.Exists(databaseFile)) Then
-                MsgBox(String.Format("Database file, {0}, was not found. Please check your connection and/or path and try again.", databaseFile), MsgBoxStyle.Critical, "Database not found!")
+                MsgBox(String.Format("Database file, {0}, was Not found. Please check your connection And/Or path And Try again.", databaseFile), MsgBoxStyle.Critical, "Database Not found!")
                 _con = Nothing
                 Return False
             End If
@@ -46,23 +47,23 @@ Namespace Modules
             If (IsNothing(_con)) Then
                 _con = New OleDbConnection("Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" + databaseFile)
             End If
-            Const strCmd As String = "SELECT DeferredPaymentAgreements.AccountNumber, DeferredPaymentAgreements.DPAType, DeferredPaymentAgreements.SentTo, DeferredPaymentAgreements.DeliveryMethod, DeferredPaymentAgreements.ContactAdded, DeferredPaymentAgreements.Key  FROM DeferredPaymentAgreements WHERE (((DeferredPaymentAgreements.ContactAdded)=False));"
+            Const strCmd As String = "Select DeferredPaymentAgreements.AccountNumber, DeferredPaymentAgreements.DPAType, DeferredPaymentAgreements.SentTo, DeferredPaymentAgreements.DeliveryMethod, DeferredPaymentAgreements.ContactAdded, DeferredPaymentAgreements.Key  FROM DeferredPaymentAgreements WHERE (((DeferredPaymentAgreements.ContactAdded)=False));"
 
 
 
             'Connect to database, run query and store the dataset
             _con.Open()  'open up a connection to the database
             Dim cmd As OleDbCommand = New OleDbCommand(strCmd, _con)
-            _ds = New DataSet
+            contactDataSet = New DataSet
             Dim da As OleDbDataAdapter = New OleDbDataAdapter(cmd.CommandText, _con)
             Dim row As System.Data.DataRow
-            da.Fill(_ds, "ContactsNeeded") 'Fill the dataset, _ds, with the above SELECT statement
+            da.Fill(contactDataSet, "ContactsNeeded") 'Fill the dataset, contactDataSet, with the above SELECT statement
             _con.Close()
 
             'Fill the DataGridView
             'NOTE Verify select command order matches datagrid column order.
-            For Each row In _ds.Tables("ContactsNeeded").Rows
-                FrmMain.DataGridView.Rows.Add(row.ItemArray)
+            For Each row In contactDataSet.Tables("ContactsNeeded").Rows
+                ' FrmMain.DataGridView.Rows.Add(row.ItemArray)
             Next
 
             Return True
@@ -71,33 +72,40 @@ Namespace Modules
         Public Sub AddContactsToDatasetAccounts()
             Const contactType = "Miscellaneous Collections" 'Always this type (For now)
             Dim bFirstSuccess As Boolean = True
-            If (IsNothing(_ds)) Then
+            If (IsNothing(contactDataSet)) Then
                 Return
             End If
-            If (_ds.Tables.Count = 1) Then
+            If (contactDataSet.Tables.Count = 1) Then
                 'Start the 
                 Dim updateString As StringBuilder = New StringBuilder
-                updateString.Append("UPDATE DeferredPaymentAgreements SET DeferredPaymentAgreements.ContactAdded = True WHERE")
+                updateString.Append("UPDATE DeferredPaymentAgreements Set DeferredPaymentAgreements.ContactAdded = True WHERE")
 
                 'Add the contact for each account in the dataset.
-                For Each row As DataRow In _ds.Tables("ContactsNeeded").Rows
+                For Each row As DataRow In contactDataSet.Tables("ContactsNeeded").Rows
+
+                    'Skip the row if it was deleted by the user.
+                    If row.RowState = DataRowState.Deleted Then Continue For
+
                     'Collect Account Number, DPA Type, Method of delivery and where it was sent.
                     Dim rsKey As Integer = row("Key")
                     Dim accountNumber As String = row("AccountNumber")
+
+                    'Generate the contact string.
                     Dim contactInfo As ContactStruct = New ContactStruct()
                     contactInfo.DeliveryMethod = row("DeliveryMethod")
                     contactInfo.DPAType = row("DPAType")
                     contactInfo.SentTo = row("SentTo")
-                    'Generate the contact string.
                     Dim contactString As String = GenerateContactString(contactInfo)
 
                     'Run the script to add the contact
                     If (RunScript(accountNumber, contactString, contactType)) Then
+                        'Update the item in the dataset.
+                        row("ContactAdded") = True
                         If (bFirstSuccess) Then
                             updateString.Append(" [DeferredPaymentAgreements].[Key]=" & rsKey.ToString)
                             bFirstSuccess = False 'No longer the first success
                         Else
-                            updateString.Append(" OR [DeferredPaymentAgreements].[Key]=" & rsKey.ToString)
+                            updateString.Append(" Or [DeferredPaymentAgreements].[Key]=" & rsKey.ToString)
                         End If
                     End If
                 Next
@@ -131,9 +139,15 @@ Namespace Modules
 
             'Create the contact string.
             ''Example: Emailed Active DPA to test@test.com
-            contactString = String.Format("{0}ed {1} DPA to {2}", contactInfo.DeliveryMethod, contactInfo.DPAType, contactInfo.SentTo)
+            contactString = String.Format("{0}ed {1} DPA To {2}", contactInfo.DeliveryMethod, contactInfo.DPAType, contactInfo.SentTo)
             Return contactString
         End Function
+
+        Public Sub DeleteContact(key As Integer)
+            Dim query As String =
+            "UPDATE DeferredPaymentAgreements Set DeferredPaymentAgreements.ContactAdded = True WHERE [DeferredPaymentAgreements].[Key]=" & key.ToString
+            UpdateDatabase(query)
+        End Sub
 
     End Module
 End Namespace

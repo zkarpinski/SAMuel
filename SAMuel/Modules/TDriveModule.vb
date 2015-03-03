@@ -217,7 +217,7 @@ Namespace Modules
 
                     If newDPA.DeliveryMethod = DeliveryType.Mail Then
                         newDPA.Sent = True
-                        lvi.ForeColor = Color.Blue
+                        lvi.ForeColor = SystemColors.Highlight
                         newDPA.Complete()
                     Else
                         'Email the DPA and mark as complete if successful
@@ -226,7 +226,7 @@ Namespace Modules
 
                         If SendEmail(newDPA, olApp) Then
                             newDPA.Sent = True
-                            lvi.ForeColor = Color.Black
+                            lvi.ForeColor = SystemColors.ControlText 
                             newDPA.Complete()
                         Else
                             ''TODO Log failed send email

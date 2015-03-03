@@ -2,7 +2,15 @@
 
 Features:
 
-  - -
+  - AddContact: You can now delete contacts from the list
+  - AddContact: Added a status label with # of accounts that will have a contact added.
+
+Code Improvements:
+
+  - AddContact: DataGridView is databound to a dataset now.
+  - General: Theme friendly coloring.
+
+## 2015-01-20
 
 Code Improvements:
 

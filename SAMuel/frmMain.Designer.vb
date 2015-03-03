@@ -23,7 +23,7 @@ Partial Class FrmMain
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim ListViewItem1 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
+        Dim ListViewItem2 As System.Windows.Forms.ListViewItem = New System.Windows.Forms.ListViewItem(New String() {"test", "test", "test"}, -1)
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(FrmMain))
         Me.dlgOpen = New System.Windows.Forms.OpenFileDialog()
         Me.TabControl1 = New System.Windows.Forms.TabControl()
@@ -84,12 +84,9 @@ Partial Class FrmMain
         Me.lblKFBatchName = New System.Windows.Forms.Label()
         Me.txtKFBatchName = New System.Windows.Forms.TextBox()
         Me.tabAddContact = New System.Windows.Forms.TabPage()
+        Me.lblContactStatus = New System.Windows.Forms.Label()
         Me.btnCGetAccounts = New System.Windows.Forms.Button()
         Me.DataGridView = New System.Windows.Forms.DataGridView()
-        Me.contactColumnAccount = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.contactColumnDPAType = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.contactColumnSentTo = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.contactColumnDeliveryMethod = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.btnStopAddContacts = New System.Windows.Forms.Button()
         Me.btnCAddContact = New System.Windows.Forms.Button()
         Me.tabDPA = New System.Windows.Forms.TabPage()
@@ -124,6 +121,8 @@ Partial Class FrmMain
         Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
         Me.lblBranding = New System.Windows.Forms.Label()
         Me.timerConvert = New System.Windows.Forms.Timer(Me.components)
+        Me.contactContextMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.DeleteToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.TabControl1.SuspendLayout
         Me.TabPage1.SuspendLayout
         Me.groupOLAudit.SuspendLayout
@@ -140,6 +139,7 @@ Partial Class FrmMain
         Me.tabDPA.SuspendLayout
         Me.tabTDrive.SuspendLayout
         Me.MenuStrip1.SuspendLayout
+        Me.contactContextMenu.SuspendLayout
         Me.SuspendLayout
         '
         'dlgOpen
@@ -184,8 +184,8 @@ Partial Class FrmMain
         '
         Me.lstEmailAttachments.Columns.AddRange(New System.Windows.Forms.ColumnHeader() {Me.hType, Me.hName})
         Me.lstEmailAttachments.FullRowSelect = true
-        ListViewItem1.StateImageIndex = 0
-        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem1})
+        ListViewItem2.StateImageIndex = 0
+        Me.lstEmailAttachments.Items.AddRange(New System.Windows.Forms.ListViewItem() {ListViewItem2})
         Me.lstEmailAttachments.Location = New System.Drawing.Point(229, 7)
         Me.lstEmailAttachments.Name = "lstEmailAttachments"
         Me.lstEmailAttachments.Size = New System.Drawing.Size(196, 254)
@@ -752,6 +752,7 @@ Partial Class FrmMain
         'tabAddContact
         '
         Me.tabAddContact.AllowDrop = true
+        Me.tabAddContact.Controls.Add(Me.lblContactStatus)
         Me.tabAddContact.Controls.Add(Me.btnCGetAccounts)
         Me.tabAddContact.Controls.Add(Me.DataGridView)
         Me.tabAddContact.Controls.Add(Me.btnStopAddContacts)
@@ -762,6 +763,17 @@ Partial Class FrmMain
         Me.tabAddContact.TabIndex = 6
         Me.tabAddContact.Text = "Add Contact"
         Me.tabAddContact.UseVisualStyleBackColor = true
+        '
+        'lblContactStatus
+        '
+        Me.lblContactStatus.BackColor = System.Drawing.Color.Transparent
+        Me.lblContactStatus.Font = New System.Drawing.Font("Microsoft Sans Serif", 9!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0,Byte))
+        Me.lblContactStatus.Location = New System.Drawing.Point(0, 225)
+        Me.lblContactStatus.Name = "lblContactStatus"
+        Me.lblContactStatus.Size = New System.Drawing.Size(428, 23)
+        Me.lblContactStatus.TabIndex = 14
+        Me.lblContactStatus.Text = "Contact Stats"
+        Me.lblContactStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
         'btnCGetAccounts
         '
@@ -778,41 +790,12 @@ Partial Class FrmMain
         Me.DataGridView.AllowUserToDeleteRows = false
         Me.DataGridView.AllowUserToResizeRows = false
         Me.DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.DataGridView.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.contactColumnAccount, Me.contactColumnDPAType, Me.contactColumnSentTo, Me.contactColumnDeliveryMethod})
         Me.DataGridView.Location = New System.Drawing.Point(3, 3)
         Me.DataGridView.Name = "DataGridView"
         Me.DataGridView.ReadOnly = true
         Me.DataGridView.RowHeadersVisible = false
         Me.DataGridView.Size = New System.Drawing.Size(425, 183)
         Me.DataGridView.TabIndex = 12
-        '
-        'contactColumnAccount
-        '
-        Me.contactColumnAccount.HeaderText = "Account"
-        Me.contactColumnAccount.Name = "contactColumnAccount"
-        Me.contactColumnAccount.ReadOnly = true
-        Me.contactColumnAccount.Width = 90
-        '
-        'contactColumnDPAType
-        '
-        Me.contactColumnDPAType.HeaderText = "DPAType"
-        Me.contactColumnDPAType.Name = "contactColumnDPAType"
-        Me.contactColumnDPAType.ReadOnly = true
-        Me.contactColumnDPAType.Width = 70
-        '
-        'contactColumnSentTo
-        '
-        Me.contactColumnSentTo.HeaderText = "Sent To"
-        Me.contactColumnSentTo.Name = "contactColumnSentTo"
-        Me.contactColumnSentTo.ReadOnly = true
-        Me.contactColumnSentTo.Width = 210
-        '
-        'contactColumnDeliveryMethod
-        '
-        Me.contactColumnDeliveryMethod.HeaderText = "Delivery Method"
-        Me.contactColumnDeliveryMethod.Name = "contactColumnDeliveryMethod"
-        Me.contactColumnDeliveryMethod.ReadOnly = true
-        Me.contactColumnDeliveryMethod.Width = 50
         '
         'btnStopAddContacts
         '
@@ -825,7 +808,7 @@ Partial Class FrmMain
         '
         'btnCAddContact
         '
-        Me.btnCAddContact.Location = New System.Drawing.Point(177, 265)
+        Me.btnCAddContact.Location = New System.Drawing.Point(171, 265)
         Me.btnCAddContact.Name = "btnCAddContact"
         Me.btnCAddContact.Size = New System.Drawing.Size(83, 23)
         Me.btnCAddContact.TabIndex = 0
@@ -1023,7 +1006,7 @@ Partial Class FrmMain
         '
         Me.lblStatus.AutoSize = true
         Me.lblStatus.BackColor = System.Drawing.Color.Transparent
-        Me.lblStatus.ForeColor = System.Drawing.Color.Black
+        Me.lblStatus.ForeColor = System.Drawing.SystemColors.ControlText
         Me.lblStatus.Location = New System.Drawing.Point(191, 346)
         Me.lblStatus.Name = "lblStatus"
         Me.lblStatus.Size = New System.Drawing.Size(38, 13)
@@ -1105,6 +1088,18 @@ Partial Class FrmMain
         '
         Me.timerConvert.Interval = 1000
         '
+        'contactContextMenu
+        '
+        Me.contactContextMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.DeleteToolStripMenuItem})
+        Me.contactContextMenu.Name = "contactContextMenu"
+        Me.contactContextMenu.Size = New System.Drawing.Size(108, 26)
+        '
+        'DeleteToolStripMenuItem
+        '
+        Me.DeleteToolStripMenuItem.Name = "DeleteToolStripMenuItem"
+        Me.DeleteToolStripMenuItem.Size = New System.Drawing.Size(107, 22)
+        Me.DeleteToolStripMenuItem.Text = "Delete"
+        '
         'FrmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6!, 13!)
@@ -1150,6 +1145,7 @@ Partial Class FrmMain
         Me.tabTDrive.ResumeLayout(false)
         Me.MenuStrip1.ResumeLayout(false)
         Me.MenuStrip1.PerformLayout
+        Me.contactContextMenu.ResumeLayout(false)
         Me.ResumeLayout(false)
         Me.PerformLayout
 
@@ -1249,8 +1245,7 @@ End Sub
     Friend WithEvents btnTEmails As System.Windows.Forms.Button
     Friend WithEvents DataGridView As DataGridView
     Friend WithEvents btnCGetAccounts As System.Windows.Forms.Button
-    Friend WithEvents contactColumnAccount As DataGridViewTextBoxColumn
-    Friend WithEvents contactColumnDPAType As DataGridViewTextBoxColumn
-    Friend WithEvents contactColumnSentTo As DataGridViewTextBoxColumn
-    Friend WithEvents contactColumnDeliveryMethod As DataGridViewTextBoxColumn
+    Friend WithEvents contactContextMenu As ContextMenuStrip
+    Friend WithEvents DeleteToolStripMenuItem As ToolStripMenuItem
+    Friend WithEvents lblContactStatus As Label
 End Class

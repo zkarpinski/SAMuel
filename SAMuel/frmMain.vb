@@ -482,7 +482,26 @@ Public Class FrmMain
 
         'Get the list of accounts
         If (GetAccountsNeedingContacts(My.Settings.DatabaseFile)) Then
-            btnCAddContact.Enabled = True
+            'Fill the DataGridView
+            Dim accCount As Integer = AddContact.contactDataSet.Tables("ContactsNeeded").Rows.Count
+            If accCount > 0 Then
+                lblContactStatus.Text = accCount.ToString & " Accounts Need A Contact"
+                btnCAddContact.Enabled = True
+                DataGridView.DataSource = AddContact.contactDataSet.Tables("ContactsNeeded")
+
+                'Format Grid View
+                DataGridView.Columns(0).Width = 90 'AccountNumber
+                DataGridView.Columns(1).Width = 55 'DPA Type
+                DataGridView.AutoResizeColumn(2) 'Sent To
+                DataGridView.Columns(3).Width = 55 'Delivery Method
+                DataGridView.Columns(4).Width = 22 'ContactAdded
+                DataGridView.Columns(4).HeaderText = String.Empty
+                DataGridView.Columns(4).Width = 30 'Key
+            Else
+                lblContactStatus.Text = "No Accounts Need A Contact"
+            End If
+        Else
+            lblContactStatus.Text = "An error occurred."
         End If
         btnCGetAccounts.Enabled = True
     End Sub
@@ -496,7 +515,28 @@ Public Class FrmMain
         btnCGetAccounts.Enabled = True
         btnStopAddContacts.Enabled = False
         _bStopContacts = False
-        DataGridView.Rows.Clear()
+        DataGridView.DataSource = vbNull
+        lblContactStatus.Text = String.Empty
+    End Sub
+
+    Private Sub Datagrid_MouseUp(sender As Object, e As MouseEventArgs) Handles DataGridView.MouseUp
+        If (e.Button = MouseButtons.Right) Then
+            Dim contactOptionsMenu As ContextMenuStrip = New ContextMenuStrip
+            Dim hit As DataGridView.HitTestInfo = DataGridView.HitTest(e.X, e.Y)
+            If hit.Type = DataGridViewHitTestType.Cell Then
+                'Dim clickedCell As DataGridViewCell = DataGridView.Rows(hit.RowIndex).Cells(hit.ColumnIndex)
+                DataGridView.ClearSelection()
+                DataGridView.Rows(hit.RowIndex).Selected = True
+                contactContextMenu.Show(DataGridView, e.Location)
+            End If
+        End If
+    End Sub
+
+    Private Sub DeleteToolStripMenuItem_Click(sender As Object, e As EventArgs) Handles DeleteToolStripMenuItem.Click
+        Dim selectedRow As DataGridViewRow = DataGridView.SelectedRows.Item(0)
+        Dim selectedItemKey As Integer = selectedRow.Cells("Key").Value
+        DeleteContact(selectedItemKey)
+        DataGridView.Rows.Remove(selectedRow)
     End Sub
 
 #End Region
@@ -763,6 +803,7 @@ Public Class FrmMain
             My.Settings.Save()
         End If
     End Sub
+
 
 #End Region
 
