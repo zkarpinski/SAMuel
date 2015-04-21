@@ -110,12 +110,6 @@
     <Compile Include="ApplicationEvents.vb" />
     <Compile Include="Classes\SAM_Email.vb" />
     <Compile Include="Classes\SAM_File.vb" />
-    <Compile Include="frmEmails.Designer.vb">
-      <DependentUpon>frmEmails.vb</DependentUpon>
-    </Compile>
-    <Compile Include="frmEmails.vb">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="frmAbout.Designer.vb">
       <DependentUpon>frmAbout.vb</DependentUpon>
     </Compile>
@@ -161,9 +155,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="frmEmails.resx">
-      <DependentUpon>frmEmails.vb</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="frmAbout.resx">
       <DependentUpon>frmAbout.vb</DependentUpon>
     </EmbeddedResource>

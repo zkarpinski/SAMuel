@@ -1,3 +1,11 @@
+## 2015-03-24 (RELEASE 1.2)
+
+Features:
+  
+  - Outlook: Disable auditmode for now (Need to handle displaying multiple accounts.
+  - Outlook: Support for multiple accounts within an email.
+  - KoFaxIt: Added two new modes, Load Account List/Multiple Copies.
+
 ## 2015-01-20
 
 Features:

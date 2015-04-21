@@ -278,6 +278,18 @@ Namespace My
                 Return CType(Me("DatabaseFile"),String)
             End Get
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("True")>  _
+        Public Property MultiAccounts() As Boolean
+            Get
+                Return CType(Me("MultiAccounts"),Boolean)
+            End Get
+            Set
+                Me("MultiAccounts") = value
+            End Set
+        End Property
     End Class
 End Namespace
 

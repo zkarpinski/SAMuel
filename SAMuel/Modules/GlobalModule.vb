@@ -12,7 +12,12 @@ Namespace Modules
         Public EMAILS_FOLDER As String
         Public CONV_FOLDER As String
         Public FAXED_FOLDER As String
-        Public TDrive_FOLDER As String
+		Public TDrive_FOLDER As String
+
+		Public ACCOUNT_REGEX_GROUPED_FORMAT As String = "((\D|^)(\d{5}-\d{5})(?!\d))"
+		Public ACCOUNT_REGEX_STD_FORMAT As String = "\d{5}-\d{5}"
+		Public ACCOUNT_REGEX_NO_HYPHEN_FORMAT As String = "((\D|^)(\d{10})(?!\d))"
+		Public CUSTOMER_REGEX_FORMAT As String = "((\D|^)(\d{9})(?!\d))"
 
         ''' <summary>
         ''' Logs actions and events from within SAMuel
@@ -79,14 +84,36 @@ Namespace Modules
         ''' <returns>String of the found match or X if no match.</returns>
         ''' <remarks></remarks>
         Function RegexAcc(ByVal str As String, ByVal format As String) As String
-            Dim _reg As Regex = New Regex(format)
-            Dim m As Match = _reg.Match(str)
-            If m.Success Then
-                Return m.Value
-            Else
-                Return "X"
-            End If
-        End Function
+			Dim _reg As Regex = New Regex(format)
+			Dim m As Match = _reg.Match(str)
+			If m.Success Then
+				Return m.Value
+			Else
+				Return "X"
+			End If
+		End Function
+
+		Function RegexAccCollection(ByVal str As String, ByVal format As String) As Array
+			Dim reg As Regex
+			Dim arr = reg.Matches(str, format).OfType(Of Match)().[Select](Function(m) m.Groups(3).Value).ToArray
+			Return arr
+		End Function
+
+		Function ContainsAccountOrCustomer(str As String) As Boolean
+			Dim reg As Regex = New Regex(ACCOUNT_REGEX_GROUPED_FORMAT)
+			If (reg.Match(str).Success) Then
+				Return True
+			End If
+			reg = New Regex(ACCOUNT_REGEX_NO_HYPHEN_FORMAT)
+			If (reg.Match(str).Success) Then
+				Return True
+			End If
+			reg = New Regex(CUSTOMER_REGEX_FORMAT)
+			If (reg.Match(str).Success) Then
+				Return True
+			End If
+			Return False
+		End Function
 
         ''' <summary>
         ''' Creates the output folders used by SAMuel if they do not exist

@@ -68,5 +68,8 @@
     <Setting Name="DatabaseFile" Type="System.String" Scope="Application">
       <Value Profile="(Default)">DEFAULT</Value>
     </Setting>
+    <Setting Name="MultiAccounts" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
