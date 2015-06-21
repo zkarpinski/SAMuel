@@ -70,8 +70,9 @@ Namespace Modules
         End Function
 
         Public Sub AddContactsToDatasetAccounts()
-            Const contactType = "Miscellaneous Collections" 'Always this type (For now)
-            Dim bFirstSuccess As Boolean = True
+			Const contactType = "Miscellaneous Collections"	'Always this type (For now)
+			Dim ContactsCompletedSinceUpdate As Integer = 0
+			Dim bFirstSuccess As Boolean = True
             If (IsNothing(contactDataSet)) Then
                 Return
             End If
@@ -99,22 +100,34 @@ Namespace Modules
 
                     'Run the script to add the contact
                     If (RunScript(accountNumber, contactString, contactType)) Then
+						ContactsCompletedSinceUpdate += 1
                         'Update the item in the dataset.
                         row("ContactAdded") = True
-                        If (bFirstSuccess) Then
-                            updateString.Append(" [DeferredPaymentAgreements].[Key]=" & rsKey.ToString)
-                            bFirstSuccess = False 'No longer the first success
+						If (bFirstSuccess) Then
+							updateString.Append(" [DeferredPaymentAgreements].[Key]=" & rsKey.ToString)
+							bFirstSuccess = False 'No longer the first success
                         Else
-                            updateString.Append(" Or [DeferredPaymentAgreements].[Key]=" & rsKey.ToString)
-                        End If
-                    End If
-                Next
+							updateString.Append(" Or [DeferredPaymentAgreements].[Key]=" & rsKey.ToString)
+						End If
+
+						'Update database after 25 records and reset the string
+						''Expression too complex when over 100
+						If (ContactsCompletedSinceUpdate >= 25) Then
+							updateString.Append(";")
+							UpdateDatabase(updateString.ToString)
+							updateString.Clear()
+							updateString.Append("UPDATE DeferredPaymentAgreements Set DeferredPaymentAgreements.ContactAdded = True WHERE")
+							bFirstSuccess = True
+							ContactsCompletedSinceUpdate = 0
+						End If
+					End If
+				Next
 
                 'Finish Update Query String
                 If (bFirstSuccess = False) Then
                     updateString.Append(";")
-                    UpdateDatabase(updateString.ToString)
-                Else
+					UpdateDatabase(updateString.ToString)
+				Else
                     'No contacts were added successfully
                     'TODO Give user feedback?
                     Return

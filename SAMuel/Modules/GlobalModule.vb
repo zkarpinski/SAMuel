@@ -120,7 +120,8 @@ Namespace Modules
         ''' </summary>
         Sub InitOutputFolders(ByVal parentPath As String)
             '' Output Folder References: SAVE_FOLDER, EMAILS_FOLDER         , ATT_FOLDER                 ,FAXED_FOLDER          , CONV_FOLDER               , TDRIVE_FOLDER
-            Dim outputFolders As String() = {parentPath, parentPath + "emails\", parentPath + "emails\temp\", parentPath + "faxed\", parentPath + "converted\", parentPath & "tDriveFiles\"}
+            Dim outputFolders As String() = {parentPath, parentPath + "emails\", parentPath + "emails\temp\",
+				parentPath + "faxed\", parentPath + "converted\", parentPath & "tDriveFiles\"}
             'Create the folder if it does not exist
             For Each value In outputFolders
                 CheckFolder(value)
